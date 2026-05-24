@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 5,
+    "error_count": 6,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 8,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 5,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 0,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 0
+    },
+    "lexical_proof_complexity": 19,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 59,
+    "source_token_estimate": 316,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.402,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 3
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. The task requires a Python AsyncRateLimiter class with an async acquire() method, a constructor accepting a 'now' callable, and ValueError on non-positive rates. Instead, the code is a Dafny module with formal verification annotations, curly-brace syntax, ghost variables, and predicates \u2014 none of which are valid Python. It cannot be executed as Python, does not define an async method, does not handle the 'now' parameter, and does not raise ValueError. This is a complete language mismatch and fails every functional and structural requirement.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. The task requires a Python AsyncRateLimiter class with an async acquire() method, a constructor accepting a 'now' callable, and ValueError on non-positive rates. Instead, the code is a Dafny module with formal verification annotations, curly-brace syntax, ghost variables, and predicates \u2014 none of which are valid Python. It cannot be executed as Python, does not define an async method, does not handle the 'now' parameter, and does not raise ValueError. This is a complete language mismatch and fails every functional and structural requirement.\",\n  \"strengths\": [\n    \"The logical algorithm for windowed rate limiting (reset on 1-second boundary, count tracking) is conceptually correct\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely wrong language for the task\",\n    \"No async/await constructs; acquire() is not a coroutine\",\n    \"No 'now' callable parameter in constructor\",\n    \"No ValueError raised for non-positive rates\",\n    \"Cannot be imported or executed as a Python module\",\n    \"Completely ignores the Python-specific entry point and API contract\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The logical algorithm for windowed rate limiting (reset on 1-second boundary, count tracking) is conceptually correct"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely wrong language for the task",
+      "No async/await constructs; acquire() is not a coroutine",
+      "No 'now' callable parameter in constructor",
+      "No ValueError raised for non-positive rates",
+      "Cannot be imported or executed as a Python module",
+      "Completely ignores the Python-specific entry point and API contract"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 320,
+      "prompt": 316,
+      "total": 636,
+      "turns": [
+        {
+          "completion": 320,
+          "prompt": 316,
+          "total": 636
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(33,2): Error: a postcondition could not be proved on this return path\n   |\n33 |   {\n   |   ^\n\nsolution.dfy(32,34): Related location: this is the postcondition that could not be proved\n   |\n32 |     ensures result ==> old(count) < old(rate)\n   |                                   ^\n\nsolution.dfy(53,2): Error: assertion might not hold\n   |\n53 |   assert r1;\n   |   ^^^^^^\n\nsolution.dfy(56,2): Error: assertion might not hold\n   |\n56 |   assert r2;\n   |   ^^^^^^\n\nsolution.dfy(59,2): Error: assertion might not hold\n   |\n59 |   assert r3;\n   |   ^^^^^^\n\nsolution.dfy(62,2): Error: assertion might not hold\n   |\n62 |   assert r4;\n   |   ^^^^^^\n\nsolution.dfy(65,2): Error: assertion might not hold\n   |\n65 |   assert r5;\n   |   ^^^^^^\n\n\nDafny program verifier finished with 3 verified, 6 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "async_rate_limiter",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nimport asyncio\nfrom collections.abc import Awaitable, Callable, Sequence\nfrom typing import Any\n\n\nasync def process_in_batches(\n    items: Sequence[Any],\n    handler: Callable[[list[Any]], Awaitable[list[Any]]],\n    *,\n    batch_size: int,\n    concurrency: int,\n) -> list[Any]:\n    if batch_size <= 0 or concurrency <= 0:\n        raise ValueError('batch_size and concurrency must be positive')\n    batches = [list(items[index:index + batch_size]) for index in range(0, len(items), batch_size)]\n    semaphore = asyncio.Semaphore(concurrency)\n\n    async def run_batch(batch: list[Any]) -> list[Any]:\n        async with semaphore:\n            return await handler(batch)\n\n    nested = await asyncio.gather(*(run_batch(batch) for batch in batches))\n    return [item for batch in nested for item in batch]\n",
+  "effective_temperature": null,
+  "entry_point": "process_in_batches",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nimport asyncio\nfrom collections.abc import Awaitable, Callable, Sequence\nfrom typing import Any\n\n\nasync def process_in_batches(\n    items: Sequence[Any],\n    handler: Callable[[list[Any]], Awaitable[list[Any]]],\n    *,\n    batch_size: int,\n    concurrency: int,\n) -> list[Any]:\n    if batch_size <= 0 or concurrency <= 0:\n        raise ValueError('batch_size and concurrency must be positive')\n    batches = [list(items[index:index + batch_size]) for index in range(0, len(items), batch_size)]\n    semaphore = asyncio.Semaphore(concurrency)\n\n    async def run_batch(batch: list[Any]) -> list[Any]:\n        async with semaphore:\n            return await handler(batch)\n\n    nested = await asyncio.gather(*(run_batch(batch) for batch in batches))\n    return [item for batch in nested for item in batch]\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend process_in_batches with cancel_event: asyncio.Event | None = None. Before\nstarting each batch, stop scheduling additional batches if cancel_event is set.\nReturn results from already completed scheduled batches. Preserve old behavior\nwhen cancel_event is omitted.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import asyncio\n\nfrom solution import process_in_batches\n\n\ndef test_cancellation_event_stops_later_batches():\n    async def _run():\n        event = asyncio.Event()\n\n        async def handler(batch):\n            event.set()\n            return list(batch)\n\n        return await process_in_batches([1, 2, 3, 4], handler, batch_size=2, concurrency=1, cancel_event=event)\n\n    assert asyncio.run(_run()) == [1, 2]\n",
+    "entry_point": "process_in_batches",
+    "human_reference": "from __future__ import annotations\n\nimport asyncio\nfrom collections.abc import Awaitable, Callable, Sequence\nfrom typing import Any\n\n\nasync def process_in_batches(\n    items: Sequence[Any],\n    handler: Callable[[list[Any]], Awaitable[list[Any]]],\n    *,\n    batch_size: int,\n    concurrency: int,\n) -> list[Any]:\n    if batch_size <= 0 or concurrency <= 0:\n        raise ValueError('batch_size and concurrency must be positive')\n    batches = [list(items[index:index + batch_size]) for index in range(0, len(items), batch_size)]\n    semaphore = asyncio.Semaphore(concurrency)\n\n    async def run_batch(batch: list[Any]) -> list[Any]:\n        async with semaphore:\n            return await handler(batch)\n\n    nested = await asyncio.gather(*(run_batch(batch) for batch in batches))\n    return [item for batch in nested for item in batch]\n",
+    "id": "async_batch_processor",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport asyncio\n\n\nasync def process_in_batches(items, handler, *, batch_size: int, concurrency: int, cancel_event=None):\n    if batch_size <= 0 or concurrency <= 0:\n        raise ValueError('batch_size and concurrency must be positive')\n    sem = asyncio.Semaphore(concurrency)\n    results = []\n\n    async def call(group):\n        async with sem:\n            return await handler(group)\n\n    for start in range(0, len(items), batch_size):\n        if cancel_event is not None and cancel_event.is_set():\n            break\n        group = list(items[start:start + batch_size])\n        batch_result = await call(group)\n        results.extend(batch_result)\n    return results\n",
+    "mock_solution": "from __future__ import annotations\n\nimport asyncio\n\n\nasync def process_in_batches(items, handler, *, batch_size: int, concurrency: int):\n    if batch_size <= 0 or concurrency <= 0:\n        raise ValueError('batch_size and concurrency must be positive')\n    sem = asyncio.Semaphore(concurrency)\n    groups = []\n    for start in range(0, len(items), batch_size):\n        groups.append(list(items[start:start + batch_size]))\n\n    async def call(group):\n        async with sem:\n            return await handler(group)\n\n    answers = await asyncio.gather(*[call(group) for group in groups])\n    merged = []\n    for answer in answers:\n        merged.extend(answer)\n    return merged\n",
+    "prompt": "Implement async process_in_batches(items, handler, *, batch_size: int, concurrency: int) -> list.\nSplit items into batches of batch_size. Run at most concurrency handler calls at\nonce. The async handler receives one batch and returns a list of results.\nReturn flattened results in batch order. Reject non-positive batch_size or concurrency.\n",
+    "tags": [
+      "async",
+      "batching",
+      "day2-hard"
+    ],
+    "test_code": "import asyncio\n\nfrom solution import process_in_batches\n\n\ndef test_processes_batches_in_order():\n    async def handler(batch):\n        return [item * 2 for item in batch]\n\n    result = asyncio.run(process_in_batches([1, 2, 3, 4, 5], handler, batch_size=2, concurrency=2))\n    assert result == [2, 4, 6, 8, 10]\n"
+  },
+  "task_id": "async_batch_processor",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

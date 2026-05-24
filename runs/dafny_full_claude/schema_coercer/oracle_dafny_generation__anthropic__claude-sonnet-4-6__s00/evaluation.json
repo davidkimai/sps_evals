@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 3,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 4,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 2,
+      "if": 24,
+      "invariant": 3,
+      "logical_and": 3,
+      "logical_or": 7,
+      "match": 0,
+      "requires": 0,
+      "while": 4
+    },
+    "lexical_proof_complexity": 48,
+    "logical_and_count": 3,
+    "logical_or_count": 7,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 171,
+    "source_token_estimate": 939,
+    "status": "verification_failed",
+    "verification_duration_seconds": 7.075,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires a Python function `coerce_schema(raw: dict, schema: dict) -> dict` with specific semantics (type callables, defaults, ValueError on cast failure). The submission does not implement the required Python entry point at all, uses Dafny syntax and type system (map<string,string>, method, ensures, invariant), encodes type callables as strings rather than callables, uses sentinel strings instead of raising ValueError, and is completely non-executable as Python. This is a total mismatch with the functional requirements and the Zen of Python structural oracle \u2014 it is neither simple, explicit, flat, readable, nor locally auditable Python code.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires a Python function `coerce_schema(raw: dict, schema: dict) -> dict` with specific semantics (type callables, defaults, ValueError on cast failure). The submission does not implement the required Python entry point at all, uses Dafny syntax and type system (map<string,string>, method, ensures, invariant), encodes type callables as strings rather than callables, uses sentinel strings instead of raising ValueError, and is completely non-executable as Python. This is a total mismatch with the functional requirements and the Zen of Python structural oracle \u2014 it is neither simple, explicit, flat, readable, nor locally auditable Python code.\",\n  \"strengths\": [\n    \"Shows some understanding of the logical structure (iterate schema keys, check presence in raw, apply coercion or default)\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Entry point `coerce_schema` is not a Python function and cannot be called\",\n    \"Type callables are treated as strings rather than actual Python callables\",\n    \"ValueError is simulated with a sentinel string instead of actually raising ValueError\",\n    \"No Python imports, no Python syntax, no executable code whatsoever\",\n    \"Violates every Zen of Python principle: not simple, not explicit, not readable as Python, not flat\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows some understanding of the logical structure (iterate schema keys, check presence in raw, apply coercion or default)"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Entry point `coerce_schema` is not a Python function and cannot be called",
+      "Type callables are treated as strings rather than actual Python callables",
+      "ValueError is simulated with a sentinel string instead of actually raising ValueError",
+      "No Python imports, no Python syntax, no executable code whatsoever",
+      "Violates every Zen of Python principle: not simple, not explicit, not readable as Python, not flat"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 942,
+      "prompt": 296,
+      "total": 1238,
+      "turns": [
+        {
+          "completion": 942,
+          "prompt": 296,
+          "total": 1238
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(3,0): Error: a postcondition could not be proved on this return path\n  |\n3 | {\n  | ^\n\nsolution.dfy(2,10): Related location: this is the postcondition that could not be proved\n  |\n2 |   ensures forall k :: k in schema ==> k in result\n  |           ^^^^^^\n\n\nDafny program verifier finished with 5 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "schema_coercer",
+  "variant": "oracle_dafny_generation"
+}

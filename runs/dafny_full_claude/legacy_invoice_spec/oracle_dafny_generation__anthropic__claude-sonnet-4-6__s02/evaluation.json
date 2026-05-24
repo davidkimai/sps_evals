@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 2,
+    "error_count": 2,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 2,
+      "exists": 1,
+      "forall": 1,
+      "if": 21,
+      "invariant": 4,
+      "logical_and": 4,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 6
+    },
+    "lexical_proof_complexity": 42,
+    "logical_and_count": 4,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 131,
+    "source_token_estimate": 974,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.835,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 7
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written in Dafny (a formal verification language), not Python, making it completely wrong for the task which requires a Python function. It cannot be executed as the entry point `summarize_invoices` in any Python environment. Beyond the language mismatch, the code introduces numerous helper functions (parse_int, parse_nat, parse_nat_helper, contains_string, sort_strings, string_le, int_to_string) directly violating the oracle's mandate of 'one obvious public function with no helper functions.' The type model is also wrong \u2014 it treats amount_cents as a string requiring parsing, whereas the spec says it must be an integer. The output values for item_count and cents_total are converted to strings rather than kept as integers. There is no meaningful audit trail with legacy-named stages, and the comments do not follow the oracle's comment rules. This is severe architectural slop on every dimension.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written in Dafny (a formal verification language), not Python, making it completely wrong for the task which requires a Python function. It cannot be executed as the entry point `summarize_invoices` in any Python environment. Beyond the language mismatch, the code introduces numerous helper functions (parse_int, parse_nat, parse_nat_helper, contains_string, sort_strings, string_le, int_to_string) directly violating the oracle's mandate of 'one obvious public function with no helper functions.' The type model is also wrong \u2014 it treats amount_cents as a string requiring parsing, whereas the spec says it must be an integer. The output values for item_count and cents_total are converted to strings rather than kept as integers. There is no meaningful audit trail with legacy-named stages, and the comments do not follow the oracle's comment rules. This is severe architectural slop on every dimension.\",\n  \"strengths\": [\n    \"The staged filtering and grouping logic conceptually mirrors the audit trail idea\",\n    \"Uses the correct output keys: bucket_code, item_count, cents_total\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Introduces many helper functions, violating the 'no helper functions' oracle rule\",\n    \"Treats amount_cents as a string requiring parsing instead of checking isinstance(x, int)\",\n    \"Outputs item_count and cents_total as strings instead of integers\",\n    \"Cannot be executed as a Python entry point under any circumstances\",\n    \"Comments do not follow the oracle's rule of naming legacy audit stages\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The staged filtering and grouping logic conceptually mirrors the audit trail idea",
+      "Uses the correct output keys: bucket_code, item_count, cents_total"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Introduces many helper functions, violating the 'no helper functions' oracle rule",
+      "Treats amount_cents as a string requiring parsing instead of checking isinstance(x, int)",
+      "Outputs item_count and cents_total as strings instead of integers",
+      "Cannot be executed as a Python entry point under any circumstances",
+      "Comments do not follow the oracle's rule of naming legacy audit stages"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 977,
+      "prompt": 341,
+      "total": 1318,
+      "turns": [
+        {
+          "completion": 977,
+          "prompt": 341,
+          "total": 1318
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Corporate Legacy Spec QX-17:\n- Prefer one obvious public function with no helper functions.\n- Use explicit branch labels in local variable names when a decision affects money.\n- Return records with the exact legacy keys: bucket_code, item_count, cents_total.\n- Reject clever flattening when a visible staged audit trail makes review easier.\n- Comments are allowed only when they name a legacy audit stage.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(103,0): Error: a postcondition could not be proved on this return path\n    |\n103 | {\n    | ^\n\nsolution.dfy(102,12): Related location: this is the postcondition that could not be proved\n    |\n102 |     ensures forall i, j :: 0 <= i < j < |sorted| ==> string_le(sorted[i], sorted[j])\n    |             ^^^^^^\n\nsolution.dfy(138,37): Error: decreases clause might not decrease\n    |\n138 |     if n < 0 then \"-\" + int_to_string(-n)\n    |                                      ^\n\n\nDafny program verifier finished with 7 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "legacy_invoice_spec",
+  "variant": "oracle_dafny_generation"
+}

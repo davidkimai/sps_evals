@@ -1,0 +1,78 @@
+id: log_aggregator
+entry_point: merge_logs
+tags: [data_pipeline_advanced, logs, day2-hard]
+day2_stressors: [streaming_compatibility, audit_provenance, backwards_compatibility]
+prompt: |
+  Implement merge_logs(streams: list[iterable[dict]]) -> list[dict]. Merge multiple
+  log streams, deduplicate records by (source, seq), and return records sorted by ts.
+  Do not mutate input records.
+test_code: |
+  from solution import merge_logs
+
+
+  def test_merges_sorts_and_deduplicates():
+      a = [{'source': 'a', 'seq': 1, 'ts': 2}, {'source': 'a', 'seq': 1, 'ts': 2}]
+      b = [{'source': 'b', 'seq': 1, 'ts': 1}]
+      assert merge_logs([a, b]) == [{'source': 'b', 'seq': 1, 'ts': 1}, {'source': 'a', 'seq': 1, 'ts': 2}]
+day2_prompt: |
+  Extend merge_logs with detect_gaps: bool = False. When true, return
+  (merged_records, gaps), where gaps contains {'source', 'missing_seq'} for missing
+  sequence numbers between observed records per source.
+day2_test_code: |
+  from solution import merge_logs
+
+
+  def test_gap_detection_by_source():
+      rows = [{'source': 'a', 'seq': 1, 'ts': 1}, {'source': 'a', 'seq': 3, 'ts': 2}]
+      merged, gaps = merge_logs([rows], detect_gaps=True)
+      assert merged == rows
+      assert gaps == [{'source': 'a', 'missing_seq': 2}]
+human_reference: |
+  from __future__ import annotations
+
+
+  def merge_logs(streams: list) -> list[dict]:
+      seen = set()
+      merged = []
+      for stream in streams:
+          for record in stream:
+              key = (record.get('source'), record.get('seq'))
+              if key in seen:
+                  continue
+              seen.add(key)
+              merged.append(dict(record))
+      return sorted(merged, key=lambda row: row.get('ts', 0))
+mock_solution: |
+  from __future__ import annotations
+
+
+  def merge_logs(streams):
+      by_key = {}
+      for stream in streams:
+          for record in stream:
+              key = (record.get('source'), record.get('seq'))
+              if key not in by_key:
+                  by_key[key] = dict(record)
+      return sorted(by_key.values(), key=lambda row: row.get('ts', 0))
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def merge_logs(streams, detect_gaps=False):
+      by_key = {}
+      seqs = {}
+      for stream in streams:
+          for record in stream:
+              key = (record.get('source'), record.get('seq'))
+              if key not in by_key:
+                  by_key[key] = dict(record)
+              seqs.setdefault(record.get('source'), set()).add(record.get('seq'))
+      merged = sorted(by_key.values(), key=lambda row: row.get('ts', 0))
+      if not detect_gaps:
+          return merged
+      gaps = []
+      for source, values in seqs.items():
+          for seq in range(min(values), max(values) + 1):
+              if seq not in values:
+                  gaps.append({'source': source, 'missing_seq': seq})
+      return merged, gaps

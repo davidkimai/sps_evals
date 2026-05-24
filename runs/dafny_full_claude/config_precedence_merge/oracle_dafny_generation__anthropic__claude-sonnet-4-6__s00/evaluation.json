@@ -1,0 +1,111 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.141,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.886,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/config_precedence_merge/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 7,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 2,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 43,
+    "source_token_estimate": 342,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 4.597,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 3
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation does not implement the required `merge_settings` function at all. Instead, it contains boilerplate code attempting to import a non-existent 'module_' (a Dafny compilation artifact) and some symbol aliasing utilities. There is no logic for deep-merging dictionaries, parsing environment variables, handling precedence, or any of the functional requirements. The code will fail immediately with an ImportError on `import module_ as _dafny_module`, and even if it didn't, it provides zero implementation of the task. This is pure architectural slop with no redeeming structural qualities relative to the task.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation does not implement the required `merge_settings` function at all. Instead, it contains boilerplate code attempting to import a non-existent 'module_' (a Dafny compilation artifact) and some symbol aliasing utilities. There is no logic for deep-merging dictionaries, parsing environment variables, handling precedence, or any of the functional requirements. The code will fail immediately with an ImportError on `import module_ as _dafny_module`, and even if it didn't, it provides zero implementation of the task. This is pure architectural slop with no redeeming structural qualities relative to the task.\",\n  \"strengths\": [\n    \"None \u2014 the file contains no relevant implementation whatsoever\"\n  ],\n  \"weaknesses\": [\n    \"Does not define or implement `merge_settings` at all\",\n    \"Attempts to import a non-existent module (`module_`) that will cause an immediate ImportError\",\n    \"Contains only Dafny compilation boilerplate completely unrelated to the task\",\n    \"No environment variable parsing, no deep-merge logic, no precedence handling\",\n    \"Violates every Zen of Python principle: not simple, not explicit, not readable, not flat\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the file contains no relevant implementation whatsoever"
+    ],
+    "weaknesses": [
+      "Does not define or implement `merge_settings` at all",
+      "Attempts to import a non-existent module (`module_`) that will cause an immediate ImportError",
+      "Contains only Dafny compilation boilerplate completely unrelated to the task",
+      "No environment variable parsing, no deep-merge logic, no precedence handling",
+      "Violates every Zen of Python principle: not simple, not explicit, not readable, not flat"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 346,
+      "prompt": 385,
+      "total": 731,
+      "turns": [
+        {
+          "completion": 346,
+          "prompt": 385,
+          "total": 731
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 2.903,
+    "exit_code": 2,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "\n==================================== ERRORS ====================================\n______________________ ERROR collecting test_solution.py _______________________\nImportError while importing test module '/work/test_solution.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_solution.py:1: in <module>\n    from solution import merge_settings\nsolution.py:2: in <module>\n    import module_ as _dafny_module\nmodule_.py:9: in <module>\n    import ConfigPrecedenceMerge as ConfigPrecedenceMerge\nE   ModuleNotFoundError: No module named 'ConfigPrecedenceMerge'\n=========================== short test summary info ============================\nERROR test_solution.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.32s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "config_precedence_merge",
+  "variant": "oracle_dafny_generation"
+}

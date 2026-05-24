@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": 4,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 4,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 7,
+      "while": 0
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 7,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 55,
+    "source_token_estimate": 309,
+    "status": "verification_failed",
+    "verification_duration_seconds": 7.002,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 6
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. The task requires a Python class named RetryGate, but the code uses Dafny class declarations, method signatures with `returns`, `requires`/`ensures` contracts, `:=` assignment, and a `Main()` method \u2014 none of which are valid Python. This code would cause a SyntaxError if executed as Python and completely fails to satisfy the functional requirements as stated. While the logical structure and invariants expressed in Dafny are correct and well-specified, the implementation is in the wrong language entirely, making it non-functional for the task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. The task requires a Python class named RetryGate, but the code uses Dafny class declarations, method signatures with `returns`, `requires`/`ensures` contracts, `:=` assignment, and a `Main()` method \u2014 none of which are valid Python. This code would cause a SyntaxError if executed as Python and completely fails to satisfy the functional requirements as stated. While the logical structure and invariants expressed in Dafny are correct and well-specified, the implementation is in the wrong language entirely, making it non-functional for the task.\",\n  \"strengths\": [\n    \"Logical correctness of the algorithm is sound \u2014 the Dafny specification accurately models the required state machine behavior\",\n    \"Formal pre/post conditions and modifies clauses are well-articulated\",\n    \"The Main() method demonstrates correct usage scenarios\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Would produce a SyntaxError in any Python interpreter\",\n    \"No Python class, no __init__, no proper method definitions\",\n    \"Does not raise ValueError for non-positive max_attempts as required\",\n    \"Cannot be imported or used as a Python module\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Logical correctness of the algorithm is sound \u2014 the Dafny specification accurately models the required state machine behavior",
+      "Formal pre/post conditions and modifies clauses are well-articulated",
+      "The Main() method demonstrates correct usage scenarios"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Would produce a SyntaxError in any Python interpreter",
+      "No Python class, no __init__, no proper method definitions",
+      "Does not raise ValueError for non-positive max_attempts as required",
+      "Cannot be imported or used as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 313,
+      "prompt": 368,
+      "total": 681,
+      "turns": [
+        {
+          "completion": 313,
+          "prompt": 368,
+          "total": 681
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(54,22): Error: a precondition for this call could not be proved\n   |\n54 |   var a2 := gate.allow();\n   |                       ^\n\nsolution.dfy(16,26): Related location: this is the precondition that could not be proved\n   |\n16 |     requires max_attempts > 0\n   |                           ^\n\nsolution.dfy(55,2): Error: assertion might not hold\n   |\n55 |   assert a2 == false;\n   |   ^^^^^^\n\nsolution.dfy(57,22): Error: a precondition for this call could not be proved\n   |\n57 |   var a3 := gate.allow();\n   |                       ^\n\nsolution.dfy(16,26): Related location: this is the precondition that could not be proved\n   |\n16 |     requires max_attempts > 0\n   |                           ^\n\nsolution.dfy(60,2): Error: assertion might not hold\n   |\n60 |   assert r == 3;\n   |   ^^^^^^\n\n\nDafny program verifier finished with 6 verified, 4 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "retry_state_machine",
+  "variant": "oracle_dafny_generation"
+}

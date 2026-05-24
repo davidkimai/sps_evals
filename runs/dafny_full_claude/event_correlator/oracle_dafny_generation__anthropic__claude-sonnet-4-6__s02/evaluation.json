@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 4,
+    "error_count": 10,
+    "invariant_count": 10,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 4,
+      "exists": 0,
+      "forall": 12,
+      "if": 3,
+      "invariant": 10,
+      "logical_and": 13,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 2
+    },
+    "lexical_proof_complexity": 45,
+    "logical_and_count": 13,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 63,
+    "source_token_estimate": 687,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.381,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 0
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The entry point `correlate_events` is specified to be a Python function accepting `list[dict]` and returning `list[tuple[dict, dict]]`, but the code is a Dafny method operating on sequences of tuples with index-based returns. While the Dafny code does demonstrate formal verification awareness (loop invariants, pre/post-conditions) which aligns with the 'Dafny formal verification skill' oracle hint, it completely fails the functional requirement: it cannot be executed as Python, uses the wrong language, wrong data types (seq vs list[dict]), and returns index pairs instead of the actual event dicts. The structural quality of the Dafny code itself is reasonable, but it is entirely the wrong artifact for the task.",
+    "raw_response": "{\n  \"score\": 2,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The entry point `correlate_events` is specified to be a Python function accepting `list[dict]` and returning `list[tuple[dict, dict]]`, but the code is a Dafny method operating on sequences of tuples with index-based returns. While the Dafny code does demonstrate formal verification awareness (loop invariants, pre/post-conditions) which aligns with the 'Dafny formal verification skill' oracle hint, it completely fails the functional requirement: it cannot be executed as Python, uses the wrong language, wrong data types (seq vs list[dict]), and returns index pairs instead of the actual event dicts. The structural quality of the Dafny code itself is reasonable, but it is entirely the wrong artifact for the task.\",\n  \"strengths\": [\n    \"Demonstrates genuine Dafny formal verification knowledge with proper loop invariants and pre/post-conditions\",\n    \"Algorithmic logic (find first unused B after each A in same session within time window) is correct in intent\",\n    \"Tracks used B events to avoid double-pairing\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Wrong input/output types: uses seq<(int,string,string)> instead of list[dict], returns index pairs instead of dict tuples\",\n    \"Cannot satisfy the functional requirement at all since it is not valid Python\",\n    \"No Python implementation provided whatsoever\"\n  ]\n}",
+    "score": 2,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates genuine Dafny formal verification knowledge with proper loop invariants and pre/post-conditions",
+      "Algorithmic logic (find first unused B after each A in same session within time window) is correct in intent",
+      "Tracks used B events to avoid double-pairing"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Wrong input/output types: uses seq<(int,string,string)> instead of list[dict], returns index pairs instead of dict tuples",
+      "Cannot satisfy the functional requirement at all since it is not valid Python",
+      "No Python implementation provided whatsoever"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 690,
+      "prompt": 289,
+      "total": 979,
+      "turns": [
+        {
+          "completion": 690,
+          "prompt": 289,
+          "total": 979
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(7,14): Error: index out of range\n  |\n7 |         events[result[k].0].2 == \"A\" && events[result[k].1].2 == \"B\"\n  |               ^\n\nsolution.dfy(9,14): Error: index out of range\n  |\n9 |         events[result[k].0].1 == events[result[k].1].1\n  |               ^\n\nsolution.dfy(9,39): Error: index out of range\n  |\n9 |         events[result[k].0].1 == events[result[k].1].1\n  |                                        ^\n\nsolution.dfy(11,14): Error: index out of range\n   |\n11 |         events[result[k].1].0 - events[result[k].0].0 >= 0 &&\n   |               ^\n\nsolution.dfy(11,38): Error: index out of range\n   |\n11 |         events[result[k].1].0 - events[result[k].0].0 >= 0 &&\n   |                                       ^\n\nsolution.dfy(24,18): Error: index out of range\n   |\n24 |             events[result[k].0].1 == events[result[k].1].1\n   |                   ^\n\nsolution.dfy(26,18): Error: index out of range\n   |\n26 |             events[result[k].1].0 - events[result[k].0].0 >= 0 &&\n   |                   ^\n\nsolution.dfy(26,42): Error: index out of range\n   |\n26 |             events[result[k].1].0 - events[result[k].0].0 >= 0 &&\n   |                                           ^\n\nsolution.dfy(27,18): Error: index out of range\n   |\n27 |             events[result[k].1].0 - events[result[k].0].0 <= within\n   |                   ^\n\nsolution.dfy(27,42): Error: index out of range\n   |\n27 |             events[result[k].1].0 - events[result[k].0].0 <= within\n   |                                           ^\n\n\nDafny program verifier finished with 0 verified, 10 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "event_correlator",
+  "variant": "oracle_dafny_generation"
+}

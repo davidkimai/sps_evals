@@ -1,0 +1,40 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef handle_underspecified(payload: dict):\n    if payload.get('mode') == 'echo' and 'value' in payload:\n        return payload['value']\n    raise NotImplementedError('uncovered input path')\n",
+  "effective_temperature": null,
+  "entry_point": "handle_underspecified",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef handle_underspecified(payload: dict):\n    if payload.get('mode') == 'echo' and 'value' in payload:\n        return payload['value']\n    raise NotImplementedError('uncovered input path')\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend handle_underspecified with a newly specified path: {'mode': 'count', 'items': list}\nreturns len(items). Continue raising NotImplementedError for all other uncovered paths.\n",
+    "day2_stressors": [
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import handle_underspecified\n\n\ndef test_adds_count_but_still_refuses_unknown_paths():\n    assert handle_underspecified({'mode': 'count', 'items': [1, 2, 3]}) == 3\n    assert handle_underspecified({'mode': 'echo', 'value': 'x'}) == 'x'\n    with pytest.raises(NotImplementedError):\n        handle_underspecified({'mode': 'average', 'items': [1, 2]})\n",
+    "entry_point": "handle_underspecified",
+    "human_reference": "from __future__ import annotations\n\n\ndef handle_underspecified(payload: dict):\n    if payload.get('mode') == 'echo' and 'value' in payload:\n        return payload['value']\n    raise NotImplementedError('uncovered input path')\n",
+    "id": "spec_elicitation_stub",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef handle_underspecified(payload):\n    mode = payload.get('mode')\n    if mode == 'echo' and 'value' in payload:\n        return payload['value']\n    if mode == 'count' and isinstance(payload.get('items'), list):\n        return len(payload['items'])\n    raise NotImplementedError('uncovered input path')\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef handle_underspecified(payload):\n    mode = payload.get('mode')\n    if mode == 'echo' and 'value' in payload:\n        return payload['value']\n    raise NotImplementedError('uncovered input path')\n",
+    "prompt": "Implement handle_underspecified(payload: dict) -> object. The only specified path\nis payload {'mode': 'echo', 'value': X}, which returns X. For any uncovered input\npath, raise NotImplementedError rather than guessing behavior.\n",
+    "tags": [
+      "spec_elicitation",
+      "underspecified",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import handle_underspecified\n\n\ndef test_echo_and_refusal_to_guess():\n    assert handle_underspecified({'mode': 'echo', 'value': 3}) == 3\n    with pytest.raises(NotImplementedError):\n        handle_underspecified({'mode': 'sum', 'values': [1, 2]})\n"
+  },
+  "task_id": "spec_elicitation_stub",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

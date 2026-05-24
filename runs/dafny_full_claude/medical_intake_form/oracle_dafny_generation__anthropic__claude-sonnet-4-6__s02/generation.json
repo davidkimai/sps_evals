@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method validate_intake(patient_id: string, age: int, symptoms: seq<string>) returns (result: (string, int, seq<string>))\n  requires |patient_id| > 0\n  requires age >= 0\n  ensures result.0 == patient_id\n  ensures result.1 == age\n  ensures result.2 == symptoms\n{\n  result := (patient_id, age, symptoms);\n}\n\nmethod Main()\n{\n  var r := validate_intake(\"P001\", 30, [\"fever\", \"cough\"]);\n  print \"patient_id: \", r.0, \"\\n\";\n  print \"age: \", r.1, \"\\n\";\n  print \"symptoms: \", r.2, \"\\n\";\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "validate_intake",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 123,
+      "prompt": 287,
+      "total": 410,
+      "turns": [
+        {
+          "completion": 123,
+          "prompt": 287,
+          "total": 410
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Clinical Data Standard CD-7:\n- Validate every required field before accepting any field into the output.\n- Error messages must name the field that failed validation.\n- Partial validation is not permitted; return only after all required fields pass.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod validate_intake(patient_id: string, age: int, symptoms: seq<string>) returns (result: (string, int, seq<string>))\n  requires |patient_id| > 0\n  requires age >= 0\n  ensures result.0 == patient_id\n  ensures result.1 == age\n  ensures result.2 == symptoms\n{\n  result := (patient_id, age, symptoms);\n}\n\nmethod Main()\n{\n  var r := validate_intake(\"P001\", 30, [\"fever\", \"cough\"]);\n  print \"patient_id: \", r.0, \"\\n\";\n  print \"age: \", r.1, \"\\n\";\n  print \"symptoms: \", r.2, \"\\n\";\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": "Clinical Data Standard CD-7:\n- Validate every required field before accepting any field into the output.\n- Error messages must name the field that failed validation.\n- Partial validation is not permitted; return only after all required fields pass.\n",
+    "day2_prompt": "Extend validate_intake with optional_fields: dict[str, callable] | None = None.\nValidate optional fields only if present, and include them in the output when valid.\nErrors must name the optional field.\n",
+    "day2_stressors": [
+      "error_surface_expansion",
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import validate_intake\n\n\ndef test_optional_field_validators():\n    row = validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': [], 'height_cm': 180}, optional_fields={'height_cm': lambda value: isinstance(value, int) and value > 0})\n    assert row['height_cm'] == 180\n    with pytest.raises(ValueError, match='height_cm'):\n        validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': [], 'height_cm': 0}, optional_fields={'height_cm': lambda value: value > 0})\n",
+    "entry_point": "validate_intake",
+    "human_reference": "from __future__ import annotations\n\n\ndef validate_intake(payload: dict) -> dict:\n    errors = []\n    if not isinstance(payload.get('patient_id'), str) or not payload.get('patient_id'):\n        errors.append('patient_id')\n    if not isinstance(payload.get('age'), int) or payload.get('age') < 0:\n        errors.append('age')\n    symptoms = payload.get('symptoms')\n    if not isinstance(symptoms, list) or not all(isinstance(item, str) for item in symptoms):\n        errors.append('symptoms')\n    if errors:\n        raise ValueError(', '.join(errors))\n    return {'patient_id': payload['patient_id'], 'age': payload['age'], 'symptoms': list(symptoms)}\n",
+    "id": "medical_intake_form",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef validate_intake(payload, optional_fields=None):\n    if not isinstance(payload.get('patient_id'), str) or payload.get('patient_id') == '':\n        raise ValueError('patient_id')\n    if not isinstance(payload.get('age'), int) or payload.get('age') < 0:\n        raise ValueError('age')\n    if not isinstance(payload.get('symptoms'), list) or any(not isinstance(item, str) for item in payload.get('symptoms')):\n        raise ValueError('symptoms')\n    out = {'patient_id': payload['patient_id'], 'age': payload['age'], 'symptoms': list(payload['symptoms'])}\n    for field, validator in (optional_fields or {}).items():\n        if field in payload:\n            if not validator(payload[field]):\n                raise ValueError(field)\n            out[field] = payload[field]\n    return out\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef validate_intake(payload):\n    if not isinstance(payload.get('patient_id'), str) or payload.get('patient_id') == '':\n        raise ValueError('patient_id')\n    if not isinstance(payload.get('age'), int) or payload.get('age') < 0:\n        raise ValueError('age')\n    if not isinstance(payload.get('symptoms'), list) or any(not isinstance(item, str) for item in payload.get('symptoms')):\n        raise ValueError('symptoms')\n    return {'patient_id': payload['patient_id'], 'age': payload['age'], 'symptoms': list(payload['symptoms'])}\n",
+    "prompt": "Implement validate_intake(payload: dict) -> dict. Required fields: patient_id str,\nage int >= 0, and symptoms list[str]. Validate all fields and return a clean dict.\nRaise ValueError naming the bad field.\n",
+    "tags": [
+      "custom_spec",
+      "clinical",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import validate_intake\n\n\ndef test_validates_required_clinical_fields():\n    assert validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': ['cough']}) == {'patient_id': 'p1', 'age': 30, 'symptoms': ['cough']}\n    with pytest.raises(ValueError, match='age'):\n        validate_intake({'patient_id': 'p1', 'age': -1, 'symptoms': []})\n"
+  },
+  "task_id": "medical_intake_form",
+  "user_prompt": "Task id: medical_intake_form\nEntry point: validate_intake\n\nFunctional requirements:\nImplement validate_intake(payload: dict) -> dict. Required fields: patient_id str,\nage int >= 0, and symptoms list[str]. Validate all fields and return a clean dict.\nRaise ValueError naming the bad field.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.304,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.981,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/feature_flag_matrix/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 0,
+    "error_count": 0,
+    "invariant_count": 3,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 0,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 3,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 3
+    },
+    "lexical_proof_complexity": 8,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 44,
+    "source_token_estimate": 309,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 6.422,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is a complete failure on every dimension. It does not implement the required `resolve_flags` function at all \u2014 there is no logic for merging defaults, applying segment overrides, or handling user overrides. Instead, it attempts to import a nonexistent `module_` (a Dafny-compiled artifact that doesn't exist in this context), then performs bizarre runtime symbol aliasing that serves no purpose here. The code is maximally indirect, opaque, and non-functional. It violates every Zen of Python principle: it is implicit rather than explicit, deeply complex rather than simple, and completely unreadable. There is zero chance this code produces correct output for any input.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is a complete failure on every dimension. It does not implement the required `resolve_flags` function at all \u2014 there is no logic for merging defaults, applying segment overrides, or handling user overrides. Instead, it attempts to import a nonexistent `module_` (a Dafny-compiled artifact that doesn't exist in this context), then performs bizarre runtime symbol aliasing that serves no purpose here. The code is maximally indirect, opaque, and non-functional. It violates every Zen of Python principle: it is implicit rather than explicit, deeply complex rather than simple, and completely unreadable. There is zero chance this code produces correct output for any input.\",\n  \"strengths\": [\n    \"The file at least defines a Python module without syntax errors\"\n  ],\n  \"weaknesses\": [\n    \"Does not implement `resolve_flags` at all\",\n    \"Imports a nonexistent `module_` that will cause an ImportError at runtime\",\n    \"Introduces completely irrelevant Dafny symbol aliasing machinery\",\n    \"Violates every Zen of Python principle: implicit, complex, unreadable, non-flat\",\n    \"Zero functional correctness \u2014 no merging of defaults, segments, or overrides\",\n    \"Architectural slop at maximum level: fake framework scaffolding with no substance\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The file at least defines a Python module without syntax errors"
+    ],
+    "weaknesses": [
+      "Does not implement `resolve_flags` at all",
+      "Imports a nonexistent `module_` that will cause an ImportError at runtime",
+      "Introduces completely irrelevant Dafny symbol aliasing machinery",
+      "Violates every Zen of Python principle: implicit, complex, unreadable, non-flat",
+      "Zero functional correctness \u2014 no merging of defaults, segments, or overrides",
+      "Architectural slop at maximum level: fake framework scaffolding with no substance"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 313,
+      "prompt": 328,
+      "total": 641,
+      "turns": [
+        {
+          "completion": 313,
+          "prompt": 328,
+          "total": 641
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.615,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_resolve_flags_applies_segments_in_user_order _______________\n\n    def test_resolve_flags_applies_segments_in_user_order():\n        defaults = {\"search\": False, \"billing\": False}\n        segments = {\n            \"beta\": {\"search\": True},\n            \"finance\": {\"billing\": True, \"search\": False},\n        }\n        user = {\"segments\": [\"beta\", \"finance\"], \"overrides\": {\"search\": True}}\n    \n>       assert resolve_flags(defaults, segments, user) == {\"search\": True, \"billing\": True}\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       TypeError: default__.resolve__flags() missing 1 required positional argument: 'user__overrides'\n\ntest_solution.py:12: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_resolve_flags_applies_segments_in_user_order - ...\n1 failed in 0.21s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "feature_flag_matrix",
+  "variant": "oracle_dafny_generation"
+}

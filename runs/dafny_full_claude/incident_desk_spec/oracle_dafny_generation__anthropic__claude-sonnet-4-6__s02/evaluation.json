@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 61,
+      "invariant": 2,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 3,
+      "while": 1
+    },
+    "lexical_proof_complexity": 71,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 3,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 107,
+    "source_token_estimate": 795,
+    "status": "verification_failed",
+    "verification_duration_seconds": 7.306,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny (a formal verification language), not Python, making it entirely wrong for the task which requires a Python function named `route_tickets`. The type signatures use Dafny syntax (`seq<map<string, string>>`, `requires`, `ensures`, `invariant`), and the code cannot be executed as Python at all. Beyond the language mismatch, the implementation violates the spec's requirement that `priority` be returned as an `int` (it converts to string), uses no `_table` naming convention, lacks the explicit severity lookup table the spec hints at, and the parse_int/int_to_string functions are hardcoded lookup chains that are both fragile and architecturally sloppy. The spec calls for simple, flat, readable Python \u2014 this is a formal methods artifact that fails every structural and functional criterion.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny (a formal verification language), not Python, making it entirely wrong for the task which requires a Python function named `route_tickets`. The type signatures use Dafny syntax (`seq<map<string, string>>`, `requires`, `ensures`, `invariant`), and the code cannot be executed as Python at all. Beyond the language mismatch, the implementation violates the spec's requirement that `priority` be returned as an `int` (it converts to string), uses no `_table` naming convention, lacks the explicit severity lookup table the spec hints at, and the parse_int/int_to_string functions are hardcoded lookup chains that are both fragile and architecturally sloppy. The spec calls for simple, flat, readable Python \u2014 this is a formal methods artifact that fails every structural and functional criterion.\",\n  \"strengths\": [\n    \"Correctly identifies the three required fields (id, severity, service) for ticket validation\",\n    \"Preserves ticket order via sequential iteration\",\n    \"Falls back to 'default' rule when service is absent\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"priority is returned as a string, not an int as required\",\n    \"parse_int and int_to_string are hardcoded sparse lookup chains \u2014 severe architectural slop\",\n    \"No _table naming convention as specified by the oracle\",\n    \"Formal verification annotations (requires, ensures, invariant) are irrelevant noise for this task\",\n    \"Does not define a Python function named route_tickets \u2014 entry point contract is broken\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Correctly identifies the three required fields (id, severity, service) for ticket validation",
+      "Preserves ticket order via sequential iteration",
+      "Falls back to 'default' rule when service is absent"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "priority is returned as a string, not an int as required",
+      "parse_int and int_to_string are hardcoded sparse lookup chains \u2014 severe architectural slop",
+      "No _table naming convention as specified by the oracle",
+      "Formal verification annotations (requires, ensures, invariant) are irrelevant noise for this task",
+      "Does not define a Python function named route_tickets \u2014 entry point contract is broken"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 798,
+      "prompt": 352,
+      "total": 1150,
+      "turns": [
+        {
+          "completion": 798,
+          "prompt": 352,
+          "total": 1150
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Incident Desk Spec N-9:\n- Return review-facing rows with stable status_code values, never booleans.\n- Prefer local lookup tables with names ending in _table.\n- Keep branch reasons as short explicit strings, not hidden in comments.\n- Do not introduce classes for single-pass ticket routing.\n- Preserve ticket order because shift leads compare rows against the intake log.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(114,9): Error: type int does not have a member ToString\n    |\n114 |   else n.ToString()\n    |          ^^^^^^^^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "incident_desk_spec",
+  "variant": "oracle_dafny_generation"
+}

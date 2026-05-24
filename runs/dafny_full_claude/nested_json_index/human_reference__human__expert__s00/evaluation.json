@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and explicit. Guard clauses are used effectively to keep the happy path unindented, variable names are self-explanatory, data movement is visible, there is no hidden mutation of input dicts, and no speculative abstractions exist. The use of `setdefault` is idiomatic and avoids redundant key checks. The only minor quibble is that `setdefault` does mutate `index` in-place (which is fine and expected here), and one could argue extracting a small `is_valid_purchase(event)` predicate helper would improve local auditability slightly, but the current single-function form is compact enough that this is not a real concern.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, flat, and explicit. Guard clauses are used effectively to keep the happy path unindented, variable names are self-explanatory, data movement is visible, there is no hidden mutation of input dicts, and no speculative abstractions exist. The use of `setdefault` is idiomatic and avoids redundant key checks. The only minor quibble is that `setdefault` does mutate `index` in-place (which is fine and expected here), and one could argue extracting a small `is_valid_purchase(event)` predicate helper would improve local auditability slightly, but the current single-function form is compact enough that this is not a real concern.\",\n  \"strengths\": [\n    \"Guard clauses keep nesting flat and readable\",\n    \"No mutation of input events or the input list\",\n    \"Explicit type checks with clear isinstance guards\",\n    \"setdefault is idiomatic and avoids redundant branching\",\n    \"Names are clear and self-documenting\",\n    \"No speculative abstractions or unused extension points\"\n  ],\n  \"weaknesses\": [\n    \"A small `is_valid_purchase` predicate helper could make the loop body even more auditable\",\n    \"The `kind` check comes after the `.get` calls for user_id and amount, a minor ordering inconsistency (checking kind first would short-circuit earlier)\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Guard clauses keep nesting flat and readable",
+      "No mutation of input events or the input list",
+      "Explicit type checks with clear isinstance guards",
+      "setdefault is idiomatic and avoids redundant branching",
+      "Names are clear and self-documenting",
+      "No speculative abstractions or unused extension points"
+    ],
+    "weaknesses": [
+      "A small `is_valid_purchase` predicate helper could make the loop body even more auditable",
+      "The `kind` check comes after the `.get` calls for user_id and amount, a minor ordering inconsistency (checking kind first would short-circuit earlier)"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 2.611,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.06s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 6.0,
+    "cyclomatic_complexity_max": 6,
+    "cyclomatic_complexity_total": 6,
+    "function_count": 1,
+    "loc": 16,
+    "maintainability_index": 58.877,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "nested_json_index",
+  "variant": "human_reference"
+}

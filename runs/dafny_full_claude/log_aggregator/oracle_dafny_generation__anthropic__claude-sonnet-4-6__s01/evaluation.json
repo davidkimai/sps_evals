@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 11,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 1,
+      "forall": 3,
+      "if": 2,
+      "invariant": 11,
+      "logical_and": 7,
+      "logical_or": 3,
+      "match": 0,
+      "requires": 0,
+      "while": 7
+    },
+    "lexical_proof_complexity": 35,
+    "logical_and_count": 7,
+    "logical_or_count": 3,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 92,
+    "source_token_estimate": 703,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.025,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `merge_logs(streams: list[iterable[dict]]) -> list[dict]` returning dicts sorted by `ts` and deduplicated by `(source, seq)`. Instead, the code is a Dafny method operating on sequences of integer tuples, with no Python entry point, no dict handling, and no callable `merge_logs` function whatsoever. While the Dafny code attempts to demonstrate formal verification concepts (loop invariants, postconditions), it is completely non-functional for the actual task, uses the wrong language, wrong data types, and contains a buggy insertion sort implementation (the shift logic is incorrect, overwriting elements rather than shifting them). This is a total failure to meet the functional requirements and the structural spec.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `merge_logs(streams: list[iterable[dict]]) -> list[dict]` returning dicts sorted by `ts` and deduplicated by `(source, seq)`. Instead, the code is a Dafny method operating on sequences of integer tuples, with no Python entry point, no dict handling, and no callable `merge_logs` function whatsoever. While the Dafny code attempts to demonstrate formal verification concepts (loop invariants, postconditions), it is completely non-functional for the actual task, uses the wrong language, wrong data types, and contains a buggy insertion sort implementation (the shift logic is incorrect, overwriting elements rather than shifting them). This is a total failure to meet the functional requirements and the structural spec.\",\n  \"strengths\": [\n    \"Attempts to include Dafny loop invariants and postconditions, showing awareness of formal verification concepts\",\n    \"Logical structure (collect \u2192 deduplicate \u2192 sort) mirrors the correct algorithm\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"No Python `merge_logs` function exists; the entry point requirement is entirely unmet\",\n    \"Operates on integer tuples instead of dicts, ignoring the actual data model\",\n    \"Insertion sort implementation is buggy (double-assignment corrupts elements during shift)\",\n    \"Cannot be executed or imported as a Python module\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to include Dafny loop invariants and postconditions, showing awareness of formal verification concepts",
+      "Logical structure (collect \u2192 deduplicate \u2192 sort) mirrors the correct algorithm"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "No Python `merge_logs` function exists; the entry point requirement is entirely unmet",
+      "Operates on integer tuples instead of dicts, ignoring the actual data model",
+      "Insertion sort implementation is buggy (double-assignment corrupts elements during shift)",
+      "Cannot be executed or imported as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 706,
+      "prompt": 282,
+      "total": 988,
+      "turns": [
+        {
+          "completion": 706,
+          "prompt": 282,
+          "total": 988
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(57,21): Error: this loop invariant could not be proved on entry\n Related message: loop invariant violation\n   |\n57 |     invariant 0 <= i <= n\n   |                      ^^\n\nsolution.dfy(59,14): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n59 |     invariant forall p, q :: 0 <= p < q < i ==> sorted[p].0 <= sorted[q].0\n   |               ^^^^^^\n\n\nDafny program verifier finished with 2 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "log_aggregator",
+  "variant": "oracle_dafny_generation"
+}

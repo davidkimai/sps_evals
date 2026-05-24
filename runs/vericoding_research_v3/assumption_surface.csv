@@ -1,0 +1,73 @@
+assumption,risk_if_wrong,surface,task_id
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,policy_merge
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,policy_merge
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,policy_merge
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,config_precedence_merge
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,config_precedence_merge
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,config_precedence_merge
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,cli_argument_validation
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,cli_argument_validation
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,cli_argument_validation
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,retry_backoff_schedule
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,retry_backoff_schedule
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,retry_backoff_schedule
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,sliding_window_limiter
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,sliding_window_limiter
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,sliding_window_limiter
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,feature_flag_matrix
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,feature_flag_matrix
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,feature_flag_matrix
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,async_rate_limiter
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,async_rate_limiter
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,async_rate_limiter
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,timing_safe_compare
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,timing_safe_compare
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,timing_safe_compare
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,input_sanitizer
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,input_sanitizer
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,input_sanitizer
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,token_bucket_enforcer
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,token_bucket_enforcer
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,token_bucket_enforcer
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,audit_log_writer
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,audit_log_writer
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,audit_log_writer
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,internal,permission_gate
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,internal,permission_gate
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,internal,permission_gate
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,safe_path_validation
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,safe_path_validation
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,safe_path_validation
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,shell_argument_construction
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,shell_argument_construction
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,shell_argument_construction
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,archive_extract_filter
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,archive_extract_filter
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,archive_extract_filter
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,url_domain_allowlist
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,url_domain_allowlist
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,url_domain_allowlist
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,parser_validator_edges
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,parser_validator_edges
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,parser_validator_edges
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,input_canonicalization
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,input_canonicalization
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,input_canonicalization
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,authorization_rule_sequence
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,authorization_rule_sequence
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,authorization_rule_sequence
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,config_schema_enforcement
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,config_schema_enforcement
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,config_schema_enforcement
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,token_scope_checker
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,token_scope_checker
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,token_scope_checker
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,redaction_policy_engine
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,redaction_policy_engine
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,redaction_policy_engine
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,webhook_signature_validator
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,webhook_signature_validator
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,webhook_signature_validator
+Inputs are confined to the component interface.,Out-of-band state may invalidate acceptance decisions.,secure,rate_limit_key_builder
+Hidden oracle captures the intended unsafe behavior.,Visible pass and hidden pass may still be a verification facade.,secure,rate_limit_key_builder
+Selector never sees hidden labels.,Selection metrics would overstate trust-boundary value.,secure,rate_limit_key_builder

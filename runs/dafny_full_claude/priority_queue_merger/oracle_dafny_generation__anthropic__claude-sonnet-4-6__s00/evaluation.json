@@ -1,0 +1,111 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 13,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 9,
+      "if": 3,
+      "invariant": 13,
+      "logical_and": 3,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 1,
+      "while": 4
+    },
+    "lexical_proof_complexity": 36,
+    "logical_and_count": 3,
+    "logical_or_count": 2,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 64,
+    "source_token_estimate": 538,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.963,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The entry point `merge_sorted_iterators` does not exist anywhere in the code. The task requires a Python function that lazily merges sorted iterators using something like `heapq.merge` or a heap-based approach, returning a Python iterator. Instead, the submission provides a Dafny method operating on sequences of sequences with formal verification invariants. This completely fails the functional requirements (wrong language, wrong signature, wrong return type, not lazy), and has no relationship to the Zen of Python or any Python structural quality criteria. It is the maximum possible architectural mismatch.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The entry point `merge_sorted_iterators` does not exist anywhere in the code. The task requires a Python function that lazily merges sorted iterators using something like `heapq.merge` or a heap-based approach, returning a Python iterator. Instead, the submission provides a Dafny method operating on sequences of sequences with formal verification invariants. This completely fails the functional requirements (wrong language, wrong signature, wrong return type, not lazy), and has no relationship to the Zen of Python or any Python structural quality criteria. It is the maximum possible architectural mismatch.\",\n  \"strengths\": [\n    \"The Dafny code itself demonstrates understanding of the merge algorithm's correctness properties through loop invariants\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely wrong language for the task\",\n    \"Entry point `merge_sorted_iterators` is completely absent\",\n    \"Not lazy \u2014 operates on materialized arrays, not iterators\",\n    \"Cannot be imported or executed as a Python module\",\n    \"No adherence to Zen of Python principles since it is not Python at all\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny code itself demonstrates understanding of the merge algorithm's correctness properties through loop invariants"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely wrong language for the task",
+      "Entry point `merge_sorted_iterators` is completely absent",
+      "Not lazy \u2014 operates on materialized arrays, not iterators",
+      "Cannot be imported or executed as a Python module",
+      "No adherence to Zen of Python principles since it is not Python at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 538,
+      "prompt": 272,
+      "total": 810,
+      "turns": [
+        {
+          "completion": 538,
+          "prompt": 272,
+          "total": 810
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(37,14): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n37 |     invariant forall i, j :: 0 <= i < j < |result| ==> result[i] <= result[j]\n   |               ^^^^^^\n\n\nDafny program verifier finished with 1 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "priority_queue_merger",
+  "variant": "oracle_dafny_generation"
+}

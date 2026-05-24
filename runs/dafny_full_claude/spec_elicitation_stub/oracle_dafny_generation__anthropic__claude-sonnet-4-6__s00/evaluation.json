@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 3.704,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.57,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/spec_elicitation_stub/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 2,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 4,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 8,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 0
+    },
+    "lexical_proof_complexity": 16,
+    "logical_and_count": 8,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": 2,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 23,
+    "source_token_estimate": 193,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.404,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop. It does not implement `handle_underspecified` at all \u2014 the required entry point is entirely absent. Instead, it imports a phantom `module_` (which would cause an ImportError at runtime), performs elaborate Dafny-to-Python symbol aliasing that serves no purpose for this task, and introduces wildcard imports and global namespace mutation. None of this addresses the trivially simple requirement: check if mode=='echo' and return value, else raise NotImplementedError. The code is maximally indirect, opaque, and non-functional for the stated task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop. It does not implement `handle_underspecified` at all \u2014 the required entry point is entirely absent. Instead, it imports a phantom `module_` (which would cause an ImportError at runtime), performs elaborate Dafny-to-Python symbol aliasing that serves no purpose for this task, and introduces wildcard imports and global namespace mutation. None of this addresses the trivially simple requirement: check if mode=='echo' and return value, else raise NotImplementedError. The code is maximally indirect, opaque, and non-functional for the stated task.\",\n  \"strengths\": [\n    \"Attempts to signal awareness of Dafny as a formal verification tool (matching the oracle hint)\"\n  ],\n  \"weaknesses\": [\n    \"Entry point `handle_underspecified` is never defined\",\n    \"Imports a non-existent `module_` which would cause ImportError immediately\",\n    \"Wildcard import pollutes namespace with unknown symbols\",\n    \"Global namespace mutation via `_specoracle_alias_dafny_symbols` is opaque and unnecessary\",\n    \"Zero functional correctness \u2014 neither the echo path nor the NotImplementedError path is implemented\",\n    \"Violates every Zen of Python principle: not explicit, not simple, not flat, not readable\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to signal awareness of Dafny as a formal verification tool (matching the oracle hint)"
+    ],
+    "weaknesses": [
+      "Entry point `handle_underspecified` is never defined",
+      "Imports a non-existent `module_` which would cause ImportError immediately",
+      "Wildcard import pollutes namespace with unknown symbols",
+      "Global namespace mutation via `_specoracle_alias_dafny_symbols` is opaque and unnecessary",
+      "Zero functional correctness \u2014 neither the echo path nor the NotImplementedError path is implemented",
+      "Violates every Zen of Python principle: not explicit, not simple, not flat, not readable"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 196,
+      "prompt": 294,
+      "total": 490,
+      "turns": [
+        {
+          "completion": 196,
+          "prompt": 294,
+          "total": 490
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.154,
+    "exit_code": 2,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "\n==================================== ERRORS ====================================\n______________________ ERROR collecting test_solution.py _______________________\nImportError while importing test module '/work/test_solution.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_solution.py:3: in <module>\n    from solution import handle_underspecified\nE   ImportError: cannot import name 'handle_underspecified' from 'solution' (/work/solution.py)\n=========================== short test summary info ============================\nERROR test_solution.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.27s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "spec_elicitation_stub",
+  "variant": "oracle_dafny_generation"
+}

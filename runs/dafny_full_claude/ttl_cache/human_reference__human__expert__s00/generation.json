@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nimport time\nfrom collections import OrderedDict\nfrom collections.abc import Callable\nfrom typing import Any\n\n\nclass TTLCache:\n    def __init__(self, max_size: int, ttl_seconds: float, *, now: Callable[[], float] | None = None) -> None:\n        if max_size <= 0 or ttl_seconds <= 0:\n            raise ValueError('max_size and ttl_seconds must be positive')\n        self._max_size = max_size\n        self._ttl = ttl_seconds\n        self._now = now or time.monotonic\n        self._items: OrderedDict[Any, tuple[Any, float]] = OrderedDict()\n\n    def set(self, key, value) -> None:\n        self._items[key] = (value, self._now())\n        self._items.move_to_end(key)\n        while len(self._items) > self._max_size:\n            self._items.popitem(last=False)\n\n    def get(self, key):\n        item = self._items.get(key)\n        if item is None:\n            return None\n        value, stamp = item\n        if self._now() - stamp > self._ttl:\n            del self._items[key]\n            return None\n        self._items.move_to_end(key)\n        return value\n",
+  "effective_temperature": null,
+  "entry_point": "TTLCache",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nimport time\nfrom collections import OrderedDict\nfrom collections.abc import Callable\nfrom typing import Any\n\n\nclass TTLCache:\n    def __init__(self, max_size: int, ttl_seconds: float, *, now: Callable[[], float] | None = None) -> None:\n        if max_size <= 0 or ttl_seconds <= 0:\n            raise ValueError('max_size and ttl_seconds must be positive')\n        self._max_size = max_size\n        self._ttl = ttl_seconds\n        self._now = now or time.monotonic\n        self._items: OrderedDict[Any, tuple[Any, float]] = OrderedDict()\n\n    def set(self, key, value) -> None:\n        self._items[key] = (value, self._now())\n        self._items.move_to_end(key)\n        while len(self._items) > self._max_size:\n            self._items.popitem(last=False)\n\n    def get(self, key):\n        item = self._items.get(key)\n        if item is None:\n            return None\n        value, stamp = item\n        if self._now() - stamp > self._ttl:\n            del self._items[key]\n            return None\n        self._items.move_to_end(key)\n        return value\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add warm(initial: dict) that pre-populates the cache from a dict using the current\ntime. It should respect max_size by keeping the latest inserted entries.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import TTLCache\n\n\ndef test_cache_warming_respects_capacity():\n    clock = {'t': 0.0}\n    cache = TTLCache(2, 5.0, now=lambda: clock['t'])\n    cache.warm({'a': 1, 'b': 2, 'c': 3})\n    assert cache.get('a') is None\n    assert cache.get('b') == 2\n    assert cache.get('c') == 3\n",
+    "entry_point": "TTLCache",
+    "human_reference": "from __future__ import annotations\n\nimport time\nfrom collections import OrderedDict\nfrom collections.abc import Callable\nfrom typing import Any\n\n\nclass TTLCache:\n    def __init__(self, max_size: int, ttl_seconds: float, *, now: Callable[[], float] | None = None) -> None:\n        if max_size <= 0 or ttl_seconds <= 0:\n            raise ValueError('max_size and ttl_seconds must be positive')\n        self._max_size = max_size\n        self._ttl = ttl_seconds\n        self._now = now or time.monotonic\n        self._items: OrderedDict[Any, tuple[Any, float]] = OrderedDict()\n\n    def set(self, key, value) -> None:\n        self._items[key] = (value, self._now())\n        self._items.move_to_end(key)\n        while len(self._items) > self._max_size:\n            self._items.popitem(last=False)\n\n    def get(self, key):\n        item = self._items.get(key)\n        if item is None:\n            return None\n        value, stamp = item\n        if self._now() - stamp > self._ttl:\n            del self._items[key]\n            return None\n        self._items.move_to_end(key)\n        return value\n",
+    "id": "ttl_cache",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport time\nfrom collections import OrderedDict\n\n\nclass TTLCache:\n    def __init__(self, max_size: int, ttl_seconds: float, *, now=None):\n        if max_size <= 0 or ttl_seconds <= 0:\n            raise ValueError('max_size and ttl_seconds must be positive')\n        self.max_size = max_size\n        self.ttl = ttl_seconds\n        self.now = now or time.monotonic\n        self.data = OrderedDict()\n\n    def set(self, key, value):\n        self.data[key] = (value, self.now())\n        self.data.move_to_end(key)\n        while len(self.data) > self.max_size:\n            self.data.popitem(last=False)\n\n    def warm(self, initial: dict):\n        for key, value in initial.items():\n            self.set(key, value)\n\n    def get(self, key):\n        if key not in self.data:\n            return None\n        value, stamp = self.data[key]\n        if self.now() - stamp > self.ttl:\n            del self.data[key]\n            return None\n        self.data.move_to_end(key)\n        return value\n",
+    "mock_solution": "from __future__ import annotations\n\nimport time\nfrom collections import OrderedDict\n\n\nclass TTLCache:\n    def __init__(self, max_size: int, ttl_seconds: float, *, now=None):\n        if max_size <= 0 or ttl_seconds <= 0:\n            raise ValueError('max_size and ttl_seconds must be positive')\n        self.max_size = max_size\n        self.ttl = ttl_seconds\n        self.now = now or time.monotonic\n        self.data = OrderedDict()\n\n    def set(self, key, value):\n        self.data[key] = (value, self.now())\n        self.data.move_to_end(key)\n        if len(self.data) > self.max_size:\n            self.data.popitem(last=False)\n\n    def get(self, key):\n        if key not in self.data:\n            return None\n        value, stamp = self.data[key]\n        if self.now() - stamp > self.ttl:\n            del self.data[key]\n            return None\n        self.data.move_to_end(key)\n        return value\n",
+    "prompt": "Implement TTLCache(max_size: int, ttl_seconds: float, *, now=None). set(key, value)\nstores a value. get(key) returns the value, or None if absent or expired. Evict\nleast-recently-used entries when max_size is exceeded.\n",
+    "tags": [
+      "object_lifecycle",
+      "cache",
+      "day2-hard"
+    ],
+    "test_code": "from solution import TTLCache\n\n\ndef test_ttl_and_lru_eviction():\n    clock = {'t': 0.0}\n    cache = TTLCache(2, 5.0, now=lambda: clock['t'])\n    cache.set('a', 1)\n    cache.set('b', 2)\n    assert cache.get('a') == 1\n    cache.set('c', 3)\n    assert cache.get('b') is None\n    clock['t'] = 10.0\n    assert cache.get('a') is None\n"
+  },
+  "task_id": "ttl_cache",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

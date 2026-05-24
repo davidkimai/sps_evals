@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\nclass AuditLogWriter:\n    def __init__(self, sink: list[dict]) -> None:\n        self._sink = sink\n        self._sequence = 0\n\n    def write(self, actor: str, action: str) -> dict:\n        self._sequence += 1\n        record = {'sequence': self._sequence, 'actor': actor, 'action': action}\n        self._sink.append(dict(record))\n        return dict(record)\n",
+  "effective_temperature": null,
+  "entry_point": "AuditLogWriter",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\nclass AuditLogWriter:\n    def __init__(self, sink: list[dict]) -> None:\n        self._sink = sink\n        self._sequence = 0\n\n    def write(self, actor: str, action: str) -> dict:\n        self._sequence += 1\n        record = {'sequence': self._sequence, 'actor': actor, 'action': action}\n        self._sink.append(dict(record))\n        return dict(record)\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend AuditLogWriter so each appended record includes checksum: str. The checksum\nmust be computed over sequence, actor, and action before the checksum is added.\nPreserve sequence behavior.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import hashlib\nimport json\n\nfrom solution import AuditLogWriter\n\n\ndef test_checksum_covers_record_fields():\n    sink = []\n    row = AuditLogWriter(sink).write('alice', 'create')\n    expected = hashlib.sha256(json.dumps({'sequence': 1, 'actor': 'alice', 'action': 'create'}, sort_keys=True).encode()).hexdigest()\n    assert row['checksum'] == expected\n    assert sink[0]['checksum'] == expected\n",
+    "entry_point": "AuditLogWriter",
+    "human_reference": "from __future__ import annotations\n\n\nclass AuditLogWriter:\n    def __init__(self, sink: list[dict]) -> None:\n        self._sink = sink\n        self._sequence = 0\n\n    def write(self, actor: str, action: str) -> dict:\n        self._sequence += 1\n        record = {'sequence': self._sequence, 'actor': actor, 'action': action}\n        self._sink.append(dict(record))\n        return dict(record)\n",
+    "id": "audit_log_writer",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport hashlib\nimport json\n\n\nclass AuditLogWriter:\n    def __init__(self, sink):\n        self.sink = sink\n        self.next_sequence = 1\n\n    def write(self, actor: str, action: str):\n        base = {'sequence': self.next_sequence, 'actor': actor, 'action': action}\n        checksum = hashlib.sha256(json.dumps(base, sort_keys=True).encode()).hexdigest()\n        row = dict(base)\n        row['checksum'] = checksum\n        self.next_sequence += 1\n        self.sink.append(row.copy())\n        return row.copy()\n",
+    "mock_solution": "from __future__ import annotations\n\n\nclass AuditLogWriter:\n    def __init__(self, sink):\n        self.sink = sink\n        self.next_sequence = 1\n\n    def write(self, actor: str, action: str):\n        row = {'sequence': self.next_sequence, 'actor': actor, 'action': action}\n        self.next_sequence += 1\n        self.sink.append(row.copy())\n        return row.copy()\n",
+    "prompt": "Implement AuditLogWriter(sink: list[dict]). Method write(actor: str, action: str) -> dict\nappends a record with monotonic sequence numbers starting at 1. The returned\nrecord and appended record must not be the same mutable object.\n",
+    "tags": [
+      "reliability_critical",
+      "audit",
+      "day2-hard"
+    ],
+    "test_code": "from solution import AuditLogWriter\n\n\ndef test_writes_monotonic_records_without_aliasing():\n    sink = []\n    writer = AuditLogWriter(sink)\n    first = writer.write('alice', 'create')\n    second = writer.write('bob', 'delete')\n    assert [row['sequence'] for row in sink] == [1, 2]\n    assert first == {'sequence': 1, 'actor': 'alice', 'action': 'create'}\n    first['actor'] = 'changed'\n    assert sink[0]['actor'] == 'alice'\n    assert second['sequence'] == 2\n"
+  },
+  "task_id": "audit_log_writer",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

@@ -1,0 +1,76 @@
+id: audit_trail_builder
+entry_point: build_audit_trail
+tags: [custom_spec, audit, day2-hard]
+day2_stressors: [audit_provenance, cross_function_state, backwards_compatibility]
+custom_spec_override: |
+  Regulatory Audit Trail Standard RAT-9:
+  - Every audit record must carry source_system, actor_id, and a monotonic sequence number.
+  - Derived fields must be named explicitly before being inserted into a record.
+  - Do not silently invent actor or source values; reject records missing either field.
+prompt: |
+  Implement build_audit_trail(events: list[dict]) -> list[dict]. Each event has
+  source_system, actor_id, and action. Return records with sequence numbers starting at 1.
+  Reject events missing source_system or actor_id.
+test_code: |
+  import pytest
+
+  from solution import build_audit_trail
+
+
+  def test_builds_monotonic_audit_trail():
+      rows = build_audit_trail([{'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}])
+      assert rows == [{'sequence': 1, 'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}]
+      with pytest.raises(ValueError):
+          build_audit_trail([{'actor_id': 'u1', 'action': 'x'}])
+day2_prompt: |
+  Extend build_audit_trail with include_provenance: bool = False. When true, add
+  provenance = '<source_system>:<sequence>' to each record.
+day2_test_code: |
+  from solution import build_audit_trail
+
+
+  def test_optional_provenance_label():
+      rows = build_audit_trail([{'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}], include_provenance=True)
+      assert rows[0]['provenance'] == 'crm:1'
+human_reference: |
+  from __future__ import annotations
+
+
+  def build_audit_trail(events: list[dict]) -> list[dict]:
+      records = []
+      for index, event in enumerate(events, start=1):
+          if not event.get('source_system') or not event.get('actor_id'):
+              raise ValueError('source_system and actor_id are required')
+          records.append({'sequence': index, 'source_system': event['source_system'], 'actor_id': event['actor_id'], 'action': event.get('action')})
+      return records
+mock_solution: |
+  from __future__ import annotations
+
+
+  def build_audit_trail(events):
+      out = []
+      sequence = 1
+      for event in events:
+          source = event.get('source_system')
+          actor = event.get('actor_id')
+          if not source or not actor:
+              raise ValueError('source_system and actor_id are required')
+          out.append({'sequence': sequence, 'source_system': source, 'actor_id': actor, 'action': event.get('action')})
+          sequence += 1
+      return out
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def build_audit_trail(events, include_provenance=False):
+      out = []
+      for sequence, event in enumerate(events, start=1):
+          source = event.get('source_system')
+          actor = event.get('actor_id')
+          if not source or not actor:
+              raise ValueError('source_system and actor_id are required')
+          row = {'sequence': sequence, 'source_system': source, 'actor_id': actor, 'action': event.get('action')}
+          if include_provenance:
+              row['provenance'] = f'{source}:{sequence}'
+          out.append(row)
+      return out

@@ -1,0 +1,128 @@
+id: sliding_window_limiter
+entry_point: SlidingWindowLimiter
+tags: [state_machine, timing, rate_limit]
+day2_stressors: [cross_function_state, backwards_compatibility]
+prompt: |
+  Implement a SlidingWindowLimiter class.
+
+  Constructor: SlidingWindowLimiter(limit: int, window_seconds: int)
+  - both values must be positive, otherwise raise ValueError.
+
+  Method:
+  - allow(key: str, timestamp: int) -> bool. Return True and record the event if
+    fewer than limit events for key occurred in the half-open window
+    (timestamp - window_seconds, timestamp]. Return False without recording
+    otherwise.
+  - snapshot(key: str) -> list[int]. Return retained timestamps for key.
+test_code: |
+  import pytest
+
+  from solution import SlidingWindowLimiter
+
+
+  def test_limiter_uses_sliding_window():
+      limiter = SlidingWindowLimiter(limit=2, window_seconds=10)
+      assert limiter.allow("user", 100) is True
+      assert limiter.allow("user", 105) is True
+      assert limiter.allow("user", 106) is False
+      assert limiter.allow("user", 111) is True
+      assert limiter.snapshot("user") == [105, 111]
+
+
+  def test_limiter_validation():
+      with pytest.raises(ValueError):
+          SlidingWindowLimiter(0, 10)
+day2_prompt: |
+  Add remaining(key: str, timestamp: int) -> int. It should prune the same way
+  as allow(), not record a new event, and return how many events can still be
+  accepted for key at that timestamp.
+day2_test_code: |
+  from solution import SlidingWindowLimiter
+
+
+  def test_remaining_does_not_record():
+      limiter = SlidingWindowLimiter(limit=2, window_seconds=10)
+      assert limiter.remaining("user", 100) == 2
+      assert limiter.allow("user", 100) is True
+      assert limiter.remaining("user", 105) == 1
+      assert limiter.snapshot("user") == [100]
+      assert limiter.remaining("user", 111) == 2
+human_reference: |
+  class SlidingWindowLimiter:
+      def __init__(self, limit: int, window_seconds: int):
+          if limit <= 0 or window_seconds <= 0:
+              raise ValueError("limit and window_seconds must be positive")
+          self._limit = limit
+          self._window_seconds = window_seconds
+          self._events: dict[str, list[int]] = {}
+
+      def allow(self, key: str, timestamp: int) -> bool:
+          retained = self._retained_events(key, timestamp)
+          if len(retained) >= self._limit:
+              return False
+          retained.append(timestamp)
+          self._events[key] = retained
+          return True
+
+      def snapshot(self, key: str) -> list[int]:
+          return list(self._events.get(key, []))
+
+      def _retained_events(self, key: str, timestamp: int) -> list[int]:
+          floor = timestamp - self._window_seconds
+          retained = [item for item in self._events.get(key, []) if item > floor]
+          self._events[key] = retained
+          return retained
+mock_solution: |
+  class SlidingWindowLimiter:
+      def __init__(self, limit: int, window_seconds: int):
+          if limit <= 0 or window_seconds <= 0:
+              raise ValueError("limit and window_seconds must be positive")
+          self._limit = limit
+          self._window_seconds = window_seconds
+          self._events: dict[str, list[int]] = {}
+
+      def allow(self, key: str, timestamp: int) -> bool:
+          retained = self._retained_events(key, timestamp)
+          if len(retained) >= self._limit:
+              return False
+          retained.append(timestamp)
+          self._events[key] = retained
+          return True
+
+      def snapshot(self, key: str) -> list[int]:
+          return list(self._events.get(key, []))
+
+      def _retained_events(self, key: str, timestamp: int) -> list[int]:
+          floor = timestamp - self._window_seconds
+          retained = [item for item in self._events.get(key, []) if item > floor]
+          self._events[key] = retained
+          return retained
+mock_day2_solution: |
+  class SlidingWindowLimiter:
+      def __init__(self, limit: int, window_seconds: int):
+          if limit <= 0 or window_seconds <= 0:
+              raise ValueError("limit and window_seconds must be positive")
+          self._limit = limit
+          self._window_seconds = window_seconds
+          self._events: dict[str, list[int]] = {}
+
+      def allow(self, key: str, timestamp: int) -> bool:
+          retained = self._retained_events(key, timestamp)
+          if len(retained) >= self._limit:
+              return False
+          retained.append(timestamp)
+          self._events[key] = retained
+          return True
+
+      def remaining(self, key: str, timestamp: int) -> int:
+          retained = self._retained_events(key, timestamp)
+          return max(0, self._limit - len(retained))
+
+      def snapshot(self, key: str) -> list[int]:
+          return list(self._events.get(key, []))
+
+      def _retained_events(self, key: str, timestamp: int) -> list[int]:
+          floor = timestamp - self._window_seconds
+          retained = [item for item in self._events.get(key, []) if item > floor]
+          self._events[key] = retained
+          return retained

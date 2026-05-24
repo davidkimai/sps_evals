@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 2,
+    "error_count": null,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 1,
+      "assume": 0,
+      "decreases": 3,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 1,
+      "if": 5,
+      "invariant": 0,
+      "logical_and": 1,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 0,
+      "while": 3
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 1,
+    "logical_or_count": 1,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 81,
+    "source_token_estimate": 489,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.491,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, and therefore completely fails to satisfy the functional requirement of implementing a Python function `extract_fields(record: dict, paths: dict[str, str], default=None) -> dict`. The code cannot be executed as Python, the entry point `extract_fields` does not exist as a callable Python function, and the `navigate` method is a stub that always returns null with no actual dict/list traversal logic. While the Dafny code shows some structural intent (loop over keys, split on dots, resolve path), it is architecturally wrong for the task, unrunnable, and provides zero value as a Python implementation. The informal oracle references 'Dafny formal verification skill' but the task still requires a working Python implementation, not Dafny source code.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, and therefore completely fails to satisfy the functional requirement of implementing a Python function `extract_fields(record: dict, paths: dict[str, str], default=None) -> dict`. The code cannot be executed as Python, the entry point `extract_fields` does not exist as a callable Python function, and the `navigate` method is a stub that always returns null with no actual dict/list traversal logic. While the Dafny code shows some structural intent (loop over keys, split on dots, resolve path), it is architecturally wrong for the task, unrunnable, and provides zero value as a Python implementation. The informal oracle references 'Dafny formal verification skill' but the task still requires a working Python implementation, not Dafny source code.\",\n  \"strengths\": [\n    \"Shows awareness of the algorithmic structure: iterate keys, split path on dots, navigate step by step\",\n    \"Includes a postcondition ensuring all keys appear in the result\"\n  ],\n  \"weaknesses\": [\n    \"Written entirely in Dafny, not Python \u2014 cannot be executed as the required entry point\",\n    \"The navigate() method is a stub returning null, so path resolution never works\",\n    \"No actual dict key lookup or list index handling implemented\",\n    \"Misinterprets the informal oracle as an instruction to write Dafny rather than Python\",\n    \"Completely fails the functional requirements: no working Python code exists\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows awareness of the algorithmic structure: iterate keys, split path on dots, navigate step by step",
+      "Includes a postcondition ensuring all keys appear in the result"
+    ],
+    "weaknesses": [
+      "Written entirely in Dafny, not Python \u2014 cannot be executed as the required entry point",
+      "The navigate() method is a stub returning null, so path resolution never works",
+      "No actual dict key lookup or list index handling implemented",
+      "Misinterprets the informal oracle as an instruction to write Dafny rather than Python",
+      "Completely fails the functional requirements: no working Python code exists"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 492,
+      "prompt": 314,
+      "total": 806,
+      "turns": [
+        {
+          "completion": 492,
+          "prompt": 314,
+          "total": 806
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(25,23): Error: RHS (of type map<string, object?>) not assignable to LHS (of type object?)\n   |\n25 |   var current: object? := record;\n   |                        ^^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "json_path_projection",
+  "variant": "oracle_dafny_generation"
+}

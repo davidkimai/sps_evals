@@ -1,0 +1,99 @@
+id: paginated_api_cursor
+entry_point: collect_cursor_items
+tags: [async, pagination, day2-hard]
+day2_stressors: [cross_function_state, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement async collect_cursor_items(fetch_page, *, start_cursor=None) -> list.
+
+  fetch_page(cursor) is an async callable returning (items, next_cursor). Append
+  items from each page until next_cursor is None. Pass start_cursor to the first
+  call.
+test_code: |
+  import asyncio
+
+  from solution import collect_cursor_items
+
+
+  def test_collects_all_pages():
+      async def fetch(cursor):
+          pages = {
+              None: ([1, 2], 'b'),
+              'b': ([3], None),
+          }
+          return pages[cursor]
+
+      assert asyncio.run(collect_cursor_items(fetch)) == [1, 2, 3]
+day2_prompt: |
+  Extend collect_cursor_items with per_page_timeout: float | None = None. When set,
+  wrap each page fetch in asyncio.wait_for. Preserve original behavior when omitted.
+day2_test_code: |
+  import asyncio
+
+  import pytest
+
+  from solution import collect_cursor_items
+
+
+  def test_per_page_timeout_and_original_behavior():
+      async def fetch(cursor):
+          return ([cursor or 'start'], None)
+
+      assert asyncio.run(collect_cursor_items(fetch, start_cursor='x')) == ['x']
+
+      async def slow(_cursor):
+          await asyncio.sleep(0.05)
+          return ([], None)
+
+      with pytest.raises(asyncio.TimeoutError):
+          asyncio.run(collect_cursor_items(slow, per_page_timeout=0.001))
+human_reference: |
+  from __future__ import annotations
+
+  from collections.abc import Awaitable, Callable
+  from typing import Any
+
+
+  async def collect_cursor_items(
+      fetch_page: Callable[[Any], Awaitable[tuple[list[Any], Any]]],
+      *,
+      start_cursor: Any = None,
+  ) -> list[Any]:
+      cursor = start_cursor
+      collected: list[Any] = []
+      while True:
+          items, cursor = await fetch_page(cursor)
+          collected.extend(items)
+          if cursor is None:
+              return collected
+mock_solution: |
+  from __future__ import annotations
+
+
+  async def collect_cursor_items(fetch_page, *, start_cursor=None):
+      out = []
+      cursor = start_cursor
+      done = False
+      while not done:
+          page_items, next_cursor = await fetch_page(cursor)
+          for item in page_items:
+              out.append(item)
+          cursor = next_cursor
+          done = cursor is None
+      return out
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import asyncio
+
+
+  async def collect_cursor_items(fetch_page, *, start_cursor=None, per_page_timeout=None):
+      out = []
+      cursor = start_cursor
+      while True:
+          if per_page_timeout is None:
+              items, cursor = await fetch_page(cursor)
+          else:
+              items, cursor = await asyncio.wait_for(fetch_page(cursor), timeout=per_page_timeout)
+          out.extend(items)
+          if cursor is None:
+              return out

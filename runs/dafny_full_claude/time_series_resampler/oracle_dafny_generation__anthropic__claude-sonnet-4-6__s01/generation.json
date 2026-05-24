@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method resample_series(\n  points: seq<(int, real)>,\n  start: int,\n  end: int,\n  interval: int\n) returns (result: seq<(int, real)>)\n  requires interval > 0\n  requires start <= end\n{\n  result := [];\n  var ts := start;\n  while ts <= end\n    invariant interval > 0\n    decreases end - ts + interval\n  {\n    // Find the latest point at or before ts\n    var bestVal: real := 0.0;\n    var found := false;\n    var i := 0;\n    while i < |points|\n      invariant 0 <= i <= |points|\n    {\n      var pt := points[i];\n      if pt.0 <= ts {\n        if !found || pt.0 >= bestVal as int {\n          // We want the latest point, track by timestamp\n          bestVal := pt.1;\n          found := true;\n          // We need to track the best timestamp too\n        }\n      }\n      i := i + 1;\n    }\n    // Redo with proper tracking\n    var bestTs: int := -1;\n    var bestValue: real := 0.0;\n    var j := 0;\n    while j < |points|\n      invariant 0 <= j <= |points|\n    {\n      var pt := points[j];\n      if pt.0 <= ts {\n        if bestTs == -1 || pt.0 >= bestTs {\n          bestTs := pt.0;\n          bestValue := pt.1;\n        }\n      }\n      j := j + 1;\n    }\n    if bestTs != -1 {\n      result := result + [(ts, bestValue)];\n    }\n    // If not found, we skip (will be None in Python)\n    ts := ts + interval;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "resample_series",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 667,
+      "prompt": 309,
+      "total": 976,
+      "turns": [
+        {
+          "completion": 667,
+          "prompt": 309,
+          "total": 976
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod resample_series(\n  points: seq<(int, real)>,\n  start: int,\n  end: int,\n  interval: int\n) returns (result: seq<(int, real)>)\n  requires interval > 0\n  requires start <= end\n{\n  result := [];\n  var ts := start;\n  while ts <= end\n    invariant interval > 0\n    decreases end - ts + interval\n  {\n    // Find the latest point at or before ts\n    var bestVal: real := 0.0;\n    var found := false;\n    var i := 0;\n    while i < |points|\n      invariant 0 <= i <= |points|\n    {\n      var pt := points[i];\n      if pt.0 <= ts {\n        if !found || pt.0 >= bestVal as int {\n          // We want the latest point, track by timestamp\n          bestVal := pt.1;\n          found := true;\n          // We need to track the best timestamp too\n        }\n      }\n      i := i + 1;\n    }\n    // Redo with proper tracking\n    var bestTs: int := -1;\n    var bestValue: real := 0.0;\n    var j := 0;\n    while j < |points|\n      invariant 0 <= j <= |points|\n    {\n      var pt := points[j];\n      if pt.0 <= ts {\n        if bestTs == -1 || pt.0 >= bestTs {\n          bestTs := pt.0;\n          bestValue := pt.1;\n        }\n      }\n      j := j + 1;\n    }\n    if bestTs != -1 {\n      result := result + [(ts, bestValue)];\n    }\n    // If not found, we skip (will be None in Python)\n    ts := ts + interval;\n  }\n}\n```\n\nWait, I need to handle the None case properly. In Dafny we can't directly represent `None`, but the translation to Python needs to handle it. Let me use a sentinel approach or a boolean flag in a tuple.\n\n```dafny\n// resample_series: forward-fill time series resampling\n// Returns pairs (timestamp, value) for found values only;\n// Python wrapper will insert None for missing timestamps.\n\nmethod resample_series(\n  points: seq<(int, real)>,\n  start: int,\n  end: int,\n  interval: int\n) returns (result: seq<(int, real)>, hasValue: seq<bool>)\n  requires interval > 0\n  requires start <= end\n  ensures |result| == |hasValue|\n{\n  result := [];\n  hasValue := [];\n  var ts := start;\n  while ts <= end\n    invariant interval > 0\n    invariant |result| == |hasValue|\n    decreases end - ts + interval\n  {\n    var bestTs: int := -1;\n    var bestValue: real := 0.0;\n    var j := 0;\n    while j < |points|\n      invariant 0 <= j <= |points|\n    {\n      var pt := points[j];\n      if pt.0 <= ts {\n        if bestTs == -1 || pt.0 >= bestTs {\n          bestTs := pt.0;\n          bestValue := pt.1;\n        }\n      }\n      j := j + 1;\n    }\n    if bestTs != -1 {\n      result := result + [(ts, bestValue)];\n      hasValue := hasValue + [true];\n    } else {\n      result := result + [(ts, 0.0)];\n      hasValue := hasValue + [false];\n    }\n    ts := ts + interval;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend resample_series with max_gap: int | None = None. If the distance from the\nlast observed point exceeds max_gap, emit None instead of forward-filling.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import resample_series\n\n\ndef test_max_gap_limits_forward_fill():\n    points = [(0, 1.0), (10, 3.0)]\n    assert resample_series(points, start=0, end=6, interval=3, max_gap=2) == [(0, 1.0), (3, None), (6, None)]\n",
+    "entry_point": "resample_series",
+    "human_reference": "from __future__ import annotations\n\n\ndef resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]:\n    ordered = sorted(points)\n    index = 0\n    current = None\n    output = []\n    for timestamp in range(start, end + 1, interval):\n        while index < len(ordered) and ordered[index][0] <= timestamp:\n            current = ordered[index][1]\n            index += 1\n        output.append((timestamp, current))\n    return output\n",
+    "id": "time_series_resampler",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef resample_series(points, *, start: int, end: int, interval: int, max_gap=None):\n    points = sorted(points)\n    output = []\n    for ts in range(start, end + 1, interval):\n        chosen = None\n        chosen_ts = None\n        for point_ts, point_value in points:\n            if point_ts <= ts:\n                chosen = point_value\n                chosen_ts = point_ts\n            else:\n                break\n        if max_gap is not None and chosen_ts is not None and ts - chosen_ts > max_gap:\n            chosen = None\n        output.append((ts, chosen))\n    return output\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef resample_series(points, *, start: int, end: int, interval: int):\n    points = sorted(points)\n    output = []\n    for ts in range(start, end + 1, interval):\n        value = None\n        for point_ts, point_value in points:\n            if point_ts <= ts:\n                value = point_value\n            else:\n                break\n        output.append((ts, value))\n    return output\n",
+    "prompt": "Implement resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]].\nReturn timestamps from start to end inclusive by interval. Use forward-fill from\nthe latest point at or before each timestamp; use None when no value is known.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "time_series",
+      "day2-hard"
+    ],
+    "test_code": "from solution import resample_series\n\n\ndef test_forward_fill_resampling():\n    points = [(0, 1.0), (5, 2.0)]\n    assert resample_series(points, start=0, end=6, interval=2) == [(0, 1.0), (2, 1.0), (4, 1.0), (6, 2.0)]\n"
+  },
+  "task_id": "time_series_resampler",
+  "user_prompt": "Task id: time_series_resampler\nEntry point: resample_series\n\nFunctional requirements:\nImplement resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]].\nReturn timestamps from start to end inclusive by interval. Use forward-fill from\nthe latest point at or before each timestamp; use None when no value is known.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

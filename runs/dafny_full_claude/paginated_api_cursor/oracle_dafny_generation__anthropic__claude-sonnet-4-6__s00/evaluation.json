@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 1,
+      "if": 1,
+      "invariant": 2,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 3,
+      "while": 1
+    },
+    "lexical_proof_complexity": 9,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 3,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 23,
+    "source_token_estimate": 149,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.012,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is Dafny formal verification code, not Python. It completely fails to implement the required async Python function `collect_cursor_items(fetch_page, *, start_cursor=None) -> list`. There is no Python code at all, no async/await, no actual callable invocation, no cursor-based pagination loop, and no return of a list. The submission appears to be a formal specification or proof artifact written in Dafny, which is entirely the wrong language and paradigm for the task. It cannot be executed as Python, does not satisfy the functional requirements, and bears no resemblance to the expected implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is Dafny formal verification code, not Python. It completely fails to implement the required async Python function `collect_cursor_items(fetch_page, *, start_cursor=None) -> list`. There is no Python code at all, no async/await, no actual callable invocation, no cursor-based pagination loop, and no return of a list. The submission appears to be a formal specification or proof artifact written in Dafny, which is entirely the wrong language and paradigm for the task. It cannot be executed as Python, does not satisfy the functional requirements, and bears no resemblance to the expected implementation.\",\n  \"strengths\": [\n    \"The Dafny code itself is internally consistent and demonstrates understanding of the algorithmic structure (accumulate items until termination condition)\"\n  ],\n  \"weaknesses\": [\n    \"Wrong programming language entirely \u2014 Dafny instead of Python\",\n    \"No async/await constructs\",\n    \"No actual fetch_page callable invocation\",\n    \"No cursor-based pagination (start_cursor, next_cursor loop)\",\n    \"Cannot be executed or imported as Python\",\n    \"Does not define the required entry point function signature\",\n    \"Zero adherence to Zen of Python or any Python structural quality criteria\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny code itself is internally consistent and demonstrates understanding of the algorithmic structure (accumulate items until termination condition)"
+    ],
+    "weaknesses": [
+      "Wrong programming language entirely \u2014 Dafny instead of Python",
+      "No async/await constructs",
+      "No actual fetch_page callable invocation",
+      "No cursor-based pagination (start_cursor, next_cursor loop)",
+      "Cannot be executed or imported as Python",
+      "Does not define the required entry point function signature",
+      "Zero adherence to Zen of Python or any Python structural quality criteria"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 152,
+      "prompt": 298,
+      "total": 450,
+      "turns": [
+        {
+          "completion": 152,
+          "prompt": 298,
+          "total": 450
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "paginated_api_cursor",
+  "variant": "oracle_dafny_generation"
+}

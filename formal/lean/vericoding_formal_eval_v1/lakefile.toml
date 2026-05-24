@@ -1,0 +1,9 @@
+name = "vericoding_formal_eval_v1"
+defaultTargets = ["formal-export"]
+
+[[lean_lib]]
+name = "FormalEval"
+
+[[lean_exe]]
+name = "formal-export"
+root = "Main"

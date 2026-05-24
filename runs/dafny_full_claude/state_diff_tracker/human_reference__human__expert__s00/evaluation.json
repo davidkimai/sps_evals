@@ -1,0 +1,57 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is a near-perfect realization of the spec: it handles all three cases (added, removed, changed fields) in a single unified loop, produces explicit per-field records with the required keys, sorts by field name, and does so in the fewest possible lines without any abstraction overhead or architectural complexity. The code is flat, readable, locally auditable, and contains no slop.",
+    "raw_response": "{\n  \"score\": 10,\n  \"rationale\": \"The implementation is a near-perfect realization of the spec: it handles all three cases (added, removed, changed fields) in a single unified loop, produces explicit per-field records with the required keys, sorts by field name, and does so in the fewest possible lines without any abstraction overhead or architectural complexity. The code is flat, readable, locally auditable, and contains no slop.\",\n  \"strengths\": [\n    \"Single loop over the union of keys covers added, removed, and changed fields uniformly\",\n    \"Sorting is applied directly to the iteration source, not as a post-processing step\",\n    \"Explicit dict literals with named keys match the spec exactly\",\n    \"No unnecessary imports, classes, or helper functions\",\n    \"Uses .get() correctly so missing keys naturally become None for before/after\"\n  ],\n  \"weaknesses\": [\n    \"No docstring or type annotation on the return type's inner dict structure, though this is a very minor omission\"\n  ]\n}",
+    "score": 10,
+    "skipped": false,
+    "strengths": [
+      "Single loop over the union of keys covers added, removed, and changed fields uniformly",
+      "Sorting is applied directly to the iteration source, not as a post-processing step",
+      "Explicit dict literals with named keys match the spec exactly",
+      "No unnecessary imports, classes, or helper functions",
+      "Uses .get() correctly so missing keys naturally become None for before/after"
+    ],
+    "weaknesses": [
+      "No docstring or type annotation on the return type's inner dict structure, though this is a very minor omission"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 4.549,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.07s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 3.0,
+    "cyclomatic_complexity_max": 3,
+    "cyclomatic_complexity_total": 3,
+    "function_count": 1,
+    "loc": 9,
+    "maintainability_index": 69.446,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "state_diff_tracker",
+  "variant": "human_reference"
+}

@@ -1,0 +1,28 @@
+{
+  "confirmatory_families": [
+    "behavioral_minimal_prompt",
+    "formal_spec_conditioned_prompt",
+    "requirements_first_prompt",
+    "structural_discipline_prompt",
+    "self_critique_prompt",
+    "alt_seed_or_temp_prompt"
+  ],
+  "confirmatory_models": [
+    "gpt-5.4-mini",
+    "gpt-5.5"
+  ],
+  "dev_models": [
+    "gpt-5.4-mini",
+    "gpt-5.5"
+  ],
+  "formal_case_export_sha256": "29b3761f7150f8cb5a254adbb218b7e98ce568723cd0286bd802c9e27e2e48b0",
+  "frozen_at": "2026-05-23T01:09:51Z",
+  "program_version": "vericoding_formal_eval_v2_2",
+  "selector_model": "",
+  "selectors": [
+    "tests_only_selector",
+    "specoracle_visible_selector",
+    "formal_oracle_selector"
+  ],
+  "task_manifest_hash": "cc7f8097227cff71229ee85c8660ad328b95311fa8606e1b7fcc98768e8e8d87"
+}

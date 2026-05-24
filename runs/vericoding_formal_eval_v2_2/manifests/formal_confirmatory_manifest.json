@@ -1,0 +1,47 @@
+{
+  "manifest_sha256": "cc7f8097227cff71229ee85c8660ad328b95311fa8606e1b7fcc98768e8e8d87",
+  "program_version": "vericoding_formal_eval_v2_2",
+  "raw_content_committed": false,
+  "schema": "specoracle.vericoding.formal_split_manifest.v1",
+  "split": "confirmatory",
+  "task_count": 1,
+  "tasks": [
+    {
+      "accepted_decision": "Accept only artifacts that satisfy visible behavior and formal evaluator cases without unresolved review-boundary blockers.",
+      "entry_point": "timing_safe_compare",
+      "external_surface": false,
+      "family_overrides": {
+        "behavioral_minimal_prompt": {
+          "extra_instruction": "Treat this as a bounded behavioral contract. Prefer the simplest direct comparison logic that satisfies the observable behavior, and avoid specialized cryptographic helpers unless they are explicitly required by the contract text. Plain equality after the required normalization steps is acceptable for this condition.",
+          "prompt_contract": "Implement timing_safe_compare(left, right, pad_to_length: int | None = None, pad_char: str = '\\0') -> bool. Accept only str or bytes. Both inputs must have the same type; otherwise raise TypeError. If pad_to_length is omitted, preserve the original comparison behavior. If pad_to_length is provided for bytes inputs, raise TypeError because padding is supported only for strings. If pad_to_length is provided for strings, right-pad both strings before comparing. For the string-padding path, reject pad_char values that are not exactly one character by raising ValueError.",
+          "temperature": 0.0
+        },
+        "formal_spec_conditioned_prompt": {
+          "extra_instruction": "Because this condition aims at a stronger trust-boundary interpretation, prefer a recognized constant-time comparison primitive when available."
+        }
+      },
+      "formal_generation_spec": "Implement timing_safe_compare(left, right, pad_to_length: int | None = None, pad_char: str = '\\0') -> bool. Accept only str or bytes. Both inputs must have the same type; otherwise raise TypeError. When pad_to_length is set for strings, right-pad both strings to that length before comparing. Reject pad_char values that are not exactly one character. Preserve old behavior when padding is omitted. This bounded contract certifies observable inputs, outputs, and exceptions only; it does not by itself certify constant-time behavior.",
+      "generation_public_spec": "Implement timing_safe_compare(left, right) -> bool as a typed wrapper around\nhmac.compare_digest. Accept only str or bytes. Both inputs must have the same\ntype; otherwise raise TypeError. Return True only when values match.\n",
+      "generation_surface_kind": "internal_visible_yaml_prompt",
+      "human_review_required": "The bounded formal I/O cases do not certify constant-time behavior. Human review should confirm use of compare_digest or an equivalent primitive before automatic authorization.",
+      "narrow_waist": true,
+      "program_version": "vericoding_formal_eval_v2_2",
+      "public_summary": "Implement timing_safe_compare(left, right) -> bool as a typed wrapper around\nhmac.compare_digest. Accept only str or bytes. Both inputs must have the same\ntype; otherwise raise TypeError. Return True only when values match.\n",
+      "raw_content_committed": false,
+      "regression_sensitive": true,
+      "rejected_decision": "Reject artifacts that pass visible checks but fail formal evaluator cases or secure boundary cases.",
+      "review_boundary_candidate": true,
+      "review_boundary_clear": true,
+      "role": "Hidden formal cases add pad_to_length and pad_char semantics on top of the visible typed-compare wrapper, but bounded I/O cases do not discharge constant-time behavior on their own.",
+      "security_relevant": false,
+      "source_ref": "data/slopbench/026_timing_safe_compare.yaml",
+      "spec_coherent": true,
+      "split": "confirmatory",
+      "stable_sample_id": "formal:internal:confirmatory:timing_safe_compare",
+      "support_status": "unknown",
+      "surface": "internal",
+      "task_hash": "bc5fd7d8133a81309e45f64437ef0bfb6a654af91b2eedad83a438a2e7d86bd0",
+      "task_id": "timing_safe_compare"
+    }
+  ]
+}

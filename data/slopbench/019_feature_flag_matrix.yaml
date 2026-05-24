@@ -1,0 +1,74 @@
+id: feature_flag_matrix
+entry_point: resolve_flags
+tags: [config_parsing, policy, json]
+day2_stressors: [audit_provenance, backwards_compatibility]
+prompt: |
+  Implement resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool].
+
+  Start from defaults. user may contain "segments", a list of segment names.
+  Apply segment overrides in the order listed on the user, ignoring unknown
+  segments. Then apply user["overrides"] if present. Return a new dictionary and
+  do not mutate inputs.
+test_code: |
+  from solution import resolve_flags
+
+
+  def test_resolve_flags_applies_segments_in_user_order():
+      defaults = {"search": False, "billing": False}
+      segments = {
+          "beta": {"search": True},
+          "finance": {"billing": True, "search": False},
+      }
+      user = {"segments": ["beta", "finance"], "overrides": {"search": True}}
+
+      assert resolve_flags(defaults, segments, user) == {"search": True, "billing": True}
+      assert defaults == {"search": False, "billing": False}
+day2_prompt: |
+  Add explain_flags(defaults, segments, user) -> dict[str, dict]. It should
+  return each final flag value with the source that last changed it:
+  {"flag": {"value": bool, "source": str}} where source is default,
+  segment:<name>, or user_override.
+day2_test_code: |
+  from solution import explain_flags, resolve_flags
+
+
+  def test_explain_flags_reports_last_source():
+      defaults = {"search": False, "billing": False}
+      segments = {"beta": {"search": True}}
+      user = {"segments": ["beta"], "overrides": {"billing": True}}
+
+      assert resolve_flags(defaults, segments, user) == {"search": True, "billing": True}
+      assert explain_flags(defaults, segments, user) == {
+          "search": {"value": True, "source": "segment:beta"},
+          "billing": {"value": True, "source": "user_override"},
+      }
+human_reference: |
+  def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:
+      resolved = dict(defaults)
+      for segment_name in user.get("segments", []):
+          resolved.update(segments.get(segment_name, {}))
+      resolved.update(user.get("overrides", {}))
+      return resolved
+mock_solution: |
+  def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:
+      resolved = dict(defaults)
+      for segment_name in user.get("segments", []):
+          resolved.update(segments.get(segment_name, {}))
+      resolved.update(user.get("overrides", {}))
+      return resolved
+mock_day2_solution: |
+  def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:
+      return {key: value["value"] for key, value in explain_flags(defaults, segments, user).items()}
+
+
+  def explain_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, dict]:
+      explained = {
+          key: {"value": value, "source": "default"}
+          for key, value in defaults.items()
+      }
+      for segment_name in user.get("segments", []):
+          for key, value in segments.get(segment_name, {}).items():
+              explained[key] = {"value": value, "source": f"segment:{segment_name}"}
+      for key, value in user.get("overrides", {}).items():
+          explained[key] = {"value": value, "source": "user_override"}
+      return explained

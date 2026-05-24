@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 0,
+    "error_count": null,
+    "invariant_count": 3,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 0,
+      "exists": 0,
+      "forall": 0,
+      "if": 5,
+      "invariant": 3,
+      "logical_and": 0,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 2,
+      "while": 3
+    },
+    "lexical_proof_complexity": 16,
+    "logical_and_count": 0,
+    "logical_or_count": 2,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 56,
+    "source_token_estimate": 324,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.555,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, and does not implement the required Python function `resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]`. The entry point signature is completely wrong, the language is wrong, the return type handling for `None` is absent (skipping instead of returning None), and there is dead/redundant code (the first inner while loop is entirely wasted work that is then redone). The informal oracle references 'Dafny formal verification skill' but the task still requires a Python implementation \u2014 the candidate appears to have misread this as a directive to write Dafny code. The result is non-functional for the stated task, violates every Zen of Python principle (simplicity, explicitness, readability), and cannot be used as the entry point.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, and does not implement the required Python function `resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]`. The entry point signature is completely wrong, the language is wrong, the return type handling for `None` is absent (skipping instead of returning None), and there is dead/redundant code (the first inner while loop is entirely wasted work that is then redone). The informal oracle references 'Dafny formal verification skill' but the task still requires a Python implementation \u2014 the candidate appears to have misread this as a directive to write Dafny code. The result is non-functional for the stated task, violates every Zen of Python principle (simplicity, explicitness, readability), and cannot be used as the entry point.\",\n  \"strengths\": [\n    \"Attempts to capture the forward-fill logic conceptually\",\n    \"Includes loop invariants and preconditions that reflect some understanding of the algorithm's correctness requirements\"\n  ],\n  \"weaknesses\": [\n    \"Wrong language: Dafny instead of Python\",\n    \"Wrong entry point signature: not a Python function with keyword-only arguments\",\n    \"None values are silently dropped instead of included as required\",\n    \"Contains dead/redundant code (first inner loop is discarded and redone)\",\n    \"O(n) scan per timestamp instead of a simple sorted/linear pass\",\n    \"Cannot be imported or called as a Python module\",\n    \"Completely fails functional requirements\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to capture the forward-fill logic conceptually",
+      "Includes loop invariants and preconditions that reflect some understanding of the algorithm's correctness requirements"
+    ],
+    "weaknesses": [
+      "Wrong language: Dafny instead of Python",
+      "Wrong entry point signature: not a Python function with keyword-only arguments",
+      "None values are silently dropped instead of included as required",
+      "Contains dead/redundant code (first inner loop is discarded and redone)",
+      "O(n) scan per timestamp instead of a simple sorted/linear pass",
+      "Cannot be imported or called as a Python module",
+      "Completely fails functional requirements"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 667,
+      "prompt": 309,
+      "total": 976,
+      "turns": [
+        {
+          "completion": 667,
+          "prompt": 309,
+          "total": 976
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(25,37): Error: the real-based number must be an integer (if you want truncation, apply .Floor to the real-based number)\n   |\n25 |         if !found || pt.0 >= bestVal as int {\n   |                                      ^^\n\n\nDafny program verifier finished with 0 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "time_series_resampler",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method MergeLogs(streams: seq<seq<(int, int, int)>>) returns (result: seq<(int, int, int)>)\n  // Each record is (ts, source, seq_num)\n  // Merge, deduplicate by (source, seq_num), sort by ts\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i].0 <= result[j].0\n{\n  // Collect all records\n  var all: seq<(int, int, int)> := [];\n  \n  for i := 0 to |streams|\n    invariant true\n  {\n    var stream := streams[i];\n    for j := 0 to |stream|\n      invariant true\n    {\n      all := all + [stream[j]];\n    }\n  }\n  \n  // Deduplicate by (source, seq_num)\n  var deduped: seq<(int, int, int)> := [];\n  for i := 0 to |all|\n    invariant true\n  {\n    var record := all[i];\n    var found := false;\n    for j := 0 to |deduped|\n      invariant true\n    {\n      if deduped[j].1 == record.1 && deduped[j].2 == record.2 {\n        found := true;\n      }\n    }\n    if !found {\n      deduped := deduped + [record];\n    }\n  }\n  \n  // Sort by ts (insertion sort)\n  var sorted := deduped;\n  var n := |sorted|;\n  var i := 1;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |sorted| == n\n    invariant forall p, q :: 0 <= p < q < i ==> sorted[p].0 <= sorted[q].0\n  {\n    var key := sorted[i];\n    var j := i - 1;\n    while j >= 0 && sorted[j].0 > key.0\n      invariant -1 <= j < i\n      invariant |sorted| == n\n      invariant forall p, q :: 0 <= p < q <= i && q != j + 1 ==> \n        (if p == j + 1 then key.0 else sorted[p].0) <= sorted[q].0 || p > j\n    {\n      sorted := sorted[j + 1 := sorted[j]];\n      j := j - 1;\n    }\n    sorted := sorted[j + 1 := key];\n    i := i + 1;\n  }\n  \n  result := sorted;\n}\n\nmethod Main() {\n  // Test basic functionality\n  var stream1: seq<(int, int, int)> := [(1, 1, 1), (3, 1, 2)];\n  var stream2: seq<(int, int, int)> := [(2, 2, 1), (1, 1, 1)]; // duplicate (1,1,1)\n  var streams: seq<seq<(int, int, int)>> := [stream1, stream2];\n  \n  var result := MergeLogs(streams);\n  \n  // Verify sorted\n  assert forall i, j :: 0 <= i < j < |result| ==> result[i].0 <= result[j].0;\n  \n  print \"Result length: \", |result|, \"\\n\";\n  for i := 0 to |result| {\n    print \"Record: ts=\", result[i].0, \" source=\", result[i].1, \" seq=\", result[i].2, \"\\n\";\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "merge_logs",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 544,
+      "prompt": 282,
+      "total": 826,
+      "turns": [
+        {
+          "completion": 544,
+          "prompt": 282,
+          "total": 826
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod MergeLogs(streams: seq<seq<(int, int, int)>>) returns (result: seq<(int, int, int)>)\n  // Each record is (ts, source, seq_num)\n  // Merge, deduplicate by (source, seq_num), sort by ts\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i].0 <= result[j].0\n{\n  // Collect all records\n  var all: seq<(int, int, int)> := [];\n  \n  for i := 0 to |streams|\n    invariant true\n  {\n    var stream := streams[i];\n    for j := 0 to |stream|\n      invariant true\n    {\n      all := all + [stream[j]];\n    }\n  }\n  \n  // Deduplicate by (source, seq_num)\n  var deduped: seq<(int, int, int)> := [];\n  for i := 0 to |all|\n    invariant true\n  {\n    var record := all[i];\n    var found := false;\n    for j := 0 to |deduped|\n      invariant true\n    {\n      if deduped[j].1 == record.1 && deduped[j].2 == record.2 {\n        found := true;\n      }\n    }\n    if !found {\n      deduped := deduped + [record];\n    }\n  }\n  \n  // Sort by ts (insertion sort)\n  var sorted := deduped;\n  var n := |sorted|;\n  var i := 1;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |sorted| == n\n    invariant forall p, q :: 0 <= p < q < i ==> sorted[p].0 <= sorted[q].0\n  {\n    var key := sorted[i];\n    var j := i - 1;\n    while j >= 0 && sorted[j].0 > key.0\n      invariant -1 <= j < i\n      invariant |sorted| == n\n      invariant forall p, q :: 0 <= p < q <= i && q != j + 1 ==> \n        (if p == j + 1 then key.0 else sorted[p].0) <= sorted[q].0 || p > j\n    {\n      sorted := sorted[j + 1 := sorted[j]];\n      j := j - 1;\n    }\n    sorted := sorted[j + 1 := key];\n    i := i + 1;\n  }\n  \n  result := sorted;\n}\n\nmethod Main() {\n  // Test basic functionality\n  var stream1: seq<(int, int, int)> := [(1, 1, 1), (3, 1, 2)];\n  var stream2: seq<(int, int, int)> := [(2, 2, 1), (1, 1, 1)]; // duplicate (1,1,1)\n  var streams: seq<seq<(int, int, int)>> := [stream1, stream2];\n  \n  var result := MergeLogs(streams);\n  \n  // Verify sorted\n  assert forall i, j :: 0 <= i < j < |result| ==> result[i].0 <= result[j].0;\n  \n  print \"Result length: \", |result|, \"\\n\";\n  for i := 0 to |result| {\n    print \"Record: ts=\", result[i].0, \" source=\", result[i].1, \" seq=\", result[i].2, \"\\n\";\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend merge_logs with detect_gaps: bool = False. When true, return\n(merged_records, gaps), where gaps contains {'source', 'missing_seq'} for missing\nsequence numbers between observed records per source.\n",
+    "day2_stressors": [
+      "streaming_compatibility",
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import merge_logs\n\n\ndef test_gap_detection_by_source():\n    rows = [{'source': 'a', 'seq': 1, 'ts': 1}, {'source': 'a', 'seq': 3, 'ts': 2}]\n    merged, gaps = merge_logs([rows], detect_gaps=True)\n    assert merged == rows\n    assert gaps == [{'source': 'a', 'missing_seq': 2}]\n",
+    "entry_point": "merge_logs",
+    "human_reference": "from __future__ import annotations\n\n\ndef merge_logs(streams: list) -> list[dict]:\n    seen = set()\n    merged = []\n    for stream in streams:\n        for record in stream:\n            key = (record.get('source'), record.get('seq'))\n            if key in seen:\n                continue\n            seen.add(key)\n            merged.append(dict(record))\n    return sorted(merged, key=lambda row: row.get('ts', 0))\n",
+    "id": "log_aggregator",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef merge_logs(streams, detect_gaps=False):\n    by_key = {}\n    seqs = {}\n    for stream in streams:\n        for record in stream:\n            key = (record.get('source'), record.get('seq'))\n            if key not in by_key:\n                by_key[key] = dict(record)\n            seqs.setdefault(record.get('source'), set()).add(record.get('seq'))\n    merged = sorted(by_key.values(), key=lambda row: row.get('ts', 0))\n    if not detect_gaps:\n        return merged\n    gaps = []\n    for source, values in seqs.items():\n        for seq in range(min(values), max(values) + 1):\n            if seq not in values:\n                gaps.append({'source': source, 'missing_seq': seq})\n    return merged, gaps\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef merge_logs(streams):\n    by_key = {}\n    for stream in streams:\n        for record in stream:\n            key = (record.get('source'), record.get('seq'))\n            if key not in by_key:\n                by_key[key] = dict(record)\n    return sorted(by_key.values(), key=lambda row: row.get('ts', 0))\n",
+    "prompt": "Implement merge_logs(streams: list[iterable[dict]]) -> list[dict]. Merge multiple\nlog streams, deduplicate records by (source, seq), and return records sorted by ts.\nDo not mutate input records.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "logs",
+      "day2-hard"
+    ],
+    "test_code": "from solution import merge_logs\n\n\ndef test_merges_sorts_and_deduplicates():\n    a = [{'source': 'a', 'seq': 1, 'ts': 2}, {'source': 'a', 'seq': 1, 'ts': 2}]\n    b = [{'source': 'b', 'seq': 1, 'ts': 1}]\n    assert merge_logs([a, b]) == [{'source': 'b', 'seq': 1, 'ts': 1}, {'source': 'a', 'seq': 1, 'ts': 2}]\n"
+  },
+  "task_id": "log_aggregator",
+  "user_prompt": "Task id: log_aggregator\nEntry point: merge_logs\n\nFunctional requirements:\nImplement merge_logs(streams: list[iterable[dict]]) -> list[dict]. Merge multiple\nlog streams, deduplicate records by (source, seq), and return records sorted by ts.\nDo not mutate input records.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

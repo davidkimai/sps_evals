@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nimport json\n\n\ndef serialize_record(record: dict, format: str) -> str:\n    if format == 'json':\n        return json.dumps(record, sort_keys=True)\n    if format == 'csv':\n        keys = list(record)\n        return ','.join(keys) + '\\n' + ','.join(str(record[key]) for key in keys)\n    if format == 'toml':\n        lines = []\n        for key, value in record.items():\n            rendered = json.dumps(value) if isinstance(value, str) else str(value)\n            lines.append(f'{key} = {rendered}')\n        return '\\n'.join(lines)\n    raise ValueError('unsupported format')\n",
+  "effective_temperature": null,
+  "entry_point": "serialize_record",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nimport json\n\n\ndef serialize_record(record: dict, format: str) -> str:\n    if format == 'json':\n        return json.dumps(record, sort_keys=True)\n    if format == 'csv':\n        keys = list(record)\n        return ','.join(keys) + '\\n' + ','.join(str(record[key]) for key in keys)\n    if format == 'toml':\n        lines = []\n        for key, value in record.items():\n            rendered = json.dumps(value) if isinstance(value, str) else str(value)\n            lines.append(f'{key} = {rendered}')\n        return '\\n'.join(lines)\n    raise ValueError('unsupported format')\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend serialize_record with schema_version: str | None = None. When provided,\ninclude the version as a header field before other fields in all formats.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "parameter_threading",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import serialize_record\n\n\ndef test_schema_version_header():\n    assert serialize_record({'a': 1}, 'csv', schema_version='v1') == 'schema_version,a\\nv1,1'\n    assert '\"schema_version\": \"v1\"' in serialize_record({'a': 1}, 'json', schema_version='v1')\n",
+    "entry_point": "serialize_record",
+    "human_reference": "from __future__ import annotations\n\nimport json\n\n\ndef serialize_record(record: dict, format: str) -> str:\n    if format == 'json':\n        return json.dumps(record, sort_keys=True)\n    if format == 'csv':\n        keys = list(record)\n        return ','.join(keys) + '\\n' + ','.join(str(record[key]) for key in keys)\n    if format == 'toml':\n        lines = []\n        for key, value in record.items():\n            rendered = json.dumps(value) if isinstance(value, str) else str(value)\n            lines.append(f'{key} = {rendered}')\n        return '\\n'.join(lines)\n    raise ValueError('unsupported format')\n",
+    "id": "multiformat_serializer",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport json\n\n\ndef serialize_record(record, format: str, schema_version=None):\n    data = dict(record)\n    if schema_version is not None:\n        data = {'schema_version': schema_version, **data}\n    if format == 'json':\n        return json.dumps(data, sort_keys=True)\n    if format == 'csv':\n        fields = list(data.keys())\n        return ','.join(fields) + '\\n' + ','.join(str(data[field]) for field in fields)\n    if format == 'toml':\n        return '\\n'.join(f'{key} = {json.dumps(value) if isinstance(value, str) else value}' for key, value in data.items())\n    raise ValueError('unsupported format')\n",
+    "mock_solution": "from __future__ import annotations\n\nimport json\n\n\ndef serialize_record(record, format: str):\n    if format == 'json':\n        return json.dumps(record, sort_keys=True)\n    elif format == 'csv':\n        fields = list(record.keys())\n        return ','.join(fields) + '\\n' + ','.join(str(record[field]) for field in fields)\n    elif format == 'toml':\n        return '\\n'.join(f'{key} = {json.dumps(value) if isinstance(value, str) else value}' for key, value in record.items())\n    raise ValueError('unsupported format')\n",
+    "prompt": "Implement serialize_record(record: dict, format: str) -> str. Support 'json',\n'csv', and 'toml'. JSON should sort keys. CSV should emit header and one row.\nTOML should emit key = value lines for primitive values.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "serialization",
+      "day2-hard"
+    ],
+    "test_code": "from solution import serialize_record\n\n\ndef test_serializes_supported_formats():\n    assert serialize_record({'b': 2, 'a': 1}, 'json') == '{\"a\": 1, \"b\": 2}'\n    assert serialize_record({'a': 1, 'b': 2}, 'csv') == 'a,b\\n1,2'\n    assert serialize_record({'a': 'x'}, 'toml') == 'a = \"x\"'\n"
+  },
+  "task_id": "multiformat_serializer",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

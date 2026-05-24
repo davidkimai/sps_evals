@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and explicit. It extracts enabled workers in a single comprehension, raises a clear ValueError with a descriptive message, and assigns jobs with a straightforward loop using modular indexing. Data movement is explicit, inputs are not mutated, and there is no speculative abstraction or unnecessary complexity. The only minor improvement would be using itertools.cycle for semantic clarity, but the modular index approach is equally readable and arguably simpler for a maintainer to audit locally.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, flat, and explicit. It extracts enabled workers in a single comprehension, raises a clear ValueError with a descriptive message, and assigns jobs with a straightforward loop using modular indexing. Data movement is explicit, inputs are not mutated, and there is no speculative abstraction or unnecessary complexity. The only minor improvement would be using itertools.cycle for semantic clarity, but the modular index approach is equally readable and arguably simpler for a maintainer to audit locally.\",\n  \"strengths\": [\n    \"Single-responsibility extraction of enabled workers via list comprehension\",\n    \"Clear, descriptive ValueError for the invalid-input case\",\n    \"Flat control flow with no deep nesting\",\n    \"No mutation of input data\",\n    \"Modular index arithmetic is simple and immediately auditable\",\n    \"Minimal surface area with no unused extension points\"\n  ],\n  \"weaknesses\": [\n    \"Building assignments list with append in a loop could use a list comprehension for slightly more idiomatic Python\",\n    \"itertools.cycle would make the round-robin intent more semantically explicit, though current approach is not wrong\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Single-responsibility extraction of enabled workers via list comprehension",
+      "Clear, descriptive ValueError for the invalid-input case",
+      "Flat control flow with no deep nesting",
+      "No mutation of input data",
+      "Modular index arithmetic is simple and immediately auditable",
+      "Minimal surface area with no unused extension points"
+    ],
+    "weaknesses": [
+      "Building assignments list with append in a loop could use a list comprehension for slightly more idiomatic Python",
+      "itertools.cycle would make the round-robin intent more semantically explicit, though current approach is not wrong"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 8.914,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "..                                                                       [100%]\n2 passed in 0.09s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 5.0,
+    "cyclomatic_complexity_max": 5,
+    "cyclomatic_complexity_total": 5,
+    "function_count": 1,
+    "loc": 8,
+    "maintainability_index": 71.056,
+    "max_nesting_depth": 1,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "round_robin_scheduler",
+  "variant": "human_reference"
+}

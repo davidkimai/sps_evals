@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-05-19T12:46:27Z",
+  "interpretation": "SCBench remains an explicit downgrade note; no primary or secondary claim depends on it.",
+  "program_version": "vericoding_research_v3",
+  "schema": "specoracle.vericoding.v3.secondary_surface_status.v1",
+  "status": "demoted",
+  "surface": "scbench_transfer",
+  "transfer_rows": 4
+}

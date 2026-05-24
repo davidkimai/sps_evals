@@ -1,0 +1,56 @@
+{
+  "artifact_language": "dafny",
+  "code": "method SplitByComma(line: string) returns (parts: seq<string>)\n  ensures |parts| >= 1\n{\n  var result: seq<string> := [];\n  var current: string := \"\";\n  var i := 0;\n  while i < |line|\n    invariant 0 <= i <= |line|\n  {\n    if line[i] == ',' {\n      result := result + [current];\n      current := \"\";\n    } else {\n      current := current + [line[i]];\n    }\n    i := i + 1;\n  }\n  result := result + [current];\n  parts := result;\n}\n\nmethod ParseCSVRows(lines: seq<string>) returns (rows: seq<map<string, string>>)\n  ensures |rows| >= 0\n{\n  rows := [];\n  var headers: seq<string> := [];\n  var headerFound := false;\n  var i := 0;\n\n  while i < |lines|\n    invariant 0 <= i <= |lines|\n  {\n    var line := lines[i];\n    // Check if line is non-empty\n    if |line| > 0 {\n      if !headerFound {\n        // First non-empty line is the header\n        headers := SplitByComma(line);\n        headerFound := true;\n      } else {\n        // Parse as a data row\n        var cells := SplitByComma(line);\n        var row: map<string, string> := map[];\n        var j := 0;\n        while j < |headers| && j < |cells|\n          invariant 0 <= j <= |headers|\n          invariant 0 <= j <= |cells|\n        {\n          row := row[headers[j] := cells[j]];\n          j := j + 1;\n        }\n        // If fewer cells than headers, fill remaining with empty string\n        while j < |headers|\n          invariant j <= |headers|\n        {\n          row := row[headers[j] := \"\"];\n          j := j + 1;\n        }\n        rows := rows + [row];\n      }\n    }\n    i := i + 1;\n  }\n}\n\nmethod Main()\n{\n  // Example test\n  var lines := [\"name,age,city\", \"Alice,30,New York\", \"Bob,25,Boston\", \"\", \"Charlie,35,Chicago\"];\n  var rows := ParseCSVRows(lines);\n  var i := 0;\n  while i < |rows|\n    invariant 0 <= i <= |rows|\n  {\n    print rows[i], \"\\n\";\n    i := i + 1;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "parse_csv_rows",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 461,
+      "prompt": 309,
+      "total": 770,
+      "turns": [
+        {
+          "completion": 461,
+          "prompt": 309,
+          "total": 770
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod SplitByComma(line: string) returns (parts: seq<string>)\n  ensures |parts| >= 1\n{\n  var result: seq<string> := [];\n  var current: string := \"\";\n  var i := 0;\n  while i < |line|\n    invariant 0 <= i <= |line|\n  {\n    if line[i] == ',' {\n      result := result + [current];\n      current := \"\";\n    } else {\n      current := current + [line[i]];\n    }\n    i := i + 1;\n  }\n  result := result + [current];\n  parts := result;\n}\n\nmethod ParseCSVRows(lines: seq<string>) returns (rows: seq<map<string, string>>)\n  ensures |rows| >= 0\n{\n  rows := [];\n  var headers: seq<string> := [];\n  var headerFound := false;\n  var i := 0;\n\n  while i < |lines|\n    invariant 0 <= i <= |lines|\n  {\n    var line := lines[i];\n    // Check if line is non-empty\n    if |line| > 0 {\n      if !headerFound {\n        // First non-empty line is the header\n        headers := SplitByComma(line);\n        headerFound := true;\n      } else {\n        // Parse as a data row\n        var cells := SplitByComma(line);\n        var row: map<string, string> := map[];\n        var j := 0;\n        while j < |headers| && j < |cells|\n          invariant 0 <= j <= |headers|\n          invariant 0 <= j <= |cells|\n        {\n          row := row[headers[j] := cells[j]];\n          j := j + 1;\n        }\n        // If fewer cells than headers, fill remaining with empty string\n        while j < |headers|\n          invariant j <= |headers|\n        {\n          row := row[headers[j] := \"\"];\n          j := j + 1;\n        }\n        rows := rows + [row];\n      }\n    }\n    i := i + 1;\n  }\n}\n\nmethod Main()\n{\n  // Example test\n  var lines := [\"name,age,city\", \"Alice,30,New York\", \"Bob,25,Boston\", \"\", \"Charlie,35,Chicago\"];\n  var rows := ParseCSVRows(lines);\n  var i := 0;\n  while i < |rows|\n    invariant 0 <= i <= |rows|\n  {\n    print rows[i], \"\\n\";\n    i := i + 1;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend parse_csv_rows with normalize_header: callable | None = None. When\nprovided, apply it to each header cell before building row dictionaries.\nPreserve streaming behavior and original behavior when omitted.\n",
+    "day2_stressors": [
+      "streaming_compatibility",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import parse_csv_rows\n\n\ndef test_normalizes_headers_without_eager_buffering():\n    seen = []\n\n    def lines():\n        for line in ['First Name,AGE', 'Ada,36']:\n            seen.append(line)\n            yield line\n\n    rows = parse_csv_rows(lines(), normalize_header=lambda name: name.strip().lower().replace(' ', '_'))\n    assert next(rows) == {'first_name': 'Ada', 'age': '36'}\n    assert seen == ['First Name,AGE', 'Ada,36']\n",
+    "entry_point": "parse_csv_rows",
+    "human_reference": "from __future__ import annotations\n\nfrom collections.abc import Callable, Iterable, Iterator\n\n\ndef parse_csv_rows(lines: Iterable[str]) -> Iterator[dict[str, str]]:\n    iterator = iter(lines)\n    header: list[str] | None = None\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        header = [cell.strip() for cell in line.split(',')]\n        break\n    if header is None:\n        return\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        cells = [cell.strip() for cell in line.split(',')]\n        yield dict(zip(header, cells))\n",
+    "id": "streaming_csv_parser",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef parse_csv_rows(lines, normalize_header=None):\n    header = None\n    for raw in lines:\n        text = raw.strip()\n        if not text:\n            continue\n        if header is None:\n            names = [part.strip() for part in text.split(',')]\n            if normalize_header is not None:\n                names = [normalize_header(name) for name in names]\n            header = names\n            continue\n        values = [part.strip() for part in text.split(',')]\n        yield {header[index]: values[index] for index in range(min(len(header), len(values)))}\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef parse_csv_rows(lines):\n    header = None\n    for raw in lines:\n        text = raw.strip()\n        if not text:\n            continue\n        if header is None:\n            header = [part.strip() for part in text.split(',')]\n            continue\n        values = [part.strip() for part in text.split(',')]\n        yield {header[index]: values[index] for index in range(min(len(header), len(values)))}\n",
+    "prompt": "Implement parse_csv_rows(lines: iterable[str]) -> iterator[dict[str, str]].\n\nThe first non-empty line is a comma-separated header. Each later non-empty line\nis a row. Yield dictionaries from header names to cell values. Preserve streaming\nbehavior: do not convert the input iterable to a list.\n",
+    "tags": [
+      "async",
+      "streaming",
+      "csv",
+      "day2-hard"
+    ],
+    "test_code": "from solution import parse_csv_rows\n\n\ndef test_parses_rows_lazily():\n    consumed = []\n\n    def lines():\n        for line in ['name,age', 'Ada,36', 'Grace,40']:\n            consumed.append(line)\n            yield line\n\n    rows = parse_csv_rows(lines())\n    assert next(rows) == {'name': 'Ada', 'age': '36'}\n    assert consumed == ['name,age', 'Ada,36']\n    assert list(rows) == [{'name': 'Grace', 'age': '40'}]\n"
+  },
+  "task_id": "streaming_csv_parser",
+  "user_prompt": "Task id: streaming_csv_parser\nEntry point: parse_csv_rows\n\nFunctional requirements:\nImplement parse_csv_rows(lines: iterable[str]) -> iterator[dict[str, str]].\n\nThe first non-empty line is a comma-separated header. Each later non-empty line\nis a row. Yield dictionaries from header names to cell values. Preserve streaming\nbehavior: do not convert the input iterable to a list.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

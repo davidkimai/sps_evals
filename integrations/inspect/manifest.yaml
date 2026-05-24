@@ -1,0 +1,31 @@
+name: slopbench
+version: 0.1.0
+description: Structural quality benchmark for secure program synthesis evaluation.
+dataset:
+  full: data/slopbench
+  pilot: data/slopbench_min
+tasks:
+  full_count: 50
+  pilot_count: 20
+splits:
+  slopbench_min:
+    path: data/slopbench_min
+    role: locked pilot evidence split
+  slopbench:
+    path: data/slopbench
+    role: canonical full benchmark
+metrics:
+  - pytest_passed
+  - cc_average
+  - cc_max
+  - max_nesting_depth
+  - judge_score
+  - stress_passed
+  - context_ablation_pass_at_1
+eval_config:
+  temperature: 0.8
+  samples: 3
+  variants:
+    - baseline_generation
+    - oracle_generation
+    - hybrid_generation

@@ -1,0 +1,9 @@
+{
+  "candidate_row_id": "hash(program_version, stable_sample_id, generation_family, model_arm, sample_index, replicate_index)",
+  "created_at": "2026-05-19T08:42:51Z",
+  "join_rule": "condition-specific rows join through stable_sample_id and task_id",
+  "schema": "specoracle.vericoding.v3.identity_schema_freeze.v1",
+  "selector_decision_row_id": "hash(program_version, stable_sample_id, fixed_bank_id, selector_family, replicate_index)",
+  "stable_sample_id": "condition-independent task/split identity; never includes generator, selector, model, repair, or triage condition",
+  "triage_decision_row_id": "hash(program_version, stable_sample_id, selected_candidate_row_id, triage_policy_version)"
+}

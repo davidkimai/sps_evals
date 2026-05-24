@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method AuditLogWriter(sink: array<(int, string, string)>, initialSize: int) returns (log: array<(int, string, string)>)\n  requires initialSize >= 0\n  ensures log.Length == initialSize\n{\n  log := new (int, string, string)[initialSize];\n}\n\nmethod Write(sink: array<(int, string, string)>, count: int, actor: string, action: string)\n  returns (newSink: array<(int, string, string)>, newCount: int, record: (int, string, string))\n  requires 0 <= count <= sink.Length\n  ensures newCount == count + 1\n  ensures record.0 == count + 1\n  ensures record.1 == actor\n  ensures record.2 == action\n  ensures newSink.Length >= newCount\n{\n  var seq_num := count + 1;\n  record := (seq_num, actor, action);\n  \n  if count < sink.Length {\n    newSink := sink;\n    newSink[count] := (seq_num, actor, action);\n  } else {\n    var newLen := if sink.Length == 0 then 4 else sink.Length * 2;\n    newSink := new (int, string, string)[newLen];\n    var i := 0;\n    while i < count\n      invariant 0 <= i <= count\n    {\n      newSink[i] := sink[i];\n      i := i + 1;\n    }\n    newSink[count] := (seq_num, actor, action);\n  }\n  \n  newCount := count + 1;\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "AuditLogWriter",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 285,
+      "prompt": 292,
+      "total": 577,
+      "turns": [
+        {
+          "completion": 285,
+          "prompt": 292,
+          "total": 577
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod AuditLogWriter(sink: array<(int, string, string)>, initialSize: int) returns (log: array<(int, string, string)>)\n  requires initialSize >= 0\n  ensures log.Length == initialSize\n{\n  log := new (int, string, string)[initialSize];\n}\n\nmethod Write(sink: array<(int, string, string)>, count: int, actor: string, action: string)\n  returns (newSink: array<(int, string, string)>, newCount: int, record: (int, string, string))\n  requires 0 <= count <= sink.Length\n  ensures newCount == count + 1\n  ensures record.0 == count + 1\n  ensures record.1 == actor\n  ensures record.2 == action\n  ensures newSink.Length >= newCount\n{\n  var seq_num := count + 1;\n  record := (seq_num, actor, action);\n  \n  if count < sink.Length {\n    newSink := sink;\n    newSink[count] := (seq_num, actor, action);\n  } else {\n    var newLen := if sink.Length == 0 then 4 else sink.Length * 2;\n    newSink := new (int, string, string)[newLen];\n    var i := 0;\n    while i < count\n      invariant 0 <= i <= count\n    {\n      newSink[i] := sink[i];\n      i := i + 1;\n    }\n    newSink[count] := (seq_num, actor, action);\n  }\n  \n  newCount := count + 1;\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend AuditLogWriter so each appended record includes checksum: str. The checksum\nmust be computed over sequence, actor, and action before the checksum is added.\nPreserve sequence behavior.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import hashlib\nimport json\n\nfrom solution import AuditLogWriter\n\n\ndef test_checksum_covers_record_fields():\n    sink = []\n    row = AuditLogWriter(sink).write('alice', 'create')\n    expected = hashlib.sha256(json.dumps({'sequence': 1, 'actor': 'alice', 'action': 'create'}, sort_keys=True).encode()).hexdigest()\n    assert row['checksum'] == expected\n    assert sink[0]['checksum'] == expected\n",
+    "entry_point": "AuditLogWriter",
+    "human_reference": "from __future__ import annotations\n\n\nclass AuditLogWriter:\n    def __init__(self, sink: list[dict]) -> None:\n        self._sink = sink\n        self._sequence = 0\n\n    def write(self, actor: str, action: str) -> dict:\n        self._sequence += 1\n        record = {'sequence': self._sequence, 'actor': actor, 'action': action}\n        self._sink.append(dict(record))\n        return dict(record)\n",
+    "id": "audit_log_writer",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport hashlib\nimport json\n\n\nclass AuditLogWriter:\n    def __init__(self, sink):\n        self.sink = sink\n        self.next_sequence = 1\n\n    def write(self, actor: str, action: str):\n        base = {'sequence': self.next_sequence, 'actor': actor, 'action': action}\n        checksum = hashlib.sha256(json.dumps(base, sort_keys=True).encode()).hexdigest()\n        row = dict(base)\n        row['checksum'] = checksum\n        self.next_sequence += 1\n        self.sink.append(row.copy())\n        return row.copy()\n",
+    "mock_solution": "from __future__ import annotations\n\n\nclass AuditLogWriter:\n    def __init__(self, sink):\n        self.sink = sink\n        self.next_sequence = 1\n\n    def write(self, actor: str, action: str):\n        row = {'sequence': self.next_sequence, 'actor': actor, 'action': action}\n        self.next_sequence += 1\n        self.sink.append(row.copy())\n        return row.copy()\n",
+    "prompt": "Implement AuditLogWriter(sink: list[dict]). Method write(actor: str, action: str) -> dict\nappends a record with monotonic sequence numbers starting at 1. The returned\nrecord and appended record must not be the same mutable object.\n",
+    "tags": [
+      "reliability_critical",
+      "audit",
+      "day2-hard"
+    ],
+    "test_code": "from solution import AuditLogWriter\n\n\ndef test_writes_monotonic_records_without_aliasing():\n    sink = []\n    writer = AuditLogWriter(sink)\n    first = writer.write('alice', 'create')\n    second = writer.write('bob', 'delete')\n    assert [row['sequence'] for row in sink] == [1, 2]\n    assert first == {'sequence': 1, 'actor': 'alice', 'action': 'create'}\n    first['actor'] = 'changed'\n    assert sink[0]['actor'] == 'alice'\n    assert second['sequence'] == 2\n"
+  },
+  "task_id": "audit_log_writer",
+  "user_prompt": "Task id: audit_log_writer\nEntry point: AuditLogWriter\n\nFunctional requirements:\nImplement AuditLogWriter(sink: list[dict]). Method write(actor: str, action: str) -> dict\nappends a record with monotonic sequence numbers starting at 1. The returned\nrecord and appended record must not be the same mutable object.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

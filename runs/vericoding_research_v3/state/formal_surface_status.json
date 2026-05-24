@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-05-19T12:46:27Z",
+  "formal_rows": 6,
+  "interpretation": "Bounded review-boundary overlay is retained as secondary evidence.",
+  "program_version": "vericoding_research_v3",
+  "schema": "specoracle.vericoding.v3.secondary_surface_status.v1",
+  "status": "complete",
+  "surface": "formal_review_boundary_overlay"
+}

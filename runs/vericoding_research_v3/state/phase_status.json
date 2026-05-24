@@ -1,0 +1,65 @@
+{
+  "phases": {
+    "phase_0_demote_canary": {
+      "next_action": "validity surgery",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_10_package_audit": {
+      "next_action": "",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:47:43Z"
+    },
+    "phase_1_validity_surgery": {
+      "next_action": "run dev bank",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_2_dev_bank": {
+      "next_action": "freeze primary",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_3_freeze": {
+      "next_action": "run primary confirmatory",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_4_primary_confirmatory": {
+      "next_action": "run expansion",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_5_expansion": {
+      "next_action": "run repair/adjudication closure",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_6_repair": {
+      "next_action": "claim hardening adjudication",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_7_review_formal": {
+      "next_action": "resolve external and SCBench",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_8_external": {
+      "next_action": "resolve SCBench",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_9_scbench": {
+      "next_action": "package audit",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    "phase_minus_1_ground": {
+      "next_action": "doctor",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    }
+  },
+  "program_version": "vericoding_research_v3"
+}

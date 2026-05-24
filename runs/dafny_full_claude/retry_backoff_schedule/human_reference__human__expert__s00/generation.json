@@ -1,0 +1,40 @@
+{
+  "artifact_language": "python",
+  "code": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n",
+  "effective_temperature": null,
+  "entry_point": "build_retry_schedule",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add next_allowed_times(start_timestamp: int, schedule: list[int]) -> list[int].\nReturn cumulative timestamps after applying each delay in schedule.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import build_retry_schedule, next_allowed_times\n\n\ndef test_next_allowed_times_uses_cumulative_schedule():\n    schedule = build_retry_schedule(4, 3, 10)\n    assert schedule == [3, 6, 10, 10]\n    assert next_allowed_times(100, schedule) == [103, 109, 119, 129]\n",
+    "entry_point": "build_retry_schedule",
+    "human_reference": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n",
+    "id": "retry_backoff_schedule",
+    "mock_day2_solution": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n\n\ndef next_allowed_times(start_timestamp: int, schedule: list[int]) -> list[int]:\n    current = start_timestamp\n    result = []\n    for delay in schedule:\n        current += delay\n        result.append(current)\n    return result\n",
+    "mock_solution": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n",
+    "prompt": "Implement build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int].\n\nValidate that attempts is non-negative and base_seconds/cap_seconds are\npositive, otherwise raise ValueError. Return exponential backoff delays:\nbase_seconds, base_seconds*2, base_seconds*4, ... capped at cap_seconds.\nattempts=0 returns an empty list.\n",
+    "tags": [
+      "retry_backoff",
+      "validation",
+      "timing"
+    ],
+    "test_code": "import pytest\n\nfrom solution import build_retry_schedule\n\n\ndef test_build_retry_schedule_caps_values():\n    assert build_retry_schedule(0, 2, 10) == []\n    assert build_retry_schedule(5, 2, 10) == [2, 4, 8, 10, 10]\n\n\ndef test_build_retry_schedule_validation():\n    with pytest.raises(ValueError):\n        build_retry_schedule(-1, 1, 10)\n    with pytest.raises(ValueError):\n        build_retry_schedule(3, 0, 10)\n"
+  },
+  "task_id": "retry_backoff_schedule",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

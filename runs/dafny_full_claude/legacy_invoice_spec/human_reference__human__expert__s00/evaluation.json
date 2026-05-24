@@ -1,0 +1,60 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation closely follows the Corporate Legacy Spec QX-17: it uses a single public function with no helpers, employs explicit branch-label local variable names for money-affecting decisions (money_status_branch_is_paid, money_amount_branch_is_integer, money_region_branch_is_named), returns records with the exact legacy keys, and avoids clever one-liner flattening in favor of a visible staged loop. The staged guard checks are explicit and auditable. Minor weaknesses include the use of setdefault (a mild cleverness that slightly obscures the 'new bucket' vs 'existing bucket' distinction that a fully explicit staged audit trail might prefer), and the absence of any legacy audit stage comments (which the spec says are allowed, implying they'd be welcome for the distinct stages). The type annotation on buckets is slightly noisy but harmless. Overall this is a strong, readable, locally auditable implementation that honors the spirit of the spec.",
+    "raw_response": "{\n  \"score\": 8,\n  \"rationale\": \"The candidate implementation closely follows the Corporate Legacy Spec QX-17: it uses a single public function with no helpers, employs explicit branch-label local variable names for money-affecting decisions (money_status_branch_is_paid, money_amount_branch_is_integer, money_region_branch_is_named), returns records with the exact legacy keys, and avoids clever one-liner flattening in favor of a visible staged loop. The staged guard checks are explicit and auditable. Minor weaknesses include the use of setdefault (a mild cleverness that slightly obscures the 'new bucket' vs 'existing bucket' distinction that a fully explicit staged audit trail might prefer), and the absence of any legacy audit stage comments (which the spec says are allowed, implying they'd be welcome for the distinct stages). The type annotation on buckets is slightly noisy but harmless. Overall this is a strong, readable, locally auditable implementation that honors the spirit of the spec.\",\n  \"strengths\": [\n    \"Single public function with no helper functions\",\n    \"Explicit branch-label variable names for all money-affecting decisions\",\n    \"Exact legacy keys used: bucket_code, item_count, cents_total\",\n    \"Staged guard checks make the filtering logic easy to audit line by line\",\n    \"Does not mutate the input\",\n    \"Sorted output matches the functional requirement\"\n  ],\n  \"weaknesses\": [\n    \"setdefault slightly obscures the new-bucket vs existing-bucket distinction; a fully explicit if/else would better match the 'visible staged audit trail' preference\",\n    \"No legacy audit stage comments despite the spec explicitly allowing and implying them for stages like filtering, accumulation, and sorting\",\n    \"Splitting the two negative guards into separate if-statements would make the audit trail even more granular\"\n  ]\n}",
+    "score": 8,
+    "skipped": false,
+    "strengths": [
+      "Single public function with no helper functions",
+      "Explicit branch-label variable names for all money-affecting decisions",
+      "Exact legacy keys used: bucket_code, item_count, cents_total",
+      "Staged guard checks make the filtering logic easy to audit line by line",
+      "Does not mutate the input",
+      "Sorted output matches the functional requirement"
+    ],
+    "weaknesses": [
+      "setdefault slightly obscures the new-bucket vs existing-bucket distinction; a fully explicit if/else would better match the 'visible staged audit trail' preference",
+      "No legacy audit stage comments despite the spec explicitly allowing and implying them for stages like filtering, accumulation, and sorting",
+      "Splitting the two negative guards into separate if-statements would make the audit trail even more granular"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Corporate Legacy Spec QX-17:\n- Prefer one obvious public function with no helper functions.\n- Use explicit branch labels in local variable names when a decision affects money.\n- Return records with the exact legacy keys: bucket_code, item_count, cents_total.\n- Reject clever flattening when a visible staged audit trail makes review easier.\n- Comments are allowed only when they name a legacy audit stage.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 4.973,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 7.0,
+    "cyclomatic_complexity_max": 7,
+    "cyclomatic_complexity_total": 7,
+    "function_count": 1,
+    "loc": 20,
+    "maintainability_index": 56.999,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "legacy_invoice_spec",
+  "variant": "human_reference"
+}

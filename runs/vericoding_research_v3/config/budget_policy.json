@@ -1,0 +1,13 @@
+{
+  "anti_drift": "Primary trust-boundary suite before new benchmarks.",
+  "breadth_model_policy": "gpt-5.4-mini for breadth/default generation; gpt-5.5 is allowed only as a predeclared bank-construction arm before confirmatory or for bounded adjudication",
+  "cost_normalized_support_metrics": [
+    "support_at_k",
+    "support_per_candidate",
+    "support_per_usd",
+    "support_per_output_token_bucket"
+  ],
+  "default_model": "gpt-5.4-mini",
+  "external_quota": 6,
+  "program_version": "vericoding_research_v3"
+}

@@ -1,0 +1,141 @@
+id: async_rate_limiter
+entry_point: AsyncRateLimiter
+tags: [async, rate_limit, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement an AsyncRateLimiter class.
+
+  Constructor: AsyncRateLimiter(rate: int, *, now: callable | None = None).
+  Method: async acquire() -> bool.
+
+  The limiter allows at most rate successful acquisitions per one-second window.
+  Use the optional now callable for deterministic tests. Reject non-positive rates
+  with ValueError.
+test_code: |
+  import asyncio
+
+  from solution import AsyncRateLimiter
+
+
+  def test_allows_only_rate_per_window():
+      clock = {'t': 0.0}
+
+      async def _run():
+          limiter = AsyncRateLimiter(2, now=lambda: clock['t'])
+          assert await limiter.acquire() is True
+          assert await limiter.acquire() is True
+          assert await limiter.acquire() is False
+          clock['t'] = 1.1
+          assert await limiter.acquire() is True
+
+      asyncio.run(_run())
+
+
+  def test_rejects_bad_rate():
+      try:
+          AsyncRateLimiter(0)
+      except ValueError:
+          return
+      raise AssertionError('expected ValueError')
+day2_prompt: |
+  Extend AsyncRateLimiter so it can be used as an async context manager.
+  Entering the context should call acquire(). If the acquisition is denied, raise
+  RuntimeError. Preserve acquire() behavior.
+day2_test_code: |
+  import asyncio
+
+  from solution import AsyncRateLimiter
+
+
+  def test_async_context_manager_preserves_acquire_semantics():
+      clock = {'t': 0.0}
+
+      async def _run():
+          limiter = AsyncRateLimiter(1, now=lambda: clock['t'])
+          async with limiter as acquired:
+              assert acquired is limiter
+          try:
+              async with limiter:
+                  pass
+          except RuntimeError:
+              pass
+          else:
+              raise AssertionError('second acquire should be denied')
+          clock['t'] = 2.0
+          assert await limiter.acquire() is True
+
+      asyncio.run(_run())
+human_reference: |
+  from __future__ import annotations
+
+  import time
+  from collections import deque
+  from typing import Callable
+
+
+  class AsyncRateLimiter:
+      def __init__(self, rate: int, *, now: Callable[[], float] | None = None) -> None:
+          if rate <= 0:
+              raise ValueError('rate must be positive')
+          self._rate = rate
+          self._now = now or time.monotonic
+          self._hits: deque[float] = deque()
+
+      async def acquire(self) -> bool:
+          current = self._now()
+          while self._hits and current - self._hits[0] >= 1.0:
+              self._hits.popleft()
+          if len(self._hits) >= self._rate:
+              return False
+          self._hits.append(current)
+          return True
+mock_solution: |
+  from __future__ import annotations
+
+  import time
+
+
+  class AsyncRateLimiter:
+      def __init__(self, rate: int, *, now=None) -> None:
+          if rate <= 0:
+              raise ValueError('rate must be positive')
+          self.rate = rate
+          self.now = now or time.monotonic
+          self.seen: list[float] = []
+
+      async def acquire(self) -> bool:
+          current = self.now()
+          self.seen = [stamp for stamp in self.seen if current - stamp < 1.0]
+          if len(self.seen) < self.rate:
+              self.seen.append(current)
+              return True
+          return False
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import time
+
+
+  class AsyncRateLimiter:
+      def __init__(self, rate: int, *, now=None) -> None:
+          if rate <= 0:
+              raise ValueError('rate must be positive')
+          self.rate = rate
+          self.now = now or time.monotonic
+          self.seen: list[float] = []
+
+      async def acquire(self) -> bool:
+          current = self.now()
+          self.seen = [stamp for stamp in self.seen if current - stamp < 1.0]
+          if len(self.seen) >= self.rate:
+              return False
+          self.seen.append(current)
+          return True
+
+      async def __aenter__(self):
+          if not await self.acquire():
+              raise RuntimeError('rate limit exceeded')
+          return self
+
+      async def __aexit__(self, exc_type, exc, tb) -> bool:
+          return False

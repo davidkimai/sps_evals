@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 2,
+    "error_count": null,
+    "invariant_count": 3,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 4,
+      "if": 1,
+      "invariant": 3,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 13,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 22,
+    "source_token_estimate": 167,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.763,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation. It fails every functional requirement: it is not a Python generator/iterator, it does not accept a file-like object with a read() method, it does not yield bytes lazily, it does not raise an error for non-positive chunk sizes in Python, and it reads all data at once (as a sequence parameter rather than streaming). The entry point signature `iter_file_chunks(file_obj, chunk_size: int)` is entirely absent. While the Dafny code itself is logically coherent and has correct loop invariants, it is architecturally irrelevant to the task and cannot be executed or imported as Python code.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation. It fails every functional requirement: it is not a Python generator/iterator, it does not accept a file-like object with a read() method, it does not yield bytes lazily, it does not raise an error for non-positive chunk sizes in Python, and it reads all data at once (as a sequence parameter rather than streaming). The entry point signature `iter_file_chunks(file_obj, chunk_size: int)` is entirely absent. While the Dafny code itself is logically coherent and has correct loop invariants, it is architecturally irrelevant to the task and cannot be executed or imported as Python code.\",\n  \"strengths\": [\n    \"The Dafny loop invariants correctly capture non-emptiness and size bounds for chunks\",\n    \"The precondition chunk_size > 0 mirrors the rejection of non-positive chunk sizes\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Not a generator/iterator; returns a full sequence rather than yielding lazily\",\n    \"Accepts a raw byte sequence instead of a file-like object with read()\",\n    \"No Python ValueError or similar raised for non-positive chunk_size\",\n    \"Cannot be imported or executed as the required Python entry point iter_file_chunks\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny loop invariants correctly capture non-emptiness and size bounds for chunks",
+      "The precondition chunk_size > 0 mirrors the rejection of non-positive chunk sizes"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Not a generator/iterator; returns a full sequence rather than yielding lazily",
+      "Accepts a raw byte sequence instead of a file-like object with read()",
+      "No Python ValueError or similar raised for non-positive chunk_size",
+      "Cannot be imported or executed as the required Python entry point iter_file_chunks"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 171,
+      "prompt": 290,
+      "total": 461,
+      "turns": [
+        {
+          "completion": 171,
+          "prompt": 290,
+          "total": 461
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(1,34): Error: Type or type parameter is not declared in this scope: byte (did you forget to qualify a name or declare a module import 'opened'?) (note that names in outer modules are not visible in contained modules)\n  |\n1 | method iter_file_chunks(data: seq<byte>, chunk_size: int) returns (chunks: seq<seq<byte>>)\n  |                                   ^^^^\n\nsolution.dfy(1,83): Error: Type or type parameter is not declared in this scope: byte (did you forget to qualify a name or declare a module import 'opened'?) (note that names in outer modules are not visible in contained modules)\n  |\n1 | method iter_file_chunks(data: seq<byte>, chunk_size: int) returns (chunks: seq<seq<byte>>)\n  |                                                                                    ^^^^\n\n2 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "lazy_file_chunker",
+  "variant": "oracle_dafny_generation"
+}

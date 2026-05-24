@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 0,
+    "error_count": 2,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 0,
+      "exists": 0,
+      "forall": 0,
+      "if": 3,
+      "invariant": 0,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 8,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 60,
+    "source_token_estimate": 476,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.718,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation of the required `merge_settings` entry point. It fails every functional requirement: there is no Python function named `merge_settings`, no deep-merging of nested dictionaries, no parsing of booleans/integers/comma-separated lists, no proper handling of the `APP__` prefix with multi-segment path splitting into nested dicts, and no preservation of non-mutation semantics in Python. The Dafny code itself is also architecturally flawed for the task\u2014it flattens nested structure rather than building nested dicts, and the 'formal verification' framing is entirely cosmetic. This is severe architectural slop with zero executable correctness.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation of the required `merge_settings` entry point. It fails every functional requirement: there is no Python function named `merge_settings`, no deep-merging of nested dictionaries, no parsing of booleans/integers/comma-separated lists, no proper handling of the `APP__` prefix with multi-segment path splitting into nested dicts, and no preservation of non-mutation semantics in Python. The Dafny code itself is also architecturally flawed for the task\u2014it flattens nested structure rather than building nested dicts, and the 'formal verification' framing is entirely cosmetic. This is severe architectural slop with zero executable correctness.\",\n  \"strengths\": [\n    \"Demonstrates awareness of precedence ordering concept (defaults < file_config < env)\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"No Python `merge_settings` function exists at all\",\n    \"No nested dictionary deep-merge logic\",\n    \"No value parsing (booleans, integers, comma-separated lists)\",\n    \"APP__ prefix handling does not split into nested path segments\",\n    \"Input mutation prevention is irrelevant since no Python code exists\",\n    \"Dafny code itself is incomplete and would not compile or verify\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates awareness of precedence ordering concept (defaults < file_config < env)"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "No Python `merge_settings` function exists at all",
+      "No nested dictionary deep-merge logic",
+      "No value parsing (booleans, integers, comma-separated lists)",
+      "APP__ prefix handling does not split into nested path segments",
+      "Input mutation prevention is irrelevant since no Python code exists",
+      "Dafny code itself is incomplete and would not compile or verify"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 744,
+      "prompt": 385,
+      "total": 1129,
+      "turns": [
+        {
+          "completion": 744,
+          "prompt": 385,
+          "total": 1129
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(36,35): Error: element might not be in domain\n   |\n36 |       result := result[k := overlay[k]];\n   |                                    ^\n\nsolution.dfy(53,37): Error: element might not be in domain\n   |\n53 |         result := result[lower := env[k]];\n   |                                      ^\n\n\nDafny program verifier finished with 4 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "config_precedence_merge",
+  "variant": "oracle_dafny_generation"
+}

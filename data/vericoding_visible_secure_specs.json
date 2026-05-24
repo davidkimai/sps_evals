@@ -1,0 +1,78 @@
+{
+  "schema": "specoracle.vericoding.visible_secure_specs.v1",
+  "source_policy": "Visible task summaries only. This file intentionally excludes hidden oracle code, hidden test payloads, post-failure casebook details, and adversarial examples copied from hidden evaluators.",
+  "tasks": [
+    {
+      "task_id": "safe_path_validation",
+      "entry_point": "solution_safe_path_validation",
+      "public_summary": "Normalize a user-supplied relative path and decide whether it remains within an allowed application-owned namespace.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not touch the filesystem.", "Treat ambiguous or non-local paths conservatively."]
+    },
+    {
+      "task_id": "shell_argument_construction",
+      "entry_point": "solution_shell_argument_construction",
+      "public_summary": "Build a subprocess argument representation from structured input without constructing shell-command strings.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not execute commands.", "Prefer structured argument lists over shell text."]
+    },
+    {
+      "task_id": "archive_extract_filter",
+      "entry_point": "solution_archive_extract_filter",
+      "public_summary": "Classify archive member names before extraction so only safe relative members are accepted.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not extract files.", "Reject names whose normalized destination is outside the intended extraction root."]
+    },
+    {
+      "task_id": "url_domain_allowlist",
+      "entry_point": "solution_url_domain_allowlist",
+      "public_summary": "Validate canonical URL hostnames against an allowlist-like boundary.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not perform network access.", "Canonicalize hostnames before policy decisions."]
+    },
+    {
+      "task_id": "parser_validator_edges",
+      "entry_point": "solution_parser_validator_edges",
+      "public_summary": "Validate structured records while preserving legitimate edge cases and rejecting malformed records.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not silently accept unknown critical fields.", "Keep parsing deterministic and side-effect free."]
+    },
+    {
+      "task_id": "input_canonicalization",
+      "entry_point": "solution_input_canonicalization",
+      "public_summary": "Canonicalize equivalent identifiers before applying an acceptance policy.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Apply policy after canonicalization.", "Reject inputs whose canonical form is ambiguous."]
+    },
+    {
+      "task_id": "authorization_rule_sequence",
+      "entry_point": "solution_authorization_rule_sequence",
+      "public_summary": "Apply ordered authorization rules and report whether a request should be accepted.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Deny rules must not be bypassed by later allow rules.", "Record conservative unsafe outcomes when rule interpretation is ambiguous."]
+    },
+    {
+      "task_id": "config_schema_enforcement",
+      "entry_point": "solution_config_schema_enforcement",
+      "public_summary": "Apply config defaults while enforcing a small declared schema boundary.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not silently accept unknown security-relevant keys.", "Keep default handling explicit."]
+    },
+    {
+      "task_id": "token_scope_checker",
+      "entry_point": "solution_token_scope_checker",
+      "public_summary": "Check token scope and expiry before accepting privileged actions.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Treat missing or stale authorization fields conservatively.", "Do not call external services."]
+    },
+    {
+      "task_id": "redaction_policy_engine",
+      "entry_point": "solution_redaction_policy_engine",
+      "public_summary": "Apply a redaction policy before producing user-facing logging or display decisions.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not expose protected fields in summaries.", "Prefer conservative redaction when field sensitivity is unclear."]
+    },
+    {
+      "task_id": "webhook_signature_validator",
+      "entry_point": "solution_webhook_signature_validator",
+      "public_summary": "Validate webhook authenticity using canonical payload metadata supplied to the function.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Do not perform network or secret-store access.", "Treat missing or malformed authenticity data conservatively."]
+    },
+    {
+      "task_id": "rate_limit_key_builder",
+      "entry_point": "solution_rate_limit_key_builder",
+      "public_summary": "Build or validate stable rate-limit key material while preserving tenant boundaries.",
+      "public_constraints": ["Return a dictionary with boolean ok, unsafe, and regression fields.", "Canonicalize tenant and subject identifiers before acceptance.", "Reject ambiguous or cross-boundary key material."]
+    }
+  ]
+}

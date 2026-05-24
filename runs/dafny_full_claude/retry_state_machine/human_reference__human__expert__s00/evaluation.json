@@ -1,0 +1,57 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is a textbook example of Zen-aligned Python: flat, explicit, minimal, and locally auditable. Each method does exactly one thing, names are self-explanatory, state is confined to two clearly named instance variables, the guard clause in __init__ raises a clear error immediately, and there are zero speculative abstractions or unused extension points. The `max(0, ...)` in `remaining()` is a small, justified defensive touch that keeps the return value semantically clean without adding complexity.",
+    "raw_response": "{\n  \"score\": 10,\n  \"rationale\": \"The implementation is a textbook example of Zen-aligned Python: flat, explicit, minimal, and locally auditable. Each method does exactly one thing, names are self-explanatory, state is confined to two clearly named instance variables, the guard clause in __init__ raises a clear error immediately, and there are zero speculative abstractions or unused extension points. The `max(0, ...)` in `remaining()` is a small, justified defensive touch that keeps the return value semantically clean without adding complexity.\",\n  \"strengths\": [\n    \"Minimal state: only two instance variables, both with clear names\",\n    \"Flat control flow with no nesting beyond the single guard clause\",\n    \"Each method is a single, obvious expression or assignment\",\n    \"Clear ValueError with an informative message for invalid input\",\n    \"No imports beyond __future__ annotations; uses only built-ins\"\n  ],\n  \"weaknesses\": [\n    \"No weaknesses of note; the implementation is essentially optimal for the task\"\n  ]\n}",
+    "score": 10,
+    "skipped": false,
+    "strengths": [
+      "Minimal state: only two instance variables, both with clear names",
+      "Flat control flow with no nesting beyond the single guard clause",
+      "Each method is a single, obvious expression or assignment",
+      "Clear ValueError with an informative message for invalid input",
+      "No imports beyond __future__ annotations; uses only built-ins"
+    ],
+    "weaknesses": [
+      "No weaknesses of note; the implementation is essentially optimal for the task"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 2.642,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "..                                                                       [100%]\n2 passed in 0.04s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 1.333,
+    "cyclomatic_complexity_max": 2,
+    "cyclomatic_complexity_total": 8,
+    "function_count": 5,
+    "loc": 15,
+    "maintainability_index": 61.964,
+    "max_nesting_depth": 1,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "retry_state_machine",
+  "variant": "human_reference"
+}

@@ -1,0 +1,16 @@
+name: slopbench
+display_name: SlopBench
+repository: https://github.com/davidkimai/specoracle
+version: 0.1.0
+description: Structural quality and maintenance-stress benchmark for secure program synthesis.
+status: pre_submission_stub
+notes: >
+  This is a local registration stub for fellowship development. It documents the
+  intended Inspect Evals registration shape but has not been submitted upstream.
+entrypoint: integrations/inspect/export.py
+dataset: data/slopbench
+metrics:
+  - cc_average
+  - pytest_passed
+  - stress_passed
+  - context_ablation_pass_at_1

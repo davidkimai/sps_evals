@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 5,
+    "error_count": null,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 4,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 5,
+      "exists": 0,
+      "forall": 2,
+      "if": 3,
+      "invariant": 4,
+      "logical_and": 1,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 3,
+      "while": 2
+    },
+    "lexical_proof_complexity": 27,
+    "logical_and_count": 1,
+    "logical_or_count": 1,
+    "requires_count": 3,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 61,
+    "source_token_estimate": 433,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.073,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires an async Python function `process_in_batches` with a specific signature, asyncio-based concurrency control, and proper flattening of results. Instead, the submission provides Dafny methods and lemmas that cannot be executed as Python code at all. There is no `async def process_in_batches`, no `asyncio.Semaphore` or equivalent concurrency limiting, no batch splitting in Python, no input validation raising exceptions for non-positive values, and no actual handler invocation. The entry point `process_in_batches` in Dafny also trivially returns `items` unchanged, which doesn't even satisfy the functional requirement of calling a handler. This is a complete language and architectural mismatch with zero functional correctness in the target runtime.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires an async Python function `process_in_batches` with a specific signature, asyncio-based concurrency control, and proper flattening of results. Instead, the submission provides Dafny methods and lemmas that cannot be executed as Python code at all. There is no `async def process_in_batches`, no `asyncio.Semaphore` or equivalent concurrency limiting, no batch splitting in Python, no input validation raising exceptions for non-positive values, and no actual handler invocation. The entry point `process_in_batches` in Dafny also trivially returns `items` unchanged, which doesn't even satisfy the functional requirement of calling a handler. This is a complete language and architectural mismatch with zero functional correctness in the target runtime.\",\n  \"strengths\": [\n    \"Demonstrates understanding of the algorithmic structure (batching, flattening) at a conceptual level\",\n    \"Includes formal pre/post conditions that mirror the validation requirements\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely wrong language for the task\",\n    \"No async/await, no asyncio concurrency primitives, no semaphore-based concurrency limiting\",\n    \"No actual handler invocation logic\",\n    \"Input validation raises no Python exceptions\",\n    \"Cannot be imported or executed as a Python module\",\n    \"The main method trivially returns items unchanged, ignoring handler and batching entirely\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates understanding of the algorithmic structure (batching, flattening) at a conceptual level",
+      "Includes formal pre/post conditions that mirror the validation requirements"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely wrong language for the task",
+      "No async/await, no asyncio concurrency primitives, no semaphore-based concurrency limiting",
+      "No actual handler invocation logic",
+      "Input validation raises no Python exceptions",
+      "Cannot be imported or executed as a Python module",
+      "The main method trivially returns items unchanged, ignoring handler and batching entirely"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 436,
+      "prompt": 322,
+      "total": 758,
+      "turns": [
+        {
+          "completion": 436,
+          "prompt": 322,
+          "total": 758
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(13,0): Error: a postcondition could not be proved on this return path\n   |\n13 | {\n   | ^\n\nsolution.dfy(12,63): Related location: this is the postcondition that could not be proved\n   |\n12 |   ensures |batches| == (|items| + batch_size - 1) / batch_size || (|items| == 0 && |batches| == 0)\n   |                                                                ^^\n\n\nDafny program verifier finished with 5 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "async_batch_processor",
+  "variant": "oracle_dafny_generation"
+}

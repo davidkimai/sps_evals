@@ -1,0 +1,152 @@
+id: inventory_reorder
+entry_point: reorder_plan
+tags: [data_pipeline, validation, aggregation]
+day2_stressors: [audit_provenance, backwards_compatibility]
+prompt: |
+  Implement reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict].
+
+  Each item has sku, on_hand, target, and case_pack. Skip malformed items and
+  items with non-positive case_pack. If sales_velocity[sku] is <= 0 or absent,
+  do not reorder. When on_hand is below target, compute the deficit and round up
+  to the nearest multiple of case_pack. Return rows sorted by sku:
+  {"sku": str, "reorder_quantity": int}
+test_code: |
+  from solution import reorder_plan
+
+
+  def test_reorder_plan_rounds_to_case_pack_and_sorts():
+      items = [
+          {"sku": "b", "on_hand": 3, "target": 10, "case_pack": 4},
+          {"sku": "a", "on_hand": 10, "target": 10, "case_pack": 5},
+          {"sku": "c", "on_hand": 1, "target": 5, "case_pack": 0},
+      ]
+      assert reorder_plan(items, {"b": 2, "a": 10, "c": 3}) == [
+          {"sku": "b", "reorder_quantity": 8},
+      ]
+day2_prompt: |
+  Add optional include_days_of_cover: bool = False. When true, include
+  days_of_cover_before_reorder, computed as on_hand // sales_velocity[sku], in
+  each returned row.
+day2_test_code: |
+  from solution import reorder_plan
+
+
+  def test_include_days_of_cover():
+      items = [{"sku": "b", "on_hand": 3, "target": 10, "case_pack": 4}]
+      assert reorder_plan(items, {"b": 2}, include_days_of_cover=True) == [
+          {
+              "sku": "b",
+              "reorder_quantity": 8,
+              "days_of_cover_before_reorder": 1,
+          }
+      ]
+human_reference: |
+  def reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict]:
+      rows = []
+      for item in items:
+          parsed = _parse_item(item)
+          if parsed is None:
+              continue
+          sku, on_hand, target, case_pack = parsed
+          velocity = sales_velocity.get(sku, 0)
+          if velocity <= 0 or on_hand >= target:
+              continue
+          rows.append(
+              {
+                  "sku": sku,
+                  "reorder_quantity": _round_up_to_case(target - on_hand, case_pack),
+              }
+          )
+      return sorted(rows, key=lambda row: row["sku"])
+
+
+  def _parse_item(item: dict) -> tuple[str, int, int, int] | None:
+      try:
+          sku = item["sku"]
+          on_hand = int(item["on_hand"])
+          target = int(item["target"])
+          case_pack = int(item["case_pack"])
+      except (KeyError, TypeError, ValueError):
+          return None
+      if not sku or case_pack <= 0:
+          return None
+      return sku, on_hand, target, case_pack
+
+
+  def _round_up_to_case(deficit: int, case_pack: int) -> int:
+      return ((deficit + case_pack - 1) // case_pack) * case_pack
+mock_solution: |
+  def reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict]:
+      rows = []
+      for item in items:
+          parsed = _parse_item(item)
+          if parsed is None:
+              continue
+          sku, on_hand, target, case_pack = parsed
+          velocity = sales_velocity.get(sku, 0)
+          if velocity <= 0 or on_hand >= target:
+              continue
+          rows.append(
+              {
+                  "sku": sku,
+                  "reorder_quantity": _round_up_to_case(target - on_hand, case_pack),
+              }
+          )
+      return sorted(rows, key=lambda row: row["sku"])
+
+
+  def _parse_item(item: dict) -> tuple[str, int, int, int] | None:
+      try:
+          sku = item["sku"]
+          on_hand = int(item["on_hand"])
+          target = int(item["target"])
+          case_pack = int(item["case_pack"])
+      except (KeyError, TypeError, ValueError):
+          return None
+      if not sku or case_pack <= 0:
+          return None
+      return sku, on_hand, target, case_pack
+
+
+  def _round_up_to_case(deficit: int, case_pack: int) -> int:
+      return ((deficit + case_pack - 1) // case_pack) * case_pack
+mock_day2_solution: |
+  def reorder_plan(
+      items: list[dict],
+      sales_velocity: dict[str, int],
+      include_days_of_cover: bool = False,
+  ) -> list[dict]:
+      rows = []
+      for item in items:
+          parsed = _parse_item(item)
+          if parsed is None:
+              continue
+          sku, on_hand, target, case_pack = parsed
+          velocity = sales_velocity.get(sku, 0)
+          if velocity <= 0 or on_hand >= target:
+              continue
+          row = {
+              "sku": sku,
+              "reorder_quantity": _round_up_to_case(target - on_hand, case_pack),
+          }
+          if include_days_of_cover:
+              row["days_of_cover_before_reorder"] = on_hand // velocity
+          rows.append(row)
+      return sorted(rows, key=lambda row: row["sku"])
+
+
+  def _parse_item(item: dict) -> tuple[str, int, int, int] | None:
+      try:
+          sku = item["sku"]
+          on_hand = int(item["on_hand"])
+          target = int(item["target"])
+          case_pack = int(item["case_pack"])
+      except (KeyError, TypeError, ValueError):
+          return None
+      if not sku or case_pack <= 0:
+          return None
+      return sku, on_hand, target, case_pack
+
+
+  def _round_up_to_case(deficit: int, case_pack: int) -> int:
+      return ((deficit + case_pack - 1) // case_pack) * case_pack

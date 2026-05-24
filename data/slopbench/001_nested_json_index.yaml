@@ -1,0 +1,128 @@
+id: nested_json_index
+entry_point: build_user_purchase_index
+tags: [json, aggregation, nesting, day2-hard]
+day2_stressors: [interface_generalization, audit_provenance, backwards_compatibility]
+prompt: |
+  Implement build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]].
+
+  Each event may contain:
+  - "user_id": a string
+  - "kind": a string
+  - "amount": an integer
+
+  Include only events where kind == "purchase", user_id is a non-empty string,
+  and amount is an integer. Return a dictionary keyed by user_id. Each value
+  must have {"count": purchase_count, "total": total_amount}. Do not mutate the
+  input list or event dictionaries.
+test_code: |
+  from solution import build_user_purchase_index
+
+
+  def test_builds_index_without_mutating_input():
+      events = [
+          {"user_id": "alice", "kind": "purchase", "amount": 4},
+          {"user_id": "alice", "kind": "refund", "amount": 1},
+          {"user_id": "bob", "kind": "purchase", "amount": 7},
+          {"user_id": "", "kind": "purchase", "amount": 10},
+          {"user_id": "bob", "kind": "purchase", "amount": "9"},
+      ]
+      snapshot = [dict(event) for event in events]
+
+      assert build_user_purchase_index(events) == {
+          "alice": {"count": 1, "total": 4},
+          "bob": {"count": 1, "total": 7},
+      }
+      assert events == snapshot
+day2_prompt: |
+  Extend build_user_purchase_index to accept an optional keyword argument
+  min_amount: int = 0. Include only purchases whose amount is greater than or
+  equal to min_amount. If min_amount is negative, raise ValueError. Preserve the
+  original behavior when min_amount is omitted.
+day2_test_code: |
+  import pytest
+
+  from solution import build_user_purchase_index
+
+
+  def test_preserves_original_behavior_and_filters_minimum_amount():
+      events = [
+          {"user_id": "alice", "kind": "purchase", "amount": 4},
+          {"user_id": "alice", "kind": "purchase", "amount": 9},
+          {"user_id": "bob", "kind": "purchase", "amount": 7},
+      ]
+
+      assert build_user_purchase_index(events) == {
+          "alice": {"count": 2, "total": 13},
+          "bob": {"count": 1, "total": 7},
+      }
+      assert build_user_purchase_index(events, min_amount=8) == {
+          "alice": {"count": 1, "total": 9},
+      }
+
+
+  def test_rejects_negative_min_amount():
+      with pytest.raises(ValueError):
+          build_user_purchase_index([], min_amount=-1)
+human_reference: |
+  from __future__ import annotations
+
+
+  def build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]]:
+      index: dict[str, dict[str, int]] = {}
+      for event in events:
+          user_id = event.get("user_id")
+          amount = event.get("amount")
+          if event.get("kind") != "purchase":
+              continue
+          if not isinstance(user_id, str) or not user_id:
+              continue
+          if not isinstance(amount, int):
+              continue
+
+          totals = index.setdefault(user_id, {"count": 0, "total": 0})
+          totals["count"] += 1
+          totals["total"] += amount
+      return index
+mock_solution: |
+  from __future__ import annotations
+
+
+  def build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]]:
+      index: dict[str, dict[str, int]] = {}
+      for event in events:
+          user_id = event.get("user_id")
+          amount = event.get("amount")
+          if event.get("kind") != "purchase" or not isinstance(user_id, str) or not user_id:
+              continue
+          if not isinstance(amount, int):
+              continue
+
+          bucket = index.setdefault(user_id, {"count": 0, "total": 0})
+          bucket["count"] += 1
+          bucket["total"] += amount
+      return index
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def build_user_purchase_index(
+      events: list[dict],
+      *,
+      min_amount: int = 0,
+  ) -> dict[str, dict[str, int]]:
+      if min_amount < 0:
+          raise ValueError("min_amount must be non-negative")
+
+      index: dict[str, dict[str, int]] = {}
+      for event in events:
+          user_id = event.get("user_id")
+          amount = event.get("amount")
+          if event.get("kind") != "purchase" or not isinstance(user_id, str) or not user_id:
+              continue
+          if not isinstance(amount, int) or amount < min_amount:
+              continue
+
+          bucket = index.setdefault(user_id, {"count": 0, "total": 0})
+          bucket["count"] += 1
+          bucket["total"] += amount
+      return index

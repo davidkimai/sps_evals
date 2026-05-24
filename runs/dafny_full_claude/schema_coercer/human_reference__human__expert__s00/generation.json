@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef coerce_schema(raw: dict, schema: dict) -> dict:\n    output = {}\n    for field, (caster, default) in schema.items():\n        value = raw.get(field, default)\n        try:\n            output[field] = caster(value)\n        except Exception as exc:\n            raise ValueError(f'could not coerce {field}') from exc\n    return output\n",
+  "effective_temperature": null,
+  "entry_point": "coerce_schema",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef coerce_schema(raw: dict, schema: dict) -> dict:\n    output = {}\n    for field, (caster, default) in schema.items():\n        value = raw.get(field, default)\n        try:\n            output[field] = caster(value)\n        except Exception as exc:\n            raise ValueError(f'could not coerce {field}') from exc\n    return output\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend coerce_schema with nullable: set[str] | None = None. If a nullable field is\npresent with value None, preserve None instead of casting. Preserve old behavior otherwise.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import coerce_schema\n\n\ndef test_nullable_fields_are_preserved():\n    schema = {'age': (int, 0), 'name': (str, 'unknown')}\n    assert coerce_schema({'age': None}, schema, nullable={'age'}) == {'age': None, 'name': 'unknown'}\n    assert coerce_schema({}, schema, nullable={'age'}) == {'age': 0, 'name': 'unknown'}\n",
+    "entry_point": "coerce_schema",
+    "human_reference": "from __future__ import annotations\n\n\ndef coerce_schema(raw: dict, schema: dict) -> dict:\n    output = {}\n    for field, (caster, default) in schema.items():\n        value = raw.get(field, default)\n        try:\n            output[field] = caster(value)\n        except Exception as exc:\n            raise ValueError(f'could not coerce {field}') from exc\n    return output\n",
+    "id": "schema_coercer",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef coerce_schema(raw, schema, nullable=None):\n    nullable = nullable or set()\n    result = {}\n    for field, pair in schema.items():\n        caster, default = pair\n        candidate = raw[field] if field in raw else default\n        if field in nullable and field in raw and candidate is None:\n            result[field] = None\n            continue\n        try:\n            result[field] = caster(candidate)\n        except Exception as exc:\n            raise ValueError(f'bad field: {field}') from exc\n    return result\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef coerce_schema(raw, schema):\n    result = {}\n    for field in schema:\n        caster, default = schema[field]\n        candidate = raw[field] if field in raw else default\n        try:\n            result[field] = caster(candidate)\n        except Exception as exc:\n            raise ValueError(f'bad field: {field}') from exc\n    return result\n",
+    "prompt": "Implement coerce_schema(raw: dict, schema: dict) -> dict. Schema maps field names\nto (type_callable, default). If raw contains a field, cast it with the callable;\nif missing, use the default. Raise ValueError with the field name when casting fails.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "schema",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import coerce_schema\n\n\ndef test_coerces_defaults_and_errors_by_field():\n    schema = {'age': (int, 0), 'name': (str, 'unknown'), 'active': (bool, False)}\n    assert coerce_schema({'age': '41', 'name': 'Ada'}, schema) == {'age': 41, 'name': 'Ada', 'active': False}\n    with pytest.raises(ValueError, match='age'):\n        coerce_schema({'age': 'bad'}, schema)\n"
+  },
+  "task_id": "schema_coercer",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

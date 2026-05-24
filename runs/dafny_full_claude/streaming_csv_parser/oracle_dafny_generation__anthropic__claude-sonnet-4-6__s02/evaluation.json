@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 9.103,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.711,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/streaming_csv_parser/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 2,
+    "error_count": 0,
+    "invariant_count": 7,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 0,
+      "if": 3,
+      "invariant": 7,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 5
+    },
+    "lexical_proof_complexity": 18,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 2,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 72,
+    "source_token_estimate": 426,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.315,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 3
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is pure architectural slop with zero functional correctness. It imports a non-existent 'module_' (which would immediately raise ImportError), contains no actual CSV parsing logic, no parse_csv_rows function, no header extraction, no row yielding, and no streaming behavior. Instead it attempts to alias Dafny compiled symbols through a convoluted reflection-based helper that manipulates globals and rewrites __init__ methods \u2014 none of which relates to the task. The code is maximally implicit, deeply indirect, completely unreadable, and fails every Zen of Python principle: it is not simple, not explicit, not flat, not readable, and not locally auditable. It would crash on import and produce no output even if it didn't.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is pure architectural slop with zero functional correctness. It imports a non-existent 'module_' (which would immediately raise ImportError), contains no actual CSV parsing logic, no parse_csv_rows function, no header extraction, no row yielding, and no streaming behavior. Instead it attempts to alias Dafny compiled symbols through a convoluted reflection-based helper that manipulates globals and rewrites __init__ methods \u2014 none of which relates to the task. The code is maximally implicit, deeply indirect, completely unreadable, and fails every Zen of Python principle: it is not simple, not explicit, not flat, not readable, and not locally auditable. It would crash on import and produce no output even if it didn't.\",\n  \"strengths\": [\n    \"Defines a helper function with a docstring-like comment indicating intent\"\n  ],\n  \"weaknesses\": [\n    \"No parse_csv_rows function is defined anywhere\",\n    \"Imports a non-existent module 'module_' causing immediate ImportError\",\n    \"Zero CSV parsing logic present\",\n    \"No streaming behavior implemented\",\n    \"Deeply implicit reflection-based symbol aliasing is the opposite of Zen of Python\",\n    \"Completely unrelated to the task requirements\",\n    \"Would crash on import before any function could be called\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Defines a helper function with a docstring-like comment indicating intent"
+    ],
+    "weaknesses": [
+      "No parse_csv_rows function is defined anywhere",
+      "Imports a non-existent module 'module_' causing immediate ImportError",
+      "Zero CSV parsing logic present",
+      "No streaming behavior implemented",
+      "Deeply implicit reflection-based symbol aliasing is the opposite of Zen of Python",
+      "Completely unrelated to the task requirements",
+      "Would crash on import before any function could be called"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 429,
+      "prompt": 309,
+      "total": 738,
+      "turns": [
+        {
+          "completion": 429,
+          "prompt": 309,
+          "total": 738
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 5.085,
+    "exit_code": 2,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "\n==================================== ERRORS ====================================\n______________________ ERROR collecting test_solution.py _______________________\nImportError while importing test module '/work/test_solution.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_solution.py:1: in <module>\n    from solution import parse_csv_rows\nE   ImportError: cannot import name 'parse_csv_rows' from 'solution' (/work/solution.py)\n=========================== short test summary info ============================\nERROR test_solution.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.18s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "streaming_csv_parser",
+  "variant": "oracle_dafny_generation"
+}

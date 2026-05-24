@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 4,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 7,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 31,
+    "source_token_estimate": 257,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.027,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, a formal verification language, rather than Python as required by the task. The entry point 'ResourceScope' is supposed to be a Python context manager class implementing __enter__, __exit__, and an acquire() method, but instead the code provides a Dafny method signature with loop invariants and formal postconditions. This is a complete language and paradigm mismatch \u2014 there is no Python class, no context manager protocol, no __enter__/__exit__, no acquire() method, and the code cannot be executed as Python. Additionally, the Dafny code itself contains a logical inconsistency noted in the inline comments (the ensures clause claims closed == resources but the implementation produces the reverse). The submission fails every functional and structural requirement.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, a formal verification language, rather than Python as required by the task. The entry point 'ResourceScope' is supposed to be a Python context manager class implementing __enter__, __exit__, and an acquire() method, but instead the code provides a Dafny method signature with loop invariants and formal postconditions. This is a complete language and paradigm mismatch \u2014 there is no Python class, no context manager protocol, no __enter__/__exit__, no acquire() method, and the code cannot be executed as Python. Additionally, the Dafny code itself contains a logical inconsistency noted in the inline comments (the ensures clause claims closed == resources but the implementation produces the reverse). The submission fails every functional and structural requirement.\",\n  \"strengths\": [\n    \"Demonstrates awareness of the reverse-order closing requirement through loop logic and inline comments\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"No Python context manager protocol (__enter__/__exit__) implemented\",\n    \"No acquire() method as required by the functional spec\",\n    \"Cannot be executed or imported as Python code\",\n    \"Contains a self-acknowledged logical inconsistency in the postcondition\",\n    \"Zero adherence to Zen of Python principles since it is not Python at all\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates awareness of the reverse-order closing requirement through loop logic and inline comments"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "No Python context manager protocol (__enter__/__exit__) implemented",
+      "No acquire() method as required by the functional spec",
+      "Cannot be executed or imported as Python code",
+      "Contains a self-acknowledged logical inconsistency in the postcondition",
+      "Zero adherence to Zen of Python principles since it is not Python at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 527,
+      "prompt": 285,
+      "total": 812,
+      "turns": [
+        {
+          "completion": 527,
+          "prompt": 285,
+          "total": 812
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "resource_scope",
+  "variant": "oracle_dafny_generation"
+}

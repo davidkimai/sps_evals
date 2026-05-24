@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 3,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 3,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 3
+    },
+    "lexical_proof_complexity": 9,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 45,
+    "source_token_estimate": 279,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.597,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation. The entry point `flatten_paths` is specified to be a Python function accepting a `dict` and returning `dict[str, object]`, but the code uses Dafny syntax (`method`, `map<string, object>`, `returns`, `invariant`, `ensures`, `:=`, `|x in remaining|`, etc.). This is not valid Python and cannot be executed or imported. While the algorithmic logic (recursive flattening with dot-path concatenation) is conceptually correct and the Dafny proof structure is interesting, it entirely fails the task's functional and language requirements. The Zen of Python principles of simplicity, readability, and explicitness are irrelevant here since the code is in the wrong language entirely. A trivial Python recursive solution would score far higher.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation. The entry point `flatten_paths` is specified to be a Python function accepting a `dict` and returning `dict[str, object]`, but the code uses Dafny syntax (`method`, `map<string, object>`, `returns`, `invariant`, `ensures`, `:=`, `|x in remaining|`, etc.). This is not valid Python and cannot be executed or imported. While the algorithmic logic (recursive flattening with dot-path concatenation) is conceptually correct and the Dafny proof structure is interesting, it entirely fails the task's functional and language requirements. The Zen of Python principles of simplicity, readability, and explicitness are irrelevant here since the code is in the wrong language entirely. A trivial Python recursive solution would score far higher.\",\n  \"strengths\": [\n    \"Algorithmic intent is correct: recursively flattens nested dicts with dot-separated keys\",\n    \"Treats lists as leaf values as specified\",\n    \"Includes formal invariants that would be meaningful in a Dafny context\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Cannot be executed as Python code; will cause a SyntaxError\",\n    \"No Python entry point `flatten_paths(value: dict) -> dict[str, object]` exists\",\n    \"Violates every Zen of Python principle by not being Python at all\",\n    \"SetToSeq helper is a Dafny method with no Python equivalent provided\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Algorithmic intent is correct: recursively flattens nested dicts with dot-separated keys",
+      "Treats lists as leaf values as specified",
+      "Includes formal invariants that would be meaningful in a Dafny context"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Cannot be executed as Python code; will cause a SyntaxError",
+      "No Python entry point `flatten_paths(value: dict) -> dict[str, object]` exists",
+      "Violates every Zen of Python principle by not being Python at all",
+      "SetToSeq helper is a Dafny method with no Python equivalent provided"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 282,
+      "prompt": 276,
+      "total": 558,
+      "turns": [
+        {
+          "completion": 282,
+          "prompt": 276,
+          "total": 558
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(13,22): Error: type conversions are not supported to this type (got map<string, object>)\n   |\n13 |       var nested := v as map<string, object>;\n   |                       ^^\n\nsolution.dfy(12,9): Error: type test for type 'map<string, object>' must be from an expression assignable to it (got 'object')\n   |\n12 |     if v is map<string, object> {\n   |          ^^\n\n2 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "hierarchical_flattener",
+  "variant": "oracle_dafny_generation"
+}

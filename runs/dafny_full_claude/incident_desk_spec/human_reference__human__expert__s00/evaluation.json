@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation closely follows the Zen-of-Python oracle: it uses a named lookup table (`severity_boost_table`) with the required `_table` suffix, avoids classes, preserves ticket order, uses the explicit string `'routed'` as `status_code`, and keeps the main loop flat and readable. The helper `_valid_ticket` is a minor structural concern \u2014 the spec says 'keep branch reasons as short explicit strings' and prefers local auditability, so inlining the guard or at least keeping it in the same module scope is borderline acceptable, but extracting it to a private function slightly obscures the skip reason at the call site. The `service_rule_table` name follows the `_table` convention nicely. One small issue: `ticket.get(field)` is falsy for empty strings and zero, which could silently skip valid tickets with edge-case values, but for the described domain this is unlikely to matter. Overall the code is clean, explicit, and structurally sound with only minor deviations from the oracle.",
+    "raw_response": "{\n  \"score\": 8,\n  \"rationale\": \"The implementation closely follows the Zen-of-Python oracle: it uses a named lookup table (`severity_boost_table`) with the required `_table` suffix, avoids classes, preserves ticket order, uses the explicit string `'routed'` as `status_code`, and keeps the main loop flat and readable. The helper `_valid_ticket` is a minor structural concern \u2014 the spec says 'keep branch reasons as short explicit strings' and prefers local auditability, so inlining the guard or at least keeping it in the same module scope is borderline acceptable, but extracting it to a private function slightly obscures the skip reason at the call site. The `service_rule_table` name follows the `_table` convention nicely. One small issue: `ticket.get(field)` is falsy for empty strings and zero, which could silently skip valid tickets with edge-case values, but for the described domain this is unlikely to matter. Overall the code is clean, explicit, and structurally sound with only minor deviations from the oracle.\",\n  \"strengths\": [\n    \"Uses `severity_boost_table` with the required `_table` suffix for the lookup\",\n    \"No classes introduced; single-pass flat loop\",\n    \"`status_code: 'routed'` is a stable explicit string, never a boolean\",\n    \"Ticket order preserved via sequential append\",\n    \"`service_rule_table` naming convention is consistent with the spec\"\n  ],\n  \"weaknesses\": [\n    \"Skip logic extracted to `_valid_ticket` helper reduces local auditability at the loop site\",\n    \"`ticket.get(field)` falsy check could silently skip tickets with legitimate zero or empty-string values\",\n    \"No explicit fallback comment or label when `rules.get('default', {})` is used, making the default-rule path slightly opaque\"\n  ]\n}",
+    "score": 8,
+    "skipped": false,
+    "strengths": [
+      "Uses `severity_boost_table` with the required `_table` suffix for the lookup",
+      "No classes introduced; single-pass flat loop",
+      "`status_code: 'routed'` is a stable explicit string, never a boolean",
+      "Ticket order preserved via sequential append",
+      "`service_rule_table` naming convention is consistent with the spec"
+    ],
+    "weaknesses": [
+      "Skip logic extracted to `_valid_ticket` helper reduces local auditability at the loop site",
+      "`ticket.get(field)` falsy check could silently skip tickets with legitimate zero or empty-string values",
+      "No explicit fallback comment or label when `rules.get('default', {})` is used, making the default-rule path slightly opaque"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Incident Desk Spec N-9:\n- Return review-facing rows with stable status_code values, never booleans.\n- Prefer local lookup tables with names ending in _table.\n- Keep branch reasons as short explicit strings, not hidden in comments.\n- Do not introduce classes for single-pass ticket routing.\n- Preserve ticket order because shift leads compare rows against the intake log.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 3.693,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.23s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 2.5,
+    "cyclomatic_complexity_max": 3,
+    "cyclomatic_complexity_total": 5,
+    "function_count": 2,
+    "loc": 20,
+    "maintainability_index": 66.351,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "incident_desk_spec",
+  "variant": "human_reference"
+}

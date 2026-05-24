@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.89,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.725,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/sliding_window_limiter/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 8,
+    "error_count": 0,
+    "invariant_count": 1,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 8,
+      "exists": 0,
+      "forall": 0,
+      "if": 4,
+      "invariant": 1,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 58,
+    "source_token_estimate": 418,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.169,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 5
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is pure architectural slop: it contains no actual SlidingWindowLimiter class, no allow() method, no snapshot() method, and no rate-limiting logic whatsoever. Instead it attempts to import a nonexistent 'module_' (which will raise ImportError at runtime), then applies a bizarre Dafny-to-Python symbol aliasing shim that serves no purpose here. It violates virtually every Zen of Python principle \u2014 it is implicit, complex, flat-out broken, unreadable, and completely fails to implement the required functionality. There is nothing salvageable from a correctness or structural quality standpoint.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is pure architectural slop: it contains no actual SlidingWindowLimiter class, no allow() method, no snapshot() method, and no rate-limiting logic whatsoever. Instead it attempts to import a nonexistent 'module_' (which will raise ImportError at runtime), then applies a bizarre Dafny-to-Python symbol aliasing shim that serves no purpose here. It violates virtually every Zen of Python principle \u2014 it is implicit, complex, flat-out broken, unreadable, and completely fails to implement the required functionality. There is nothing salvageable from a correctness or structural quality standpoint.\",\n  \"strengths\": [\n    \"The file has a comment explaining its supposed intent\"\n  ],\n  \"weaknesses\": [\n    \"No SlidingWindowLimiter class is defined anywhere\",\n    \"No allow() or snapshot() methods exist\",\n    \"Imports a nonexistent 'module_' causing immediate ImportError\",\n    \"Dafny shim code is irrelevant boilerplate with no connection to the task\",\n    \"Violates explicitness, simplicity, readability, and every other Zen principle\",\n    \"Zero functional correctness \u2014 the code cannot run at all\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The file has a comment explaining its supposed intent"
+    ],
+    "weaknesses": [
+      "No SlidingWindowLimiter class is defined anywhere",
+      "No allow() or snapshot() methods exist",
+      "Imports a nonexistent 'module_' causing immediate ImportError",
+      "Dafny shim code is irrelevant boilerplate with no connection to the task",
+      "Violates explicitness, simplicity, readability, and every other Zen principle",
+      "Zero functional correctness \u2014 the code cannot run at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 421,
+      "prompt": 358,
+      "total": 779,
+      "turns": [
+        {
+          "completion": 421,
+          "prompt": 358,
+          "total": 779
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.14,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n_______________________ test_limiter_uses_sliding_window _______________________\n\n    def test_limiter_uses_sliding_window():\n>       limiter = SlidingWindowLimiter(limit=2, window_seconds=10)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:7: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <module_.SlidingWindowLimiter object at 0xffffb22e26d0>\n__orig = <function SlidingWindowLimiter.__init__ at 0xffffb218f880>\n__ctor = <function SlidingWindowLimiter.ctor__ at 0xffffb21bab60>, args = ()\nkwargs = {'limit': 2, 'window_seconds': 10}\n\n    def __init__(self, *args, __orig=original_init, __ctor=constructor, **kwargs):\n        __orig(self)\n        if args or kwargs:\n>           __ctor(self, *args, **kwargs)\nE           TypeError: SlidingWindowLimiter.ctor__() got an unexpected keyword argument 'window_seconds'\n\nsolution.py:16: TypeError\n___________________________ test_limiter_validation ____________________________\n\n    def test_limiter_validation():\n>       with pytest.raises(ValueError):\nE       Failed: DID NOT RAISE <class 'ValueError'>\n\ntest_solution.py:16: Failed\n=========================== short test summary info ============================\nFAILED test_solution.py::test_limiter_uses_sliding_window - TypeError: Slidin...\nFAILED test_solution.py::test_limiter_validation - Failed: DID NOT RAISE <cla...\n2 failed in 0.23s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "sliding_window_limiter",
+  "variant": "oracle_dafny_generation"
+}

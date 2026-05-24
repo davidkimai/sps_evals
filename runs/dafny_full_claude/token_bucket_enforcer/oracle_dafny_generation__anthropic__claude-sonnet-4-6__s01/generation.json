@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "class TokenBucketEnforcer {\n  var capacity: int\n  var tokens: int\n\n  constructor(capacity: int, refill_rate: real)\n    requires capacity >= 0\n    ensures this.capacity == capacity\n    ensures this.tokens == capacity\n  {\n    this.capacity := capacity;\n    this.tokens := capacity;\n  }\n\n  method allow(cost: int) returns (result: bool)\n    requires cost >= 0\n    requires tokens >= 0\n    requires tokens <= capacity\n    modifies this\n    ensures tokens >= 0\n    ensures tokens <= capacity\n    ensures result ==> tokens == old(tokens) - cost\n    ensures !result ==> tokens == old(tokens)\n  {\n    if cost <= tokens {\n      tokens := tokens - cost;\n      result := true;\n    } else {\n      result := false;\n    }\n  }\n\n  method refill(amount: int)\n    requires amount >= 0\n    requires tokens >= 0\n    requires tokens <= capacity\n    modifies this\n    ensures tokens >= 0\n    ensures tokens <= capacity\n  {\n    var newTokens := tokens + amount;\n    if newTokens > capacity {\n      tokens := capacity;\n    } else {\n      tokens := newTokens;\n    }\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "TokenBucketEnforcer",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 265,
+      "prompt": 294,
+      "total": 559,
+      "turns": [
+        {
+          "completion": 265,
+          "prompt": 294,
+          "total": 559
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nclass TokenBucketEnforcer {\n  var capacity: int\n  var tokens: int\n\n  constructor(capacity: int, refill_rate: real)\n    requires capacity >= 0\n    ensures this.capacity == capacity\n    ensures this.tokens == capacity\n  {\n    this.capacity := capacity;\n    this.tokens := capacity;\n  }\n\n  method allow(cost: int) returns (result: bool)\n    requires cost >= 0\n    requires tokens >= 0\n    requires tokens <= capacity\n    modifies this\n    ensures tokens >= 0\n    ensures tokens <= capacity\n    ensures result ==> tokens == old(tokens) - cost\n    ensures !result ==> tokens == old(tokens)\n  {\n    if cost <= tokens {\n      tokens := tokens - cost;\n      result := true;\n    } else {\n      result := false;\n    }\n  }\n\n  method refill(amount: int)\n    requires amount >= 0\n    requires tokens >= 0\n    requires tokens <= capacity\n    modifies this\n    ensures tokens >= 0\n    ensures tokens <= capacity\n  {\n    var newTokens := tokens + amount;\n    if newTokens > capacity {\n      tokens := capacity;\n    } else {\n      tokens := newTokens;\n    }\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend TokenBucketEnforcer with burst: int = 0. Burst increases maximum capacity\nby burst tokens while preserving the base refill rate and old behavior when burst\nis omitted.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import TokenBucketEnforcer\n\n\ndef test_burst_extends_capacity_only():\n    clock = {'t': 0.0}\n    bucket = TokenBucketEnforcer(2, 1.0, burst=2, now=lambda: clock['t'])\n    assert bucket.allow(4) is True\n    assert bucket.allow(1) is False\n    clock['t'] = 1.0\n    assert bucket.allow(1) is True\n",
+    "entry_point": "TokenBucketEnforcer",
+    "human_reference": "from __future__ import annotations\n\nimport time\nfrom collections.abc import Callable\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, now: Callable[[], float] | None = None) -> None:\n        if capacity <= 0 or refill_rate <= 0:\n            raise ValueError('capacity and refill_rate must be positive')\n        self._capacity = capacity\n        self._refill_rate = refill_rate\n        self._now = now or time.monotonic\n        self._tokens = float(capacity)\n        self._last = self._now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self._now()\n        elapsed = max(0.0, current - self._last)\n        self._tokens = min(float(self._capacity), self._tokens + elapsed * self._refill_rate)\n        self._last = current\n        if self._tokens < cost:\n            return False\n        self._tokens -= cost\n        return True\n",
+    "id": "token_bucket_enforcer",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport time\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, burst: int = 0, now=None) -> None:\n        if capacity <= 0 or refill_rate <= 0 or burst < 0:\n            raise ValueError('invalid bucket parameters')\n        self.capacity = capacity + burst\n        self.refill_rate = refill_rate\n        self.now = now or time.monotonic\n        self.tokens = float(self.capacity)\n        self.last = self.now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self.now()\n        self.tokens = min(self.capacity, self.tokens + max(0, current - self.last) * self.refill_rate)\n        self.last = current\n        if self.tokens < cost:\n            return False\n        self.tokens -= cost\n        return True\n",
+    "mock_solution": "from __future__ import annotations\n\nimport time\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, now=None) -> None:\n        if capacity <= 0 or refill_rate <= 0:\n            raise ValueError('capacity and refill_rate must be positive')\n        self.capacity = capacity\n        self.refill_rate = refill_rate\n        self.now = now or time.monotonic\n        self.tokens = float(capacity)\n        self.last = self.now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self.now()\n        self.tokens = min(self.capacity, self.tokens + max(0, current - self.last) * self.refill_rate)\n        self.last = current\n        if self.tokens >= cost:\n            self.tokens -= cost\n            return True\n        return False\n",
+    "prompt": "Implement TokenBucketEnforcer(capacity: int, refill_rate: float, *, now=None).\nMethod allow(cost: int = 1) -> bool refills tokens according to elapsed time,\ndenies when cost exceeds available tokens, and never exceeds capacity.\n",
+    "tags": [
+      "reliability_critical",
+      "rate_limit",
+      "day2-hard"
+    ],
+    "test_code": "from solution import TokenBucketEnforcer\n\n\ndef test_token_bucket_enforces_costs():\n    clock = {'t': 0.0}\n    bucket = TokenBucketEnforcer(3, 1.0, now=lambda: clock['t'])\n    assert bucket.allow(2) is True\n    assert bucket.allow(2) is False\n    clock['t'] = 2.0\n    assert bucket.allow(2) is True\n"
+  },
+  "task_id": "token_bucket_enforcer",
+  "user_prompt": "Task id: token_bucket_enforcer\nEntry point: TokenBucketEnforcer\n\nFunctional requirements:\nImplement TokenBucketEnforcer(capacity: int, refill_rate: float, *, now=None).\nMethod allow(cost: int = 1) -> bool refills tokens according to elapsed time,\ndenies when cost exceeds available tokens, and never exceeds capacity.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

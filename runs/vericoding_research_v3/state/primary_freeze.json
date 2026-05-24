@@ -1,0 +1,17 @@
+{
+  "confirmatory_tasks": 16,
+  "dev_tasks": 8,
+  "frozen_at": "2026-05-19T08:42:51Z",
+  "main_claim": "executable trust boundaries improve acceptance/rejection for autonomous coding agents",
+  "non_primary_surfaces": [
+    "SCBench",
+    "Terminal-Bench",
+    "formal overlay"
+  ],
+  "primary_denominator": "24 owned narrow-waist tasks",
+  "program_version": "vericoding_research_v3",
+  "stretch_surfaces_demotable": [
+    "Lean/formal review-boundary overlay",
+    "SCBench executable upgrade"
+  ]
+}

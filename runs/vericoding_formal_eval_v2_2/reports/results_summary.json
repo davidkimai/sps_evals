@@ -1,0 +1,15 @@
+{
+  "candidate_rows": 24,
+  "created_at": "2026-05-23T01:12:07Z",
+  "e2e_rows": 3,
+  "formal_eval_rows": 24,
+  "formal_false_accept_tasks": 0,
+  "program_version": "vericoding_formal_eval_v2_2",
+  "review_escalation_count": 1,
+  "selector_rows": 3,
+  "support_absent_tasks": 0,
+  "support_present_tasks": 2,
+  "task_count": 2,
+  "tests_only_false_accept_tasks": 0,
+  "visible_formal_fail_tasks": 1
+}

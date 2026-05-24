@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 3.722,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.11,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/audit_trail_builder/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 12,
+      "invariant": 2,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 0
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 38,
+    "source_token_estimate": 273,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 4.929,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This candidate implementation contains no actual audit trail logic whatsoever. It is entirely composed of Dafny-to-Python compilation scaffolding that attempts to import from a non-existent 'module_' and perform symbol aliasing. There is no build_audit_trail function, no sequence numbering, no field validation, no rejection of missing source_system or actor_id, and no record construction. The code would fail immediately at import time due to the missing 'module_' dependency, and even if that were resolved, it provides zero functional implementation of the required task. This is severe architectural slop \u2014 the entire submission is irrelevant boilerplate masquerading as an implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This candidate implementation contains no actual audit trail logic whatsoever. It is entirely composed of Dafny-to-Python compilation scaffolding that attempts to import from a non-existent 'module_' and perform symbol aliasing. There is no build_audit_trail function, no sequence numbering, no field validation, no rejection of missing source_system or actor_id, and no record construction. The code would fail immediately at import time due to the missing 'module_' dependency, and even if that were resolved, it provides zero functional implementation of the required task. This is severe architectural slop \u2014 the entire submission is irrelevant boilerplate masquerading as an implementation.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement any part of the required functionality\"\n  ],\n  \"weaknesses\": [\n    \"No build_audit_trail function defined\",\n    \"Imports a non-existent module 'module_' causing immediate ImportError\",\n    \"Zero sequence numbering logic\",\n    \"No validation or rejection of events missing source_system or actor_id\",\n    \"Entire file is irrelevant Dafny compilation scaffolding with no task-relevant code\",\n    \"Violates every point of RAT-9: no explicit field naming, no monotonic sequence, no rejection logic\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement any part of the required functionality"
+    ],
+    "weaknesses": [
+      "No build_audit_trail function defined",
+      "Imports a non-existent module 'module_' causing immediate ImportError",
+      "Zero sequence numbering logic",
+      "No validation or rejection of events missing source_system or actor_id",
+      "Entire file is irrelevant Dafny compilation scaffolding with no task-relevant code",
+      "Violates every point of RAT-9: no explicit field naming, no monotonic sequence, no rejection logic"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 276,
+      "prompt": 290,
+      "total": 566,
+      "turns": [
+        {
+          "completion": 276,
+          "prompt": 290,
+          "total": 566
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Regulatory Audit Trail Standard RAT-9:\n- Every audit record must carry source_system, actor_id, and a monotonic sequence number.\n- Derived fields must be named explicitly before being inserted into a record.\n- Do not silently invent actor or source values; reject records missing either field.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.727,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________________ test_builds_monotonic_audit_trail _______________________\n\n    def test_builds_monotonic_audit_trail():\n        rows = build_audit_trail([{'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}])\n>       assert rows == [{'sequence': 1, 'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}]\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:8: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <_dafny.Seq object at 0xffff94f61c90>\nother = [{'action': 'create', 'actor_id': 'u1', 'sequence': 1, 'source_system': 'crm'}]\n\n    def __eq__(self, other: object) -> bool:\n>       return self.Elements == other.Elements\n                                ^^^^^^^^^^^^^^\nE       AttributeError: 'list' object has no attribute 'Elements'\n\n/usr/local/lib/python3.11/dist-packages/_dafny/__init__.py:269: AttributeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_builds_monotonic_audit_trail - AttributeError: ...\n1 failed in 0.13s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "audit_trail_builder",
+  "variant": "oracle_dafny_generation"
+}

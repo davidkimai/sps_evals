@@ -1,0 +1,10 @@
+{
+  "confirmatory_complete": true,
+  "created_at": "2026-05-23T01:05:36Z",
+  "final_submit_ready": true,
+  "live_runs_complete": true,
+  "main_claim": "A bounded Lean-backed evaluator can still require human review for wrapper or operational reasons even when candidates satisfy visible checks and formal I/O cases on a narrow review-boundary attack slice.",
+  "program_version": "vericoding_formal_eval_v2_2",
+  "status": "bootstrapped",
+  "updated_at": "2026-05-23T01:12:07Z"
+}

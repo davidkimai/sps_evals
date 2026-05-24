@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": 6,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 2,
+      "if": 8,
+      "invariant": 4,
+      "logical_and": 0,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 1,
+      "while": 5
+    },
+    "lexical_proof_complexity": 30,
+    "logical_and_count": 0,
+    "logical_or_count": 2,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 105,
+    "source_token_estimate": 613,
+    "status": "verification_failed",
+    "verification_duration_seconds": 7.946,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python, making it completely non-functional as a Python implementation of serialize_record. The entry point serialize_record(record: dict, format: str) -> str is never implemented in Python, so the code cannot be executed, imported, or tested in any Python environment. While the Dafny code does demonstrate some structural awareness of the three formats and sorting logic, it is the wrong language for the task and represents a fundamental category error. The informal oracle references 'Dafny formal verification skill loaded through modular discovery,' which appears to have been misinterpreted as an instruction to write Dafny code rather than Python code with Dafny-inspired structural clarity. There are no Python strengths to evaluate since no Python code exists.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python, making it completely non-functional as a Python implementation of serialize_record. The entry point serialize_record(record: dict, format: str) -> str is never implemented in Python, so the code cannot be executed, imported, or tested in any Python environment. While the Dafny code does demonstrate some structural awareness of the three formats and sorting logic, it is the wrong language for the task and represents a fundamental category error. The informal oracle references 'Dafny formal verification skill loaded through modular discovery,' which appears to have been misinterpreted as an instruction to write Dafny code rather than Python code with Dafny-inspired structural clarity. There are no Python strengths to evaluate since no Python code exists.\",\n  \"strengths\": [\n    \"Demonstrates awareness of all three required formats (json, csv, toml)\",\n    \"Shows sorted-key logic for JSON output\",\n    \"Modular decomposition into separate serialization methods\"\n  ],\n  \"weaknesses\": [\n    \"Entire implementation is in Dafny, not Python \u2014 completely non-executable for the task\",\n    \"Entry point serialize_record does not exist as a Python callable\",\n    \"Cannot handle Python dict with mixed primitive types (int, float, bool) since Dafny types are used\",\n    \"JSON output wraps all values in quotes regardless of type, which is incorrect for non-string primitives\",\n    \"TOML output also wraps all values in quotes, violating TOML semantics for integers/booleans\",\n    \"No Python imports or standard library usage (json module, csv module) considered\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates awareness of all three required formats (json, csv, toml)",
+      "Shows sorted-key logic for JSON output",
+      "Modular decomposition into separate serialization methods"
+    ],
+    "weaknesses": [
+      "Entire implementation is in Dafny, not Python \u2014 completely non-executable for the task",
+      "Entry point serialize_record does not exist as a Python callable",
+      "Cannot handle Python dict with mixed primitive types (int, float, bool) since Dafny types are used",
+      "JSON output wraps all values in quotes regardless of type, which is incorrect for non-string primitives",
+      "TOML output also wraps all values in quotes, violating TOML semantics for integers/booleans",
+      "No Python imports or standard library usage (json module, csv module) considered"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 616,
+      "prompt": 290,
+      "total": 906,
+      "turns": [
+        {
+          "completion": 616,
+          "prompt": 290,
+          "total": 906
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(17,0): Error: a postcondition could not be proved on this return path\n   |\n17 | {\n   | ^\n\nsolution.dfy(15,10): Related location: this is the postcondition that could not be proved\n   |\n15 |   ensures forall k :: k in keys <==> k in record\n   |           ^^^^^^\n\nsolution.dfy(17,0): Error: a postcondition could not be proved on this return path\n   |\n17 | {\n   | ^\n\nsolution.dfy(16,10): Related location: this is the postcondition that could not be proved\n   |\n16 |   ensures forall i, j :: 0 <= i < j < |keys| ==> keys[i] < keys[j]\n   |           ^^^^^^\n\nsolution.dfy(20,2): Error: decreases expression might not decrease\n   |\n20 |   while remaining != {}\n   |   ^^^^^\n\nsolution.dfy(34,20): Error: variable 'minKey', which is subject to definite-assignment rules, might be uninitialized here\n   |\n34 |       } else if k < minKey {\n   |                     ^^^^^^\n\nsolution.dfy(39,20): Error: variable 'minKey', which is subject to definite-assignment rules, might be uninitialized here\n   |\n39 |     keys := keys + [minKey];\n   |                     ^^^^^^\n\nsolution.dfy(94,0): Error: a postcondition could not be proved on this return path\n   |\n94 | {\n   | ^\n\nsolution.dfy(93,19): Related location: this is the postcondition that could not be proved\n   |\n93 |   ensures |result| > 0\n   |                    ^\n\n\nDafny program verifier finished with 4 verified, 6 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "multiformat_serializer",
+  "variant": "oracle_dafny_generation"
+}

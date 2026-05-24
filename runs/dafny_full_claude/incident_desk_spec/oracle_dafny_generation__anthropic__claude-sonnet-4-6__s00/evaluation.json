@@ -1,0 +1,111 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 3.476,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.362,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/incident_desk_spec/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 1,
+      "if": 69,
+      "invariant": 2,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 79,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 115,
+    "source_token_estimate": 837,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 4.595,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation does not implement route_tickets at all. Instead, it contains Dafny-to-Python interop boilerplate that attempts to import from a nonexistent 'module_' and monkey-patch symbols. There is no routing logic, no lookup table, no severity adjustment, no field validation, no status_code, and no output rows. It violates every aspect of the informal spec: no _table naming, no explicit branch strings, no stable status_code, no ticket ordering, and introduces unnecessary architectural complexity (class mutation, dynamic aliasing) for what should be a simple single-pass function. The entry point route_tickets is never defined.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation does not implement route_tickets at all. Instead, it contains Dafny-to-Python interop boilerplate that attempts to import from a nonexistent 'module_' and monkey-patch symbols. There is no routing logic, no lookup table, no severity adjustment, no field validation, no status_code, and no output rows. It violates every aspect of the informal spec: no _table naming, no explicit branch strings, no stable status_code, no ticket ordering, and introduces unnecessary architectural complexity (class mutation, dynamic aliasing) for what should be a simple single-pass function. The entry point route_tickets is never defined.\",\n  \"strengths\": [\n    \"None \u2014 the function required by the task is entirely absent\"\n  ],\n  \"weaknesses\": [\n    \"route_tickets is never defined\",\n    \"Imports a nonexistent module ('module_') causing an immediate ImportError\",\n    \"No routing logic, severity adjustment, or field validation whatsoever\",\n    \"Introduces heavy Dafny interop machinery completely irrelevant to the task\",\n    \"Violates all five structural spec points: no _table, no explicit branch strings, no status_code, no order preservation, introduces class-level mutation\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the function required by the task is entirely absent"
+    ],
+    "weaknesses": [
+      "route_tickets is never defined",
+      "Imports a nonexistent module ('module_') causing an immediate ImportError",
+      "No routing logic, severity adjustment, or field validation whatsoever",
+      "Introduces heavy Dafny interop machinery completely irrelevant to the task",
+      "Violates all five structural spec points: no _table, no explicit branch strings, no status_code, no order preservation, introduces class-level mutation"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 840,
+      "prompt": 352,
+      "total": 1192,
+      "turns": [
+        {
+          "completion": 840,
+          "prompt": 352,
+          "total": 1192
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Incident Desk Spec N-9:\n- Return review-facing rows with stable status_code values, never booleans.\n- Prefer local lookup tables with names ending in _table.\n- Keep branch reasons as short explicit strings, not hidden in comments.\n- Do not introduce classes for single-pass ticket routing.\n- Preserve ticket order because shift leads compare rows against the intake log.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.668,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________ test_route_tickets_uses_default_and_severity_boosts ______________\n\n    def test_route_tickets_uses_default_and_severity_boosts():\n        tickets = [\n            {\"id\": \"t1\", \"severity\": \"critical\", \"service\": \"api\"},\n            {\"id\": \"t2\", \"severity\": \"low\", \"service\": \"unknown\"},\n            {\"id\": \"bad\", \"service\": \"api\"},\n        ]\n        rules = {\n            \"api\": {\"queue\": \"backend\", \"priority\": 20},\n            \"default\": {\"queue\": \"triage\", \"priority\": 1},\n        }\n>       assert route_tickets(tickets, rules) == [\n            {\"id\": \"t1\", \"queue\": \"backend\", \"priority\": 30, \"status_code\": \"routed\"},\n            {\"id\": \"t2\", \"queue\": \"triage\", \"priority\": 1, \"status_code\": \"routed\"},\n        ]\n\ntest_solution.py:14: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <_dafny.Seq object at 0xffffae320c10>\nother = [{'id': 't1', 'priority': 30, 'queue': 'backend', 'status_code': 'routed'}, {'id': 't2', 'priority': 1, 'queue': 'triage', 'status_code': 'routed'}]\n\n    def __eq__(self, other: object) -> bool:\n>       return self.Elements == other.Elements\n                                ^^^^^^^^^^^^^^\nE       AttributeError: 'list' object has no attribute 'Elements'\n\n/usr/local/lib/python3.11/dist-packages/_dafny/__init__.py:269: AttributeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_route_tickets_uses_default_and_severity_boosts\n1 failed in 0.27s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "incident_desk_spec",
+  "variant": "oracle_dafny_generation"
+}

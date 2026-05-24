@@ -1,0 +1,99 @@
+id: round_robin_scheduler
+entry_point: assign_round_robin
+tags: [state_machine, scheduling, cli_tool]
+day2_stressors: [cross_function_state, backwards_compatibility]
+prompt: |
+  Implement assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict].
+
+  Each worker has "name" and optional "enabled" fields. Enabled defaults to
+  True. Assign jobs in input order to enabled workers in round-robin order.
+  Return rows shaped as {"job": str, "worker": str}. Raise ValueError if there
+  are no enabled workers. Do not mutate inputs.
+test_code: |
+  import pytest
+
+  from solution import assign_round_robin
+
+
+  def test_assign_round_robin_skips_disabled_workers():
+      workers = [
+          {"name": "a"},
+          {"name": "b", "enabled": False},
+          {"name": "c"},
+      ]
+      assert assign_round_robin(workers, ["j1", "j2", "j3", "j4"]) == [
+          {"job": "j1", "worker": "a"},
+          {"job": "j2", "worker": "c"},
+          {"job": "j3", "worker": "a"},
+          {"job": "j4", "worker": "c"},
+      ]
+
+
+  def test_assign_round_robin_requires_enabled_worker():
+      with pytest.raises(ValueError):
+          assign_round_robin([{"name": "a", "enabled": False}], ["j"])
+day2_prompt: |
+  Add optional capacities: dict[str, int] | None = None. When provided, a worker
+  may receive at most its capacity. Workers missing from capacities have no cap.
+  Unassigned overflow jobs should be omitted.
+day2_test_code: |
+  from solution import assign_round_robin
+
+
+  def test_capacities_omit_overflow_jobs():
+      workers = [{"name": "a"}, {"name": "b"}]
+      rows = assign_round_robin(workers, ["j1", "j2", "j3", "j4"], capacities={"a": 1, "b": 2})
+      assert rows == [
+          {"job": "j1", "worker": "a"},
+          {"job": "j2", "worker": "b"},
+          {"job": "j3", "worker": "b"},
+      ]
+human_reference: |
+  def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:
+      enabled = [worker["name"] for worker in workers if worker.get("enabled", True)]
+      if not enabled:
+          raise ValueError("at least one worker must be enabled")
+      assignments = []
+      for index, job in enumerate(jobs):
+          assignments.append({"job": job, "worker": enabled[index % len(enabled)]})
+      return assignments
+mock_solution: |
+  def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:
+      enabled = [worker["name"] for worker in workers if worker.get("enabled", True)]
+      if not enabled:
+          raise ValueError("at least one worker must be enabled")
+      assignments = []
+      for index, job in enumerate(jobs):
+          assignments.append({"job": job, "worker": enabled[index % len(enabled)]})
+      return assignments
+mock_day2_solution: |
+  def assign_round_robin(
+      workers: list[dict],
+      jobs: list[str],
+      capacities: dict[str, int] | None = None,
+  ) -> list[dict]:
+      enabled = [worker["name"] for worker in workers if worker.get("enabled", True)]
+      if not enabled:
+          raise ValueError("at least one worker must be enabled")
+      capacities = capacities or {}
+      used = {name: 0 for name in enabled}
+      assignments = []
+      cursor = 0
+      for job in jobs:
+          chosen = _next_available(enabled, capacities, used, cursor)
+          if chosen is None:
+              break
+          worker, cursor = chosen
+          used[worker] += 1
+          assignments.append({"job": job, "worker": worker})
+      return assignments
+
+
+  def _next_available(enabled, capacities, used, cursor):
+      for offset in range(len(enabled)):
+          index = (cursor + offset) % len(enabled)
+          worker = enabled[index]
+          cap = capacities.get(worker)
+          if cap is None or used[worker] < cap:
+              return worker, (index + 1) % len(enabled)
+      return None

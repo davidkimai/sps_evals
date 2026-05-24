@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 0
+    },
+    "lexical_proof_complexity": 1,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 5,
+    "source_token_estimate": 37,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.115,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is Dafny pseudocode, not Python, and therefore completely fails to satisfy the functional requirements. It does not implement a Python function, does not use hmac.compare_digest, does not handle bytes inputs, does not enforce same-type checking with TypeError, and is not executable as a Python module. The informal oracle references Dafny formal verification as a skill/style metaphor, not as the target language for the implementation. This is a fundamental misreading of the task that produces zero usable code.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is Dafny pseudocode, not Python, and therefore completely fails to satisfy the functional requirements. It does not implement a Python function, does not use hmac.compare_digest, does not handle bytes inputs, does not enforce same-type checking with TypeError, and is not executable as a Python module. The informal oracle references Dafny formal verification as a skill/style metaphor, not as the target language for the implementation. This is a fundamental misreading of the task that produces zero usable code.\",\n  \"strengths\": [\n    \"The postcondition `ensures result == (left == right)` correctly captures the logical equality semantics\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely wrong language for the task\",\n    \"Does not use hmac.compare_digest, so timing-safety guarantee is absent\",\n    \"No type checking for str vs bytes or TypeError on mismatched types\",\n    \"Cannot be imported or executed as a Python module\",\n    \"Only handles string type; bytes input is completely ignored\",\n    \"No entry point matching the required Python function signature\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The postcondition `ensures result == (left == right)` correctly captures the logical equality semantics"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely wrong language for the task",
+      "Does not use hmac.compare_digest, so timing-safety guarantee is absent",
+      "No type checking for str vs bytes or TypeError on mismatched types",
+      "Cannot be imported or executed as a Python module",
+      "Only handles string type; bytes input is completely ignored",
+      "No entry point matching the required Python function signature"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 40,
+      "prompt": 292,
+      "total": 332,
+      "turns": [
+        {
+          "completion": 40,
+          "prompt": 292,
+          "total": 332
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "timing_safe_compare",
+  "variant": "oracle_dafny_generation"
+}

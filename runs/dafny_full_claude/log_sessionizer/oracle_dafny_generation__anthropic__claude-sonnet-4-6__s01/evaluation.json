@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 6,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 4,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 3,
+      "invariant": 6,
+      "logical_and": 2,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 1,
+      "while": 4
+    },
+    "lexical_proof_complexity": 22,
+    "logical_and_count": 2,
+    "logical_or_count": 1,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 75,
+    "source_token_estimate": 491,
+    "status": "verification_failed",
+    "verification_duration_seconds": 2.792,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `build_sessions(events: list[dict], gap_seconds: int) -> list[dict]` that processes dictionaries with `user_id` and `timestamp` keys, handles malformed events, and returns a list of session dicts. Instead, the code is a Dafny method operating on sequences of tuples with no malformed-event handling, no dict I/O, and cannot be executed as Python at all. This is a complete language mismatch and functional failure \u2014 the entry point `build_sessions` as a Python callable does not exist, the input/output types are wrong, and none of the Python-specific requirements (skipping malformed events, returning dicts) are addressed.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `build_sessions(events: list[dict], gap_seconds: int) -> list[dict]` that processes dictionaries with `user_id` and `timestamp` keys, handles malformed events, and returns a list of session dicts. Instead, the code is a Dafny method operating on sequences of tuples with no malformed-event handling, no dict I/O, and cannot be executed as Python at all. This is a complete language mismatch and functional failure \u2014 the entry point `build_sessions` as a Python callable does not exist, the input/output types are wrong, and none of the Python-specific requirements (skipping malformed events, returning dicts) are addressed.\",\n  \"strengths\": [\n    \"The algorithmic logic for sessionization (insertion sort + linear scan with gap detection) is conceptually correct and would work if translated to Python\",\n    \"Dafny loop invariants and decreases clauses show formal reasoning effort\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"No handling of malformed events (missing user_id or timestamp)\",\n    \"Input and output types are tuples, not dicts as required\",\n    \"No Python function signature matching `build_sessions(events: list[dict], gap_seconds: int) -> list[dict]`\",\n    \"Cannot be imported or called by any Python test harness\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The algorithmic logic for sessionization (insertion sort + linear scan with gap detection) is conceptually correct and would work if translated to Python",
+      "Dafny loop invariants and decreases clauses show formal reasoning effort"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "No handling of malformed events (missing user_id or timestamp)",
+      "Input and output types are tuples, not dicts as required",
+      "No Python function signature matching `build_sessions(events: list[dict], gap_seconds: int) -> list[dict]`",
+      "Cannot be imported or called by any Python test harness"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 495,
+      "prompt": 335,
+      "total": 830,
+      "turns": [
+        {
+          "completion": 495,
+          "prompt": 335,
+          "total": 830
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(15,34): Error: arguments to > must be of a numeric type, bitvector type, ORDINAL, char, or a set-like type (instead got _System.string and _System.string)\n   |\n15 |     while j > 0 && (sorted[j-1].0 > sorted[j].0 || (sorted[j-1].0 == sorted[j].0 && sorted[j-1].1 > sorted[j].1))\n   |                                   ^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "log_sessionizer",
+  "variant": "oracle_dafny_generation"
+}

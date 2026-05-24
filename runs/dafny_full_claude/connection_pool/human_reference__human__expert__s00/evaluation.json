@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and explicit throughout. Each method does exactly one thing, data movement is visible at every step, and the control flow never nests more than one level deep. The guard clause on max_size raises a clear error immediately. The idle pool is a plain list of (conn, timestamp) tuples\u2014no hidden state, no speculative abstractions. The only mild imperfections are the use of `hasattr(conn, 'close')` as a duck-type probe rather than requiring a defined interface (which could silently swallow missing close calls), and the fact that `acquire` has no capacity guard (it will create connections beyond max_size if all slots are occupied), which may or may not be intentional per the spec but is worth noting. Overall the code is sparse, locally auditable, and uses ordinary stdlib constructs exactly as the oracle demands.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, flat, and explicit throughout. Each method does exactly one thing, data movement is visible at every step, and the control flow never nests more than one level deep. The guard clause on max_size raises a clear error immediately. The idle pool is a plain list of (conn, timestamp) tuples\u2014no hidden state, no speculative abstractions. The only mild imperfections are the use of `hasattr(conn, 'close')` as a duck-type probe rather than requiring a defined interface (which could silently swallow missing close calls), and the fact that `acquire` has no capacity guard (it will create connections beyond max_size if all slots are occupied), which may or may not be intentional per the spec but is worth noting. Overall the code is sparse, locally auditable, and uses ordinary stdlib constructs exactly as the oracle demands.\",\n  \"strengths\": [\n    \"Flat control flow with no deep nesting anywhere\",\n    \"Explicit data movement: idle list is a plain list of tuples, mutations are visible\",\n    \"Clear ValueError on invalid max_size rather than silent fallback\",\n    \"Small, single-purpose methods that are easy to read and audit locally\",\n    \"No speculative abstractions or unused extension points\",\n    \"Standard-library only, no clever metaprogramming\"\n  ],\n  \"weaknesses\": [\n    \"hasattr(conn, 'close') duck-typing probe can silently skip close on objects that lack it; a defined protocol or unconditional close would be more explicit\",\n    \"acquire() creates connections without a total-count cap, so active + idle can exceed max_size if callers hold many connections simultaneously\u2014may surprise users expecting a hard cap\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Flat control flow with no deep nesting anywhere",
+      "Explicit data movement: idle list is a plain list of tuples, mutations are visible",
+      "Clear ValueError on invalid max_size rather than silent fallback",
+      "Small, single-purpose methods that are easy to read and audit locally",
+      "No speculative abstractions or unused extension points",
+      "Standard-library only, no clever metaprogramming"
+    ],
+    "weaknesses": [
+      "hasattr(conn, 'close') duck-typing probe can silently skip close on objects that lack it; a defined protocol or unconditional close would be more explicit",
+      "acquire() creates connections without a total-count cap, so active + idle can exceed max_size if callers hold many connections simultaneously\u2014may surprise users expecting a hard cap"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 6.336,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.05s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 3.2,
+    "cyclomatic_complexity_max": 4,
+    "cyclomatic_complexity_total": 16,
+    "function_count": 4,
+    "loc": 32,
+    "maintainability_index": 52.748,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "connection_pool",
+  "variant": "human_reference"
+}

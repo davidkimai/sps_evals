@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and easy to audit locally. It uses a straightforward Kahn's-algorithm-style approach with no deep nesting, no hidden mutation, and explicit data movement at each step. The single function is small enough to read in one pass, names are self-explanatory (remaining, ready, completed, blockers), and the cycle detection raises a clear ValueError. The only minor structural quibble is that the function is slightly monolithic\u2014a tiny helper to build the initial dependency sets could improve separation\u2014but the function is short enough that extraction would add more ceremony than clarity, so the current form is arguably the right call under the 'sparse enough to audit locally' constraint.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, flat, and easy to audit locally. It uses a straightforward Kahn's-algorithm-style approach with no deep nesting, no hidden mutation, and explicit data movement at each step. The single function is small enough to read in one pass, names are self-explanatory (remaining, ready, completed, blockers), and the cycle detection raises a clear ValueError. The only minor structural quibble is that the function is slightly monolithic\u2014a tiny helper to build the initial dependency sets could improve separation\u2014but the function is short enough that extraction would add more ceremony than clarity, so the current form is arguably the right call under the 'sparse enough to audit locally' constraint.\",\n  \"strengths\": [\n    \"Flat control flow with no unnecessary nesting\",\n    \"Explicit data movement: each iteration produces a fresh `remaining` dict without mutating the previous one\",\n    \"Clear, descriptive names (remaining, ready, completed, blockers)\",\n    \"Cycle detection raises a precise ValueError with a helpful message\",\n    \"Includes tasks that only appear as dependencies via the initial `tasks` set construction\",\n    \"Does not mutate the input\"\n  ],\n  \"weaknesses\": [\n    \"Rebuilding the entire `remaining` dict each iteration is slightly less efficient than in-place removal, though correctness and clarity are preserved\",\n    \"Could marginally benefit from a small helper to build the initial `remaining` map, separating graph construction from the scheduling loop\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Flat control flow with no unnecessary nesting",
+      "Explicit data movement: each iteration produces a fresh `remaining` dict without mutating the previous one",
+      "Clear, descriptive names (remaining, ready, completed, blockers)",
+      "Cycle detection raises a precise ValueError with a helpful message",
+      "Includes tasks that only appear as dependencies via the initial `tasks` set construction",
+      "Does not mutate the input"
+    ],
+    "weaknesses": [
+      "Rebuilding the entire `remaining` dict each iteration is slightly less efficient than in-place removal, though correctness and clarity are preserved",
+      "Could marginally benefit from a small helper to build the initial `remaining` map, separating graph construction from the scheduling loop"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 3.827,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "..                                                                       [100%]\n2 passed in 0.15s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 9.0,
+    "cyclomatic_complexity_max": 9,
+    "cyclomatic_complexity_total": 9,
+    "function_count": 1,
+    "loc": 19,
+    "maintainability_index": 61.266,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "dependency_order",
+  "variant": "human_reference"
+}

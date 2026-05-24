@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": 5,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 5,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 6
+    },
+    "lexical_proof_complexity": 18,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 83,
+    "source_token_estimate": 566,
+    "status": "verification_failed",
+    "verification_duration_seconds": 7.211,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python as required by the task. The entry point `summarize_windows` must be a Python function accepting `list[dict]` and returning `list[dict]`, but instead the code defines a Dafny method operating on sequences of tuples. It cannot be imported or executed as Python, fails to handle malformed event dicts, does not raise `ValueError` for non-positive `window_size` in Python, and returns tuples instead of dicts. While the Dafny logic itself shows some algorithmic understanding (floor division correction, insertion sort, map accumulation), none of it is usable for the actual task. This is a complete language mismatch and a fundamental architectural failure.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python as required by the task. The entry point `summarize_windows` must be a Python function accepting `list[dict]` and returning `list[dict]`, but instead the code defines a Dafny method operating on sequences of tuples. It cannot be imported or executed as Python, fails to handle malformed event dicts, does not raise `ValueError` for non-positive `window_size` in Python, and returns tuples instead of dicts. While the Dafny logic itself shows some algorithmic understanding (floor division correction, insertion sort, map accumulation), none of it is usable for the actual task. This is a complete language mismatch and a fundamental architectural failure.\",\n  \"strengths\": [\n    \"Demonstrates awareness of floor-division correction for negative timestamps\",\n    \"Includes sorting logic and accumulation pattern that mirrors the correct algorithm conceptually\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely wrong language for the task\",\n    \"Cannot be executed or imported as a Python module\",\n    \"Does not accept list[dict] input or return list[dict] output\",\n    \"Does not handle malformed event filtering in Python\",\n    \"Does not raise ValueError for non-positive window_size in Python\",\n    \"Zero adherence to Zen of Python principles since it is not Python at all\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates awareness of floor-division correction for negative timestamps",
+      "Includes sorting logic and accumulation pattern that mirrors the correct algorithm conceptually"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely wrong language for the task",
+      "Cannot be executed or imported as a Python module",
+      "Does not accept list[dict] input or return list[dict] output",
+      "Does not handle malformed event filtering in Python",
+      "Does not raise ValueError for non-positive window_size in Python",
+      "Zero adherence to Zen of Python principles since it is not Python at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 569,
+      "prompt": 338,
+      "total": 907,
+      "turns": [
+        {
+          "completion": 569,
+          "prompt": 338,
+          "total": 907
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(53,2): Error: cannot prove termination; try supplying a decreases clause for the loop\n   |\n53 |   while j < |sortedKeys|\n   |   ^^^^^\n\nsolution.dfy(54,21): Error: this loop invariant could not be proved on entry\n Related message: loop invariant violation\n   |\n54 |     invariant 0 <= j <= |sortedKeys|\n   |                      ^^\n\nsolution.dfy(58,30): Error: index out of range\n   |\n58 |     while k2 > 0 && sortedKeys[k2 - 1] > cur\n   |                               ^\n\nsolution.dfy(64,29): Error: index out of range\n   |\n64 |     sortedKeys := sortedKeys[k2 := cur];\n   |                              ^^\n\nsolution.dfy(76,23): Error: element might not be in domain\n   |\n76 |     var data := windows[k3];\n   |                        ^\n\n\nDafny program verifier finished with 1 verified, 5 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "event_windows",
+  "variant": "oracle_dafny_generation"
+}

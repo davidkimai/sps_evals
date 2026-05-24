@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef flatten_paths(value: dict) -> dict[str, object]:\n    output = {}\n\n    def visit(prefix: str, item) -> None:\n        if isinstance(item, dict):\n            for key, child in item.items():\n                visit(f'{prefix}.{key}' if prefix else str(key), child)\n        else:\n            output[prefix] = item\n\n    visit('', value)\n    return output\n",
+  "effective_temperature": null,
+  "entry_point": "flatten_paths",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef flatten_paths(value: dict) -> dict[str, object]:\n    output = {}\n\n    def visit(prefix: str, item) -> None:\n        if isinstance(item, dict):\n            for key, child in item.items():\n                visit(f'{prefix}.{key}' if prefix else str(key), child)\n        else:\n            output[prefix] = item\n\n    visit('', value)\n    return output\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend flatten_paths with array_mode: str = 'leaf'. When array_mode='index',\nflatten list items using bracket indexes such as users[0].name. Preserve old behavior when omitted.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "streaming_compatibility",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import flatten_paths\n\n\ndef test_array_index_mode():\n    data = {'users': [{'name': 'Ada'}, {'name': 'Grace'}]}\n    assert flatten_paths(data) == {'users': [{'name': 'Ada'}, {'name': 'Grace'}]}\n    assert flatten_paths(data, array_mode='index') == {'users[0].name': 'Ada', 'users[1].name': 'Grace'}\n",
+    "entry_point": "flatten_paths",
+    "human_reference": "from __future__ import annotations\n\n\ndef flatten_paths(value: dict) -> dict[str, object]:\n    output = {}\n\n    def visit(prefix: str, item) -> None:\n        if isinstance(item, dict):\n            for key, child in item.items():\n                visit(f'{prefix}.{key}' if prefix else str(key), child)\n        else:\n            output[prefix] = item\n\n    visit('', value)\n    return output\n",
+    "id": "hierarchical_flattener",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef flatten_paths(value, array_mode='leaf'):\n    out = {}\n\n    def visit(prefix, item):\n        if isinstance(item, dict):\n            for key, child in item.items():\n                visit(f'{prefix}.{key}' if prefix else str(key), child)\n        elif isinstance(item, list) and array_mode == 'index':\n            for index, child in enumerate(item):\n                visit(f'{prefix}[{index}]', child)\n        else:\n            out[prefix] = item\n\n    visit('', value)\n    return out\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef flatten_paths(value):\n    out = {}\n    stack = [('', value)]\n    while stack:\n        prefix, item = stack.pop()\n        if isinstance(item, dict):\n            for key, child in reversed(list(item.items())):\n                stack.append((f'{prefix}.{key}' if prefix else str(key), child))\n        else:\n            out[prefix] = item\n    return out\n",
+    "prompt": "Implement flatten_paths(value: dict) -> dict[str, object]. Flatten nested dicts\ninto dot-path keys. Lists should be treated as leaf values in the initial version.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "json",
+      "day2-hard"
+    ],
+    "test_code": "from solution import flatten_paths\n\n\ndef test_flattens_nested_dicts_only():\n    assert flatten_paths({'a': {'b': 1}, 'c': [2]}) == {'a.b': 1, 'c': [2]}\n"
+  },
+  "task_id": "hierarchical_flattener",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

@@ -1,0 +1,54 @@
+{
+  "artifact_language": "dafny",
+  "code": "class RetryGate {\n  var max_attempts: int\n  var failures: int\n\n  constructor(max_att: int)\n    requires max_att > 0\n    ensures max_attempts == max_att\n    ensures failures == 0\n  {\n    max_attempts := max_att;\n    failures := 0;\n  }\n\n  method allow() returns (result: bool)\n    requires failures >= 0\n    requires max_attempts > 0\n    ensures result == (failures < max_attempts)\n  {\n    result := failures < max_attempts;\n  }\n\n  method record_success()\n    requires failures >= 0\n    ensures failures == 0\n    modifies this\n  {\n    failures := 0;\n  }\n\n  method record_failure()\n    requires failures >= 0\n    ensures failures == old(failures) + 1\n    modifies this\n  {\n    failures := failures + 1;\n  }\n\n  method remaining() returns (result: int)\n    requires failures >= 0\n    requires max_attempts > 0\n    ensures result == max_attempts - failures\n  {\n    result := max_attempts - failures;\n  }\n}\n\nmethod Main() {\n  var gate := new RetryGate(3);\n  var a := gate.allow();\n  assert a == true;\n  gate.record_failure();\n  gate.record_failure();\n  gate.record_failure();\n  var a2 := gate.allow();\n  assert a2 == false;\n  gate.record_success();\n  var a3 := gate.allow();\n  assert a3 == true;\n  var r := gate.remaining();\n  assert r == 3;\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "RetryGate",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 313,
+      "prompt": 368,
+      "total": 681,
+      "turns": [
+        {
+          "completion": 313,
+          "prompt": 368,
+          "total": 681
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nclass RetryGate {\n  var max_attempts: int\n  var failures: int\n\n  constructor(max_att: int)\n    requires max_att > 0\n    ensures max_attempts == max_att\n    ensures failures == 0\n  {\n    max_attempts := max_att;\n    failures := 0;\n  }\n\n  method allow() returns (result: bool)\n    requires failures >= 0\n    requires max_attempts > 0\n    ensures result == (failures < max_attempts)\n  {\n    result := failures < max_attempts;\n  }\n\n  method record_success()\n    requires failures >= 0\n    ensures failures == 0\n    modifies this\n  {\n    failures := 0;\n  }\n\n  method record_failure()\n    requires failures >= 0\n    ensures failures == old(failures) + 1\n    modifies this\n  {\n    failures := failures + 1;\n  }\n\n  method remaining() returns (result: int)\n    requires failures >= 0\n    requires max_attempts > 0\n    ensures result == max_attempts - failures\n  {\n    result := max_attempts - failures;\n  }\n}\n\nmethod Main() {\n  var gate := new RetryGate(3);\n  var a := gate.allow();\n  assert a == true;\n  gate.record_failure();\n  gate.record_failure();\n  gate.record_failure();\n  var a2 := gate.allow();\n  assert a2 == false;\n  gate.record_success();\n  var a3 := gate.allow();\n  assert a3 == true;\n  var r := gate.remaining();\n  assert r == 3;\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add a snapshot() -> dict method that returns the current state without\nmutating it. The dictionary must contain max_attempts, failures, remaining,\nand allowed.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import RetryGate\n\n\ndef test_snapshot_reports_state_without_mutation():\n    gate = RetryGate(3)\n    gate.record_failure()\n    snapshot = gate.snapshot()\n\n    assert snapshot == {\n        \"max_attempts\": 3,\n        \"failures\": 1,\n        \"remaining\": 2,\n        \"allowed\": True,\n    }\n    assert gate.remaining() == 2\n    assert gate.allow()\n\n\ndef test_original_limit_validation_remains():\n    with pytest.raises(ValueError):\n        RetryGate(0)\n",
+    "entry_point": "RetryGate",
+    "human_reference": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n",
+    "id": "retry_state_machine",
+    "mock_day2_solution": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n\n    def snapshot(self) -> dict[str, int | bool]:\n        return {\n            \"max_attempts\": self._max_attempts,\n            \"failures\": self._failures,\n            \"remaining\": self.remaining(),\n            \"allowed\": self.allow(),\n        }\n",
+    "mock_solution": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n",
+    "prompt": "Implement a RetryGate class.\n\nConstructor: RetryGate(max_attempts: int)\n- max_attempts must be positive, otherwise raise ValueError.\n\nMethods:\n- allow() -> bool: True while the number of recorded failures is less than max_attempts.\n- record_success() -> None: reset the failure count to zero.\n- record_failure() -> None: increment the failure count by one.\n- remaining() -> int: remaining attempts before allow() becomes False.\n\nThe implementation should be deterministic and should not use time, threads,\nnetworking, or global state.\n",
+    "tags": [
+      "state",
+      "control-flow",
+      "maintainability"
+    ],
+    "test_code": "import pytest\n\nfrom solution import RetryGate\n\n\ndef test_retry_gate_tracks_failures_and_reset():\n    gate = RetryGate(2)\n    assert gate.allow()\n    assert gate.remaining() == 2\n\n    gate.record_failure()\n    assert gate.allow()\n    assert gate.remaining() == 1\n\n    gate.record_failure()\n    assert not gate.allow()\n    assert gate.remaining() == 0\n\n    gate.record_success()\n    assert gate.allow()\n    assert gate.remaining() == 2\n\n\ndef test_retry_gate_rejects_invalid_limit():\n    with pytest.raises(ValueError):\n        RetryGate(0)\n"
+  },
+  "task_id": "retry_state_machine",
+  "user_prompt": "Task id: retry_state_machine\nEntry point: RetryGate\n\nFunctional requirements:\nImplement a RetryGate class.\n\nConstructor: RetryGate(max_attempts: int)\n- max_attempts must be positive, otherwise raise ValueError.\n\nMethods:\n- allow() -> bool: True while the number of recorded failures is less than max_attempts.\n- record_success() -> None: reset the failure count to zero.\n- record_failure() -> None: increment the failure count by one.\n- remaining() -> int: remaining attempts before allow() becomes False.\n\nThe implementation should be deterministic and should not use time, threads,\nnetworking, or global state.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

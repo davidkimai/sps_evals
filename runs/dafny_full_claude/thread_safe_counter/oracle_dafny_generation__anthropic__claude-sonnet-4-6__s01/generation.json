@@ -1,0 +1,56 @@
+{
+  "artifact_language": "dafny",
+  "code": "class BoundedCounter {\n  var maxTotal: int\n  var counts: map<string, int>\n  var totalCount: int\n\n  constructor(max_total: int)\n    requires max_total > 0\n    ensures maxTotal == max_total\n    ensures counts == map[]\n    ensures totalCount == 0\n  {\n    maxTotal := max_total;\n    counts := map[];\n    totalCount := 0;\n  }\n\n  method increment(name: string) returns (newVal: int)\n    requires totalCount < maxTotal\n    modifies this\n    ensures totalCount == old(totalCount) + 1\n    ensures totalCount <= maxTotal\n    ensures name in counts\n    ensures counts[name] == newVal\n    ensures newVal >= 1\n  {\n    if name in counts {\n      counts := counts[name := counts[name] + 1];\n    } else {\n      counts := counts[name := 1];\n    }\n    totalCount := totalCount + 1;\n    newVal := counts[name];\n  }\n\n  method total() returns (t: int)\n    ensures t == totalCount\n  {\n    t := totalCount;\n  }\n\n  method snapshot() returns (snap: map<string, int>)\n    ensures snap == counts\n  {\n    snap := counts;\n  }\n}\n\nmethod Main() {\n  var bc := new BoundedCounter(10);\n  var v1 := bc.increment(\"a\");\n  assert v1 == 1;\n  var v2 := bc.increment(\"a\");\n  assert v2 == 2;\n  var v3 := bc.increment(\"b\");\n  assert v3 == 1;\n  var t := bc.total();\n  assert t == 3;\n  var snap := bc.snapshot();\n  assert snap[\"a\"] == 2;\n  assert snap[\"b\"] == 1;\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "BoundedCounter",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 333,
+      "prompt": 383,
+      "total": 716,
+      "turns": [
+        {
+          "completion": 333,
+          "prompt": 383,
+          "total": 716
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nclass BoundedCounter {\n  var maxTotal: int\n  var counts: map<string, int>\n  var totalCount: int\n\n  constructor(max_total: int)\n    requires max_total > 0\n    ensures maxTotal == max_total\n    ensures counts == map[]\n    ensures totalCount == 0\n  {\n    maxTotal := max_total;\n    counts := map[];\n    totalCount := 0;\n  }\n\n  method increment(name: string) returns (newVal: int)\n    requires totalCount < maxTotal\n    modifies this\n    ensures totalCount == old(totalCount) + 1\n    ensures totalCount <= maxTotal\n    ensures name in counts\n    ensures counts[name] == newVal\n    ensures newVal >= 1\n  {\n    if name in counts {\n      counts := counts[name := counts[name] + 1];\n    } else {\n      counts := counts[name := 1];\n    }\n    totalCount := totalCount + 1;\n    newVal := counts[name];\n  }\n\n  method total() returns (t: int)\n    ensures t == totalCount\n  {\n    t := totalCount;\n  }\n\n  method snapshot() returns (snap: map<string, int>)\n    ensures snap == counts\n  {\n    snap := counts;\n  }\n}\n\nmethod Main() {\n  var bc := new BoundedCounter(10);\n  var v1 := bc.increment(\"a\");\n  assert v1 == 1;\n  var v2 := bc.increment(\"a\");\n  assert v2 == 2;\n  var v3 := bc.increment(\"b\");\n  assert v3 == 1;\n  var t := bc.total();\n  assert t == 3;\n  var snap := bc.snapshot();\n  assert snap[\"a\"] == 2;\n  assert snap[\"b\"] == 1;\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add decrement(name: str) -> int. It should decrement the named counter and\nreturn the new value. If the name is absent or already zero, raise KeyError.\nCounts that reach zero should be removed from snapshot().\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import BoundedCounter\n\n\ndef test_decrement_preserves_existing_behavior():\n    counter = BoundedCounter(3)\n    assert counter.increment(\"jobs\") == 1\n    assert counter.increment(\"jobs\") == 2\n    assert counter.total() == 2\n    assert counter.decrement(\"jobs\") == 1\n    assert counter.decrement(\"jobs\") == 0\n    assert counter.total() == 0\n    assert counter.snapshot() == {}\n    with pytest.raises(KeyError):\n        counter.decrement(\"jobs\")\n\n\ndef test_decrement_frees_capacity():\n    counter = BoundedCounter(1)\n    counter.increment(\"a\")\n    with pytest.raises(OverflowError):\n        counter.increment(\"b\")\n    counter.decrement(\"a\")\n    assert counter.increment(\"b\") == 1\n",
+    "entry_point": "BoundedCounter",
+    "human_reference": "from threading import Lock\n\n\nclass BoundedCounter:\n    def __init__(self, max_total: int):\n        if max_total <= 0:\n            raise ValueError(\"max_total must be positive\")\n        self._max_total = max_total\n        self._counts = {}\n        self._total = 0\n        self._lock = Lock()\n\n    def increment(self, name: str) -> int:\n        with self._lock:\n            if self._total >= self._max_total:\n                raise OverflowError(\"counter capacity exceeded\")\n            next_value = self._counts.get(name, 0) + 1\n            self._counts[name] = next_value\n            self._total += 1\n            return next_value\n\n    def total(self) -> int:\n        with self._lock:\n            return self._total\n\n    def snapshot(self) -> dict[str, int]:\n        with self._lock:\n            return dict(self._counts)\n",
+    "id": "thread_safe_counter",
+    "mock_day2_solution": "from threading import Lock\n\n\nclass BoundedCounter:\n    def __init__(self, max_total: int):\n        if max_total <= 0:\n            raise ValueError(\"max_total must be positive\")\n        self._max_total = max_total\n        self._counts = {}\n        self._total = 0\n        self._lock = Lock()\n\n    def increment(self, name: str) -> int:\n        with self._lock:\n            if self._total >= self._max_total:\n                raise OverflowError(\"counter capacity exceeded\")\n            next_value = self._counts.get(name, 0) + 1\n            self._counts[name] = next_value\n            self._total += 1\n            return next_value\n\n    def decrement(self, name: str) -> int:\n        with self._lock:\n            current = self._counts.get(name, 0)\n            if current <= 0:\n                raise KeyError(name)\n            next_value = current - 1\n            if next_value:\n                self._counts[name] = next_value\n            else:\n                del self._counts[name]\n            self._total -= 1\n            return next_value\n\n    def total(self) -> int:\n        with self._lock:\n            return self._total\n\n    def snapshot(self) -> dict[str, int]:\n        with self._lock:\n            return dict(self._counts)\n",
+    "mock_solution": "from threading import Lock\n\n\nclass BoundedCounter:\n    def __init__(self, max_total: int):\n        if max_total <= 0:\n            raise ValueError(\"max_total must be positive\")\n        self._max_total = max_total\n        self._counts = {}\n        self._total = 0\n        self._lock = Lock()\n\n    def increment(self, name: str) -> int:\n        with self._lock:\n            if self._total >= self._max_total:\n                raise OverflowError(\"counter capacity exceeded\")\n            next_value = self._counts.get(name, 0) + 1\n            self._counts[name] = next_value\n            self._total += 1\n            return next_value\n\n    def total(self) -> int:\n        with self._lock:\n            return self._total\n\n    def snapshot(self) -> dict[str, int]:\n        with self._lock:\n            return dict(self._counts)\n",
+    "prompt": "Implement a BoundedCounter class for coordinating named counters across worker\nthreads.\n\nConstructor: BoundedCounter(max_total: int)\n- max_total must be positive, otherwise raise ValueError.\n\nMethods:\n- increment(name: str) -> int: increment the named counter by one and return\n  the new value for that name. If the total count would exceed max_total,\n  raise OverflowError.\n- total() -> int: return the total count across all names.\n- snapshot() -> dict[str, int]: return a copy of nonzero counts by name.\n\nThe implementation must be thread-safe and must not expose mutable internal\nstate.\n",
+    "tags": [
+      "concurrency",
+      "state_machine",
+      "locking",
+      "day2-hard"
+    ],
+    "test_code": "from concurrent.futures import ThreadPoolExecutor\n\nimport pytest\n\nfrom solution import BoundedCounter\n\n\ndef test_counter_is_thread_safe_and_bounded():\n    counter = BoundedCounter(40)\n\n    def bump(worker):\n        for _ in range(10):\n            counter.increment(worker)\n\n    with ThreadPoolExecutor(max_workers=4) as pool:\n        list(pool.map(bump, [\"a\", \"b\", \"c\", \"d\"]))\n\n    assert counter.total() == 40\n    assert counter.snapshot() == {\"a\": 10, \"b\": 10, \"c\": 10, \"d\": 10}\n    with pytest.raises(OverflowError):\n        counter.increment(\"overflow\")\n\n\ndef test_counter_validation_and_snapshot_copy():\n    with pytest.raises(ValueError):\n        BoundedCounter(0)\n    counter = BoundedCounter(2)\n    counter.increment(\"x\")\n    snap = counter.snapshot()\n    snap[\"x\"] = 99\n    assert counter.snapshot() == {\"x\": 1}\n"
+  },
+  "task_id": "thread_safe_counter",
+  "user_prompt": "Task id: thread_safe_counter\nEntry point: BoundedCounter\n\nFunctional requirements:\nImplement a BoundedCounter class for coordinating named counters across worker\nthreads.\n\nConstructor: BoundedCounter(max_total: int)\n- max_total must be positive, otherwise raise ValueError.\n\nMethods:\n- increment(name: str) -> int: increment the named counter by one and return\n  the new value for that name. If the total count would exceed max_total,\n  raise OverflowError.\n- total() -> int: return the total count across all names.\n- snapshot() -> dict[str, int]: return a copy of nonzero counts by name.\n\nThe implementation must be thread-safe and must not expose mutable internal\nstate.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

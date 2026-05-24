@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 4,
+      "if": 2,
+      "invariant": 2,
+      "logical_and": 0,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 13,
+    "logical_and_count": 0,
+    "logical_or_count": 1,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 32,
+    "source_token_estimate": 261,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.016,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny (a formal verification language), not Python, making it entirely non-functional as a Python implementation of `reconcile_entries`. The entry point signature, data types, and syntax are all wrong for the task. While the algorithmic logic is structurally sound\u2014separate debit/credit accumulators, no inline arithmetic inside direction conditionals, balance computed after accumulation\u2014the code cannot be executed as Python, uses a formal spec language with preconditions/postconditions/invariants, and does not handle the 'reject unknown directions' requirement (it encodes it as a precondition rather than a runtime ValueError). The balance formula is also inverted (credit - debit becomes debit - credit in the tuple). These are fundamental failures against the functional requirements and the Python-centric structural oracle.",
+    "raw_response": "{\n  \"score\": 2,\n  \"rationale\": \"The candidate submission is written in Dafny (a formal verification language), not Python, making it entirely non-functional as a Python implementation of `reconcile_entries`. The entry point signature, data types, and syntax are all wrong for the task. While the algorithmic logic is structurally sound\u2014separate debit/credit accumulators, no inline arithmetic inside direction conditionals, balance computed after accumulation\u2014the code cannot be executed as Python, uses a formal spec language with preconditions/postconditions/invariants, and does not handle the 'reject unknown directions' requirement (it encodes it as a precondition rather than a runtime ValueError). The balance formula is also inverted (credit - debit becomes debit - credit in the tuple). These are fundamental failures against the functional requirements and the Python-centric structural oracle.\",\n  \"strengths\": [\n    \"Separate named accumulators for debit and credit are used correctly\",\n    \"No inline arithmetic inside the direction conditional\",\n    \"Balance is computed after accumulation, not inline\",\n    \"Formal invariants demonstrate clear reasoning about correctness\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Entry point signature does not match required reconcile_entries(entries: list[dict]) -> dict\",\n    \"Unknown directions are handled as a precondition, not a runtime rejection (ValueError)\",\n    \"Balance formula is inverted: tuple stores (debit, credit, credit-debit) but invariant says result[acct].2 == result[acct].1 - result[acct].0 which is credit-debit, yet the task says balance = credit - debit \u2014 marginally correct but tuple indexing is inconsistent with the docstring\",\n    \"Cannot be imported or executed as a Python module\"\n  ]\n}",
+    "score": 2,
+    "skipped": false,
+    "strengths": [
+      "Separate named accumulators for debit and credit are used correctly",
+      "No inline arithmetic inside the direction conditional",
+      "Balance is computed after accumulation, not inline",
+      "Formal invariants demonstrate clear reasoning about correctness"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Entry point signature does not match required reconcile_entries(entries: list[dict]) -> dict",
+      "Unknown directions are handled as a precondition, not a runtime rejection (ValueError)",
+      "Balance formula is inverted: tuple stores (debit, credit, credit-debit) but invariant says result[acct].2 == result[acct].1 - result[acct].0 which is credit-debit, yet the task says balance = credit - debit \u2014 marginally correct but tuple indexing is inconsistent with the docstring",
+      "Cannot be imported or executed as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 265,
+      "prompt": 291,
+      "total": 556,
+      "turns": [
+        {
+          "completion": 265,
+          "prompt": 291,
+          "total": 556
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Treasury Reconciliation Doctrine TR-4:\n- Every monetary delta must be tagged debit or credit before it affects totals.\n- Debit and credit balances must be computed in separate named accumulators.\n- Do not place inline arithmetic inside conditionals that decide monetary direction.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "\nDafny program verifier finished with 2 verified, 0 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "financial_reconciler",
+  "variant": "oracle_dafny_generation"
+}

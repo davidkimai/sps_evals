@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 5.581,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.642,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/circuit_breaker/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 7,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 7,
+      "exists": 0,
+      "forall": 0,
+      "if": 4,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 4,
+      "while": 0
+    },
+    "lexical_proof_complexity": 15,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 4,
+    "runtime_exit_code": 2,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 71,
+    "source_token_estimate": 472,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 7.964,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 6
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This candidate is not a CircuitBreaker implementation at all. It is a Dafny-to-Python interop shim that attempts to import from a 'module_' that does not exist in this context, performs symbol aliasing, and provides zero circuit-breaker logic. There is no state attribute, no failure_threshold, no recovery_timeout, no half-open state, no call() method, and no CircuitBreaker class defined anywhere in the code. The entire submission is architectural slop masquerading as an implementation by delegating to a non-existent compiled Dafny module.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This candidate is not a CircuitBreaker implementation at all. It is a Dafny-to-Python interop shim that attempts to import from a 'module_' that does not exist in this context, performs symbol aliasing, and provides zero circuit-breaker logic. There is no state attribute, no failure_threshold, no recovery_timeout, no half-open state, no call() method, and no CircuitBreaker class defined anywhere in the code. The entire submission is architectural slop masquerading as an implementation by delegating to a non-existent compiled Dafny module.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement any part of the required functionality\"\n  ],\n  \"weaknesses\": [\n    \"No CircuitBreaker class defined\",\n    \"No state attribute or state machine logic\",\n    \"No failure counting or threshold enforcement\",\n    \"No recovery timeout or half-open trial logic\",\n    \"Depends on a non-existent 'module_' import that would cause an ImportError at runtime\",\n    \"Completely wrong architectural approach \u2014 Dafny interop shim instead of a Python implementation\",\n    \"Violates every point of RCS-5: no explicit state, no named configuration, no half-open transitions\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement any part of the required functionality"
+    ],
+    "weaknesses": [
+      "No CircuitBreaker class defined",
+      "No state attribute or state machine logic",
+      "No failure counting or threshold enforcement",
+      "No recovery timeout or half-open trial logic",
+      "Depends on a non-existent 'module_' import that would cause an ImportError at runtime",
+      "Completely wrong architectural approach \u2014 Dafny interop shim instead of a Python implementation",
+      "Violates every point of RCS-5: no explicit state, no named configuration, no half-open transitions"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 475,
+      "prompt": 303,
+      "total": 778,
+      "turns": [
+        {
+          "completion": 475,
+          "prompt": 303,
+          "total": 778
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Resilience Control Standard RCS-5:\n- State transitions must be explicit and inspectable through a state attribute.\n- Failure thresholds and recovery timers must be named configuration values, not magic constants.\n- Half-open trials must either close on success or reopen on failure.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.397,
+    "exit_code": 2,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "\n==================================== ERRORS ====================================\n______________________ ERROR collecting test_solution.py _______________________\nImportError while importing test module '/work/test_solution.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_solution.py:3: in <module>\n    from solution import CircuitBreaker\nsolution.py:2: in <module>\n    import module_ as _dafny_module\nmodule_.py:9: in <module>\n    import CircuitBreakerModule as CircuitBreakerModule\nE   ModuleNotFoundError: No module named 'CircuitBreakerModule'\n=========================== short test summary info ============================\nERROR test_solution.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.30s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "circuit_breaker",
+  "variant": "oracle_dafny_generation"
+}

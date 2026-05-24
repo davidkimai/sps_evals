@@ -1,0 +1,56 @@
+{
+  "artifact_language": "dafny",
+  "code": "method iter_file_chunks(file_obj: object, chunk_size: int) returns (chunks: seq<seq<int>>)\n  requires chunk_size > 0\n  ensures forall i :: 0 <= i < |chunks| ==> |chunks[i]| > 0\n{\n  chunks := [];\n}\n\nmethod ValidateChunkSize(chunk_size: int)\n  requires chunk_size > 0\n{\n}\n\nmethod ReadChunk(data: seq<int>, offset: int, chunk_size: int) returns (chunk: seq<int>)\n  requires 0 <= offset <= |data|\n  requires chunk_size > 0\n  ensures |chunk| == if offset + chunk_size <= |data| then chunk_size else |data| - offset\n  ensures |chunk| >= 0\n{\n  if offset + chunk_size <= |data| {\n    chunk := data[offset..offset + chunk_size];\n  } else {\n    chunk := data[offset..];\n  }\n}\n\nmethod SplitIntoChunks(data: seq<int>, chunk_size: int) returns (chunks: seq<seq<int>>)\n  requires chunk_size > 0\n  ensures forall i :: 0 <= i < |chunks| ==> |chunks[i]| > 0\n  ensures forall i :: 0 <= i < |chunks| ==> |chunks[i]| <= chunk_size\n{\n  chunks := [];\n  var offset := 0;\n  while offset < |data|\n    invariant 0 <= offset <= |data|\n    invariant forall i :: 0 <= i < |chunks| ==> |chunks[i]| > 0\n    invariant forall i :: 0 <= i < |chunks| ==> |chunks[i]| <= chunk_size\n    decreases |data| - offset\n  {\n    var end := offset + chunk_size;\n    if end > |data| {\n      end := |data|;\n    }\n    var chunk := data[offset..end];\n    assert |chunk| == end - offset;\n    assert end > offset;\n    assert |chunk| > 0;\n    chunks := chunks + [chunk];\n    offset := end;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "iter_file_chunks",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 364,
+      "prompt": 290,
+      "total": 654,
+      "turns": [
+        {
+          "completion": 364,
+          "prompt": 290,
+          "total": 654
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod iter_file_chunks(file_obj: object, chunk_size: int) returns (chunks: seq<seq<int>>)\n  requires chunk_size > 0\n  ensures forall i :: 0 <= i < |chunks| ==> |chunks[i]| > 0\n{\n  chunks := [];\n}\n\nmethod ValidateChunkSize(chunk_size: int)\n  requires chunk_size > 0\n{\n}\n\nmethod ReadChunk(data: seq<int>, offset: int, chunk_size: int) returns (chunk: seq<int>)\n  requires 0 <= offset <= |data|\n  requires chunk_size > 0\n  ensures |chunk| == if offset + chunk_size <= |data| then chunk_size else |data| - offset\n  ensures |chunk| >= 0\n{\n  if offset + chunk_size <= |data| {\n    chunk := data[offset..offset + chunk_size];\n  } else {\n    chunk := data[offset..];\n  }\n}\n\nmethod SplitIntoChunks(data: seq<int>, chunk_size: int) returns (chunks: seq<seq<int>>)\n  requires chunk_size > 0\n  ensures forall i :: 0 <= i < |chunks| ==> |chunks[i]| > 0\n  ensures forall i :: 0 <= i < |chunks| ==> |chunks[i]| <= chunk_size\n{\n  chunks := [];\n  var offset := 0;\n  while offset < |data|\n    invariant 0 <= offset <= |data|\n    invariant forall i :: 0 <= i < |chunks| ==> |chunks[i]| > 0\n    invariant forall i :: 0 <= i < |chunks| ==> |chunks[i]| <= chunk_size\n    decreases |data| - offset\n  {\n    var end := offset + chunk_size;\n    if end > |data| {\n      end := |data|;\n    }\n    var chunk := data[offset..end];\n    assert |chunk| == end - offset;\n    assert end > offset;\n    assert |chunk| > 0;\n    chunks := chunks + [chunk];\n    offset := end;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend iter_file_chunks with include_index: bool = False. When true, yield\n(index, chunk) tuples. Preserve byte-only output when false.\n",
+    "day2_stressors": [
+      "streaming_compatibility",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from io import BytesIO\n\nfrom solution import iter_file_chunks\n\n\ndef test_optional_chunk_index_metadata():\n    assert list(iter_file_chunks(BytesIO(b'abcd'), 2)) == [b'ab', b'cd']\n    assert list(iter_file_chunks(BytesIO(b'abcd'), 2, include_index=True)) == [(0, b'ab'), (1, b'cd')]\n",
+    "entry_point": "iter_file_chunks",
+    "human_reference": "from __future__ import annotations\n\nfrom collections.abc import Iterator\nfrom typing import BinaryIO\n\n\ndef iter_file_chunks(file_obj: BinaryIO, chunk_size: int) -> Iterator[bytes]:\n    if chunk_size <= 0:\n        raise ValueError('chunk_size must be positive')\n    while True:\n        chunk = file_obj.read(chunk_size)\n        if not chunk:\n            break\n        yield chunk\n",
+    "id": "lazy_file_chunker",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef iter_file_chunks(file_obj, chunk_size: int, include_index: bool = False):\n    if chunk_size < 1:\n        raise ValueError('chunk_size must be positive')\n    index = 0\n    while True:\n        chunk = file_obj.read(chunk_size)\n        if not chunk:\n            return\n        if include_index:\n            yield (index, chunk)\n        else:\n            yield chunk\n        index += 1\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef iter_file_chunks(file_obj, chunk_size: int):\n    if chunk_size < 1:\n        raise ValueError('chunk_size must be positive')\n    chunk = file_obj.read(chunk_size)\n    while chunk:\n        yield chunk\n        chunk = file_obj.read(chunk_size)\n",
+    "prompt": "Implement iter_file_chunks(file_obj, chunk_size: int) -> iterator[bytes].\nRead from a file-like object with read(size), yielding non-empty byte chunks.\nReject non-positive chunk sizes. Do not read the whole file at once.\n",
+    "tags": [
+      "async",
+      "streaming",
+      "io",
+      "day2-hard"
+    ],
+    "test_code": "from io import BytesIO\n\nimport pytest\n\nfrom solution import iter_file_chunks\n\n\ndef test_chunks_lazily():\n    assert list(iter_file_chunks(BytesIO(b'abcdef'), 2)) == [b'ab', b'cd', b'ef']\n\n\ndef test_rejects_bad_size():\n    with pytest.raises(ValueError):\n        list(iter_file_chunks(BytesIO(b'x'), 0))\n"
+  },
+  "task_id": "lazy_file_chunker",
+  "user_prompt": "Task id: lazy_file_chunker\nEntry point: iter_file_chunks\n\nFunctional requirements:\nImplement iter_file_chunks(file_obj, chunk_size: int) -> iterator[bytes].\nRead from a file-like object with read(size), yielding non-empty byte chunks.\nReject non-positive chunk sizes. Do not read the whole file at once.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

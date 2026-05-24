@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 3.927,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 2.635,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/spec_elicitation_stub/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 2,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 8,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 0
+    },
+    "lexical_proof_complexity": 12,
+    "logical_and_count": 8,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 13,
+    "source_token_estimate": 115,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 3.735,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation completely fails to implement the required `handle_underspecified` function. Instead of a simple, explicit function that handles the 'echo' mode and raises NotImplementedError for all other inputs, it imports a non-existent `module_` (which would cause an ImportError at runtime), performs complex Dafny-to-Python symbol aliasing gymnastics, and never defines the entry point `handle_underspecified` at all. This is the opposite of the Zen of Python: it is implicit, deeply indirect, relies on dynamic namespace manipulation, and introduces massive unnecessary complexity for what should be a 3-5 line function. There is no structural quality, no simplicity, no explicitness, and no local auditability.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation completely fails to implement the required `handle_underspecified` function. Instead of a simple, explicit function that handles the 'echo' mode and raises NotImplementedError for all other inputs, it imports a non-existent `module_` (which would cause an ImportError at runtime), performs complex Dafny-to-Python symbol aliasing gymnastics, and never defines the entry point `handle_underspecified` at all. This is the opposite of the Zen of Python: it is implicit, deeply indirect, relies on dynamic namespace manipulation, and introduces massive unnecessary complexity for what should be a 3-5 line function. There is no structural quality, no simplicity, no explicitness, and no local auditability.\",\n  \"strengths\": [\n    \"The comment at least acknowledges the Dafny context mentioned in the oracle\"\n  ],\n  \"weaknesses\": [\n    \"The required entry point `handle_underspecified` is never defined\",\n    \"Imports a non-existent `module_` that would cause an immediate ImportError\",\n    \"Uses wildcard imports and dynamic namespace mutation, violating explicitness\",\n    \"Massive architectural slop: Dafny compilation machinery for a trivial dispatch function\",\n    \"No NotImplementedError raised for uncovered paths as specified\",\n    \"The 'echo' mode returning the value is never implemented\",\n    \"Zero functional correctness for any input\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The comment at least acknowledges the Dafny context mentioned in the oracle"
+    ],
+    "weaknesses": [
+      "The required entry point `handle_underspecified` is never defined",
+      "Imports a non-existent `module_` that would cause an immediate ImportError",
+      "Uses wildcard imports and dynamic namespace mutation, violating explicitness",
+      "Massive architectural slop: Dafny compilation machinery for a trivial dispatch function",
+      "No NotImplementedError raised for uncovered paths as specified",
+      "The 'echo' mode returning the value is never implemented",
+      "Zero functional correctness for any input"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 118,
+      "prompt": 294,
+      "total": 412,
+      "turns": [
+        {
+          "completion": 118,
+          "prompt": 294,
+          "total": 412
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 2.993,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________________ test_echo_and_refusal_to_guess ________________________\n\n    def test_echo_and_refusal_to_guess():\n>       assert handle_underspecified({'mode': 'echo', 'value': 3}) == 3\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       TypeError: default__.handle__underspecified() missing 3 required positional arguments: 'value', 'hasMode', and 'hasValue'\n\ntest_solution.py:7: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_echo_and_refusal_to_guess - TypeError: default_...\n1 failed in 0.28s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "spec_elicitation_stub",
+  "variant": "oracle_dafny_generation"
+}

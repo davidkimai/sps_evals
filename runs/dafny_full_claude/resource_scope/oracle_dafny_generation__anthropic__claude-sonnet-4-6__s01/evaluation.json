@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.718,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 2.228,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/resource_scope/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 4,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 7,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 23,
+    "source_token_estimate": 136,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 6.032,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is pure architectural slop: it imports a non-existent 'module_' (a Dafny compilation artifact), performs opaque symbol aliasing via reflection, and provides absolutely no ResourceScope class, context manager protocol (__enter__/__exit__), acquire method, or reverse-order cleanup logic. The code cannot function at all for the stated task, and the entire approach of shimming Dafny-compiled Python modules is wildly inappropriate for a simple context manager requirement. It violates every Zen of Python principle: it is implicit, complex, nested, unreadable, and completely fails to implement the required semantics.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is pure architectural slop: it imports a non-existent 'module_' (a Dafny compilation artifact), performs opaque symbol aliasing via reflection, and provides absolutely no ResourceScope class, context manager protocol (__enter__/__exit__), acquire method, or reverse-order cleanup logic. The code cannot function at all for the stated task, and the entire approach of shimming Dafny-compiled Python modules is wildly inappropriate for a simple context manager requirement. It violates every Zen of Python principle: it is implicit, complex, nested, unreadable, and completely fails to implement the required semantics.\",\n  \"strengths\": [\n    \"Attempts to document its intent with a comment about Dafny compilation\"\n  ],\n  \"weaknesses\": [\n    \"No ResourceScope class defined anywhere\",\n    \"No context manager protocol (__enter__/__exit__) implemented\",\n    \"No acquire() method implemented\",\n    \"No reverse-order cleanup logic\",\n    \"Imports a non-existent module ('module_') that will cause ImportError at runtime\",\n    \"Opaque reflection-based symbol aliasing adds zero value and maximum confusion\",\n    \"Completely wrong architectural approach for a trivial context manager task\",\n    \"Violates explicitness, simplicity, and readability principles of Zen of Python\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to document its intent with a comment about Dafny compilation"
+    ],
+    "weaknesses": [
+      "No ResourceScope class defined anywhere",
+      "No context manager protocol (__enter__/__exit__) implemented",
+      "No acquire() method implemented",
+      "No reverse-order cleanup logic",
+      "Imports a non-existent module ('module_') that will cause ImportError at runtime",
+      "Opaque reflection-based symbol aliasing adds zero value and maximum confusion",
+      "Completely wrong architectural approach for a trivial context manager task",
+      "Violates explicitness, simplicity, and readability principles of Zen of Python"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 140,
+      "prompt": 285,
+      "total": 425,
+      "turns": [
+        {
+          "completion": 140,
+          "prompt": 285,
+          "total": 425
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.517,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_closes_reverse_order_on_exception ____________________\n\n    def test_closes_reverse_order_on_exception():\n        log = []\n        try:\n>           with ResourceScope() as scope:\n                 ^^^^^^^^^^^^^^^\nE           TypeError: default__.ResourceScope() missing 1 required positional argument: 'resources'\n\ntest_solution.py:15: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_closes_reverse_order_on_exception - TypeError: ...\n1 failed in 0.12s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "resource_scope",
+  "variant": "oracle_dafny_generation"
+}

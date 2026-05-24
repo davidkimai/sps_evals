@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-05-19T08:16:26Z",
+  "freeze_rule": "Task identities and splits are frozen before full v3 implementation; downgrade rather than silently reshape.",
+  "manifest_sha256": "5464885a4e367827b9612a4cbf79984bd525a3f119c335daad084c0fa5cda0e7",
+  "program_version": "vericoding_research_v3",
+  "raw_content_committed": false,
+  "role": "bounded secondary transfer surface",
+  "schema_version": "v3_scbench_transfer",
+  "task_count": 4,
+  "tasks": [
+    {
+      "external_surface": true,
+      "primary_denominator": false,
+      "program_version": "vericoding_research_v3",
+      "raw_content_committed": false,
+      "regression_sensitive": true,
+      "role": "SCBench sanitized iterative-refinement regression episode",
+      "security_relevant": false,
+      "source_ref": "runs/sprint9_external_subset_manifest.json",
+      "split": "confirmatory",
+      "stable_sample_id": "vericoding:scbench_regression:dev:scbench_04dcc71d0253",
+      "surface": "scbench_regression",
+      "task_hash": "a64a3d0010ad74e5e8fd1155bceef4debe88f87076647b34f49a75c54945c651",
+      "task_id": "scbench_04dcc71d0253"
+    },
+    {
+      "external_surface": true,
+      "primary_denominator": false,
+      "program_version": "vericoding_research_v3",
+      "raw_content_committed": false,
+      "regression_sensitive": true,
+      "role": "SCBench sanitized iterative-refinement regression episode",
+      "security_relevant": false,
+      "source_ref": "runs/sprint9_external_subset_manifest.json",
+      "split": "confirmatory",
+      "stable_sample_id": "vericoding:scbench_regression:dev:scbench_0963556efea0",
+      "surface": "scbench_regression",
+      "task_hash": "ddc374ae8c82ff35b891f900a6a7918c76553c26481d1c7401383e7fbbc320de",
+      "task_id": "scbench_0963556efea0"
+    },
+    {
+      "external_surface": true,
+      "primary_denominator": false,
+      "program_version": "vericoding_research_v3",
+      "raw_content_committed": false,
+      "regression_sensitive": true,
+      "role": "SCBench sanitized iterative-refinement regression episode",
+      "security_relevant": false,
+      "source_ref": "runs/sprint9_external_subset_manifest.json",
+      "split": "confirmatory",
+      "stable_sample_id": "vericoding:scbench_regression:dev:scbench_09c0fb5819d1",
+      "surface": "scbench_regression",
+      "task_hash": "bdf24b370b8a7b895f956fd03d25a1c0560364550bfaba474d8c4f598a7e99e4",
+      "task_id": "scbench_09c0fb5819d1"
+    },
+    {
+      "external_surface": true,
+      "primary_denominator": false,
+      "program_version": "vericoding_research_v3",
+      "raw_content_committed": false,
+      "regression_sensitive": true,
+      "role": "SCBench sanitized iterative-refinement regression episode",
+      "security_relevant": false,
+      "source_ref": "runs/sprint9_external_subset_manifest.json",
+      "split": "confirmatory",
+      "stable_sample_id": "vericoding:scbench_regression:confirmatory:scbench_0f545d6782cc",
+      "surface": "scbench_regression",
+      "task_hash": "c03f6f4e8d871e63b173e27bbe6a77cee3e97ed03ca1fa72e17bfbd44be73c0d",
+      "task_id": "scbench_0f545d6782cc"
+    }
+  ]
+}

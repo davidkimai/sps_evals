@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nfrom collections.abc import Callable, Iterable, Iterator\n\n\ndef parse_csv_rows(lines: Iterable[str]) -> Iterator[dict[str, str]]:\n    iterator = iter(lines)\n    header: list[str] | None = None\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        header = [cell.strip() for cell in line.split(',')]\n        break\n    if header is None:\n        return\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        cells = [cell.strip() for cell in line.split(',')]\n        yield dict(zip(header, cells))\n",
+  "effective_temperature": null,
+  "entry_point": "parse_csv_rows",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nfrom collections.abc import Callable, Iterable, Iterator\n\n\ndef parse_csv_rows(lines: Iterable[str]) -> Iterator[dict[str, str]]:\n    iterator = iter(lines)\n    header: list[str] | None = None\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        header = [cell.strip() for cell in line.split(',')]\n        break\n    if header is None:\n        return\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        cells = [cell.strip() for cell in line.split(',')]\n        yield dict(zip(header, cells))\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend parse_csv_rows with normalize_header: callable | None = None. When\nprovided, apply it to each header cell before building row dictionaries.\nPreserve streaming behavior and original behavior when omitted.\n",
+    "day2_stressors": [
+      "streaming_compatibility",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import parse_csv_rows\n\n\ndef test_normalizes_headers_without_eager_buffering():\n    seen = []\n\n    def lines():\n        for line in ['First Name,AGE', 'Ada,36']:\n            seen.append(line)\n            yield line\n\n    rows = parse_csv_rows(lines(), normalize_header=lambda name: name.strip().lower().replace(' ', '_'))\n    assert next(rows) == {'first_name': 'Ada', 'age': '36'}\n    assert seen == ['First Name,AGE', 'Ada,36']\n",
+    "entry_point": "parse_csv_rows",
+    "human_reference": "from __future__ import annotations\n\nfrom collections.abc import Callable, Iterable, Iterator\n\n\ndef parse_csv_rows(lines: Iterable[str]) -> Iterator[dict[str, str]]:\n    iterator = iter(lines)\n    header: list[str] | None = None\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        header = [cell.strip() for cell in line.split(',')]\n        break\n    if header is None:\n        return\n    for raw in iterator:\n        line = raw.strip()\n        if not line:\n            continue\n        cells = [cell.strip() for cell in line.split(',')]\n        yield dict(zip(header, cells))\n",
+    "id": "streaming_csv_parser",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef parse_csv_rows(lines, normalize_header=None):\n    header = None\n    for raw in lines:\n        text = raw.strip()\n        if not text:\n            continue\n        if header is None:\n            names = [part.strip() for part in text.split(',')]\n            if normalize_header is not None:\n                names = [normalize_header(name) for name in names]\n            header = names\n            continue\n        values = [part.strip() for part in text.split(',')]\n        yield {header[index]: values[index] for index in range(min(len(header), len(values)))}\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef parse_csv_rows(lines):\n    header = None\n    for raw in lines:\n        text = raw.strip()\n        if not text:\n            continue\n        if header is None:\n            header = [part.strip() for part in text.split(',')]\n            continue\n        values = [part.strip() for part in text.split(',')]\n        yield {header[index]: values[index] for index in range(min(len(header), len(values)))}\n",
+    "prompt": "Implement parse_csv_rows(lines: iterable[str]) -> iterator[dict[str, str]].\n\nThe first non-empty line is a comma-separated header. Each later non-empty line\nis a row. Yield dictionaries from header names to cell values. Preserve streaming\nbehavior: do not convert the input iterable to a list.\n",
+    "tags": [
+      "async",
+      "streaming",
+      "csv",
+      "day2-hard"
+    ],
+    "test_code": "from solution import parse_csv_rows\n\n\ndef test_parses_rows_lazily():\n    consumed = []\n\n    def lines():\n        for line in ['name,age', 'Ada,36', 'Grace,40']:\n            consumed.append(line)\n            yield line\n\n    rows = parse_csv_rows(lines())\n    assert next(rows) == {'name': 'Ada', 'age': '36'}\n    assert consumed == ['name,age', 'Ada,36']\n    assert list(rows) == [{'name': 'Grace', 'age': '40'}]\n"
+  },
+  "task_id": "streaming_csv_parser",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

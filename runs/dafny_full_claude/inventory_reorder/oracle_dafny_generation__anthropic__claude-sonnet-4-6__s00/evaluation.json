@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 4,
+    "error_count": null,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 4,
+      "exists": 0,
+      "forall": 0,
+      "if": 4,
+      "invariant": 4,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 4,
+      "while": 3
+    },
+    "lexical_proof_complexity": 20,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 4,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 67,
+    "source_token_estimate": 471,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.02,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python, and therefore completely fails to satisfy the functional requirement of implementing a Python function `reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict]`. The entry point signature, input types, and output types are all wrong. The code cannot be executed as Python, would cause a syntax error, and does not address the actual task interface at all. While the Dafny logic itself appears structurally sound and shows understanding of the algorithmic intent, it is the wrong language, wrong signature, and wrong data structures for the task. This is severe architectural slop \u2014 submitting Dafny pseudocode instead of a working Python implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python, and therefore completely fails to satisfy the functional requirement of implementing a Python function `reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict]`. The entry point signature, input types, and output types are all wrong. The code cannot be executed as Python, would cause a syntax error, and does not address the actual task interface at all. While the Dafny logic itself appears structurally sound and shows understanding of the algorithmic intent, it is the wrong language, wrong signature, and wrong data structures for the task. This is severe architectural slop \u2014 submitting Dafny pseudocode instead of a working Python implementation.\",\n  \"strengths\": [\n    \"Demonstrates correct algorithmic logic for rounding up to nearest case_pack multiple\",\n    \"Shows awareness of the sorting requirement and velocity filtering\",\n    \"Includes formal pre/post conditions that reflect the problem constraints\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Wrong function signature: takes parallel sequences instead of list[dict] and dict[str, int]\",\n    \"Returns parallel sequences instead of list[dict] with 'sku' and 'reorder_quantity' keys\",\n    \"Malformed item skipping logic is absent (no handling of missing keys)\",\n    \"Cannot be imported or called as reorder_plan(items, sales_velocity) in any Python context\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates correct algorithmic logic for rounding up to nearest case_pack multiple",
+      "Shows awareness of the sorting requirement and velocity filtering",
+      "Includes formal pre/post conditions that reflect the problem constraints"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Wrong function signature: takes parallel sequences instead of list[dict] and dict[str, int]",
+      "Returns parallel sequences instead of list[dict] with 'sku' and 'reorder_quantity' keys",
+      "Malformed item skipping logic is absent (no handling of missing keys)",
+      "Cannot be imported or called as reorder_plan(items, sales_velocity) in any Python context"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 475,
+      "prompt": 340,
+      "total": 815,
+      "turns": [
+        {
+          "completion": 475,
+          "prompt": 340,
+          "total": 815
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "inventory_reorder",
+  "variant": "oracle_dafny_generation"
+}

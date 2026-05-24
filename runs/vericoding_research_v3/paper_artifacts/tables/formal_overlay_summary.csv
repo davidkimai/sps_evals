@@ -1,0 +1,7 @@
+created_at,formal_slice_row_id,hidden_pass,program_version,property_oracle,property_pass,review_boundary_only,split,surface,task_id,visible_pass
+2026-05-19T01:24:45Z,fdea5ab0cb22b91e54,True,vericoding_research_v3,executable_review_boundary_overlay,True,True,confirmatory,internal,timing_safe_compare,True
+2026-05-19T01:24:45Z,01b2c008610405c8c0,True,vericoding_research_v3,executable_review_boundary_overlay,True,True,confirmatory,internal,token_bucket_enforcer,True
+2026-05-19T01:24:45Z,a6727520d8afe2e1e6,True,vericoding_research_v3,executable_review_boundary_overlay,True,True,confirmatory,internal,permission_gate,True
+2026-05-19T01:24:45Z,c7f3719b510cf6f646,True,vericoding_research_v3,executable_review_boundary_overlay,True,True,confirmatory,secure,parser_validator_edges,True
+2026-05-19T01:24:45Z,9d485e027e9d90f21e,True,vericoding_research_v3,executable_review_boundary_overlay,True,True,confirmatory,secure,authorization_rule_sequence,True
+2026-05-19T01:24:45Z,dbfba0c887f36bb01f,True,vericoding_research_v3,executable_review_boundary_overlay,True,True,confirmatory,secure,token_scope_checker,True

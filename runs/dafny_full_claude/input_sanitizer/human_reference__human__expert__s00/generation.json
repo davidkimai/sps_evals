@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]:\n    clean: list[str] = []\n    seen: set[str] = set()\n    for field in fields:\n        if field in seen:\n            continue\n        if field not in allowed:\n            continue\n        if not field.replace('_', '').isalnum():\n            continue\n        seen.add(field)\n        clean.append(field)\n    return clean\n",
+  "effective_temperature": null,
+  "entry_point": "sanitize_fields",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]:\n    clean: list[str] = []\n    seen: set[str] = set()\n    for field in fields:\n        if field in seen:\n            continue\n        if field not in allowed:\n            continue\n        if not field.replace('_', '').isalnum():\n            continue\n        seen.add(field)\n        clean.append(field)\n    return clean\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend sanitize_fields with length_caps: dict[str, int] | None = None. If a field\nhas a cap and its name is longer than the cap, omit it. Preserve old behavior\nwhen omitted.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import sanitize_fields\n\n\ndef test_length_caps_are_field_specific():\n    fields = ['name', 'long_field', 'age']\n    allowed = {'name', 'long_field', 'age'}\n    assert sanitize_fields(fields, allowed, length_caps={'long_field': 5}) == ['name', 'age']\n    assert sanitize_fields(fields, allowed) == fields\n",
+    "entry_point": "sanitize_fields",
+    "human_reference": "from __future__ import annotations\n\n\ndef sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]:\n    clean: list[str] = []\n    seen: set[str] = set()\n    for field in fields:\n        if field in seen:\n            continue\n        if field not in allowed:\n            continue\n        if not field.replace('_', '').isalnum():\n            continue\n        seen.add(field)\n        clean.append(field)\n    return clean\n",
+    "id": "input_sanitizer",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef sanitize_fields(fields, allowed, length_caps=None):\n    output = []\n    caps = length_caps or {}\n    for field in fields:\n        if field in output or field not in allowed:\n            continue\n        if not all(char.isalnum() or char == '_' for char in field):\n            continue\n        if field in caps and len(field) > caps[field]:\n            continue\n        output.append(field)\n    return output\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef sanitize_fields(fields, allowed):\n    output = []\n    for field in fields:\n        if field in allowed and field not in output:\n            ok = True\n            for char in field:\n                if not (char.isalnum() or char == '_'):\n                    ok = False\n            if ok:\n                output.append(field)\n    return output\n",
+    "prompt": "Implement sanitize_fields(fields: list[str], allowed: set[str]) -> list[str].\nReturn fields that are in allowed and contain only letters, digits, and underscores.\nPreserve input order and remove duplicates.\n",
+    "tags": [
+      "reliability_critical",
+      "validation",
+      "day2-hard"
+    ],
+    "test_code": "from solution import sanitize_fields\n\n\ndef test_whitelist_and_identifier_filter():\n    assert sanitize_fields(['name', 'bad-field', 'age', 'name', 'role'], {'name', 'age'}) == ['name', 'age']\n"
+  },
+  "task_id": "input_sanitizer",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

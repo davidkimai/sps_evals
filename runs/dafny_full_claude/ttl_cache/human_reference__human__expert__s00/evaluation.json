@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, direct, and well-structured. It uses OrderedDict as the natural standard-library construct for LRU tracking, keeps the two public methods short and readable, validates inputs with a clear error, and makes the clock injectable without over-engineering. Data movement is explicit (move_to_end, popitem), there is no hidden mutation or global state, and the code is sparse enough to audit locally in one pass. The only minor quibbles are that the `set` method calls `move_to_end` redundantly when the key is new (assignment already places it at the end in Python 3.7+ OrderedDict), and the type annotations import `Callable` and `Any` from two separate modules when a simpler `Optional[Callable]` or even a plain comment would suffice \u2014 but these are trivial nits that don't affect structural quality meaningfully.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, direct, and well-structured. It uses OrderedDict as the natural standard-library construct for LRU tracking, keeps the two public methods short and readable, validates inputs with a clear error, and makes the clock injectable without over-engineering. Data movement is explicit (move_to_end, popitem), there is no hidden mutation or global state, and the code is sparse enough to audit locally in one pass. The only minor quibbles are that the `set` method calls `move_to_end` redundantly when the key is new (assignment already places it at the end in Python 3.7+ OrderedDict), and the type annotations import `Callable` and `Any` from two separate modules when a simpler `Optional[Callable]` or even a plain comment would suffice \u2014 but these are trivial nits that don't affect structural quality meaningfully.\",\n  \"strengths\": [\n    \"Uses OrderedDict, the idiomatic standard-library tool for LRU, with no clever metaprogramming\",\n    \"Input validation raises a clear ValueError immediately rather than failing silently later\",\n    \"Clock is injected via a simple keyword argument, making the class trivially testable\",\n    \"Control flow is flat: guard clauses in get() avoid nesting\",\n    \"Data movement (move_to_end, popitem) is explicit and locally auditable\",\n    \"No speculative abstractions or unused extension points\"\n  ],\n  \"weaknesses\": [\n    \"Redundant move_to_end call in set() for newly inserted keys (already at end)\",\n    \"Minor: importing both Callable from collections.abc and Any from typing adds a small noise line that could be simplified\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Uses OrderedDict, the idiomatic standard-library tool for LRU, with no clever metaprogramming",
+      "Input validation raises a clear ValueError immediately rather than failing silently later",
+      "Clock is injected via a simple keyword argument, making the class trivially testable",
+      "Control flow is flat: guard clauses in get() avoid nesting",
+      "Data movement (move_to_end, popitem) is explicit and locally auditable",
+      "No speculative abstractions or unused extension points"
+    ],
+    "weaknesses": [
+      "Redundant move_to_end call in set() for newly inserted keys (already at end)",
+      "Minor: importing both Callable from collections.abc and Any from typing adds a small noise line that could be simplified"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 3.759,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.01s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 3.25,
+    "cyclomatic_complexity_max": 4,
+    "cyclomatic_complexity_total": 13,
+    "function_count": 3,
+    "loc": 28,
+    "maintainability_index": 52.639,
+    "max_nesting_depth": 1,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "ttl_cache",
+  "variant": "human_reference"
+}

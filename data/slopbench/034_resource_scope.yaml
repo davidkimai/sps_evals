@@ -1,0 +1,128 @@
+id: resource_scope
+entry_point: ResourceScope
+tags: [object_lifecycle, context_manager, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement ResourceScope as a context manager. acquire(resource) records a resource
+  and returns it. On context exit, close tracked resources in reverse acquisition
+  order, including when an exception occurs.
+test_code: |
+  from solution import ResourceScope
+
+
+  class Resource:
+      def __init__(self, name, log):
+          self.name = name
+          self.log = log
+      def close(self):
+          self.log.append(self.name)
+
+
+  def test_closes_reverse_order_on_exception():
+      log = []
+      try:
+          with ResourceScope() as scope:
+              scope.acquire(Resource('first', log))
+              scope.acquire(Resource('second', log))
+              raise RuntimeError('boom')
+      except RuntimeError:
+          pass
+      assert log == ['second', 'first']
+day2_prompt: |
+  Add release(resource) that closes and removes a specific tracked resource before
+  scope exit. Releasing an untracked resource should raise ValueError.
+day2_test_code: |
+  import pytest
+
+  from solution import ResourceScope
+
+
+  class Resource:
+      def __init__(self, name, log):
+          self.name = name
+          self.log = log
+      def close(self):
+          self.log.append(self.name)
+
+
+  def test_partial_release_prevents_double_close():
+      log = []
+      with ResourceScope() as scope:
+          one = scope.acquire(Resource('one', log))
+          two = scope.acquire(Resource('two', log))
+          scope.release(one)
+      assert log == ['one', 'two']
+
+      with pytest.raises(ValueError):
+          ResourceScope().release(Resource('x', []))
+human_reference: |
+  from __future__ import annotations
+
+
+  class ResourceScope:
+      def __init__(self) -> None:
+          self._resources: list[object] = []
+
+      def __enter__(self):
+          return self
+
+      def acquire(self, resource):
+          self._resources.append(resource)
+          return resource
+
+      def __exit__(self, exc_type, exc, tb) -> bool:
+          while self._resources:
+              resource = self._resources.pop()
+              close = getattr(resource, 'close', None)
+              if close is not None:
+                  close()
+          return False
+mock_solution: |
+  from __future__ import annotations
+
+
+  class ResourceScope:
+      def __init__(self):
+          self.resources = []
+
+      def __enter__(self):
+          return self
+
+      def acquire(self, resource):
+          self.resources.append(resource)
+          return resource
+
+      def __exit__(self, exc_type, exc, tb):
+          for resource in reversed(self.resources):
+              if hasattr(resource, 'close'):
+                  resource.close()
+          self.resources.clear()
+          return False
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  class ResourceScope:
+      def __init__(self):
+          self.resources = []
+
+      def __enter__(self):
+          return self
+
+      def acquire(self, resource):
+          self.resources.append(resource)
+          return resource
+
+      def release(self, resource):
+          if resource not in self.resources:
+              raise ValueError('resource is not tracked')
+          self.resources.remove(resource)
+          if hasattr(resource, 'close'):
+              resource.close()
+
+      def __exit__(self, exc_type, exc, tb):
+          for resource in reversed(self.resources):
+              if hasattr(resource, 'close'):
+                  resource.close()
+          self.resources.clear()
+          return False

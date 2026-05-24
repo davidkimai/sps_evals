@@ -1,0 +1,40 @@
+{
+  "artifact_language": "python",
+  "code": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    resolved = dict(defaults)\n    for segment_name in user.get(\"segments\", []):\n        resolved.update(segments.get(segment_name, {}))\n    resolved.update(user.get(\"overrides\", {}))\n    return resolved\n",
+  "effective_temperature": null,
+  "entry_point": "resolve_flags",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    resolved = dict(defaults)\n    for segment_name in user.get(\"segments\", []):\n        resolved.update(segments.get(segment_name, {}))\n    resolved.update(user.get(\"overrides\", {}))\n    return resolved\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add explain_flags(defaults, segments, user) -> dict[str, dict]. It should\nreturn each final flag value with the source that last changed it:\n{\"flag\": {\"value\": bool, \"source\": str}} where source is default,\nsegment:<name>, or user_override.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import explain_flags, resolve_flags\n\n\ndef test_explain_flags_reports_last_source():\n    defaults = {\"search\": False, \"billing\": False}\n    segments = {\"beta\": {\"search\": True}}\n    user = {\"segments\": [\"beta\"], \"overrides\": {\"billing\": True}}\n\n    assert resolve_flags(defaults, segments, user) == {\"search\": True, \"billing\": True}\n    assert explain_flags(defaults, segments, user) == {\n        \"search\": {\"value\": True, \"source\": \"segment:beta\"},\n        \"billing\": {\"value\": True, \"source\": \"user_override\"},\n    }\n",
+    "entry_point": "resolve_flags",
+    "human_reference": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    resolved = dict(defaults)\n    for segment_name in user.get(\"segments\", []):\n        resolved.update(segments.get(segment_name, {}))\n    resolved.update(user.get(\"overrides\", {}))\n    return resolved\n",
+    "id": "feature_flag_matrix",
+    "mock_day2_solution": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    return {key: value[\"value\"] for key, value in explain_flags(defaults, segments, user).items()}\n\n\ndef explain_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, dict]:\n    explained = {\n        key: {\"value\": value, \"source\": \"default\"}\n        for key, value in defaults.items()\n    }\n    for segment_name in user.get(\"segments\", []):\n        for key, value in segments.get(segment_name, {}).items():\n            explained[key] = {\"value\": value, \"source\": f\"segment:{segment_name}\"}\n    for key, value in user.get(\"overrides\", {}).items():\n        explained[key] = {\"value\": value, \"source\": \"user_override\"}\n    return explained\n",
+    "mock_solution": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    resolved = dict(defaults)\n    for segment_name in user.get(\"segments\", []):\n        resolved.update(segments.get(segment_name, {}))\n    resolved.update(user.get(\"overrides\", {}))\n    return resolved\n",
+    "prompt": "Implement resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool].\n\nStart from defaults. user may contain \"segments\", a list of segment names.\nApply segment overrides in the order listed on the user, ignoring unknown\nsegments. Then apply user[\"overrides\"] if present. Return a new dictionary and\ndo not mutate inputs.\n",
+    "tags": [
+      "config_parsing",
+      "policy",
+      "json"
+    ],
+    "test_code": "from solution import resolve_flags\n\n\ndef test_resolve_flags_applies_segments_in_user_order():\n    defaults = {\"search\": False, \"billing\": False}\n    segments = {\n        \"beta\": {\"search\": True},\n        \"finance\": {\"billing\": True, \"search\": False},\n    }\n    user = {\"segments\": [\"beta\", \"finance\"], \"overrides\": {\"search\": True}}\n\n    assert resolve_flags(defaults, segments, user) == {\"search\": True, \"billing\": True}\n    assert defaults == {\"search\": False, \"billing\": False}\n"
+  },
+  "task_id": "feature_flag_matrix",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

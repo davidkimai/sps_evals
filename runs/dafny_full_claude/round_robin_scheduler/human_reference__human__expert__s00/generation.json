@@ -1,0 +1,40 @@
+{
+  "artifact_language": "python",
+  "code": "def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    assignments = []\n    for index, job in enumerate(jobs):\n        assignments.append({\"job\": job, \"worker\": enabled[index % len(enabled)]})\n    return assignments\n",
+  "effective_temperature": null,
+  "entry_point": "assign_round_robin",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    assignments = []\n    for index, job in enumerate(jobs):\n        assignments.append({\"job\": job, \"worker\": enabled[index % len(enabled)]})\n    return assignments\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add optional capacities: dict[str, int] | None = None. When provided, a worker\nmay receive at most its capacity. Workers missing from capacities have no cap.\nUnassigned overflow jobs should be omitted.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import assign_round_robin\n\n\ndef test_capacities_omit_overflow_jobs():\n    workers = [{\"name\": \"a\"}, {\"name\": \"b\"}]\n    rows = assign_round_robin(workers, [\"j1\", \"j2\", \"j3\", \"j4\"], capacities={\"a\": 1, \"b\": 2})\n    assert rows == [\n        {\"job\": \"j1\", \"worker\": \"a\"},\n        {\"job\": \"j2\", \"worker\": \"b\"},\n        {\"job\": \"j3\", \"worker\": \"b\"},\n    ]\n",
+    "entry_point": "assign_round_robin",
+    "human_reference": "def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    assignments = []\n    for index, job in enumerate(jobs):\n        assignments.append({\"job\": job, \"worker\": enabled[index % len(enabled)]})\n    return assignments\n",
+    "id": "round_robin_scheduler",
+    "mock_day2_solution": "def assign_round_robin(\n    workers: list[dict],\n    jobs: list[str],\n    capacities: dict[str, int] | None = None,\n) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    capacities = capacities or {}\n    used = {name: 0 for name in enabled}\n    assignments = []\n    cursor = 0\n    for job in jobs:\n        chosen = _next_available(enabled, capacities, used, cursor)\n        if chosen is None:\n            break\n        worker, cursor = chosen\n        used[worker] += 1\n        assignments.append({\"job\": job, \"worker\": worker})\n    return assignments\n\n\ndef _next_available(enabled, capacities, used, cursor):\n    for offset in range(len(enabled)):\n        index = (cursor + offset) % len(enabled)\n        worker = enabled[index]\n        cap = capacities.get(worker)\n        if cap is None or used[worker] < cap:\n            return worker, (index + 1) % len(enabled)\n    return None\n",
+    "mock_solution": "def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    assignments = []\n    for index, job in enumerate(jobs):\n        assignments.append({\"job\": job, \"worker\": enabled[index % len(enabled)]})\n    return assignments\n",
+    "prompt": "Implement assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict].\n\nEach worker has \"name\" and optional \"enabled\" fields. Enabled defaults to\nTrue. Assign jobs in input order to enabled workers in round-robin order.\nReturn rows shaped as {\"job\": str, \"worker\": str}. Raise ValueError if there\nare no enabled workers. Do not mutate inputs.\n",
+    "tags": [
+      "state_machine",
+      "scheduling",
+      "cli_tool"
+    ],
+    "test_code": "import pytest\n\nfrom solution import assign_round_robin\n\n\ndef test_assign_round_robin_skips_disabled_workers():\n    workers = [\n        {\"name\": \"a\"},\n        {\"name\": \"b\", \"enabled\": False},\n        {\"name\": \"c\"},\n    ]\n    assert assign_round_robin(workers, [\"j1\", \"j2\", \"j3\", \"j4\"]) == [\n        {\"job\": \"j1\", \"worker\": \"a\"},\n        {\"job\": \"j2\", \"worker\": \"c\"},\n        {\"job\": \"j3\", \"worker\": \"a\"},\n        {\"job\": \"j4\", \"worker\": \"c\"},\n    ]\n\n\ndef test_assign_round_robin_requires_enabled_worker():\n    with pytest.raises(ValueError):\n        assign_round_robin([{\"name\": \"a\", \"enabled\": False}], [\"j\"])\n"
+  },
+  "task_id": "round_robin_scheduler",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

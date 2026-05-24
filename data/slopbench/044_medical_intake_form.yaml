@@ -1,0 +1,84 @@
+id: medical_intake_form
+entry_point: validate_intake
+tags: [custom_spec, clinical, day2-hard]
+day2_stressors: [error_surface_expansion, audit_provenance, backwards_compatibility]
+custom_spec_override: |
+  Clinical Data Standard CD-7:
+  - Validate every required field before accepting any field into the output.
+  - Error messages must name the field that failed validation.
+  - Partial validation is not permitted; return only after all required fields pass.
+prompt: |
+  Implement validate_intake(payload: dict) -> dict. Required fields: patient_id str,
+  age int >= 0, and symptoms list[str]. Validate all fields and return a clean dict.
+  Raise ValueError naming the bad field.
+test_code: |
+  import pytest
+
+  from solution import validate_intake
+
+
+  def test_validates_required_clinical_fields():
+      assert validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': ['cough']}) == {'patient_id': 'p1', 'age': 30, 'symptoms': ['cough']}
+      with pytest.raises(ValueError, match='age'):
+          validate_intake({'patient_id': 'p1', 'age': -1, 'symptoms': []})
+day2_prompt: |
+  Extend validate_intake with optional_fields: dict[str, callable] | None = None.
+  Validate optional fields only if present, and include them in the output when valid.
+  Errors must name the optional field.
+day2_test_code: |
+  import pytest
+
+  from solution import validate_intake
+
+
+  def test_optional_field_validators():
+      row = validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': [], 'height_cm': 180}, optional_fields={'height_cm': lambda value: isinstance(value, int) and value > 0})
+      assert row['height_cm'] == 180
+      with pytest.raises(ValueError, match='height_cm'):
+          validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': [], 'height_cm': 0}, optional_fields={'height_cm': lambda value: value > 0})
+human_reference: |
+  from __future__ import annotations
+
+
+  def validate_intake(payload: dict) -> dict:
+      errors = []
+      if not isinstance(payload.get('patient_id'), str) or not payload.get('patient_id'):
+          errors.append('patient_id')
+      if not isinstance(payload.get('age'), int) or payload.get('age') < 0:
+          errors.append('age')
+      symptoms = payload.get('symptoms')
+      if not isinstance(symptoms, list) or not all(isinstance(item, str) for item in symptoms):
+          errors.append('symptoms')
+      if errors:
+          raise ValueError(', '.join(errors))
+      return {'patient_id': payload['patient_id'], 'age': payload['age'], 'symptoms': list(symptoms)}
+mock_solution: |
+  from __future__ import annotations
+
+
+  def validate_intake(payload):
+      if not isinstance(payload.get('patient_id'), str) or payload.get('patient_id') == '':
+          raise ValueError('patient_id')
+      if not isinstance(payload.get('age'), int) or payload.get('age') < 0:
+          raise ValueError('age')
+      if not isinstance(payload.get('symptoms'), list) or any(not isinstance(item, str) for item in payload.get('symptoms')):
+          raise ValueError('symptoms')
+      return {'patient_id': payload['patient_id'], 'age': payload['age'], 'symptoms': list(payload['symptoms'])}
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def validate_intake(payload, optional_fields=None):
+      if not isinstance(payload.get('patient_id'), str) or payload.get('patient_id') == '':
+          raise ValueError('patient_id')
+      if not isinstance(payload.get('age'), int) or payload.get('age') < 0:
+          raise ValueError('age')
+      if not isinstance(payload.get('symptoms'), list) or any(not isinstance(item, str) for item in payload.get('symptoms')):
+          raise ValueError('symptoms')
+      out = {'patient_id': payload['patient_id'], 'age': payload['age'], 'symptoms': list(payload['symptoms'])}
+      for field, validator in (optional_fields or {}).items():
+          if field in payload:
+              if not validator(payload[field]):
+                  raise ValueError(field)
+              out[field] = payload[field]
+      return out

@@ -1,0 +1,38 @@
+{
+  "applies_to": "selected_final_artifacts",
+  "auto_accept": {
+    "all_required": [
+      "visible_evaluator_passes",
+      "hidden_evaluator_passes",
+      "no_secure_blocker",
+      "no_regression_blocker",
+      "no_unresolved_high_severity_review_blocker"
+    ]
+  },
+  "auto_reject": {
+    "any_required": [
+      "parse_failure",
+      "runtime_failure",
+      "visible_failure",
+      "hidden_executable_failure",
+      "secure_false_accept_condition",
+      "regression_blocker"
+    ]
+  },
+  "created_at": "2026-05-19T08:42:51Z",
+  "decisions": [
+    "auto_accept",
+    "auto_reject",
+    "escalate_to_review"
+  ],
+  "escalate_to_review": {
+    "any_required": [
+      "spec_ambiguity",
+      "wrapper_runtime_tcb_dependency",
+      "assumption_gap",
+      "high_review_burden",
+      "formal_or_review_boundary_concern"
+    ]
+  },
+  "schema": "specoracle.vericoding.v3.triage_policy_freeze.v1"
+}

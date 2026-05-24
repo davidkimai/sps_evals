@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "_MISSING = object()\n\n\ndef extract_fields(record: dict, paths: dict[str, str], default=None) -> dict:\n    result = {}\n    for output_key, path in paths.items():\n        value = _resolve_path(record, path)\n        result[output_key] = default if value is _MISSING else value\n    return result\n\n\ndef _resolve_path(value, path: str):\n    current = value\n    for segment in path.split(\".\"):\n        if isinstance(current, dict):\n            if segment not in current:\n                return _MISSING\n            current = current[segment]\n        elif isinstance(current, list) and segment.isdigit():\n            index = int(segment)\n            if index >= len(current):\n                return _MISSING\n            current = current[index]\n        else:\n            return _MISSING\n    return current\n",
+  "effective_temperature": null,
+  "entry_point": "extract_fields",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "_MISSING = object()\n\n\ndef extract_fields(record: dict, paths: dict[str, str], default=None) -> dict:\n    result = {}\n    for output_key, path in paths.items():\n        value = _resolve_path(record, path)\n        result[output_key] = default if value is _MISSING else value\n    return result\n\n\ndef _resolve_path(value, path: str):\n    current = value\n    for segment in path.split(\".\"):\n        if isinstance(current, dict):\n            if segment not in current:\n                return _MISSING\n            current = current[segment]\n        elif isinstance(current, list) and segment.isdigit():\n            index = int(segment)\n            if index >= len(current):\n                return _MISSING\n            current = current[index]\n        else:\n            return _MISSING\n    return current\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add an optional required: set[str] | None = None argument. If an output key is\nin required and its path cannot be resolved, raise KeyError for that output\nkey instead of returning default.\n",
+    "day2_stressors": [
+      "error_surface_expansion",
+      "parameter_threading",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import extract_fields\n\n\ndef test_required_paths_raise_key_error():\n    record = {\"user\": {\"id\": \"u1\"}}\n    assert extract_fields(record, {\"id\": \"user.id\"}, required={\"id\"}) == {\"id\": \"u1\"}\n    with pytest.raises(KeyError):\n        extract_fields(record, {\"name\": \"user.name\"}, default=None, required={\"name\"})\n",
+    "entry_point": "extract_fields",
+    "human_reference": "_MISSING = object()\n\n\ndef extract_fields(record: dict, paths: dict[str, str], default=None) -> dict:\n    result = {}\n    for output_key, path in paths.items():\n        value = _resolve_path(record, path)\n        result[output_key] = default if value is _MISSING else value\n    return result\n\n\ndef _resolve_path(value, path: str):\n    current = value\n    for segment in path.split(\".\"):\n        if isinstance(current, dict):\n            if segment not in current:\n                return _MISSING\n            current = current[segment]\n        elif isinstance(current, list) and segment.isdigit():\n            index = int(segment)\n            if index >= len(current):\n                return _MISSING\n            current = current[index]\n        else:\n            return _MISSING\n    return current\n",
+    "id": "json_path_projection",
+    "mock_day2_solution": "_MISSING = object()\n\n\ndef extract_fields(\n    record: dict,\n    paths: dict[str, str],\n    default=None,\n    required: set[str] | None = None,\n) -> dict:\n    required = required or set()\n    result = {}\n    for output_key, path in paths.items():\n        value = _resolve_path(record, path)\n        if value is _MISSING and output_key in required:\n            raise KeyError(output_key)\n        result[output_key] = default if value is _MISSING else value\n    return result\n\n\ndef _resolve_path(value, path: str):\n    current = value\n    for segment in path.split(\".\"):\n        if isinstance(current, dict):\n            if segment not in current:\n                return _MISSING\n            current = current[segment]\n        elif isinstance(current, list) and segment.isdigit():\n            index = int(segment)\n            if index >= len(current):\n                return _MISSING\n            current = current[index]\n        else:\n            return _MISSING\n    return current\n",
+    "mock_solution": "_MISSING = object()\n\n\ndef extract_fields(record: dict, paths: dict[str, str], default=None) -> dict:\n    result = {}\n    for output_key, path in paths.items():\n        value = _resolve_path(record, path)\n        result[output_key] = default if value is _MISSING else value\n    return result\n\n\ndef _resolve_path(value, path: str):\n    current = value\n    for segment in path.split(\".\"):\n        if isinstance(current, dict):\n            if segment not in current:\n                return _MISSING\n            current = current[segment]\n        elif isinstance(current, list) and segment.isdigit():\n            index = int(segment)\n            if index >= len(current):\n                return _MISSING\n            current = current[index]\n        else:\n            return _MISSING\n    return current\n",
+    "prompt": "Implement extract_fields(record: dict, paths: dict[str, str], default=None) -> dict.\n\nEach path is dot-separated and may include integer list indexes, such as\n\"orders.0.total\". Return a dictionary mapping each output key to the extracted\nvalue. If a path cannot be resolved, use default. Do not mutate the input.\n",
+    "tags": [
+      "json",
+      "config_parsing",
+      "edge-cases",
+      "day2-hard"
+    ],
+    "test_code": "from solution import extract_fields\n\n\ndef test_extract_fields_handles_dicts_lists_and_defaults():\n    record = {\n        \"user\": {\"id\": \"u1\", \"profile\": {\"name\": \"Ada\"}},\n        \"orders\": [{\"total\": 30}, {\"total\": 40}],\n    }\n    paths = {\n        \"user_id\": \"user.id\",\n        \"name\": \"user.profile.name\",\n        \"first_total\": \"orders.0.total\",\n        \"missing\": \"orders.3.total\",\n    }\n    assert extract_fields(record, paths, default=\"NA\") == {\n        \"user_id\": \"u1\",\n        \"name\": \"Ada\",\n        \"first_total\": 30,\n        \"missing\": \"NA\",\n    }\n"
+  },
+  "task_id": "json_path_projection",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

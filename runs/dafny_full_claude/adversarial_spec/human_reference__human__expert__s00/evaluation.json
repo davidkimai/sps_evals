@@ -1,0 +1,57 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is functionally correct and actually represents good Pythonic style (flat dict lookup, no repetition, readable), but it directly violates the informal structural spec LT-11 which explicitly requires every transition to be represented by a local variable named branch_<state>_<event> and favors auditable branch labels over minimizing decision count. The dict-based approach, while clean by general Python standards, completely ignores the mandated naming convention and explicit labeled branch variable requirement. There are no branch_idle_start, branch_running_stop, branch_running_fail, or branch_failed_reset local variables anywhere in the code.",
+    "raw_response": "{\n  \"score\": 2,\n  \"rationale\": \"The candidate implementation is functionally correct and actually represents good Pythonic style (flat dict lookup, no repetition, readable), but it directly violates the informal structural spec LT-11 which explicitly requires every transition to be represented by a local variable named branch_<state>_<event> and favors auditable branch labels over minimizing decision count. The dict-based approach, while clean by general Python standards, completely ignores the mandated naming convention and explicit labeled branch variable requirement. There are no branch_idle_start, branch_running_stop, branch_running_fail, or branch_failed_reset local variables anywhere in the code.\",\n  \"strengths\": [\n    \"Functionally correct for all specified transitions including unknown-transition fallback\",\n    \"Concise and idiomatic Python \u2014 good general code quality\",\n    \"Single dict lookup is O(1) and easy to extend\"\n  ],\n  \"weaknesses\": [\n    \"Completely ignores the LT-11 requirement for explicit branch_<state>_<event> local variables\",\n    \"No auditable labeled branches as mandated by the structural spec\",\n    \"The entire architectural intent of the spec (explicit, locally auditable branch labels) is bypassed in favor of a compact data structure\"\n  ]\n}",
+    "score": 2,
+    "skipped": false,
+    "strengths": [
+      "Functionally correct for all specified transitions including unknown-transition fallback",
+      "Concise and idiomatic Python \u2014 good general code quality",
+      "Single dict lookup is O(1) and easy to extend"
+    ],
+    "weaknesses": [
+      "Completely ignores the LT-11 requirement for explicit branch_<state>_<event> local variables",
+      "No auditable labeled branches as mandated by the structural spec",
+      "The entire architectural intent of the spec (explicit, locally auditable branch labels) is bypassed in favor of a compact data structure"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Legacy Telemetry Standard LT-11:\n- Every state transition must be represented by an explicit labeled branch variable.\n- Branch labels must be local variables named branch_<state>_<event>.\n- The implementation should favor auditable branch labels over minimizing decision count.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 4.868,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 1.0,
+    "cyclomatic_complexity_max": 1,
+    "cyclomatic_complexity_total": 1,
+    "function_count": 1,
+    "loc": 4,
+    "maintainability_index": 100.0,
+    "max_nesting_depth": 0,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "adversarial_spec",
+  "variant": "human_reference"
+}

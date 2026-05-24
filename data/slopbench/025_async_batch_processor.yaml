@@ -1,0 +1,115 @@
+id: async_batch_processor
+entry_point: process_in_batches
+tags: [async, batching, day2-hard]
+day2_stressors: [parameter_threading, cross_function_state, backwards_compatibility]
+prompt: |
+  Implement async process_in_batches(items, handler, *, batch_size: int, concurrency: int) -> list.
+  Split items into batches of batch_size. Run at most concurrency handler calls at
+  once. The async handler receives one batch and returns a list of results.
+  Return flattened results in batch order. Reject non-positive batch_size or concurrency.
+test_code: |
+  import asyncio
+
+  from solution import process_in_batches
+
+
+  def test_processes_batches_in_order():
+      async def handler(batch):
+          return [item * 2 for item in batch]
+
+      result = asyncio.run(process_in_batches([1, 2, 3, 4, 5], handler, batch_size=2, concurrency=2))
+      assert result == [2, 4, 6, 8, 10]
+day2_prompt: |
+  Extend process_in_batches with cancel_event: asyncio.Event | None = None. Before
+  starting each batch, stop scheduling additional batches if cancel_event is set.
+  Return results from already completed scheduled batches. Preserve old behavior
+  when cancel_event is omitted.
+day2_test_code: |
+  import asyncio
+
+  from solution import process_in_batches
+
+
+  def test_cancellation_event_stops_later_batches():
+      async def _run():
+          event = asyncio.Event()
+
+          async def handler(batch):
+              event.set()
+              return list(batch)
+
+          return await process_in_batches([1, 2, 3, 4], handler, batch_size=2, concurrency=1, cancel_event=event)
+
+      assert asyncio.run(_run()) == [1, 2]
+human_reference: |
+  from __future__ import annotations
+
+  import asyncio
+  from collections.abc import Awaitable, Callable, Sequence
+  from typing import Any
+
+
+  async def process_in_batches(
+      items: Sequence[Any],
+      handler: Callable[[list[Any]], Awaitable[list[Any]]],
+      *,
+      batch_size: int,
+      concurrency: int,
+  ) -> list[Any]:
+      if batch_size <= 0 or concurrency <= 0:
+          raise ValueError('batch_size and concurrency must be positive')
+      batches = [list(items[index:index + batch_size]) for index in range(0, len(items), batch_size)]
+      semaphore = asyncio.Semaphore(concurrency)
+
+      async def run_batch(batch: list[Any]) -> list[Any]:
+          async with semaphore:
+              return await handler(batch)
+
+      nested = await asyncio.gather(*(run_batch(batch) for batch in batches))
+      return [item for batch in nested for item in batch]
+mock_solution: |
+  from __future__ import annotations
+
+  import asyncio
+
+
+  async def process_in_batches(items, handler, *, batch_size: int, concurrency: int):
+      if batch_size <= 0 or concurrency <= 0:
+          raise ValueError('batch_size and concurrency must be positive')
+      sem = asyncio.Semaphore(concurrency)
+      groups = []
+      for start in range(0, len(items), batch_size):
+          groups.append(list(items[start:start + batch_size]))
+
+      async def call(group):
+          async with sem:
+              return await handler(group)
+
+      answers = await asyncio.gather(*[call(group) for group in groups])
+      merged = []
+      for answer in answers:
+          merged.extend(answer)
+      return merged
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import asyncio
+
+
+  async def process_in_batches(items, handler, *, batch_size: int, concurrency: int, cancel_event=None):
+      if batch_size <= 0 or concurrency <= 0:
+          raise ValueError('batch_size and concurrency must be positive')
+      sem = asyncio.Semaphore(concurrency)
+      results = []
+
+      async def call(group):
+          async with sem:
+              return await handler(group)
+
+      for start in range(0, len(items), batch_size):
+          if cancel_event is not None and cancel_event.is_set():
+              break
+          group = list(items[start:start + batch_size])
+          batch_result = await call(group)
+          results.extend(batch_result)
+      return results

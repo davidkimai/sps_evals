@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 3.76,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 7.974,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/spec_elicitation_stub/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 0
+    },
+    "lexical_proof_complexity": 2,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": 2,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 6,
+    "source_token_estimate": 38,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 3.826,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is pure architectural slop: it imports a non-existent 'module_' (which would immediately raise ImportError at runtime), never defines the required 'handle_underspecified' entry point, contains no echo logic, raises no NotImplementedError for uncovered paths, and instead consists entirely of a speculative Dafny-to-Python symbol aliasing shim that has nothing to do with the task. The informal oracle references Dafny verification skill as a stylistic metaphor, not as a literal instruction to compile Dafny modules. The code is unreadable, non-functional, and maximally indirect.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is pure architectural slop: it imports a non-existent 'module_' (which would immediately raise ImportError at runtime), never defines the required 'handle_underspecified' entry point, contains no echo logic, raises no NotImplementedError for uncovered paths, and instead consists entirely of a speculative Dafny-to-Python symbol aliasing shim that has nothing to do with the task. The informal oracle references Dafny verification skill as a stylistic metaphor, not as a literal instruction to compile Dafny modules. The code is unreadable, non-functional, and maximally indirect.\",\n  \"strengths\": [\n    \"Attempts to reference the Dafny theme mentioned in the oracle\"\n  ],\n  \"weaknesses\": [\n    \"Does not define handle_underspecified at all\",\n    \"Imports a non-existent module_ causing immediate ImportError\",\n    \"No echo logic implemented\",\n    \"No NotImplementedError raised for uncovered paths\",\n    \"Wildcard import and global mutation are anti-patterns\",\n    \"Completely unrelated to the functional requirements\",\n    \"Violates every Zen of Python principle: not simple, not explicit, not flat, not readable\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to reference the Dafny theme mentioned in the oracle"
+    ],
+    "weaknesses": [
+      "Does not define handle_underspecified at all",
+      "Imports a non-existent module_ causing immediate ImportError",
+      "No echo logic implemented",
+      "No NotImplementedError raised for uncovered paths",
+      "Wildcard import and global mutation are anti-patterns",
+      "Completely unrelated to the functional requirements",
+      "Violates every Zen of Python principle: not simple, not explicit, not flat, not readable"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 41,
+      "prompt": 294,
+      "total": 335,
+      "turns": [
+        {
+          "completion": 41,
+          "prompt": 294,
+          "total": 335
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.253,
+    "exit_code": 2,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "\n==================================== ERRORS ====================================\n______________________ ERROR collecting test_solution.py _______________________\nImportError while importing test module '/work/test_solution.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_solution.py:3: in <module>\n    from solution import handle_underspecified\nE   ImportError: cannot import name 'handle_underspecified' from 'solution' (/work/solution.py)\n=========================== short test summary info ============================\nERROR test_solution.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.35s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "spec_elicitation_stub",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method flatten_paths(value: map<string, object>) returns (result: map<string, object>)\n{\n  result := map[];\n  var keys := value.Keys;\n  var keySeq := SetToSeq(keys);\n  var i := 0;\n  while i < |keySeq|\n    invariant 0 <= i <= |keySeq|\n  {\n    var k := keySeq[i];\n    var v := value[k];\n    if v is map<string, object> {\n      var nested := v as map<string, object>;\n      var sub := flatten_paths(nested);\n      var subKeys := sub.Keys;\n      var subKeySeq := SetToSeq(subKeys);\n      var j := 0;\n      while j < |subKeySeq|\n        invariant 0 <= j <= |subKeySeq|\n      {\n        var sk := subKeySeq[j];\n        var sv := sub[sk];\n        result := result[k + \".\" + sk := sv];\n        j := j + 1;\n      }\n    } else {\n      result := result[k := v];\n    }\n    i := i + 1;\n  }\n}\n\nmethod SetToSeq(s: set<string>) returns (sq: seq<string>)\n  ensures multiset(sq) == multiset(s)\n{\n  sq := [];\n  var remaining := s;\n  while remaining != {}\n    invariant multiset(sq) + multiset(remaining) == multiset(s)\n    decreases remaining\n  {\n    var x :| x in remaining;\n    sq := sq + [x];\n    remaining := remaining - {x};\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "flatten_paths",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 282,
+      "prompt": 276,
+      "total": 558,
+      "turns": [
+        {
+          "completion": 282,
+          "prompt": 276,
+          "total": 558
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod flatten_paths(value: map<string, object>) returns (result: map<string, object>)\n{\n  result := map[];\n  var keys := value.Keys;\n  var keySeq := SetToSeq(keys);\n  var i := 0;\n  while i < |keySeq|\n    invariant 0 <= i <= |keySeq|\n  {\n    var k := keySeq[i];\n    var v := value[k];\n    if v is map<string, object> {\n      var nested := v as map<string, object>;\n      var sub := flatten_paths(nested);\n      var subKeys := sub.Keys;\n      var subKeySeq := SetToSeq(subKeys);\n      var j := 0;\n      while j < |subKeySeq|\n        invariant 0 <= j <= |subKeySeq|\n      {\n        var sk := subKeySeq[j];\n        var sv := sub[sk];\n        result := result[k + \".\" + sk := sv];\n        j := j + 1;\n      }\n    } else {\n      result := result[k := v];\n    }\n    i := i + 1;\n  }\n}\n\nmethod SetToSeq(s: set<string>) returns (sq: seq<string>)\n  ensures multiset(sq) == multiset(s)\n{\n  sq := [];\n  var remaining := s;\n  while remaining != {}\n    invariant multiset(sq) + multiset(remaining) == multiset(s)\n    decreases remaining\n  {\n    var x :| x in remaining;\n    sq := sq + [x];\n    remaining := remaining - {x};\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend flatten_paths with array_mode: str = 'leaf'. When array_mode='index',\nflatten list items using bracket indexes such as users[0].name. Preserve old behavior when omitted.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "streaming_compatibility",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import flatten_paths\n\n\ndef test_array_index_mode():\n    data = {'users': [{'name': 'Ada'}, {'name': 'Grace'}]}\n    assert flatten_paths(data) == {'users': [{'name': 'Ada'}, {'name': 'Grace'}]}\n    assert flatten_paths(data, array_mode='index') == {'users[0].name': 'Ada', 'users[1].name': 'Grace'}\n",
+    "entry_point": "flatten_paths",
+    "human_reference": "from __future__ import annotations\n\n\ndef flatten_paths(value: dict) -> dict[str, object]:\n    output = {}\n\n    def visit(prefix: str, item) -> None:\n        if isinstance(item, dict):\n            for key, child in item.items():\n                visit(f'{prefix}.{key}' if prefix else str(key), child)\n        else:\n            output[prefix] = item\n\n    visit('', value)\n    return output\n",
+    "id": "hierarchical_flattener",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef flatten_paths(value, array_mode='leaf'):\n    out = {}\n\n    def visit(prefix, item):\n        if isinstance(item, dict):\n            for key, child in item.items():\n                visit(f'{prefix}.{key}' if prefix else str(key), child)\n        elif isinstance(item, list) and array_mode == 'index':\n            for index, child in enumerate(item):\n                visit(f'{prefix}[{index}]', child)\n        else:\n            out[prefix] = item\n\n    visit('', value)\n    return out\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef flatten_paths(value):\n    out = {}\n    stack = [('', value)]\n    while stack:\n        prefix, item = stack.pop()\n        if isinstance(item, dict):\n            for key, child in reversed(list(item.items())):\n                stack.append((f'{prefix}.{key}' if prefix else str(key), child))\n        else:\n            out[prefix] = item\n    return out\n",
+    "prompt": "Implement flatten_paths(value: dict) -> dict[str, object]. Flatten nested dicts\ninto dot-path keys. Lists should be treated as leaf values in the initial version.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "json",
+      "day2-hard"
+    ],
+    "test_code": "from solution import flatten_paths\n\n\ndef test_flattens_nested_dicts_only():\n    assert flatten_paths({'a': {'b': 1}, 'c': [2]}) == {'a.b': 1, 'c': [2]}\n"
+  },
+  "task_id": "hierarchical_flattener",
+  "user_prompt": "Task id: hierarchical_flattener\nEntry point: flatten_paths\n\nFunctional requirements:\nImplement flatten_paths(value: dict) -> dict[str, object]. Flatten nested dicts\ninto dot-path keys. Lists should be treated as leaf values in the initial version.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

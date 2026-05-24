@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 3,
+    "error_count": 2,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 2,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 2,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 14,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 68,
+    "source_token_estimate": 630,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.673,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python, and does not implement the required `merge_settings` Python function at all. The entry point `merge_settings` is completely absent. The Dafny code itself is a rough sketch that doesn't correctly model nested dictionary merging, type parsing (booleans, integers, lists), or deep-merge semantics. The informal spec mentions 'Dafny formal verification skill' as flavor text describing the reviewer's approach, not as an instruction to submit Dafny code. The submission fails every functional requirement: no nested dict support, no value parsing, no comma-separated list handling, no deep merge, and no Python implementation whatsoever. This is a fundamental misunderstanding of the task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python, and does not implement the required `merge_settings` Python function at all. The entry point `merge_settings` is completely absent. The Dafny code itself is a rough sketch that doesn't correctly model nested dictionary merging, type parsing (booleans, integers, lists), or deep-merge semantics. The informal spec mentions 'Dafny formal verification skill' as flavor text describing the reviewer's approach, not as an instruction to submit Dafny code. The submission fails every functional requirement: no nested dict support, no value parsing, no comma-separated list handling, no deep merge, and no Python implementation whatsoever. This is a fundamental misunderstanding of the task.\",\n  \"strengths\": [\n    \"Demonstrates awareness of the APP__ prefix filtering concept\",\n    \"Includes a HasPrefix helper function that correctly checks string prefixes\"\n  ],\n  \"weaknesses\": [\n    \"Entire submission is in Dafny, not Python \u2014 the required entry point merge_settings does not exist\",\n    \"No nested dictionary support; uses flat string maps only\",\n    \"No value parsing for booleans, integers, or comma-separated lists\",\n    \"No deep-merge logic for nested dictionaries\",\n    \"Does not split APP__ keys on double underscore to build nested paths\",\n    \"Input mutation prevention is irrelevant since there is no Python implementation\",\n    \"The Dafny code itself is incomplete and would not verify correctly\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates awareness of the APP__ prefix filtering concept",
+      "Includes a HasPrefix helper function that correctly checks string prefixes"
+    ],
+    "weaknesses": [
+      "Entire submission is in Dafny, not Python \u2014 the required entry point merge_settings does not exist",
+      "No nested dictionary support; uses flat string maps only",
+      "No value parsing for booleans, integers, or comma-separated lists",
+      "No deep-merge logic for nested dictionaries",
+      "Does not split APP__ keys on double underscore to build nested paths",
+      "Input mutation prevention is irrelevant since there is no Python implementation",
+      "The Dafny code itself is incomplete and would not verify correctly"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 634,
+      "prompt": 385,
+      "total": 1019,
+      "turns": [
+        {
+          "completion": 634,
+          "prompt": 385,
+          "total": 1019
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(79,2): Error: assertion might not hold\n   |\n79 |   assert \"host\" in result;\n   |   ^^^^^^\n\nsolution.dfy(80,2): Error: assertion might not hold\n   |\n80 |   assert result[\"host\"] == \"example.com\";\n   |   ^^^^^^\n\n\nDafny program verifier finished with 4 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "config_precedence_merge",
+  "variant": "oracle_dafny_generation"
+}

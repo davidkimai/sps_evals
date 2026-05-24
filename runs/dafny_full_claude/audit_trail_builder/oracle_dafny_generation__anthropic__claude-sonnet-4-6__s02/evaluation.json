@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 12,
+      "invariant": 2,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 1
+    },
+    "lexical_proof_complexity": 18,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 39,
+    "source_token_estimate": 277,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.295,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny (a formal verification language), not Python, making it entirely wrong for the specified entry point `build_audit_trail(events: list[dict]) -> list[dict]`. While the logic structure is conceptually aligned \u2014 rejecting events missing source_system or actor_id, assigning monotonic sequence numbers, and explicitly naming derived fields \u2014 the implementation cannot be executed as Python code, uses Dafny syntax (`method`, `seq`, `map`, `invariant`, `ensures`), and includes a severely limited `int_to_string` function that only handles single digits correctly (the recursive case concatenates digit strings but the base cases only cover 0\u20139, so numbers like 10 would produce '10' correctly but the approach is fragile and non-idiomatic). The structural intent partially matches RAT-9 (explicit field naming, rejection of incomplete records, monotonic sequence), but the wrong language choice is a fundamental architectural failure for the task.",
+    "raw_response": "{\n  \"score\": 2,\n  \"rationale\": \"The candidate submission is written in Dafny (a formal verification language), not Python, making it entirely wrong for the specified entry point `build_audit_trail(events: list[dict]) -> list[dict]`. While the logic structure is conceptually aligned \u2014 rejecting events missing source_system or actor_id, assigning monotonic sequence numbers, and explicitly naming derived fields \u2014 the implementation cannot be executed as Python code, uses Dafny syntax (`method`, `seq`, `map`, `invariant`, `ensures`), and includes a severely limited `int_to_string` function that only handles single digits correctly (the recursive case concatenates digit strings but the base cases only cover 0\u20139, so numbers like 10 would produce '10' correctly but the approach is fragile and non-idiomatic). The structural intent partially matches RAT-9 (explicit field naming, rejection of incomplete records, monotonic sequence), but the wrong language choice is a fundamental architectural failure for the task.\",\n  \"strengths\": [\n    \"Correctly rejects events missing source_system or actor_id without silent invention\",\n    \"Monotonic sequence numbering logic is sound and invariant is formally stated\",\n    \"Derived fields (sequence, action) are explicitly named before insertion into the record\",\n    \"Includes action field conditionally rather than silently omitting or fabricating it\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the specified entry point\",\n    \"Cannot be imported or executed as a Python module\",\n    \"int_to_string is a fragile stub that would fail for numbers >= 10 in edge cases and is unnecessary in Python\",\n    \"No handling of the 'action' field requirement from the functional spec (spec says each event 'has' action, but it's treated as optional here)\",\n    \"Formal verification annotations (ensures, invariant) add noise irrelevant to the Python runtime context\"\n  ]\n}",
+    "score": 2,
+    "skipped": false,
+    "strengths": [
+      "Correctly rejects events missing source_system or actor_id without silent invention",
+      "Monotonic sequence numbering logic is sound and invariant is formally stated",
+      "Derived fields (sequence, action) are explicitly named before insertion into the record",
+      "Includes action field conditionally rather than silently omitting or fabricating it"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the specified entry point",
+      "Cannot be imported or executed as a Python module",
+      "int_to_string is a fragile stub that would fail for numbers >= 10 in edge cases and is unnecessary in Python",
+      "No handling of the 'action' field requirement from the functional spec (spec says each event 'has' action, but it's treated as optional here)",
+      "Formal verification annotations (ensures, invariant) add noise irrelevant to the Python runtime context"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 280,
+      "prompt": 290,
+      "total": 570,
+      "turns": [
+        {
+          "completion": 280,
+          "prompt": 290,
+          "total": 570
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Regulatory Audit Trail Standard RAT-9:\n- Every audit record must carry source_system, actor_id, and a monotonic sequence number.\n- Derived fields must be named explicitly before being inserted into a record.\n- Do not silently invent actor or source values; reject records missing either field.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(3,0): Error: a postcondition could not be proved on this return path\n  |\n3 | {\n  | ^\n\nsolution.dfy(2,19): Related location: this is the postcondition that could not be proved\n  |\n2 |   ensures |result| <= |events|\n  |                    ^^\n\n\nDafny program verifier finished with 1 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "audit_trail_builder",
+  "variant": "oracle_dafny_generation"
+}

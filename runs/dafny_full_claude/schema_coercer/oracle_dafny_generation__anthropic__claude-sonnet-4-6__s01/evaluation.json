@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 1,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 3,
+      "if": 9,
+      "invariant": 1,
+      "logical_and": 3,
+      "logical_or": 8,
+      "match": 0,
+      "requires": 0,
+      "while": 1
+    },
+    "lexical_proof_complexity": 27,
+    "logical_and_count": 3,
+    "logical_or_count": 8,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 57,
+    "source_token_estimate": 438,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.75,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python, making it completely non-functional as a Python implementation. The entry point `coerce_schema` is a Dafny method, not a Python function, and cannot be executed or imported as Python code. The functional requirements explicitly ask for a Python function `coerce_schema(raw: dict, schema: dict) -> dict` that casts values using callable type functions and raises `ValueError` on failure. Instead, the submission uses Dafny's type system, datatype Option, predicates, and formal verification constructs that have no Python equivalent. The informal oracle references 'Dafny formal verification skill' but this appears to be a red herring or a style hint\u2014the actual deliverable must be Python. The submission fails on every practical dimension: wrong language, wrong types, wrong error handling mechanism, and produces no runnable artifact.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python, making it completely non-functional as a Python implementation. The entry point `coerce_schema` is a Dafny method, not a Python function, and cannot be executed or imported as Python code. The functional requirements explicitly ask for a Python function `coerce_schema(raw: dict, schema: dict) -> dict` that casts values using callable type functions and raises `ValueError` on failure. Instead, the submission uses Dafny's type system, datatype Option, predicates, and formal verification constructs that have no Python equivalent. The informal oracle references 'Dafny formal verification skill' but this appears to be a red herring or a style hint\u2014the actual deliverable must be Python. The submission fails on every practical dimension: wrong language, wrong types, wrong error handling mechanism, and produces no runnable artifact.\",\n  \"strengths\": [\n    \"Shows understanding of the logical structure of schema coercion (iterate fields, check presence, cast or default)\",\n    \"Includes formal invariants and postconditions that correctly capture the intent\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Does not implement the Python callable-based type casting (e.g., int('5'), float('3.14'))\",\n    \"Does not raise ValueError with the field name on casting failure as required\",\n    \"Schema type is modeled as strings rather than Python callables, losing the generality requirement\",\n    \"No Python code whatsoever is present in the submission\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows understanding of the logical structure of schema coercion (iterate fields, check presence, cast or default)",
+      "Includes formal invariants and postconditions that correctly capture the intent"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Does not implement the Python callable-based type casting (e.g., int('5'), float('3.14'))",
+      "Does not raise ValueError with the field name on casting failure as required",
+      "Schema type is modeled as strings rather than Python callables, losing the generality requirement",
+      "No Python code whatsoever is present in the submission"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 441,
+      "prompt": 296,
+      "total": 737,
+      "turns": [
+        {
+          "completion": 441,
+          "prompt": 296,
+          "total": 737
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(3,0): Error: a postcondition could not be proved on this return path\n  |\n3 | {\n  | ^\n\nsolution.dfy(2,10): Related location: this is the postcondition that could not be proved\n  |\n2 |   ensures forall k :: k in schema ==> k in result\n  |           ^^^^^^\n\n\nDafny program verifier finished with 1 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "schema_coercer",
+  "variant": "oracle_dafny_generation"
+}

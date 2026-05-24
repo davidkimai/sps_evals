@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nimport weakref\nfrom typing import Any\n\n\nclass ObjectRegistry:\n    def __init__(self) -> None:\n        self._refs: dict[str, weakref.ReferenceType[Any]] = {}\n\n    def register(self, key: str, obj: object) -> None:\n        self._refs[key] = weakref.ref(obj)\n\n    def get(self, key: str):\n        ref = self._refs.get(key)\n        return None if ref is None else ref()\n\n    def cleanup(self) -> None:\n        self._refs = {key: ref for key, ref in self._refs.items() if ref() is not None}\n",
+  "effective_temperature": null,
+  "entry_point": "ObjectRegistry",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nimport weakref\nfrom typing import Any\n\n\nclass ObjectRegistry:\n    def __init__(self) -> None:\n        self._refs: dict[str, weakref.ReferenceType[Any]] = {}\n\n    def register(self, key: str, obj: object) -> None:\n        self._refs[key] = weakref.ref(obj)\n\n    def get(self, key: str):\n        ref = self._refs.get(key)\n        return None if ref is None else ref()\n\n    def cleanup(self) -> None:\n        self._refs = {key: ref for key, ref in self._refs.items() if ref() is not None}\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend ObjectRegistry.register with tags: set[str] | None = None and add by_tag(tag)\nreturning live objects registered with that tag. Dead references should not be\nreturned.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import ObjectRegistry\n\n\nclass Thing:\n    pass\n\n\ndef test_tag_lookup_returns_live_objects():\n    registry = ObjectRegistry()\n    one = Thing()\n    two = Thing()\n    registry.register('one', one, tags={'blue'})\n    registry.register('two', two, tags={'red', 'blue'})\n    assert registry.by_tag('blue') == [one, two]\n    assert registry.by_tag('red') == [two]\n",
+    "entry_point": "ObjectRegistry",
+    "human_reference": "from __future__ import annotations\n\nimport weakref\nfrom typing import Any\n\n\nclass ObjectRegistry:\n    def __init__(self) -> None:\n        self._refs: dict[str, weakref.ReferenceType[Any]] = {}\n\n    def register(self, key: str, obj: object) -> None:\n        self._refs[key] = weakref.ref(obj)\n\n    def get(self, key: str):\n        ref = self._refs.get(key)\n        return None if ref is None else ref()\n\n    def cleanup(self) -> None:\n        self._refs = {key: ref for key, ref in self._refs.items() if ref() is not None}\n",
+    "id": "object_registry",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport weakref\n\n\nclass ObjectRegistry:\n    def __init__(self):\n        self.refs = {}\n        self.tags = {}\n\n    def register(self, key: str, obj, tags=None):\n        self.refs[key] = weakref.ref(obj)\n        for tag in tags or set():\n            self.tags.setdefault(tag, []).append(key)\n\n    def get(self, key: str):\n        ref = self.refs.get(key)\n        return None if ref is None else ref()\n\n    def cleanup(self):\n        self.refs = {key: ref for key, ref in self.refs.items() if ref() is not None}\n\n    def by_tag(self, tag: str):\n        out = []\n        for key in self.tags.get(tag, []):\n            value = self.get(key)\n            if value is not None:\n                out.append(value)\n        return out\n",
+    "mock_solution": "from __future__ import annotations\n\nimport weakref\n\n\nclass ObjectRegistry:\n    def __init__(self):\n        self.refs = {}\n\n    def register(self, key: str, obj):\n        self.refs[key] = weakref.ref(obj)\n\n    def get(self, key: str):\n        if key not in self.refs:\n            return None\n        return self.refs[key]()\n\n    def cleanup(self):\n        for key in list(self.refs):\n            if self.refs[key]() is None:\n                del self.refs[key]\n",
+    "prompt": "Implement ObjectRegistry using weak references. register(key, obj) stores obj;\nget(key) returns the object or None if it has been garbage-collected; cleanup()\nremoves dead references.\n",
+    "tags": [
+      "object_lifecycle",
+      "weakref",
+      "day2-hard"
+    ],
+    "test_code": "import gc\n\nfrom solution import ObjectRegistry\n\n\nclass Thing:\n    pass\n\n\ndef test_weak_registry_cleans_dead_objects():\n    registry = ObjectRegistry()\n    thing = Thing()\n    registry.register('a', thing)\n    assert registry.get('a') is thing\n    del thing\n    gc.collect()\n    registry.cleanup()\n    assert registry.get('a') is None\n"
+  },
+  "task_id": "object_registry",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

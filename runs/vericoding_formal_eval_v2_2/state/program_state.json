@@ -1,0 +1,10 @@
+{
+  "blockers": [
+    "formal_case_export_pending",
+    "formal_validation_pending",
+    "live_runs_pending"
+  ],
+  "created_at": "2026-05-23T01:05:36Z",
+  "current_phase": "bootstrapped",
+  "program_version": "vericoding_formal_eval_v2_2"
+}

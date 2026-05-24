@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": 4,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 4,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 7,
+      "while": 0
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 7,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 55,
+    "source_token_estimate": 308,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.041,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 6
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. It uses curly-brace class bodies, Dafny method/constructor keywords, requires/ensures/modifies clauses, and a Main() method \u2014 none of which are valid Python. The entry point RetryGate is not a Python class at all, so the code cannot be imported or executed as Python. While the logical structure correctly models the retry state machine semantics (max_attempts validation via requires, failure counting, reset, remaining calculation), the implementation completely fails the task of producing a Python class. There are no Python constructs whatsoever: no __init__, no self, no def, no raise ValueError. This is architectural slop of the highest order relative to the Python task requirements.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. It uses curly-brace class bodies, Dafny method/constructor keywords, requires/ensures/modifies clauses, and a Main() method \u2014 none of which are valid Python. The entry point RetryGate is not a Python class at all, so the code cannot be imported or executed as Python. While the logical structure correctly models the retry state machine semantics (max_attempts validation via requires, failure counting, reset, remaining calculation), the implementation completely fails the task of producing a Python class. There are no Python constructs whatsoever: no __init__, no self, no def, no raise ValueError. This is architectural slop of the highest order relative to the Python task requirements.\",\n  \"strengths\": [\n    \"Logical semantics of the retry state machine are correctly modeled\",\n    \"Formal pre/post-conditions (requires/ensures) are coherent and match the functional spec\",\n    \"Includes a Main() test that exercises all methods\"\n  ],\n  \"weaknesses\": [\n    \"Entire implementation is in Dafny, not Python \u2014 completely non-executable as the required language\",\n    \"No Python class, no __init__, no self, no def \u2014 zero valid Python syntax\",\n    \"ValueError for invalid max_attempts is not raised; it is only expressed as a Dafny requires clause\",\n    \"Cannot satisfy the entry point RetryGate as a Python class\",\n    \"Fails every Zen of Python criterion since it is not Python at all\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Logical semantics of the retry state machine are correctly modeled",
+      "Formal pre/post-conditions (requires/ensures) are coherent and match the functional spec",
+      "Includes a Main() test that exercises all methods"
+    ],
+    "weaknesses": [
+      "Entire implementation is in Dafny, not Python \u2014 completely non-executable as the required language",
+      "No Python class, no __init__, no self, no def \u2014 zero valid Python syntax",
+      "ValueError for invalid max_attempts is not raised; it is only expressed as a Dafny requires clause",
+      "Cannot satisfy the entry point RetryGate as a Python class",
+      "Fails every Zen of Python criterion since it is not Python at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 312,
+      "prompt": 368,
+      "total": 680,
+      "turns": [
+        {
+          "completion": 312,
+          "prompt": 368,
+          "total": 680
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(54,21): Error: a precondition for this call could not be proved\n   |\n54 |   var b := gate.allow();\n   |                      ^\n\nsolution.dfy(16,26): Related location: this is the precondition that could not be proved\n   |\n16 |     requires max_attempts > 0\n   |                           ^\n\nsolution.dfy(55,2): Error: assertion might not hold\n   |\n55 |   assert b == false;\n   |   ^^^^^^\n\nsolution.dfy(57,21): Error: a precondition for this call could not be proved\n   |\n57 |   var c := gate.allow();\n   |                      ^\n\nsolution.dfy(16,26): Related location: this is the precondition that could not be proved\n   |\n16 |     requires max_attempts > 0\n   |                           ^\n\nsolution.dfy(60,2): Error: assertion might not hold\n   |\n60 |   assert r == 3;\n   |   ^^^^^^\n\n\nDafny program verifier finished with 6 verified, 4 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "retry_state_machine",
+  "variant": "oracle_dafny_generation"
+}

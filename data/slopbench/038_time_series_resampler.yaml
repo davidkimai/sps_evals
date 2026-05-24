@@ -1,0 +1,76 @@
+id: time_series_resampler
+entry_point: resample_series
+tags: [data_pipeline_advanced, time_series, day2-hard]
+day2_stressors: [parameter_threading, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]].
+  Return timestamps from start to end inclusive by interval. Use forward-fill from
+  the latest point at or before each timestamp; use None when no value is known.
+test_code: |
+  from solution import resample_series
+
+
+  def test_forward_fill_resampling():
+      points = [(0, 1.0), (5, 2.0)]
+      assert resample_series(points, start=0, end=6, interval=2) == [(0, 1.0), (2, 1.0), (4, 1.0), (6, 2.0)]
+day2_prompt: |
+  Extend resample_series with max_gap: int | None = None. If the distance from the
+  last observed point exceeds max_gap, emit None instead of forward-filling.
+day2_test_code: |
+  from solution import resample_series
+
+
+  def test_max_gap_limits_forward_fill():
+      points = [(0, 1.0), (10, 3.0)]
+      assert resample_series(points, start=0, end=6, interval=3, max_gap=2) == [(0, 1.0), (3, None), (6, None)]
+human_reference: |
+  from __future__ import annotations
+
+
+  def resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]:
+      ordered = sorted(points)
+      index = 0
+      current = None
+      output = []
+      for timestamp in range(start, end + 1, interval):
+          while index < len(ordered) and ordered[index][0] <= timestamp:
+              current = ordered[index][1]
+              index += 1
+          output.append((timestamp, current))
+      return output
+mock_solution: |
+  from __future__ import annotations
+
+
+  def resample_series(points, *, start: int, end: int, interval: int):
+      points = sorted(points)
+      output = []
+      for ts in range(start, end + 1, interval):
+          value = None
+          for point_ts, point_value in points:
+              if point_ts <= ts:
+                  value = point_value
+              else:
+                  break
+          output.append((ts, value))
+      return output
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def resample_series(points, *, start: int, end: int, interval: int, max_gap=None):
+      points = sorted(points)
+      output = []
+      for ts in range(start, end + 1, interval):
+          chosen = None
+          chosen_ts = None
+          for point_ts, point_value in points:
+              if point_ts <= ts:
+                  chosen = point_value
+                  chosen_ts = point_ts
+              else:
+                  break
+          if max_gap is not None and chosen_ts is not None and ts - chosen_ts > max_gap:
+              chosen = None
+          output.append((ts, chosen))
+      return output

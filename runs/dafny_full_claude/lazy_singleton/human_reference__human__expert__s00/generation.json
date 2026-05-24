@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nfrom threading import Lock\nfrom typing import Callable, Generic, TypeVar\n\nT = TypeVar('T')\n_MISSING = object()\n\n\nclass LazySingleton(Generic[T]):\n    def __init__(self, factory: Callable[[], T]) -> None:\n        self._factory = factory\n        self._value: T | object = _MISSING\n        self._lock = Lock()\n\n    def get(self) -> T:\n        if self._value is _MISSING:\n            with self._lock:\n                if self._value is _MISSING:\n                    self._value = self._factory()\n        return self._value  # type: ignore[return-value]\n",
+  "effective_temperature": null,
+  "entry_point": "LazySingleton",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nfrom threading import Lock\nfrom typing import Callable, Generic, TypeVar\n\nT = TypeVar('T')\n_MISSING = object()\n\n\nclass LazySingleton(Generic[T]):\n    def __init__(self, factory: Callable[[], T]) -> None:\n        self._factory = factory\n        self._value: T | object = _MISSING\n        self._lock = Lock()\n\n    def get(self) -> T:\n        if self._value is _MISSING:\n            with self._lock:\n                if self._value is _MISSING:\n                    self._value = self._factory()\n        return self._value  # type: ignore[return-value]\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add reset_for_test() that restores the uninitialized state so the next get()\ncreates a fresh object. Preserve thread safety.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import LazySingleton\n\n\ndef test_reset_for_test_creates_new_instance():\n    counter = {'n': 0}\n    def factory():\n        counter['n'] += 1\n        return {'n': counter['n']}\n    singleton = LazySingleton(factory)\n    first = singleton.get()\n    singleton.reset_for_test()\n    second = singleton.get()\n    assert first != second\n    assert counter['n'] == 2\n",
+    "entry_point": "LazySingleton",
+    "human_reference": "from __future__ import annotations\n\nfrom threading import Lock\nfrom typing import Callable, Generic, TypeVar\n\nT = TypeVar('T')\n_MISSING = object()\n\n\nclass LazySingleton(Generic[T]):\n    def __init__(self, factory: Callable[[], T]) -> None:\n        self._factory = factory\n        self._value: T | object = _MISSING\n        self._lock = Lock()\n\n    def get(self) -> T:\n        if self._value is _MISSING:\n            with self._lock:\n                if self._value is _MISSING:\n                    self._value = self._factory()\n        return self._value  # type: ignore[return-value]\n",
+    "id": "lazy_singleton",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport threading\n\n_EMPTY = object()\n\n\nclass LazySingleton:\n    def __init__(self, factory):\n        self.factory = factory\n        self.value = _EMPTY\n        self.lock = threading.Lock()\n\n    def get(self):\n        with self.lock:\n            if self.value is _EMPTY:\n                self.value = self.factory()\n            return self.value\n\n    def reset_for_test(self):\n        with self.lock:\n            self.value = _EMPTY\n",
+    "mock_solution": "from __future__ import annotations\n\nimport threading\n\n_EMPTY = object()\n\n\nclass LazySingleton:\n    def __init__(self, factory):\n        self.factory = factory\n        self.value = _EMPTY\n        self.lock = threading.Lock()\n\n    def get(self):\n        with self.lock:\n            if self.value is _EMPTY:\n                self.value = self.factory()\n            return self.value\n",
+    "prompt": "Implement LazySingleton(factory). Method get() returns the same lazily-created\nobject on every call. It must be safe under concurrent calls from multiple\nthreads.\n",
+    "tags": [
+      "object_lifecycle",
+      "threading",
+      "day2-hard"
+    ],
+    "test_code": "from concurrent.futures import ThreadPoolExecutor\n\nfrom solution import LazySingleton\n\n\ndef test_single_instance_under_threads():\n    calls = []\n    singleton = LazySingleton(lambda: calls.append(object()) or calls[-1])\n    with ThreadPoolExecutor(max_workers=4) as pool:\n        values = list(pool.map(lambda _: singleton.get(), range(20)))\n    assert len({id(value) for value in values}) == 1\n    assert len(calls) == 1\n"
+  },
+  "task_id": "lazy_singleton",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

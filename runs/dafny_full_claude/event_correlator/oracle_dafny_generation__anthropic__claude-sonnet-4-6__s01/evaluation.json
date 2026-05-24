@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": 2,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 2,
+      "if": 5,
+      "invariant": 5,
+      "logical_and": 13,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 3
+    },
+    "lexical_proof_complexity": 30,
+    "logical_and_count": 13,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 64,
+    "source_token_estimate": 550,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.201,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, and therefore cannot serve as the required `correlate_events` Python function. The entry point `correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]` is completely absent. The code uses Dafny syntax, tuple-encoded events instead of dicts, and formal verification annotations that are irrelevant to the Python runtime. While the Dafny specification does attempt to capture some of the correct semantics (same session, A before B, within time window), it is not executable Python, fails to accept `list[dict]` inputs, returns tuples of ints rather than tuples of dicts, and introduces an incorrect 'usedB' deduplication mechanism not required by the spec. This is a category error: submitting a formal verification artifact instead of a working Python implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, and therefore cannot serve as the required `correlate_events` Python function. The entry point `correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]` is completely absent. The code uses Dafny syntax, tuple-encoded events instead of dicts, and formal verification annotations that are irrelevant to the Python runtime. While the Dafny specification does attempt to capture some of the correct semantics (same session, A before B, within time window), it is not executable Python, fails to accept `list[dict]` inputs, returns tuples of ints rather than tuples of dicts, and introduces an incorrect 'usedB' deduplication mechanism not required by the spec. This is a category error: submitting a formal verification artifact instead of a working Python implementation.\",\n  \"strengths\": [\n    \"Attempts to encode the core invariants (same session, A before B, within time window) in formal postconditions\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Accepts tuples of ints instead of dicts, violating the function signature\",\n    \"Returns tuples of ints instead of tuples of dicts\",\n    \"Introduces unsanctioned 'usedB' deduplication logic not in the spec\",\n    \"No Python module, no `correlate_events` function, no imports \u2014 zero functional deliverable\",\n    \"Structural quality is irrelevant since the language target is entirely wrong\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to encode the core invariants (same session, A before B, within time window) in formal postconditions"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Accepts tuples of ints instead of dicts, violating the function signature",
+      "Returns tuples of ints instead of tuples of dicts",
+      "Introduces unsanctioned 'usedB' deduplication logic not in the spec",
+      "No Python module, no `correlate_events` function, no imports \u2014 zero functional deliverable",
+      "Structural quality is irrelevant since the language target is entirely wrong"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 553,
+      "prompt": 289,
+      "total": 842,
+      "turns": [
+        {
+          "completion": 553,
+          "prompt": 289,
+          "total": 842
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(18,14): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n18 |     invariant forall k :: 0 <= k < |result| ==>\n   |               ^^^^^^\n\nsolution.dfy(32,6): Error: cannot prove termination; try supplying a decreases clause for the loop\n   |\n32 |       while j < |events| && !found\n   |       ^^^^^\n\n\nDafny program verifier finished with 1 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "event_correlator",
+  "variant": "oracle_dafny_generation"
+}

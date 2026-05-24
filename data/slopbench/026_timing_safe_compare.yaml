@@ -1,0 +1,77 @@
+id: timing_safe_compare
+entry_point: timing_safe_compare
+tags: [reliability_critical, security, day2-hard]
+day2_stressors: [interface_generalization, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement timing_safe_compare(left, right) -> bool as a typed wrapper around
+  hmac.compare_digest. Accept only str or bytes. Both inputs must have the same
+  type; otherwise raise TypeError. Return True only when values match.
+test_code: |
+  import pytest
+
+  from solution import timing_safe_compare
+
+
+  def test_compare_digest_wrapper():
+      assert timing_safe_compare('abc', 'abc') is True
+      assert timing_safe_compare(b'abc', b'abd') is False
+      with pytest.raises(TypeError):
+          timing_safe_compare('abc', b'abc')
+      with pytest.raises(TypeError):
+          timing_safe_compare(1, 1)
+day2_prompt: |
+  Extend timing_safe_compare with pad_to_length: int | None = None and pad_char: str = "\0".
+  When pad_to_length is set for strings, right-pad both strings to that length before comparing.
+  Reject pad_char values that are not exactly one character. Preserve old behavior when omitted.
+day2_test_code: |
+  import pytest
+
+  from solution import timing_safe_compare
+
+
+  def test_padded_string_compare():
+      assert timing_safe_compare('a', 'a', pad_to_length=4, pad_char='x') is True
+      assert timing_safe_compare('a', 'a   ', pad_to_length=4, pad_char=' ') is True
+      assert timing_safe_compare('a', 'b', pad_to_length=4) is False
+      with pytest.raises(ValueError):
+          timing_safe_compare('a', 'a', pad_to_length=4, pad_char='xx')
+human_reference: |
+  from __future__ import annotations
+
+  import hmac
+
+
+  def timing_safe_compare(left: str | bytes, right: str | bytes) -> bool:
+      if not isinstance(left, (str, bytes)) or not isinstance(right, (str, bytes)):
+          raise TypeError('values must be str or bytes')
+      if type(left) is not type(right):
+          raise TypeError('values must share a type')
+      return hmac.compare_digest(left, right)
+mock_solution: |
+  from __future__ import annotations
+
+  import hmac
+
+
+  def timing_safe_compare(left, right):
+      allowed = (str, bytes)
+      if isinstance(left, allowed) and isinstance(right, allowed) and type(left) is type(right):
+          return hmac.compare_digest(left, right)
+      raise TypeError('values must be same-type str or bytes')
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import hmac
+
+
+  def timing_safe_compare(left, right, pad_to_length=None, pad_char='\0'):
+      if not isinstance(left, (str, bytes)) or not isinstance(right, (str, bytes)) or type(left) is not type(right):
+          raise TypeError('values must be same-type str or bytes')
+      if pad_to_length is not None:
+          if not isinstance(left, str):
+              raise TypeError('padding is only supported for str')
+          if len(pad_char) != 1:
+              raise ValueError('pad_char must be one character')
+          left = left.ljust(pad_to_length, pad_char)
+          right = right.ljust(pad_to_length, pad_char)
+      return hmac.compare_digest(left, right)

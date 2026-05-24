@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.929,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.839,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/lazy_file_chunker/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 5,
+    "error_count": 0,
+    "invariant_count": 3,
+    "keyword_counts": {
+      "assert": 3,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 5,
+      "exists": 0,
+      "forall": 5,
+      "if": 3,
+      "invariant": 3,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 5,
+      "while": 1
+    },
+    "lexical_proof_complexity": 26,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 5,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 47,
+    "source_token_estimate": 361,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 6.874,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 5
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop that completely fails to implement the required functionality. It imports a non-existent 'module_' (which would cause an ImportError at runtime), contains no actual iter_file_chunks function, and instead consists entirely of a bizarre meta-programming shim that tries to alias Dafny-compiled symbols into the global namespace. There is no file reading, no chunk yielding, no validation of chunk_size, and no iterator logic whatsoever. The code is maximally indirect, opaque, and non-functional \u2014 the antithesis of the Zen of Python's principles of simplicity, explicitness, and readability.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop that completely fails to implement the required functionality. It imports a non-existent 'module_' (which would cause an ImportError at runtime), contains no actual iter_file_chunks function, and instead consists entirely of a bizarre meta-programming shim that tries to alias Dafny-compiled symbols into the global namespace. There is no file reading, no chunk yielding, no validation of chunk_size, and no iterator logic whatsoever. The code is maximally indirect, opaque, and non-functional \u2014 the antithesis of the Zen of Python's principles of simplicity, explicitness, and readability.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement any part of the required functionality\"\n  ],\n  \"weaknesses\": [\n    \"Does not define iter_file_chunks at all\",\n    \"Imports a non-existent module ('module_') causing immediate ImportError\",\n    \"Uses wildcard imports, violating explicitness\",\n    \"Deeply opaque meta-programming with no relation to the task\",\n    \"No chunk_size validation, no file reading, no iterator logic\",\n    \"Violates virtually every Zen of Python principle: explicit, simple, flat, readable\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement any part of the required functionality"
+    ],
+    "weaknesses": [
+      "Does not define iter_file_chunks at all",
+      "Imports a non-existent module ('module_') causing immediate ImportError",
+      "Uses wildcard imports, violating explicitness",
+      "Deeply opaque meta-programming with no relation to the task",
+      "No chunk_size validation, no file reading, no iterator logic",
+      "Violates virtually every Zen of Python principle: explicit, simple, flat, readable"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 364,
+      "prompt": 290,
+      "total": 654,
+      "turns": [
+        {
+          "completion": 364,
+          "prompt": 290,
+          "total": 654
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 2.865,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n______________________________ test_chunks_lazily ______________________________\n\n    def test_chunks_lazily():\n>       assert list(iter_file_chunks(BytesIO(b'abcdef'), 2)) == [b'ab', b'cd', b'ef']\nE       AssertionError: assert [] == [b'ab', b'cd', b'ef']\nE         \nE         Right contains 3 more items, first extra item: b'ab'\nE         Use -v to get more diff\n\ntest_solution.py:9: AssertionError\n____________________________ test_rejects_bad_size _____________________________\n\n    def test_rejects_bad_size():\n>       with pytest.raises(ValueError):\nE       Failed: DID NOT RAISE <class 'ValueError'>\n\ntest_solution.py:13: Failed\n=========================== short test summary info ============================\nFAILED test_solution.py::test_chunks_lazily - AssertionError: assert [] == [b...\nFAILED test_solution.py::test_rejects_bad_size - Failed: DID NOT RAISE <class...\n2 failed in 0.10s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "lazy_file_chunker",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 0,
+    "error_count": null,
+    "invariant_count": 18,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 0,
+      "exists": 0,
+      "forall": 0,
+      "if": 30,
+      "invariant": 18,
+      "logical_and": 7,
+      "logical_or": 7,
+      "match": 0,
+      "requires": 0,
+      "while": 12
+    },
+    "lexical_proof_complexity": 75,
+    "logical_and_count": 7,
+    "logical_or_count": 7,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 260,
+    "source_token_estimate": 1676,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.141,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written entirely in Dafny, not Python. The task requires a Python function `aggregate_sales(csv_text: str) -> list[dict]`, but the submission provides Dafny methods with Dafny syntax, types, and verification annotations. This is a complete language mismatch \u2014 the code cannot be executed as Python, the entry point signature is wrong, and the return type is `seq<map<string, string>>` rather than `list[dict]` with integer values. Beyond the language error, the result maps store quantities and cents as strings (via `int_to_string`) rather than integers, violating the functional requirement. The informal oracle references 'Dafny formal verification skill' as a structural metaphor for rigor and correctness, not as a directive to literally write Dafny code. This submission fundamentally fails to implement the required Python function.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written entirely in Dafny, not Python. The task requires a Python function `aggregate_sales(csv_text: str) -> list[dict]`, but the submission provides Dafny methods with Dafny syntax, types, and verification annotations. This is a complete language mismatch \u2014 the code cannot be executed as Python, the entry point signature is wrong, and the return type is `seq<map<string, string>>` rather than `list[dict]` with integer values. Beyond the language error, the result maps store quantities and cents as strings (via `int_to_string`) rather than integers, violating the functional requirement. The informal oracle references 'Dafny formal verification skill' as a structural metaphor for rigor and correctness, not as a directive to literally write Dafny code. This submission fundamentally fails to implement the required Python function.\",\n  \"strengths\": [\n    \"Demonstrates awareness of the algorithmic steps: header parsing, column index detection, grouping, sorting\",\n    \"Includes loop invariants and structured decomposition consistent with formal verification style\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Cannot be executed or imported as a Python module\",\n    \"Return type uses string values for quantity and cents instead of integers\",\n    \"Misinterprets the informal oracle ('Dafny skill') as a literal instruction to write Dafny\",\n    \"No valid Python entry point `aggregate_sales` exists\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates awareness of the algorithmic steps: header parsing, column index detection, grouping, sorting",
+      "Includes loop invariants and structured decomposition consistent with formal verification style"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Cannot be executed or imported as a Python module",
+      "Return type uses string values for quantity and cents instead of integers",
+      "Misinterprets the informal oracle ('Dafny skill') as a literal instruction to write Dafny",
+      "No valid Python entry point `aggregate_sales` exists"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 1679,
+      "prompt": 329,
+      "total": 2008,
+      "turns": [
+        {
+          "completion": 1679,
+          "prompt": 329,
+          "total": 2008
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(147,33): Error: expression is not allowed to invoke a method (int_to_string)\n    |\n147 |                    \"quantity\" := int_to_string(quantities[idx]),\n    |                                  ^^^^^^^^^^^^^\n\nsolution.dfy(147,46): Error: method call is not allowed to be used in an expression context (int_to_string)\n    |\n147 |                    \"quantity\" := int_to_string(quantities[idx]),\n    |                                               ^\n\nsolution.dfy(148,30): Error: expression is not allowed to invoke a method (int_to_string)\n    |\n148 |                    \"cents\" := int_to_string(cents_vals[idx])];\n    |                               ^^^^^^^^^^^^^\n\nsolution.dfy(148,43): Error: method call is not allowed to be used in an expression context (int_to_string)\n    |\n148 |                    \"cents\" := int_to_string(cents_vals[idx])];\n    |                                            ^\n\n4 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "csv_sales_aggregate",
+  "variant": "oracle_dafny_generation"
+}

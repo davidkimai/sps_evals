@@ -1,0 +1,3 @@
+candidate_count,formal_support_present,split,surface,task_id,visible_formal_fail_present
+12,True,dev,secure,safe_path_validation,False
+12,True,confirmatory,internal,timing_safe_compare,True

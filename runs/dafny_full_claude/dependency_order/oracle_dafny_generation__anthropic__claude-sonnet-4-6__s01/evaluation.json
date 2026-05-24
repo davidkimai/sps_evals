@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 8,
+    "error_count": null,
+    "invariant_count": 12,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 1,
+      "decreases": 1,
+      "ensures": 8,
+      "exists": 0,
+      "forall": 11,
+      "if": 7,
+      "invariant": 12,
+      "logical_and": 1,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 0,
+      "while": 11
+    },
+    "lexical_proof_complexity": 53,
+    "logical_and_count": 1,
+    "logical_or_count": 1,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 157,
+    "source_token_estimate": 1125,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.018,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python, making it completely non-functional as a Python implementation of `plan_batches`. The entry point requires a Python function accepting `dict[str, list[str]]` and returning `list[list[str]]`, but the code is Dafny syntax with `method`, `map<string, seq<string>>`, `set<string>`, `assume false`, and formal verification annotations. It cannot be imported or executed as Python, fails all functional requirements, and the 'Dafny formal verification skill' oracle was clearly misread as an instruction to write Dafny code rather than Python code inspired by formal-verification principles. There are no Python strengths to note.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python, making it completely non-functional as a Python implementation of `plan_batches`. The entry point requires a Python function accepting `dict[str, list[str]]` and returning `list[list[str]]`, but the code is Dafny syntax with `method`, `map<string, seq<string>>`, `set<string>`, `assume false`, and formal verification annotations. It cannot be imported or executed as Python, fails all functional requirements, and the 'Dafny formal verification skill' oracle was clearly misread as an instruction to write Dafny code rather than Python code inspired by formal-verification principles. There are no Python strengths to note.\",\n  \"strengths\": [\n    \"The algorithmic logic (Kahn's topological sort, cycle detection, alphabetical sorting) is conceptually correct in the Dafny pseudocode\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely unusable as the required implementation\",\n    \"Cannot be imported or executed by any Python runtime\",\n    \"Does not satisfy the function signature plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]\",\n    \"Uses `assume false` as a cycle-detection mechanism, which is a verification hint not a runtime exception\",\n    \"No Python ValueError is raised on cycle detection\",\n    \"Misinterprets the informal oracle as a directive to write Dafny rather than well-structured Python\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The algorithmic logic (Kahn's topological sort, cycle detection, alphabetical sorting) is conceptually correct in the Dafny pseudocode"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely unusable as the required implementation",
+      "Cannot be imported or executed by any Python runtime",
+      "Does not satisfy the function signature plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]",
+      "Uses `assume false` as a cycle-detection mechanism, which is a verification hint not a runtime exception",
+      "No Python ValueError is raised on cycle detection",
+      "Misinterprets the informal oracle as a directive to write Dafny rather than well-structured Python"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 1128,
+      "prompt": 327,
+      "total": 1455,
+      "turns": [
+        {
+          "completion": 1128,
+          "prompt": 327,
+          "total": 1455
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(99,6): Warning: assume statement has no {:axiom} annotation\n   |\n99 |       assume false; // Signal error - in compiled code this will raise ValueError\n   |       ^^^^^^\n\nsolution.dfy(155,28): Error: arguments to > must be of a numeric type, bitvector type, ORDINAL, char, or a set-like type (instead got seq<char> and seq<char>)\n    |\n155 |     while j >= 0 && temp[j] > key\n    |                             ^\n\nsolution.dfy(159,51): Error: arguments to >= must be of a numeric type, bitvector type, ORDINAL, char, or a set-like type (instead got seq<char> and seq<char>)\n    |\n159 |       invariant forall k :: j < k <= i ==> temp[k] >= key\n    |                                                    ^^\n\n2 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "dependency_order",
+  "variant": "oracle_dafny_generation"
+}

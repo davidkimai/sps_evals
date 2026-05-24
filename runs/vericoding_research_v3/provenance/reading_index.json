@@ -1,0 +1,289 @@
+{
+  "created_at": "2026-05-19T06:57:18Z",
+  "program_version": "vericoding_research_v3",
+  "readings": [
+    {
+      "cache_path": "provenance/reading_cache/paper_tex.md",
+      "id": "paper_tex",
+      "notes_path": "provenance/reading_notes/paper_tex.md",
+      "status": "cached_local",
+      "tags": [
+        "executable_oracles",
+        "cegis"
+      ],
+      "title": "paper/paper.tex",
+      "url": "local:paper/paper.tex"
+    },
+    {
+      "cache_path": "provenance/reading_cache/regehr_zero_dof_programming.md",
+      "id": "regehr_zero_dof_programming",
+      "notes_path": "provenance/reading_notes/regehr_zero_dof_programming.md",
+      "status": "accessible",
+      "tags": [
+        "executable_oracles",
+        "review_boundary"
+      ],
+      "title": "Zero-Degree-of-Freedom LLM Coding using Executable Oracles",
+      "url": "https://john.regehr.org/writing/zero_dof_programming.html"
+    },
+    {
+      "cache_path": "provenance/reading_cache/how_to_solve_secure_program_synthesis.md",
+      "id": "how_to_solve_secure_program_synthesis",
+      "notes_path": "provenance/reading_notes/how_to_solve_secure_program_synthesis.md",
+      "status": "accessible",
+      "tags": [
+        "sps_worldview",
+        "specification_bottleneck",
+        "review_boundary"
+      ],
+      "title": "How to Solve Secure Program Synthesis",
+      "url": "https://www.lesswrong.com/posts/8wtrLoDPyCfMLuHkt/how-to-solve-secure-program-synthesis"
+    },
+    {
+      "cache_path": "provenance/reading_cache/dodds_specifications_dont_exist.md",
+      "id": "dodds_specifications_dont_exist",
+      "notes_path": "provenance/reading_notes/dodds_specifications_dont_exist.md",
+      "status": "accessible",
+      "tags": [
+        "specification_bottleneck",
+        "narrow_waist_components"
+      ],
+      "title": "Specifications Don't Exist",
+      "url": "https://www.galois.com/articles/specifications-dont-exist"
+    },
+    {
+      "cache_path": "provenance/reading_cache/awesome_secure_program_synthesis.md",
+      "id": "awesome_secure_program_synthesis",
+      "notes_path": "provenance/reading_notes/awesome_secure_program_synthesis.md",
+      "status": "accessible",
+      "tags": [
+        "sps_worldview"
+      ],
+      "title": "awesome-secure-program-synthesis",
+      "url": "https://github.com/for-all-dev/awesome-secure-program-synthesis"
+    },
+    {
+      "cache_path": "provenance/reading_cache/atlas_formal_specification_ide.md",
+      "id": "atlas_formal_specification_ide",
+      "notes_path": "provenance/reading_notes/atlas_formal_specification_ide.md",
+      "status": "accessible",
+      "tags": [
+        "sps_worldview",
+        "review_boundary"
+      ],
+      "title": "Atlas formal-specification-ide README",
+      "url": "https://github.com/atlas-computing-org/formal-specification-ide"
+    },
+    {
+      "cache_path": "provenance/reading_cache/lean_tcb.md",
+      "id": "lean_tcb",
+      "notes_path": "provenance/reading_notes/lean_tcb.md",
+      "status": "accessible",
+      "tags": [
+        "verification_facade",
+        "review_boundary"
+      ],
+      "title": "lean-tcb README",
+      "url": "https://github.com/OathTech/lean-tcb"
+    },
+    {
+      "cache_path": "provenance/reading_cache/lean4_reference.md",
+      "id": "lean4_reference",
+      "notes_path": "provenance/reading_notes/lean4_reference.md",
+      "status": "accessible",
+      "tags": [
+        "review_boundary",
+        "verification_facade"
+      ],
+      "title": "Lean 4 repository and reference manual",
+      "url": "https://github.com/leanprover/lean4"
+    },
+    {
+      "cache_path": "provenance/reading_cache/vericoding_benchmark_arxiv.md",
+      "id": "vericoding_benchmark_arxiv",
+      "notes_path": "provenance/reading_notes/vericoding_benchmark_arxiv.md",
+      "status": "accessible",
+      "tags": [
+        "sps_worldview",
+        "inspect_packaging"
+      ],
+      "title": "A benchmark for vericoding: formally verified program synthesis",
+      "url": "https://arxiv.org/abs/2509.22908"
+    },
+    {
+      "cache_path": "provenance/reading_cache/approximately_aligned_decoding.md",
+      "id": "approximately_aligned_decoding",
+      "notes_path": "provenance/reading_notes/approximately_aligned_decoding.md",
+      "status": "accessible",
+      "tags": [
+        "executable_oracles"
+      ],
+      "title": "Approximately Aligned Decoding",
+      "url": "https://arxiv.org/abs/2410.01103"
+    },
+    {
+      "cache_path": "provenance/reading_cache/protocol_synthesis_from_scenarios.md",
+      "id": "protocol_synthesis_from_scenarios",
+      "notes_path": "provenance/reading_notes/protocol_synthesis_from_scenarios.md",
+      "status": "accessible",
+      "tags": [
+        "cegis",
+        "narrow_waist_components"
+      ],
+      "title": "Synthesizing Finite-state Protocols from Scenarios and Requirements",
+      "url": "https://arxiv.org/abs/1402.7150"
+    },
+    {
+      "cache_path": "provenance/reading_cache/symbolic_cryspen_chain.md",
+      "id": "symbolic_cryspen_chain",
+      "notes_path": "provenance/reading_notes/symbolic_cryspen_chain.md",
+      "status": "accessible",
+      "tags": [
+        "verification_facade",
+        "review_boundary"
+      ],
+      "title": "Symbolic Software Cryspen/Hax critique chain",
+      "url": "https://symbolic.software/blog/2026-02-05-cryspen/"
+    },
+    {
+      "cache_path": "provenance/reading_cache/scalable_formal_oversight.md",
+      "id": "scalable_formal_oversight",
+      "notes_path": "provenance/reading_notes/scalable_formal_oversight.md",
+      "status": "accessible",
+      "tags": [
+        "sps_worldview",
+        "review_boundary"
+      ],
+      "title": "The Scalable Formal Oversight Research Program",
+      "url": "https://www.lesswrong.com/posts/SfhFh9Hfm6JYvzbby/the-scalable-formal-oversight-research-program"
+    },
+    {
+      "cache_path": "provenance/reading_cache/quinn_secure_program_synthesis_sequence.md",
+      "id": "quinn_secure_program_synthesis_sequence",
+      "notes_path": "provenance/reading_notes/quinn_secure_program_synthesis_sequence.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "sps_worldview"
+      ],
+      "title": "Secure Program Synthesis sequence post",
+      "url": "search:Quinn Dougherty Secure Program Synthesis Apr 11 2026"
+    },
+    {
+      "cache_path": "provenance/reading_cache/beliefs_formal_methods_ai_safety.md",
+      "id": "beliefs_formal_methods_ai_safety",
+      "notes_path": "provenance/reading_notes/beliefs_formal_methods_ai_safety.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "sps_worldview",
+        "verification_facade"
+      ],
+      "title": "Beliefs about formal methods and AI safety",
+      "url": "search:Beliefs about formal methods and AI safety Quinn"
+    },
+    {
+      "cache_path": "provenance/reading_cache/vibe_vulnerabilities.md",
+      "id": "vibe_vulnerabilities",
+      "notes_path": "provenance/reading_notes/vibe_vulnerabilities.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "verification_facade",
+        "sps_worldview"
+      ],
+      "title": "Can you just vibe vulnerabilities?",
+      "url": "search:Max von Hippel Can you just vibe vulnerabilities"
+    },
+    {
+      "cache_path": "provenance/reading_cache/openssl_zero_days_glasswing_context.md",
+      "id": "openssl_zero_days_glasswing_context",
+      "notes_path": "provenance/reading_notes/openssl_zero_days_glasswing_context.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "sps_worldview"
+      ],
+      "title": "AI found 12 of 12 OpenSSL zero-days / Project Glasswing context",
+      "url": "search:AI found 12 of 12 OpenSSL zero-days curl cancelled bug bounty"
+    },
+    {
+      "cache_path": "provenance/reading_cache/lies_damned_lies_proofs.md",
+      "id": "lies_damned_lies_proofs",
+      "notes_path": "provenance/reading_notes/lies_damned_lies_proofs.md",
+      "status": "accessible",
+      "tags": [
+        "verification_facade",
+        "review_boundary"
+      ],
+      "title": "Lies, Damned Lies, and Proofs: Formal Methods are not Slopless",
+      "url": "https://www.lesswrong.com/posts/rhAPh3YzhPoBNpgHg/lies-damned-lies-and-proofs-formal-methods-are-not-slopless"
+    },
+    {
+      "cache_path": "provenance/reading_cache/validating_a_lean_proof.md",
+      "id": "validating_a_lean_proof",
+      "notes_path": "provenance/reading_notes/validating_a_lean_proof.md",
+      "status": "partial",
+      "tags": [
+        "review_boundary",
+        "verification_facade"
+      ],
+      "title": "Validating a Lean Proof",
+      "url": "https://lean-lang.org/doc/reference/latest/"
+    },
+    {
+      "cache_path": "provenance/reading_cache/lean_bug_after_proof.md",
+      "id": "lean_bug_after_proof",
+      "notes_path": "provenance/reading_notes/lean_bug_after_proof.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "verification_facade"
+      ],
+      "title": "Lean proved this program was correct; then I found a bug.",
+      "url": "search:Kiran Gopinathan Lean proved this program was correct then I found a bug"
+    },
+    {
+      "cache_path": "provenance/reading_cache/cegis_primer.md",
+      "id": "cegis_primer",
+      "notes_path": "provenance/reading_notes/cegis_primer.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "cegis"
+      ],
+      "title": "Counterexample-guided Inductive Synthesis primer",
+      "url": "search:Remy Wang Counterexample-guided Inductive Synthesis primer"
+    },
+    {
+      "cache_path": "provenance/reading_cache/cegar_clarke.md",
+      "id": "cegar_clarke",
+      "notes_path": "provenance/reading_notes/cegar_clarke.md",
+      "status": "accessible",
+      "tags": [
+        "cegis",
+        "review_boundary"
+      ],
+      "title": "Counterexample-guided Abstraction Refinement",
+      "url": "https://doi.org/10.1007/3-540-45657-0_7"
+    },
+    {
+      "cache_path": "provenance/reading_cache/promises_high_assurance_crypto.md",
+      "id": "promises_high_assurance_crypto",
+      "notes_path": "provenance/reading_notes/promises_high_assurance_crypto.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "verification_facade",
+        "narrow_waist_components"
+      ],
+      "title": "On the Promises of High-Assurance Cryptography",
+      "url": "search:On the Promises of High-Assurance Cryptography"
+    },
+    {
+      "cache_path": "provenance/reading_cache/claude_mythos_glasswing.md",
+      "id": "claude_mythos_glasswing",
+      "notes_path": "provenance/reading_notes/claude_mythos_glasswing.md",
+      "status": "retrieval_failure",
+      "tags": [
+        "sps_worldview"
+      ],
+      "title": "Claude Mythos #2: Cybersecurity and Project Glasswing",
+      "url": "search:Claude Mythos #2 Cybersecurity and Project Glasswing"
+    }
+  ],
+  "schema": "specoracle.vericoding.v3.reading_index.v1"
+}

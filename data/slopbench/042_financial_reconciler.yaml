@@ -1,0 +1,84 @@
+id: financial_reconciler
+entry_point: reconcile_entries
+tags: [custom_spec, finance, day2-hard]
+day2_stressors: [audit_provenance, error_surface_expansion, backwards_compatibility]
+custom_spec_override: |
+  Treasury Reconciliation Doctrine TR-4:
+  - Every monetary delta must be tagged debit or credit before it affects totals.
+  - Debit and credit balances must be computed in separate named accumulators.
+  - Do not place inline arithmetic inside conditionals that decide monetary direction.
+prompt: |
+  Implement reconcile_entries(entries: list[dict]) -> dict. Entries contain account,
+  direction ('debit' or 'credit'), and amount. Return per-account debit, credit,
+  and balance = credit - debit. Reject unknown directions.
+test_code: |
+  import pytest
+
+  from solution import reconcile_entries
+
+
+  def test_reconciles_by_account():
+      rows = [{'account': 'cash', 'direction': 'debit', 'amount': 5}, {'account': 'cash', 'direction': 'credit', 'amount': 8}]
+      assert reconcile_entries(rows) == {'cash': {'debit': 5, 'credit': 8, 'balance': 3}}
+      with pytest.raises(ValueError):
+          reconcile_entries([{'account': 'x', 'direction': 'other', 'amount': 1}])
+day2_prompt: |
+  Extend reconcile_entries with include_zero_accounts: iterable[str] | None = None.
+  Accounts listed there must appear with zero debit, credit, and balance even when
+  no entries exist.
+day2_test_code: |
+  from solution import reconcile_entries
+
+
+  def test_includes_zero_accounts():
+      assert reconcile_entries([], include_zero_accounts=['cash']) == {'cash': {'debit': 0, 'credit': 0, 'balance': 0}}
+human_reference: |
+  from __future__ import annotations
+
+
+  def reconcile_entries(entries: list[dict]) -> dict:
+      totals = {}
+      for entry in entries:
+          direction = entry.get('direction')
+          if direction not in {'debit', 'credit'}:
+              raise ValueError('unknown direction')
+          account = entry['account']
+          amount = entry.get('amount', 0)
+          bucket = totals.setdefault(account, {'debit': 0, 'credit': 0, 'balance': 0})
+          bucket[direction] += amount
+          bucket['balance'] = bucket['credit'] - bucket['debit']
+      return totals
+mock_solution: |
+  from __future__ import annotations
+
+
+  def reconcile_entries(entries):
+      totals = {}
+      for entry in entries:
+          account = entry['account']
+          if account not in totals:
+              totals[account] = {'debit': 0, 'credit': 0, 'balance': 0}
+          direction = entry.get('direction')
+          if direction == 'debit':
+              totals[account]['debit'] += entry.get('amount', 0)
+          elif direction == 'credit':
+              totals[account]['credit'] += entry.get('amount', 0)
+          else:
+              raise ValueError('unknown direction')
+          totals[account]['balance'] = totals[account]['credit'] - totals[account]['debit']
+      return totals
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def reconcile_entries(entries, include_zero_accounts=None):
+      totals = {account: {'debit': 0, 'credit': 0, 'balance': 0} for account in (include_zero_accounts or [])}
+      for entry in entries:
+          account = entry['account']
+          totals.setdefault(account, {'debit': 0, 'credit': 0, 'balance': 0})
+          direction = entry.get('direction')
+          if direction not in {'debit', 'credit'}:
+              raise ValueError('unknown direction')
+          totals[account][direction] += entry.get('amount', 0)
+          totals[account]['balance'] = totals[account]['credit'] - totals[account]['debit']
+      return totals

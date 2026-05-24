@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 2,
+    "error_count": 3,
+    "invariant_count": 7,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 2,
+      "forall": 3,
+      "if": 1,
+      "invariant": 7,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 3
+    },
+    "lexical_proof_complexity": 22,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 45,
+    "source_token_estimate": 340,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.759,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]` with specific dict-based input/output shapes, ValueError on no enabled workers, and no mutation of inputs. Instead, the code uses Dafny syntax with tuples, sequences, and method declarations that are completely incompatible with the Python entry point. It cannot be imported or executed as Python, fails to handle the `dict` input format with optional 'enabled' fields, does not raise `ValueError`, and returns tuples instead of dicts. While the Dafny code itself shows some formal verification intent (loop invariants, preconditions, postconditions), it is entirely the wrong language and architecture for the task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]` with specific dict-based input/output shapes, ValueError on no enabled workers, and no mutation of inputs. Instead, the code uses Dafny syntax with tuples, sequences, and method declarations that are completely incompatible with the Python entry point. It cannot be imported or executed as Python, fails to handle the `dict` input format with optional 'enabled' fields, does not raise `ValueError`, and returns tuples instead of dicts. While the Dafny code itself shows some formal verification intent (loop invariants, preconditions, postconditions), it is entirely the wrong language and architecture for the task.\",\n  \"strengths\": [\n    \"Shows awareness of formal verification concepts with loop invariants and pre/postconditions\",\n    \"Logic for collecting enabled workers and round-robin assignment is conceptually correct\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Cannot be executed as the required Python entry point assign_round_robin\",\n    \"Does not handle dict inputs with optional 'enabled' field defaulting to True\",\n    \"Does not raise ValueError for no enabled workers\",\n    \"Returns tuples instead of required {'job': str, 'worker': str} dicts\",\n    \"Fails all functional requirements due to language mismatch\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows awareness of formal verification concepts with loop invariants and pre/postconditions",
+      "Logic for collecting enabled workers and round-robin assignment is conceptually correct"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Cannot be executed as the required Python entry point assign_round_robin",
+      "Does not handle dict inputs with optional 'enabled' field defaulting to True",
+      "Does not raise ValueError for no enabled workers",
+      "Returns tuples instead of required {'job': str, 'worker': str} dicts",
+      "Fails all functional requirements due to language mismatch"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 343,
+      "prompt": 325,
+      "total": 668,
+      "turns": [
+        {
+          "completion": 343,
+          "prompt": 325,
+          "total": 668
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(11,14): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n11 |     invariant forall i :: 0 <= i < |enabled| ==> exists j :: 0 <= j < k && workers[j].1 && workers[j].0 == enabled[i]\n   |               ^^^^^^\n\nsolution.dfy(27,24): Error: this loop invariant could not be proved on entry\n Related message: loop invariant violation\n   |\n27 |     invariant |enabled| > 0\n   |                         ^\n\nsolution.dfy(40,34): Error: a precondition for this call could not be proved\n   |\n40 |   var result := assign_round_robin(workers, jobs);\n   |                                   ^\n\nsolution.dfy(2,11): Related location: this is the precondition that could not be proved\n  |\n2 |   requires exists i :: 0 <= i < |workers| && workers[i].1\n  |            ^^^^^^\n\n\nDafny program verifier finished with 1 verified, 3 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "round_robin_scheduler",
+  "variant": "oracle_dafny_generation"
+}

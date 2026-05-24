@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 18,
+    "error_count": null,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 3,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 18,
+      "exists": 0,
+      "forall": 0,
+      "if": 5,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 11,
+      "while": 0
+    },
+    "lexical_proof_complexity": 37,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 11,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 102,
+    "source_token_estimate": 675,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.188,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. The task requires a Python class `TokenBucketEnforcer` with an `allow(cost: int = 1) -> bool` method and a `now` callable parameter for time injection. Instead, the submission provides Dafny class definitions, method specifications with pre/postconditions, and a `Main()` method \u2014 none of which constitute valid Python code. The entry point `TokenBucketEnforcer` is defined as a Dafny method returning a `TokenBucket`, not a Python class. There is no functional Python implementation whatsoever, making this completely unusable for the stated task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. The task requires a Python class `TokenBucketEnforcer` with an `allow(cost: int = 1) -> bool` method and a `now` callable parameter for time injection. Instead, the submission provides Dafny class definitions, method specifications with pre/postconditions, and a `Main()` method \u2014 none of which constitute valid Python code. The entry point `TokenBucketEnforcer` is defined as a Dafny method returning a `TokenBucket`, not a Python class. There is no functional Python implementation whatsoever, making this completely unusable for the stated task.\",\n  \"strengths\": [\n    \"Shows understanding of token bucket algorithm logic (refill on elapsed time, cap at capacity, deduct on allow)\",\n    \"Includes a worked example in Main() that traces expected behavior correctly\"\n  ],\n  \"weaknesses\": [\n    \"Entire submission is Dafny code, not Python \u2014 will not parse or execute as Python\",\n    \"No Python class with __init__ accepting capacity, refill_rate, and now=None\",\n    \"allow() method signature does not match required Python interface (cost: int = 1) -> bool\",\n    \"now parameter is passed per-call in Dafny style rather than injected as a callable at construction time\",\n    \"Completely fails the functional requirements as a Python implementation\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows understanding of token bucket algorithm logic (refill on elapsed time, cap at capacity, deduct on allow)",
+      "Includes a worked example in Main() that traces expected behavior correctly"
+    ],
+    "weaknesses": [
+      "Entire submission is Dafny code, not Python \u2014 will not parse or execute as Python",
+      "No Python class with __init__ accepting capacity, refill_rate, and now=None",
+      "allow() method signature does not match required Python interface (cost: int = 1) -> bool",
+      "now parameter is passed per-call in Dafny style rather than injected as a callable at construction time",
+      "Completely fails the functional requirements as a Python implementation"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 678,
+      "prompt": 294,
+      "total": 972,
+      "turns": [
+        {
+          "completion": 678,
+          "prompt": 294,
+          "total": 972
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(1,6): Error: duplicate name of top-level declaration: TokenBucketEnforcer\n  |\n1 | class TokenBucketEnforcer {\n  |       ^^^^^^^^^^^^^^^^^^^\n\nsolution.dfy(90,7): Related location\n   |\n90 | method TokenBucketEnforcer(capacity: int, refillRate: real) returns (bucket: TokenBucket)\n   |        ^^^^^^^^^^^^^^^^^^^\n\nsolution.dfy(1,6): Error: Type or type parameter is not declared in this scope: TokenBucketEnforcer? (did you forget to qualify a name or declare a module import 'opened'?) (note that names in outer modules are not visible in contained modules)\n  |\n1 | class TokenBucketEnforcer {\n  |       ^^^^^^^^^^^^^^^^^^^\n\n2 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "token_bucket_enforcer",
+  "variant": "oracle_dafny_generation"
+}

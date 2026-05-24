@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 4,
+    "error_count": null,
+    "invariant_count": 6,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 4,
+      "exists": 0,
+      "forall": 0,
+      "if": 3,
+      "invariant": 6,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 3,
+      "while": 3
+    },
+    "lexical_proof_complexity": 22,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 3,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 73,
+    "source_token_estimate": 471,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.194,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict]`, but the code is Dafny syntax with `method`, `requires`, `ensures`, `seq<string>`, `map<string, int>`, etc. This is not executable Python at all \u2014 it would cause a syntax error immediately. Beyond the wrong language, the function signature is completely different from the spec (parallel arrays instead of a list of dicts), and the return type is two sequences rather than a list of dicts. There is zero alignment with the Zen of Python principles of simplicity, readability, and explicitness in Python idioms. The only partial credit is that the algorithmic logic (rounding up to case_pack multiples, filtering by velocity, sorting by sku) appears conceptually correct in the Dafny pseudocode, but this does not constitute a valid or usable implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `reorder_plan(items: list[dict], sales_velocity: dict[str, int]) -> list[dict]`, but the code is Dafny syntax with `method`, `requires`, `ensures`, `seq<string>`, `map<string, int>`, etc. This is not executable Python at all \u2014 it would cause a syntax error immediately. Beyond the wrong language, the function signature is completely different from the spec (parallel arrays instead of a list of dicts), and the return type is two sequences rather than a list of dicts. There is zero alignment with the Zen of Python principles of simplicity, readability, and explicitness in Python idioms. The only partial credit is that the algorithmic logic (rounding up to case_pack multiples, filtering by velocity, sorting by sku) appears conceptually correct in the Dafny pseudocode, but this does not constitute a valid or usable implementation.\",\n  \"strengths\": [\n    \"Algorithmic logic for rounding deficit up to nearest case_pack multiple is conceptually correct\",\n    \"Filtering conditions (velocity > 0, on_hand < target, case_pack > 0) match the spec\",\n    \"Sorting by sku is addressed\"\n  ],\n  \"weaknesses\": [\n    \"Entire implementation is written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Function signature does not match spec: uses parallel arrays instead of list[dict] and returns two sequences instead of list[dict]\",\n    \"No Python idioms, no list comprehensions, no dict access \u2014 violates every Zen of Python principle\",\n    \"Cannot be imported or called as reorder_plan(items, sales_velocity) as required\",\n    \"Malformed item handling is delegated to a `valid` boolean array rather than being handled inside the function\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Algorithmic logic for rounding deficit up to nearest case_pack multiple is conceptually correct",
+      "Filtering conditions (velocity > 0, on_hand < target, case_pack > 0) match the spec",
+      "Sorting by sku is addressed"
+    ],
+    "weaknesses": [
+      "Entire implementation is written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Function signature does not match spec: uses parallel arrays instead of list[dict] and returns two sequences instead of list[dict]",
+      "No Python idioms, no list comprehensions, no dict access \u2014 violates every Zen of Python principle",
+      "Cannot be imported or called as reorder_plan(items, sales_velocity) as required",
+      "Malformed item handling is delegated to a `valid` boolean array rather than being handled inside the function"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 474,
+      "prompt": 340,
+      "total": 814,
+      "turns": [
+        {
+          "completion": 474,
+          "prompt": 340,
+          "total": 814
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(64,27): Error: arguments to > must be of a numeric type, bitvector type, ORDINAL, char, or a set-like type (instead got seq<char> and seq<char>)\n   |\n64 |     while k > 0 && rs[k-1] > key_s\n   |                            ^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "inventory_reorder",
+  "variant": "oracle_dafny_generation"
+}

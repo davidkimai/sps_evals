@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.633,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.242,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/input_sanitizer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 2,
+    "error_count": 0,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 7,
+      "if": 1,
+      "invariant": 5,
+      "logical_and": 2,
+      "logical_or": 3,
+      "match": 0,
+      "requires": 0,
+      "while": 1
+    },
+    "lexical_proof_complexity": 21,
+    "logical_and_count": 2,
+    "logical_or_count": 3,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 30,
+    "source_token_estimate": 244,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 6.111,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop that completely fails to implement the required `sanitize_fields` function. Instead of a simple, readable list comprehension or loop that filters fields by membership in `allowed` and validates characters, it imports a fictional Dafny-compiled module (`module_`), performs opaque symbol aliasing, and never defines `sanitize_fields` at all. The code would crash on import due to the missing `module_` dependency, and even if it didn't, it provides zero functional behavior. This is the antithesis of the Zen of Python: it is implicit, complex, nested, impractical, and completely unreadable, with no local auditability whatsoever.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop that completely fails to implement the required `sanitize_fields` function. Instead of a simple, readable list comprehension or loop that filters fields by membership in `allowed` and validates characters, it imports a fictional Dafny-compiled module (`module_`), performs opaque symbol aliasing, and never defines `sanitize_fields` at all. The code would crash on import due to the missing `module_` dependency, and even if it didn't, it provides zero functional behavior. This is the antithesis of the Zen of Python: it is implicit, complex, nested, impractical, and completely unreadable, with no local auditability whatsoever.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement the required function at all\"\n  ],\n  \"weaknesses\": [\n    \"Does not define `sanitize_fields` anywhere\",\n    \"Imports a non-existent `module_` that would cause an immediate ImportError\",\n    \"Introduces unnecessary complexity via Dafny symbol aliasing machinery\",\n    \"Violates every Zen of Python principle: implicit, complex, nested, impractical\",\n    \"Zero functional correctness \u2014 no filtering, no deduplication, no character validation\",\n    \"No local auditability; behavior is entirely opaque and indirection-heavy\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement the required function at all"
+    ],
+    "weaknesses": [
+      "Does not define `sanitize_fields` anywhere",
+      "Imports a non-existent `module_` that would cause an immediate ImportError",
+      "Introduces unnecessary complexity via Dafny symbol aliasing machinery",
+      "Violates every Zen of Python principle: implicit, complex, nested, impractical",
+      "Zero functional correctness \u2014 no filtering, no deduplication, no character validation",
+      "No local auditability; behavior is entirely opaque and indirection-heavy"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 247,
+      "prompt": 286,
+      "total": 533,
+      "turns": [
+        {
+          "completion": 247,
+          "prompt": 286,
+          "total": 533
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.058,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_____________________ test_whitelist_and_identifier_filter _____________________\n\n    def test_whitelist_and_identifier_filter():\n>       assert sanitize_fields(['name', 'bad-field', 'age', 'name', 'role'], {'name', 'age'}) == ['name', 'age']\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:5: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nmodule_.py:27: in sanitize__fields\n    if (((d_2_field_) in (allowed)) and ((d_2_field_) not in (d_0_seen_))) and (default__.is__valid__field(d_2_field_)):\n                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ns = 'name'\n\n    @staticmethod\n    def is__valid__field(s):\n        def lambda0_(forall_var_0_):\n            d_0_c_: str = forall_var_0_\n            return not ((d_0_c_) in (s)) or (default__.is__valid__char(d_0_c_))\n    \n>       return _dafny.quantifier((s).UniqueElements, True, lambda0_)\n                                 ^^^^^^^^^^^^^^^^^^\nE       AttributeError: 'str' object has no attribute 'UniqueElements'\n\nmodule_.py:39: AttributeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_whitelist_and_identifier_filter - AttributeErro...\n1 failed in 0.21s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "input_sanitizer",
+  "variant": "oracle_dafny_generation"
+}

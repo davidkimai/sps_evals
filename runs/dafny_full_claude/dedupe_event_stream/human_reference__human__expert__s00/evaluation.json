@@ -1,0 +1,60 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and well-decomposed. The main function reads like a clear narrative: parse, skip malformed, check window, retain or skip, update state. The helper `_parse_event` isolates validation logic and returns an explicit None sentinel rather than raising or silently swallowing errors. Data movement is explicit \u2014 `last_seen` is local, mutation is visible, and there is no hidden state. Names are self-explanatory. The only minor quibble is that `key_fields` being an empty list is silently accepted (producing a single-key deduplication on timestamp alone), which could surprise callers, but this is a borderline case not clearly excluded by the spec. The union return type annotation `tuple[int, tuple] | None` is clear and idiomatic for Python 3.10+. Overall this is a textbook example of the Zen principles applied: simple, explicit, flat, and locally auditable.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, flat, and well-decomposed. The main function reads like a clear narrative: parse, skip malformed, check window, retain or skip, update state. The helper `_parse_event` isolates validation logic and returns an explicit None sentinel rather than raising or silently swallowing errors. Data movement is explicit \u2014 `last_seen` is local, mutation is visible, and there is no hidden state. Names are self-explanatory. The only minor quibble is that `key_fields` being an empty list is silently accepted (producing a single-key deduplication on timestamp alone), which could surprise callers, but this is a borderline case not clearly excluded by the spec. The union return type annotation `tuple[int, tuple] | None` is clear and idiomatic for Python 3.10+. Overall this is a textbook example of the Zen principles applied: simple, explicit, flat, and locally auditable.\",\n  \"strengths\": [\n    \"Clean separation between parsing/validation and deduplication logic\",\n    \"Flat control flow with guard clauses (continue) instead of nested conditionals\",\n    \"Explicit data movement \u2014 no hidden mutation or global state\",\n    \"Self-documenting names throughout\",\n    \"Minimal surface area with no speculative abstractions or unused extension points\",\n    \"Correct handling of the rolling window semantics (updates last_seen only on retention)\"\n  ],\n  \"weaknesses\": [\n    \"Empty key_fields list is silently accepted, potentially surprising behavior\",\n    \"No input validation on window_seconds (e.g., negative values are silently accepted)\",\n    \"Boolean timestamps (bool is a subclass of int in Python) would pass the isinstance check, which may be unintended\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Clean separation between parsing/validation and deduplication logic",
+      "Flat control flow with guard clauses (continue) instead of nested conditionals",
+      "Explicit data movement \u2014 no hidden mutation or global state",
+      "Self-documenting names throughout",
+      "Minimal surface area with no speculative abstractions or unused extension points",
+      "Correct handling of the rolling window semantics (updates last_seen only on retention)"
+    ],
+    "weaknesses": [
+      "Empty key_fields list is silently accepted, potentially surprising behavior",
+      "No input validation on window_seconds (e.g., negative values are silently accepted)",
+      "Boolean timestamps (bool is a subclass of int in Python) would pass the isinstance check, which may be unintended"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 5.251,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 4.5,
+    "cyclomatic_complexity_max": 5,
+    "cyclomatic_complexity_total": 9,
+    "function_count": 2,
+    "loc": 24,
+    "maintainability_index": 54.977,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "dedupe_event_stream",
+  "variant": "human_reference"
+}

@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]:\n    ordered = sorted(events, key=lambda row: row.get('ts', 0))\n    pairs = []\n    for left in ordered:\n        if left.get('type') != 'A':\n            continue\n        for right in ordered:\n            if right.get('session_id') != left.get('session_id') or right.get('type') != 'B':\n                continue\n            if 0 < right.get('ts', 0) - left.get('ts', 0) <= within:\n                pairs.append((left, right))\n                break\n    return pairs\n",
+  "effective_temperature": null,
+  "entry_point": "correlate_events",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]:\n    ordered = sorted(events, key=lambda row: row.get('ts', 0))\n    pairs = []\n    for left in ordered:\n        if left.get('type') != 'A':\n            continue\n        for right in ordered:\n            if right.get('session_id') != left.get('session_id') or right.get('type') != 'B':\n                continue\n            if 0 < right.get('ts', 0) - left.get('ts', 0) <= within:\n                pairs.append((left, right))\n                break\n    return pairs\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend correlate_events with chain_types: list[str] | None = None. When provided,\nreturn chains of events matching the ordered types within the same session, with\neach adjacent step within the window.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import correlate_events\n\n\ndef test_multi_type_chain_matching():\n    events = [\n        {'session_id': 's', 'type': 'A', 'ts': 1},\n        {'session_id': 's', 'type': 'B', 'ts': 2},\n        {'session_id': 's', 'type': 'C', 'ts': 4},\n    ]\n    assert correlate_events(events, within=3, chain_types=['A', 'B', 'C']) == [events]\n",
+    "entry_point": "correlate_events",
+    "human_reference": "from __future__ import annotations\n\n\ndef correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]:\n    ordered = sorted(events, key=lambda row: row.get('ts', 0))\n    pairs = []\n    for left in ordered:\n        if left.get('type') != 'A':\n            continue\n        for right in ordered:\n            if right.get('session_id') != left.get('session_id') or right.get('type') != 'B':\n                continue\n            if 0 < right.get('ts', 0) - left.get('ts', 0) <= within:\n                pairs.append((left, right))\n                break\n    return pairs\n",
+    "id": "event_correlator",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef correlate_events(events, *, within: int, chain_types=None):\n    ordered = sorted(events, key=lambda row: row['ts'])\n    if chain_types is None:\n        out = []\n        for index, event in enumerate(ordered):\n            if event.get('type') == 'A':\n                for candidate in ordered[index + 1:]:\n                    if candidate.get('session_id') == event.get('session_id') and candidate.get('type') == 'B' and candidate['ts'] - event['ts'] <= within:\n                        out.append((event, candidate))\n                        break\n        return out\n    chains = []\n    for event in ordered:\n        if event.get('type') != chain_types[0]:\n            continue\n        chain = [event]\n        cursor = event\n        for expected in chain_types[1:]:\n            match = None\n            for candidate in ordered:\n                if candidate.get('session_id') == cursor.get('session_id') and candidate.get('type') == expected and 0 < candidate['ts'] - cursor['ts'] <= within:\n                    match = candidate\n                    break\n            if match is None:\n                chain = []\n                break\n            chain.append(match)\n            cursor = match\n        if chain:\n            chains.append(chain)\n    return chains\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef correlate_events(events, *, within: int):\n    out = []\n    ordered = sorted(events, key=lambda row: row['ts'])\n    for index, event in enumerate(ordered):\n        if event.get('type') == 'A':\n            for candidate in ordered[index + 1:]:\n                if candidate.get('session_id') == event.get('session_id') and candidate.get('type') == 'B' and candidate['ts'] - event['ts'] <= within:\n                    out.append((event, candidate))\n                    break\n    return out\n",
+    "prompt": "Implement correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]].\nPair event type 'A' with the first later type 'B' in the same session_id where\nthe time delta is no more than within seconds.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "events",
+      "day2-hard"
+    ],
+    "test_code": "from solution import correlate_events\n\n\ndef test_correlates_a_before_b_by_session():\n    events = [{'session_id': 's', 'type': 'A', 'ts': 1}, {'session_id': 's', 'type': 'B', 'ts': 3}]\n    pairs = correlate_events(events, within=5)\n    assert pairs == [(events[0], events[1])]\n"
+  },
+  "task_id": "event_correlator",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

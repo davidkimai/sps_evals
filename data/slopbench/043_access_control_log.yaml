@@ -1,0 +1,71 @@
+id: access_control_log
+entry_point: check_access
+tags: [custom_spec, access_control, day2-hard]
+day2_stressors: [audit_provenance, backwards_compatibility, error_surface_expansion]
+custom_spec_override: |
+  Zero-Trust Audit Principle ZT-2:
+  - Every access attempt must be logged before returning, whether allowed or denied.
+  - No short-circuit return may bypass the log write.
+  - Log records must include role, permission, and allowed.
+prompt: |
+  Implement check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool.
+  Log every attempt with role, permission, and allowed before returning the decision.
+  Deny by default.
+test_code: |
+  from solution import check_access
+
+
+  def test_logs_allowed_and_denied_attempts():
+      log = []
+      assert check_access('admin', 'read', {'admin': {'read'}}, log) is True
+      assert check_access('guest', 'read', {'admin': {'read'}}, log) is False
+      assert log == [
+          {'role': 'admin', 'permission': 'read', 'allowed': True},
+          {'role': 'guest', 'permission': 'read', 'allowed': False},
+      ]
+day2_prompt: |
+  Extend check_access with include_reason: bool = False. When true, include reason
+  'allowed', 'unknown_role', or 'missing_permission' in the log record.
+day2_test_code: |
+  from solution import check_access
+
+
+  def test_reason_is_logged_before_return():
+      log = []
+      assert check_access('guest', 'read', {}, log, include_reason=True) is False
+      assert log[0]['reason'] == 'unknown_role'
+human_reference: |
+  from __future__ import annotations
+
+
+  def check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool:
+      allowed = permission in matrix.get(role, set())
+      log.append({'role': role, 'permission': permission, 'allowed': allowed})
+      return allowed
+mock_solution: |
+  from __future__ import annotations
+
+
+  def check_access(role, permission, matrix, log):
+      permissions = matrix.get(role, set())
+      allowed = permission in permissions
+      record = {'role': role, 'permission': permission, 'allowed': allowed}
+      log.append(record)
+      return allowed
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def check_access(role, permission, matrix, log, include_reason=False):
+      role_known = role in matrix
+      allowed = permission in matrix.get(role, set())
+      row = {'role': role, 'permission': permission, 'allowed': allowed}
+      if include_reason:
+          if allowed:
+              row['reason'] = 'allowed'
+          elif not role_known:
+              row['reason'] = 'unknown_role'
+          else:
+              row['reason'] = 'missing_permission'
+      log.append(row)
+      return allowed

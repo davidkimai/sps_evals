@@ -1,0 +1,905 @@
+task_id,variant,provider,model,sample_index,requested_temperature,effective_temperature,artifact_language,oracle_spec_label,oracle_spec,syntax_ok,loc,function_count,class_count,cc_total,cc_average,cc_max,maintainability_index,max_nesting_depth,pytest_passed,pytest_timed_out,judge_score,judge_skipped,stress_passed,maintenance_token_overhead,maintenance_failure_type,maintenance_failure_detail,context_ablation_pass_at_1,context_ablation_token_overhead,context_ablation_failure_type,context_ablation_failure_detail,stress_duration_seconds,hybrid_retries,hybrid_gate_pass,hard_cc_pass,hard_nesting_pass,hard_pytest_pass,hybrid_feedback_cc_delta,max_retries_exceeded,selected_skill_ids,tool_call_count,total_prompt_token_estimate,total_completion_token_estimate,total_generation_token_estimate,generation_turn_count,dafny_status,dafny_verified,dafny_error_count,dafny_verification_status,dafny_compilation_status,compiled_python_path,lexical_proof_complexity,requires_count,ensures_count,invariant_count,source_loc,source_token_estimate,compiled_loc,compiled_token_estimate,compiled_cc_average,compiled_bloat_token_ratio
+nested_json_index,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,347,535,882,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/nested_json_index/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,26,1,1,2,66,531,27,303,12.0,0.571
+nested_json_index,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,347,609,956,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/nested_json_index/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,31,2,3,2,72,605,27,303,12.0,0.501
+nested_json_index,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,347,506,853,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/nested_json_index/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,25,0,1,2,66,503,27,303,12.0,0.602
+retry_state_machine,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,368,312,680,1,verification_failed,False,4,verification_failed,,,17,7,6,0,55,308,,,,
+retry_state_machine,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,368,303,671,1,verification_failed,False,2,verification_failed,,,17,7,6,0,53,299,,,,
+retry_state_machine,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,368,313,681,1,verification_failed,False,4,verification_failed,,,17,7,6,0,55,309,,,,
+event_windows,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,338,936,1274,1,verification_failed,False,,timeout,,,42,1,1,22,109,933,,,,
+event_windows,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,338,569,907,1,verification_failed,False,5,verification_failed,,,18,1,1,5,83,566,,,,
+event_windows,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,338,903,1241,1,verification_failed,False,,verification_failed,,,52,1,6,16,120,900,,,,
+dependency_order,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,327,1205,1532,1,verification_failed,False,,verification_failed,,,51,0,8,6,168,1202,,,,
+dependency_order,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,327,1128,1455,1,verification_failed,False,,verification_failed,,,53,0,8,12,157,1125,,,,
+dependency_order,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,327,1194,1521,1,verification_failed,False,,verification_failed,,,50,0,7,8,170,1191,,,,
+policy_merge,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,307,327,634,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/policy_merge/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,34,0,4,5,27,324,27,303,12.0,0.935
+policy_merge,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,307,423,730,1,verification_failed,False,4,verification_failed,,,25,0,3,2,51,420,,,,
+policy_merge,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,307,785,1092,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/policy_merge/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,38,0,4,5,29,358,27,303,12.0,0.846
+legacy_invoice_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Corporate Legacy Spec QX-17:
+- Prefer one obvious public function with no helper functions.
+- Use explicit branch labels in local variable names when a decision affects money.
+- Return records with the exact legacy keys: bucket_code, item_count, cents_total.
+- Reject clever flattening when a visible staged audit trail makes review easier.
+- Comments are allowed only when they name a legacy audit stage.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,341,952,1293,1,verification_failed,False,,verification_failed,,,28,0,0,0,147,949,,,,
+legacy_invoice_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Corporate Legacy Spec QX-17:
+- Prefer one obvious public function with no helper functions.
+- Use explicit branch labels in local variable names when a decision affects money.
+- Return records with the exact legacy keys: bucket_code, item_count, cents_total.
+- Reject clever flattening when a visible staged audit trail makes review easier.
+- Comments are allowed only when they name a legacy audit stage.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,341,747,1088,1,verification_failed,False,,verification_failed,,,26,1,1,8,94,615,,,,
+legacy_invoice_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Corporate Legacy Spec QX-17:
+- Prefer one obvious public function with no helper functions.
+- Use explicit branch labels in local variable names when a decision affects money.
+- Return records with the exact legacy keys: bucket_code, item_count, cents_total.
+- Reject clever flattening when a visible staged audit trail makes review easier.
+- Comments are allowed only when they name a legacy audit stage.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,341,977,1318,1,verification_failed,False,2,verification_failed,,,42,1,2,4,131,974,,,,
+thread_safe_counter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,383,448,831,1,verification_failed,False,6,verification_failed,,,28,4,13,0,74,445,,,,
+thread_safe_counter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,383,333,716,1,verification_failed,False,6,verification_failed,,,19,2,10,0,56,330,,,,
+thread_safe_counter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,383,333,716,1,verification_failed,False,6,verification_failed,,,19,2,10,0,56,330,,,,
+config_precedence_merge,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,385,346,731,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/config_precedence_merge/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,7,0,1,0,43,342,27,303,12.0,0.886
+config_precedence_merge,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,385,634,1019,1,verification_failed,False,2,verification_failed,,,14,0,3,0,68,630,,,,
+config_precedence_merge,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,385,744,1129,1,verification_failed,False,2,verification_failed,,,8,0,0,0,60,476,,,,
+cli_argument_validation,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,356,901,1257,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/cli_argument_validation/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,23,0,4,1,84,565,27,303,12.0,0.536
+cli_argument_validation,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,356,376,732,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/cli_argument_validation/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,13,0,4,1,59,373,27,303,12.0,0.812
+cli_argument_validation,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,356,632,988,1,verification_failed,False,2,verification_failed,,,30,0,3,5,104,628,,,,
+csv_sales_aggregate,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,329,1650,1979,1,verification_failed,False,,verification_failed,,,71,1,5,16,258,1647,,,,
+csv_sales_aggregate,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,329,1679,2008,1,verification_failed,False,,verification_failed,,,75,0,0,18,260,1676,,,,
+csv_sales_aggregate,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,329,1628,1957,1,verification_failed,False,,verification_failed,,,69,2,3,8,255,1625,,,,
+retry_backoff_schedule,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,325,292,617,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/retry_backoff_schedule/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,19,3,3,5,38,289,27,303,12.0,1.048
+retry_backoff_schedule,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,325,340,665,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/retry_backoff_schedule/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,22,3,3,5,46,337,27,303,12.0,0.899
+retry_backoff_schedule,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,325,323,648,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/retry_backoff_schedule/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,19,3,3,5,41,320,27,303,12.0,0.947
+json_path_projection,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,314,649,963,1,verification_failed,False,,verification_failed,,,30,0,5,5,116,646,,,,
+json_path_projection,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,314,492,806,1,verification_failed,False,,verification_failed,,,17,0,2,0,81,489,,,,
+json_path_projection,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,314,552,866,1,verification_failed,False,,verification_failed,,,23,0,2,0,89,548,,,,
+sliding_window_limiter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,358,429,787,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/sliding_window_limiter/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,17,2,8,1,56,425,27,303,12.0,0.713
+sliding_window_limiter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,358,421,779,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/sliding_window_limiter/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,17,2,8,1,58,418,27,303,12.0,0.725
+sliding_window_limiter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,358,421,779,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/sliding_window_limiter/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,17,2,8,1,58,418,27,303,12.0,0.725
+archival_binding_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Archival Binder Spec R-04:
+- Prefer visibly staged parsing over compressed one-liners.
+- Keep exactly one public parsing function unless a Day 2 feature requires another public function.
+- Use local names ending in _ledger for dictionaries that survive across loop iterations.
+- Preserve input order whenever the output is review-facing.
+- Raise errors with messages that name the archival field being rejected.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,329,955,1284,1,verification_failed,False,,verification_failed,,,38,1,3,7,167,952,,,,
+archival_binding_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Archival Binder Spec R-04:
+- Prefer visibly staged parsing over compressed one-liners.
+- Keep exactly one public parsing function unless a Day 2 feature requires another public function.
+- Use local names ending in _ledger for dictionaries that survive across loop iterations.
+- Preserve input order whenever the output is review-facing.
+- Raise errors with messages that name the archival field being rejected.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,329,1043,1372,1,verification_failed,False,2,verification_failed,,,41,1,4,10,180,1040,,,,
+archival_binding_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Archival Binder Spec R-04:
+- Prefer visibly staged parsing over compressed one-liners.
+- Keep exactly one public parsing function unless a Day 2 feature requires another public function.
+- Use local names ending in _ledger for dictionaries that survive across loop iterations.
+- Preserve input order whenever the output is review-facing.
+- Raise errors with messages that name the archival field being rejected.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,329,924,1253,1,verification_failed,False,2,verification_failed,,,42,1,5,7,134,921,,,,
+dedupe_event_stream,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,342,780,1122,1,verification_failed,False,,verification_failed,,,32,1,1,7,129,777,,,,
+dedupe_event_stream,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,342,485,827,1,verification_failed,False,,verification_failed,,,24,1,1,7,65,482,,,,
+dedupe_event_stream,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,342,429,771,1,verification_failed,False,2,verification_failed,,,20,1,1,5,58,426,,,,
+round_robin_scheduler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,325,343,668,1,verification_failed,False,3,verification_failed,,,22,1,2,7,45,340,,,,
+round_robin_scheduler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,325,215,540,1,verification_failed,False,,verification_failed,,,15,1,2,5,30,212,,,,
+round_robin_scheduler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,325,136,461,1,verification_failed,False,,verification_failed,,,7,2,1,1,20,132,,,,
+incident_desk_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Incident Desk Spec N-9:
+- Return review-facing rows with stable status_code values, never booleans.
+- Prefer local lookup tables with names ending in _table.
+- Keep branch reasons as short explicit strings, not hidden in comments.
+- Do not introduce classes for single-pass ticket routing.
+- Preserve ticket order because shift leads compare rows against the intake log.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,352,840,1192,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/incident_desk_spec/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,79,2,1,2,115,837,27,303,12.0,0.362
+incident_desk_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Incident Desk Spec N-9:
+- Return review-facing rows with stable status_code values, never booleans.
+- Prefer local lookup tables with names ending in _table.
+- Keep branch reasons as short explicit strings, not hidden in comments.
+- Do not introduce classes for single-pass ticket routing.
+- Preserve ticket order because shift leads compare rows against the intake log.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,352,1070,1422,1,verification_failed,False,4,verification_failed,,,80,2,1,2,133,1067,,,,
+incident_desk_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Incident Desk Spec N-9:
+- Return review-facing rows with stable status_code values, never booleans.
+- Prefer local lookup tables with names ending in _table.
+- Keep branch reasons as short explicit strings, not hidden in comments.
+- Do not introduce classes for single-pass ticket routing.
+- Preserve ticket order because shift leads compare rows against the intake log.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,352,798,1150,1,verification_failed,False,,verification_failed,,,71,3,1,2,107,795,,,,
+log_sessionizer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,335,507,842,1,verification_failed,False,,verification_failed,,,18,1,1,6,74,504,,,,
+log_sessionizer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,335,495,830,1,verification_failed,False,,verification_failed,,,22,1,1,6,75,491,,,,
+log_sessionizer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,335,726,1061,1,verification_failed,False,,verification_failed,,,41,1,3,10,89,723,,,,
+feature_flag_matrix,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,328,218,546,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/feature_flag_matrix/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,5,0,1,1,29,215,27,303,12.0,1.409
+feature_flag_matrix,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,328,313,641,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/feature_flag_matrix/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,8,0,0,3,44,309,27,303,12.0,0.981
+feature_flag_matrix,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,328,559,887,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/feature_flag_matrix/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,28,0,4,9,67,556,27,303,12.0,0.545
+inventory_reorder,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,340,475,815,1,verification_failed,False,,timeout,,,20,4,4,4,67,471,,,,
+inventory_reorder,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,340,940,1280,1,verification_failed,False,,timeout,,,44,4,4,6,140,937,,,,
+inventory_reorder,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,340,474,814,1,verification_failed,False,,verification_failed,,,22,3,4,6,73,471,,,,
+async_rate_limiter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,316,370,686,1,verification_failed,False,,timeout,,,28,5,9,0,72,366,,,,
+async_rate_limiter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,316,320,636,1,verification_failed,False,6,verification_failed,,,19,2,5,0,59,316,,,,
+async_rate_limiter,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,316,218,534,1,verification_failed,False,5,verification_failed,,,11,2,3,0,41,215,,,,
+streaming_csv_parser,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,309,461,770,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/streaming_csv_parser/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,17,0,2,6,75,458,27,303,12.0,0.662
+streaming_csv_parser,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,309,431,740,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/streaming_csv_parser/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,16,0,2,5,72,428,27,303,12.0,0.708
+streaming_csv_parser,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,309,429,738,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/streaming_csv_parser/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,18,0,2,7,72,426,27,303,12.0,0.711
+paginated_api_cursor,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,298,152,450,1,verification_failed,False,,timeout,,,9,3,1,2,23,149,,,,
+paginated_api_cursor,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,298,77,375,1,verification_failed,False,,timeout,,,5,1,1,2,14,74,,,,
+paginated_api_cursor,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,298,77,375,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/paginated_api_cursor/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,5,1,1,2,14,74,27,303,12.0,4.095
+lazy_file_chunker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,290,429,719,1,verification_failed,False,,timeout,,,32,4,6,6,60,426,,,,
+lazy_file_chunker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,290,171,461,1,verification_failed,False,,verification_failed,,,13,2,2,3,22,167,,,,
+lazy_file_chunker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,290,364,654,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/lazy_file_chunker/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,26,5,5,3,47,361,27,303,12.0,0.839
+async_batch_processor,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,322,604,926,1,verification_failed,False,3,verification_failed,,,34,4,7,4,76,601,,,,
+async_batch_processor,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,322,127,449,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/async_batch_processor/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,8,2,1,2,21,124,27,303,12.0,2.444
+async_batch_processor,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,322,436,758,1,verification_failed,False,,verification_failed,,,27,3,5,4,61,433,,,,
+timing_safe_compare,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,292,106,398,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/timing_safe_compare/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,6,0,1,2,19,103,27,303,12.0,2.942
+timing_safe_compare,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,292,118,410,1,verification_failed,False,,timeout,,,8,2,1,2,21,114,,,,
+timing_safe_compare,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,292,40,332,1,verification_failed,False,,timeout,,,1,0,1,0,5,37,,,,
+input_sanitizer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,286,234,520,1,verification_failed,False,,timeout,,,19,0,2,4,29,230,,,,
+input_sanitizer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,286,247,533,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/input_sanitizer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,21,0,2,5,30,244,27,303,12.0,1.242
+input_sanitizer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,286,233,519,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/input_sanitizer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,19,0,2,4,29,229,27,303,12.0,1.323
+token_bucket_enforcer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,294,384,678,1,verification_failed,False,8,verification_failed,,,21,6,6,0,59,381,,,,
+token_bucket_enforcer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,294,265,559,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/token_bucket_enforcer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,17,7,8,0,44,262,27,303,12.0,1.156
+token_bucket_enforcer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,294,678,972,1,verification_failed,False,,verification_failed,,,37,11,18,0,102,675,,,,
+audit_log_writer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,292,364,656,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/audit_log_writer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,18,2,6,4,45,361,27,303,12.0,0.839
+audit_log_writer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,292,285,577,1,verification_failed,False,,verification_failed,,,12,2,6,1,34,281,,,,
+audit_log_writer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,292,402,694,1,verification_failed,False,,verification_failed,,,18,2,6,2,48,399,,,,
+permission_gate,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,True,False,1,False,,,,,,,,,,,,,,,,,,,289,95,384,1,verified,True,0,verified,translated,runs/dafny_full_claude/permission_gate/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,4,0,1,0,14,92,27,303,12.0,3.293
+permission_gate,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,True,False,1,False,,,,,,,,,,,,,,,,,,,289,95,384,1,verified,True,0,verified,translated,runs/dafny_full_claude/permission_gate/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,4,0,1,0,14,92,27,303,12.0,3.293
+permission_gate,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,True,False,1,False,,,,,,,,,,,,,,,,,,,289,95,384,1,verified,True,0,verified,translated,runs/dafny_full_claude/permission_gate/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,4,0,1,0,14,92,27,303,12.0,3.293
+connection_pool,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,302,735,1037,1,verification_failed,False,,timeout,,,38,6,14,5,125,732,,,,
+connection_pool,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,302,818,1120,1,verification_failed,False,,verification_failed,,,52,12,22,4,144,815,,,,
+connection_pool,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,302,989,1291,1,verification_failed,False,,verification_failed,,,52,12,13,11,158,985,,,,
+lazy_singleton,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,274,100,374,1,verification_failed,False,,verification_failed,,,4,0,3,0,20,97,,,,
+lazy_singleton,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,274,109,383,1,verification_failed,False,,verification_failed,,,4,0,3,0,20,106,,,,
+lazy_singleton,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,274,100,374,1,verification_failed,False,,verification_failed,,,4,0,3,0,20,97,,,,
+object_registry,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,280,200,480,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/object_registry/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,5,0,4,0,32,197,27,303,12.0,1.538
+object_registry,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,280,283,563,1,verification_failed,False,,verification_failed,,,9,0,5,0,48,280,,,,
+object_registry,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,280,195,475,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/object_registry/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,5,0,4,0,32,192,27,303,12.0,1.578
+resource_scope,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,285,141,426,1,verification_failed,False,,timeout,,,7,0,1,4,23,138,,,,
+resource_scope,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,285,140,425,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/resource_scope/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,7,0,1,4,23,136,27,303,12.0,2.228
+resource_scope,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,285,527,812,1,verification_failed,False,,timeout,,,7,0,1,4,31,257,,,,
+ttl_cache,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,286,1542,1828,1,verification_failed,False,,verification_failed,,,49,8,9,11,220,1539,,,,
+ttl_cache,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,286,879,1165,1,verification_failed,False,,verification_failed,,,45,19,9,6,136,876,,,,
+ttl_cache,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,286,1059,1345,1,verification_failed,False,,verification_failed,,,47,18,8,6,161,1056,,,,
+schema_coercer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,296,942,1238,1,verification_failed,False,,verification_failed,,,48,0,1,3,171,939,,,,
+schema_coercer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,296,441,737,1,verification_failed,False,,verification_failed,,,27,0,1,1,57,438,,,,
+schema_coercer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,296,635,931,1,verification_failed,False,2,verification_failed,,,32,0,1,1,118,632,,,,
+log_aggregator,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,282,607,889,1,verification_failed,False,2,verification_failed,,,27,0,1,11,85,604,,,,
+log_aggregator,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,282,706,988,1,verification_failed,False,,timeout,,,35,0,1,11,92,703,,,,
+log_aggregator,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,282,544,826,1,verification_failed,False,2,verification_failed,,,25,0,1,10,73,541,,,,
+time_series_resampler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,309,739,1048,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/time_series_resampler/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,27,4,1,6,112,735,27,303,12.0,0.412
+time_series_resampler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,309,667,976,1,verification_failed,False,,verification_failed,,,16,2,0,3,56,324,,,,
+time_series_resampler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,309,702,1011,1,verification_failed,False,2,verification_failed,,,31,4,1,13,115,698,,,,
+hierarchical_flattener,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,276,349,625,1,verification_failed,False,,verification_failed,,,22,0,3,6,52,346,,,,
+hierarchical_flattener,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,276,181,457,1,verification_failed,False,,verification_failed,,,5,0,0,0,27,178,,,,
+hierarchical_flattener,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,276,282,558,1,verification_failed,False,,verification_failed,,,9,0,1,3,45,279,,,,
+event_correlator,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,289,396,685,1,verification_failed,False,,verification_failed,,,30,1,1,5,45,393,,,,
+event_correlator,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,289,553,842,1,verification_failed,False,2,verification_failed,,,30,1,1,5,64,550,,,,
+event_correlator,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,2,False,,,,,,,,,,,,,,,,,,,289,690,979,1,verification_failed,False,10,verification_failed,,,45,1,4,10,63,687,,,,
+audit_trail_builder,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Regulatory Audit Trail Standard RAT-9:
+- Every audit record must carry source_system, actor_id, and a monotonic sequence number.
+- Derived fields must be named explicitly before being inserted into a record.
+- Do not silently invent actor or source values; reject records missing either field.",False,0,0,0,0,0.0,0,,0,False,False,3,False,,,,,,,,,,,,,,,,,,,290,484,774,1,verification_failed,False,4,verification_failed,,,19,2,1,2,62,481,,,,
+audit_trail_builder,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Regulatory Audit Trail Standard RAT-9:
+- Every audit record must carry source_system, actor_id, and a monotonic sequence number.
+- Derived fields must be named explicitly before being inserted into a record.
+- Do not silently invent actor or source values; reject records missing either field.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,290,276,566,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/audit_trail_builder/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,17,1,1,2,38,273,27,303,12.0,1.11
+audit_trail_builder,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Regulatory Audit Trail Standard RAT-9:
+- Every audit record must carry source_system, actor_id, and a monotonic sequence number.
+- Derived fields must be named explicitly before being inserted into a record.
+- Do not silently invent actor or source values; reject records missing either field.",False,0,0,0,0,0.0,0,,0,False,False,2,False,,,,,,,,,,,,,,,,,,,290,280,570,1,verification_failed,False,,verification_failed,,,18,1,1,2,39,277,,,,
+financial_reconciler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Treasury Reconciliation Doctrine TR-4:
+- Every monetary delta must be tagged debit or credit before it affects totals.
+- Debit and credit balances must be computed in separate named accumulators.
+- Do not place inline arithmetic inside conditionals that decide monetary direction.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,291,265,556,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/financial_reconciler/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,13,2,1,2,32,261,27,303,12.0,1.161
+financial_reconciler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Treasury Reconciliation Doctrine TR-4:
+- Every monetary delta must be tagged debit or credit before it affects totals.
+- Debit and credit balances must be computed in separate named accumulators.
+- Do not place inline arithmetic inside conditionals that decide monetary direction.",False,0,0,0,0,0.0,0,,0,False,False,2,False,,,,,,,,,,,,,,,,,,,291,265,556,1,verification_failed,False,,timeout,,,13,2,1,2,32,261,,,,
+financial_reconciler,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Treasury Reconciliation Doctrine TR-4:
+- Every monetary delta must be tagged debit or credit before it affects totals.
+- Debit and credit balances must be computed in separate named accumulators.
+- Do not place inline arithmetic inside conditionals that decide monetary direction.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,291,265,556,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/financial_reconciler/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,13,2,1,2,32,261,27,303,12.0,1.161
+access_control_log,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Zero-Trust Audit Principle ZT-2:
+- Every access attempt must be logged before returning, whether allowed or denied.
+- No short-circuit return may bypass the log write.
+- Log records must include role, permission, and allowed.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,286,160,446,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/access_control_log/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,4,0,1,0,17,157,27,303,12.0,1.93
+access_control_log,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Zero-Trust Audit Principle ZT-2:
+- Every access attempt must be logged before returning, whether allowed or denied.
+- No short-circuit return may bypass the log write.
+- Log records must include role, permission, and allowed.",True,27,2,0,12,12.0,12,70.179,3,False,True,1,False,,,,,,,,,,,,,,,,,,,286,159,445,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/access_control_log/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,4,0,1,0,17,156,27,303,12.0,1.942
+access_control_log,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Zero-Trust Audit Principle ZT-2:
+- Every access attempt must be logged before returning, whether allowed or denied.
+- No short-circuit return may bypass the log write.
+- Log records must include role, permission, and allowed.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,286,160,446,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/access_control_log/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,4,0,1,0,17,157,27,303,12.0,1.93
+medical_intake_form,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Clinical Data Standard CD-7:
+- Validate every required field before accepting any field into the output.
+- Error messages must name the field that failed validation.
+- Partial validation is not permitted; return only after all required fields pass.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,287,123,410,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/medical_intake_form/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,5,2,3,0,15,120,27,303,12.0,2.525
+medical_intake_form,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Clinical Data Standard CD-7:
+- Validate every required field before accepting any field into the output.
+- Error messages must name the field that failed validation.
+- Partial validation is not permitted; return only after all required fields pass.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,287,300,587,1,verification_failed,False,3,verification_failed,,,16,0,2,0,52,297,,,,
+medical_intake_form,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Clinical Data Standard CD-7:
+- Validate every required field before accepting any field into the output.
+- Error messages must name the field that failed validation.
+- Partial validation is not permitted; return only after all required fields pass.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,287,123,410,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/medical_intake_form/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,5,2,3,0,16,120,27,303,12.0,2.525
+adversarial_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Legacy Telemetry Standard LT-11:
+- Every state transition must be represented by an explicit labeled branch variable.
+- Branch labels must be local variables named branch_<state>_<event>.
+- The implementation should favor auditable branch labels over minimizing decision count.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,291,106,397,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/adversarial_spec/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,8,0,0,0,14,103,27,303,12.0,2.942
+adversarial_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Legacy Telemetry Standard LT-11:
+- Every state transition must be represented by an explicit labeled branch variable.
+- Branch labels must be local variables named branch_<state>_<event>.
+- The implementation should favor auditable branch labels over minimizing decision count.",False,0,0,0,0,0.0,0,,0,False,False,2,False,,,,,,,,,,,,,,,,,,,291,106,397,1,verification_failed,False,,timeout,,,8,0,0,0,14,103,,,,
+adversarial_spec,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Legacy Telemetry Standard LT-11:
+- Every state transition must be represented by an explicit labeled branch variable.
+- Branch labels must be local variables named branch_<state>_<event>.
+- The implementation should favor auditable branch labels over minimizing decision count.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,291,106,397,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/adversarial_spec/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,8,0,0,0,14,103,27,303,12.0,2.942
+priority_queue_merger,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,272,538,810,1,verification_failed,False,,verification_failed,,,36,1,1,13,64,538,,,,
+priority_queue_merger,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,272,896,1168,1,verification_failed,False,,verification_failed,,,53,2,3,13,123,892,,,,
+priority_queue_merger,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,272,946,1218,1,verification_failed,False,,verification_failed,,,69,2,3,19,114,942,,,,
+state_diff_tracker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"State Review Ledger SRL-3:
+- Every field-level change must be represented as an explicit record with field, before, and after.
+- Do not collapse multiple changed fields into a summary string.
+- Exported graph edges must preserve the same field labels as the diff records.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,289,804,1093,1,verification_failed,False,4,verification_failed,,,50,0,6,19,102,801,,,,
+state_diff_tracker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"State Review Ledger SRL-3:
+- Every field-level change must be represented as an explicit record with field, before, and after.
+- Do not collapse multiple changed fields into a summary string.
+- Exported graph edges must preserve the same field labels as the diff records.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,289,587,876,1,verification_failed,False,,verification_failed,,,28,0,3,7,68,584,,,,
+state_diff_tracker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"State Review Ledger SRL-3:
+- Every field-level change must be represented as an explicit record with field, before, and after.
+- Do not collapse multiple changed fields into a summary string.
+- Exported graph edges must preserve the same field labels as the diff records.",False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,289,620,909,1,verification_failed,False,10,verification_failed,,,39,0,4,9,69,617,,,,
+multiformat_serializer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,290,834,1124,1,verification_failed,False,2,verification_failed,,,44,1,6,6,132,831,,,,
+multiformat_serializer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,290,616,906,1,verification_failed,False,6,verification_failed,,,30,1,6,4,105,613,,,,
+multiformat_serializer,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,False,0,0,0,0,0.0,0,,0,False,False,1,False,,,,,,,,,,,,,,,,,,,290,796,1086,1,verification_failed,False,,timeout,,,54,4,10,9,119,793,,,,
+circuit_breaker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,custom_spec_override,"Resilience Control Standard RCS-5:
+- State transitions must be explicit and inspectable through a state attribute.
+- Failure thresholds and recovery timers must be named configuration values, not magic constants.
+- Half-open trials must either close on success or reopen on failure.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,303,540,843,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/circuit_breaker/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,18,6,6,0,84,537,27,303,12.0,0.564
+circuit_breaker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,custom_spec_override,"Resilience Control Standard RCS-5:
+- State transitions must be explicit and inspectable through a state attribute.
+- Failure thresholds and recovery timers must be named configuration values, not magic constants.
+- Half-open trials must either close on success or reopen on failure.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,303,475,778,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/circuit_breaker/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,15,4,7,0,71,472,27,303,12.0,0.642
+circuit_breaker,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,custom_spec_override,"Resilience Control Standard RCS-5:
+- State transitions must be explicit and inspectable through a state attribute.
+- Failure thresholds and recovery timers must be named configuration values, not magic constants.
+- Half-open trials must either close on success or reopen on failure.",True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,303,418,721,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/circuit_breaker/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,13,3,6,0,63,415,27,303,12.0,0.73
+spec_elicitation_stub,oracle_dafny_generation,anthropic,claude-sonnet-4-6,0,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,294,196,490,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/spec_elicitation_stub/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py,16,1,2,0,23,193,27,303,12.0,1.57
+spec_elicitation_stub,oracle_dafny_generation,anthropic,claude-sonnet-4-6,1,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,294,118,412,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/spec_elicitation_stub/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py,12,1,2,0,13,115,27,303,12.0,2.635
+spec_elicitation_stub,oracle_dafny_generation,anthropic,claude-sonnet-4-6,2,0.8,0.8,dafny,dafny_formal_verification,Dafny formal verification skill loaded through modular discovery.,True,27,2,0,12,12.0,12,70.179,3,False,False,1,False,,,,,,,,,,,,,,,,,,,294,41,335,1,runtime_failed,True,0,verified,translated,runs/dafny_full_claude/spec_elicitation_stub/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py,2,1,1,0,6,38,27,303,12.0,7.974
+nested_json_index,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,16,1,0,6,6.0,6,58.877,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+retry_state_machine,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,15,5,1,8,1.333,2,61.964,1,True,False,10,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+event_windows,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,15,1,0,6,6.0,6,58.61,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+dependency_order,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,19,1,0,9,9.0,9,61.266,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+policy_merge,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,14,1,0,5,5.0,5,65.989,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+legacy_invoice_spec,human_reference,human,expert,0,,,python,custom_spec_override,"Corporate Legacy Spec QX-17:
+- Prefer one obvious public function with no helper functions.
+- Use explicit branch labels in local variable names when a decision affects money.
+- Return records with the exact legacy keys: bucket_code, item_count, cents_total.
+- Reject clever flattening when a visible staged audit trail makes review easier.
+- Comments are allowed only when they name a legacy audit stage.",True,20,1,0,7,7.0,7,56.999,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+thread_safe_counter,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,23,4,1,8,1.6,2,58.289,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+config_precedence_merge,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,37,4,0,22,5.5,9,48.92,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+cli_argument_validation,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,32,3,0,14,4.667,8,48.418,4,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+csv_sales_aggregate,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,30,2,0,10,5.0,6,54.614,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+retry_backoff_schedule,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,9,1,0,5,5.0,5,66.101,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+json_path_projection,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,22,2,0,10,5.0,7,58.067,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+sliding_window_limiter,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,21,4,1,12,2.4,3,56.366,1,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+archival_binding_spec,human_reference,human,expert,0,,,python,custom_spec_override,"Archival Binder Spec R-04:
+- Prefer visibly staged parsing over compressed one-liners.
+- Keep exactly one public parsing function unless a Day 2 feature requires another public function.
+- Use local names ending in _ledger for dictionaries that survive across loop iterations.
+- Preserve input order whenever the output is review-facing.
+- Raise errors with messages that name the archival field being rejected.",True,20,2,0,10,5.0,6,57.092,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+dedupe_event_stream,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,24,2,0,9,4.5,5,54.977,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+round_robin_scheduler,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,8,1,0,5,5.0,5,71.056,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+incident_desk_spec,human_reference,human,expert,0,,,python,custom_spec_override,"Incident Desk Spec N-9:
+- Return review-facing rows with stable status_code values, never booleans.
+- Prefer local lookup tables with names ending in _table.
+- Keep branch reasons as short explicit strings, not hidden in comments.
+- Do not introduce classes for single-pass ticket routing.
+- Preserve ticket order because shift leads compare rows against the intake log.",True,20,2,0,5,2.5,3,66.351,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+log_sessionizer,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,28,3,0,12,4.0,6,54.839,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+feature_flag_matrix,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,6,1,0,2,2.0,2,100.0,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+inventory_reorder,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,30,3,0,10,3.333,5,52.114,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+async_rate_limiter,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,19,2,1,12,4.0,5,57.473,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+streaming_csv_parser,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,19,1,0,8,8.0,8,60.402,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+paginated_api_cursor,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,15,1,0,3,3.0,3,71.314,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+lazy_file_chunker,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,11,1,0,4,4.0,4,69.289,2,True,False,10,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+async_batch_processor,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,20,2,0,7,7.0,7,62.338,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+timing_safe_compare,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,8,1,0,4,4.0,4,69.252,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+input_sanitizer,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,14,1,0,5,5.0,5,63.598,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+token_bucket_enforcer,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,23,2,1,12,4.0,5,54.376,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+audit_log_writer,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,10,2,1,4,1.333,2,72.138,0,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+permission_gate,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,3,1,0,1,1.0,1,84.716,0,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+connection_pool,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,32,4,1,16,3.2,4,52.748,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+lazy_singleton,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,16,2,1,7,2.333,3,77.395,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+object_registry,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,13,4,1,10,2.0,3,64.932,0,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+resource_scope,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,16,4,1,8,1.6,3,67.476,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+ttl_cache,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,28,3,1,13,3.25,4,52.639,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+schema_coercer,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,10,1,0,3,3.0,3,100.0,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+log_aggregator,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,12,1,0,4,4.0,4,70.421,3,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+time_series_resampler,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,12,1,0,4,4.0,4,63.803,2,True,False,7,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+hierarchical_flattener,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,11,2,0,1,1.0,1,100.0,2,True,False,6,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+event_correlator,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,14,1,0,7,7.0,7,59.951,3,True,False,6,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+audit_trail_builder,human_reference,human,expert,0,,,python,custom_spec_override,"Regulatory Audit Trail Standard RAT-9:
+- Every audit record must carry source_system, actor_id, and a monotonic sequence number.
+- Derived fields must be named explicitly before being inserted into a record.
+- Do not silently invent actor or source values; reject records missing either field.",True,8,1,0,4,4.0,4,69.841,2,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+financial_reconciler,human_reference,human,expert,0,,,python,custom_spec_override,"Treasury Reconciliation Doctrine TR-4:
+- Every monetary delta must be tagged debit or credit before it affects totals.
+- Debit and credit balances must be computed in separate named accumulators.
+- Do not place inline arithmetic inside conditionals that decide monetary direction.",True,13,1,0,3,3.0,3,64.405,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+access_control_log,human_reference,human,expert,0,,,python,custom_spec_override,"Zero-Trust Audit Principle ZT-2:
+- Every access attempt must be logged before returning, whether allowed or denied.
+- No short-circuit return may bypass the log write.
+- Log records must include role, permission, and allowed.",True,5,1,0,1,1.0,1,78.15,0,True,False,10,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+medical_intake_form,human_reference,human,expert,0,,,python,custom_spec_override,"Clinical Data Standard CD-7:
+- Validate every required field before accepting any field into the output.
+- Error messages must name the field that failed validation.
+- Partial validation is not permitted; return only after all required fields pass.",True,13,1,0,9,9.0,9,60.173,1,True,False,8,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+adversarial_spec,human_reference,human,expert,0,,,python,custom_spec_override,"Legacy Telemetry Standard LT-11:
+- Every state transition must be represented by an explicit labeled branch variable.
+- Branch labels must be local variables named branch_<state>_<event>.
+- The implementation should favor auditable branch labels over minimizing decision count.",True,4,1,0,1,1.0,1,100.0,0,True,False,2,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+priority_queue_merger,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,18,1,0,6,6.0,6,100.0,3,True,False,7,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+state_diff_tracker,human_reference,human,expert,0,,,python,custom_spec_override,"State Review Ledger SRL-3:
+- Every field-level change must be represented as an explicit record with field, before, and after.
+- Do not collapse multiple changed fields into a summary string.
+- Exported graph edges must preserve the same field labels as the diff records.",True,9,1,0,3,3.0,3,69.446,2,True,False,10,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+multiformat_serializer,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,15,1,0,7,7.0,7,61.517,2,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+circuit_breaker,human_reference,human,expert,0,,,python,custom_spec_override,"Resilience Control Standard RCS-5:
+- State transitions must be explicit and inspectable through a state attribute.
+- Failure thresholds and recovery timers must be named configuration values, not magic constants.
+- Half-open trials must either close on success or reopen on failure.",True,28,2,1,16,5.333,6,51.613,3,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,
+spec_elicitation_stub,human_reference,human,expert,0,,,python,zen_of_python,"Treat the Zen of Python as an informal in-context oracle for structural quality.
+The oracle is not a style preference layer; it is a degree-of-freedom collapse
+over the implementation space. Preserve functional correctness while choosing
+the simplest architecture that satisfies the task.
+
+Operational constraints:
+- Prefer small pure helpers over monolithic functions.
+- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.
+- Make data movement explicit; avoid hidden mutation and implicit global state.
+- Raise clear errors for invalid inputs instead of silently guessing.
+- Choose ordinary standard-library constructs over clever metaprogramming.
+- Use names that make the implementation easy to explain.
+- Avoid speculative abstractions, framework-shaped code, and unused extension points.
+- Keep code sparse enough that a maintainer can audit behavior locally.
+",True,5,1,0,3,3.0,3,74.159,1,True,False,9,False,,,,,,,,,,,,,,,,,,,,,,0,not_dafny,,,,,,,,,,,,,,,

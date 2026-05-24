@@ -1,0 +1,54 @@
+{
+  "artifact_language": "dafny",
+  "code": "method merge_policy(defaults: map<string, int>, override: map<string, int>) returns (result: map<string, int>)\n  ensures forall k :: k in override && override[k] != -999999 ==> k in result && result[k] == override[k]\n  ensures forall k :: k in defaults && k !in override ==> k in result && result[k] == defaults[k]\n  ensures forall k :: k in override && override[k] == -999999 ==> k !in result\n{\n  result := defaults;\n  var keys := override.Keys;\n  var keySeq: seq<string> := [];\n  \n  // Convert keys to sequence\n  var remaining := keys;\n  while remaining != {}\n    decreases |remaining|\n  {\n    var k :| k in remaining;\n    keySeq := keySeq + [k];\n    remaining := remaining - {k};\n  }\n  \n  var i := 0;\n  while i < |keySeq|\n    invariant 0 <= i <= |keySeq|\n    invariant forall k :: k in result ==> (k in defaults || k in override)\n  {\n    var k := keySeq[i];\n    if override[k] == -999999 {\n      // Remove key (None represented as -999999)\n      if k in result {\n        result := result - {k};\n      }\n    } else {\n      result := result[k := override[k]];\n    }\n    i := i + 1;\n  }\n}\n\nmethod Main() {\n  // Test basic merge\n  var defaults := map[\"a\" := 1, \"b\" := 2, \"c\" := 3];\n  var override := map[\"b\" := 20, \"d\" := 4];\n  var result := merge_policy(defaults, override);\n  \n  assert \"a\" in result;\n  assert \"b\" in result;\n  assert \"d\" in result;\n  \n  print \"merge_policy basic test done\\n\";\n  \n  // Test removal with sentinel -999999\n  var defaults2 := map[\"a\" := 1, \"b\" := 2];\n  var override2 := map[\"b\" := -999999];\n  var result2 := merge_policy(defaults2, override2);\n  \n  assert \"a\" in result2;\n  assert \"b\" !in result2;\n  \n  print \"merge_policy removal test done\\n\";\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "merge_policy",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 423,
+      "prompt": 307,
+      "total": 730,
+      "turns": [
+        {
+          "completion": 423,
+          "prompt": 307,
+          "total": 730
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod merge_policy(defaults: map<string, int>, override: map<string, int>) returns (result: map<string, int>)\n  ensures forall k :: k in override && override[k] != -999999 ==> k in result && result[k] == override[k]\n  ensures forall k :: k in defaults && k !in override ==> k in result && result[k] == defaults[k]\n  ensures forall k :: k in override && override[k] == -999999 ==> k !in result\n{\n  result := defaults;\n  var keys := override.Keys;\n  var keySeq: seq<string> := [];\n  \n  // Convert keys to sequence\n  var remaining := keys;\n  while remaining != {}\n    decreases |remaining|\n  {\n    var k :| k in remaining;\n    keySeq := keySeq + [k];\n    remaining := remaining - {k};\n  }\n  \n  var i := 0;\n  while i < |keySeq|\n    invariant 0 <= i <= |keySeq|\n    invariant forall k :: k in result ==> (k in defaults || k in override)\n  {\n    var k := keySeq[i];\n    if override[k] == -999999 {\n      // Remove key (None represented as -999999)\n      if k in result {\n        result := result - {k};\n      }\n    } else {\n      result := result[k := override[k]];\n    }\n    i := i + 1;\n  }\n}\n\nmethod Main() {\n  // Test basic merge\n  var defaults := map[\"a\" := 1, \"b\" := 2, \"c\" := 3];\n  var override := map[\"b\" := 20, \"d\" := 4];\n  var result := merge_policy(defaults, override);\n  \n  assert \"a\" in result;\n  assert \"b\" in result;\n  assert \"d\" in result;\n  \n  print \"merge_policy basic test done\\n\";\n  \n  // Test removal with sentinel -999999\n  var defaults2 := map[\"a\" := 1, \"b\" := 2];\n  var override2 := map[\"b\" := -999999];\n  var result2 := merge_policy(defaults2, override2);\n  \n  assert \"a\" in result2;\n  assert \"b\" !in result2;\n  \n  print \"merge_policy removal test done\\n\";\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend merge_policy to accept an optional keyword argument\nallow_delete: bool = True. When allow_delete is false, None values in the\noverride should be ignored instead of deleting keys. Preserve the original\nbehavior when allow_delete is omitted.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import merge_policy\n\n\ndef test_can_disable_none_as_delete_marker():\n    defaults = {\"retry\": {\"count\": 3, \"backoff\": \"linear\"}, \"region\": \"us\"}\n    override = {\"retry\": {\"backoff\": None}, \"region\": None}\n\n    assert merge_policy(defaults, override) == {\"retry\": {\"count\": 3}}\n    assert merge_policy(defaults, override, allow_delete=False) == defaults\n    assert defaults == {\"retry\": {\"count\": 3, \"backoff\": \"linear\"}, \"region\": \"us\"}\n",
+    "entry_point": "merge_policy",
+    "human_reference": "from __future__ import annotations\n\nfrom copy import deepcopy\n\n\ndef merge_policy(defaults: dict, override: dict) -> dict:\n    result = deepcopy(defaults)\n    for key, value in override.items():\n        if value is None:\n            result.pop(key, None)\n            continue\n\n        current = result.get(key)\n        if isinstance(current, dict) and isinstance(value, dict):\n            result[key] = merge_policy(current, value)\n            continue\n        result[key] = deepcopy(value)\n    return result\n",
+    "id": "policy_merge",
+    "mock_day2_solution": "from __future__ import annotations\n\nfrom copy import deepcopy\n\n\ndef merge_policy(defaults: dict, override: dict, *, allow_delete: bool = True) -> dict:\n    result = deepcopy(defaults)\n    for key, value in override.items():\n        if value is None:\n            if allow_delete:\n                result.pop(key, None)\n            continue\n\n        existing = result.get(key)\n        if isinstance(existing, dict) and isinstance(value, dict):\n            result[key] = merge_policy(existing, value, allow_delete=allow_delete)\n        else:\n            result[key] = deepcopy(value)\n    return result\n",
+    "mock_solution": "from __future__ import annotations\n\nfrom copy import deepcopy\n\n\ndef merge_policy(defaults: dict, override: dict) -> dict:\n    result = deepcopy(defaults)\n    for key, value in override.items():\n        if value is None:\n            result.pop(key, None)\n            continue\n\n        existing = result.get(key)\n        if isinstance(existing, dict) and isinstance(value, dict):\n            result[key] = merge_policy(existing, value)\n        else:\n            result[key] = deepcopy(value)\n    return result\n",
+    "prompt": "Implement merge_policy(defaults: dict, override: dict) -> dict.\n\nReturn a new dictionary. The override wins over defaults. If both values for a\nkey are dictionaries, merge them recursively. If override contains a key with\nvalue None, remove that key from the result. Do not mutate either input.\n",
+    "tags": [
+      "config",
+      "validation",
+      "explicitness"
+    ],
+    "test_code": "from solution import merge_policy\n\n\ndef test_merges_recursively_and_removes_none_values():\n    defaults = {\n        \"retry\": {\"count\": 3, \"backoff\": \"linear\"},\n        \"log\": True,\n        \"region\": \"us\",\n    }\n    override = {\n        \"retry\": {\"backoff\": \"expo\"},\n        \"region\": None,\n    }\n\n    result = merge_policy(defaults, override)\n\n    assert result == {\n        \"retry\": {\"count\": 3, \"backoff\": \"expo\"},\n        \"log\": True,\n    }\n    assert defaults[\"retry\"][\"backoff\"] == \"linear\"\n    assert \"region\" in defaults\n"
+  },
+  "task_id": "policy_merge",
+  "user_prompt": "Task id: policy_merge\nEntry point: merge_policy\n\nFunctional requirements:\nImplement merge_policy(defaults: dict, override: dict) -> dict.\n\nReturn a new dictionary. The override wins over defaults. If both values for a\nkey are dictionaries, merge them recursively. If override contains a key with\nvalue None, remove that key from the result. Do not mutate either input.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

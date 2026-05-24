@@ -1,0 +1,119 @@
+id: object_registry
+entry_point: ObjectRegistry
+tags: [object_lifecycle, weakref, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement ObjectRegistry using weak references. register(key, obj) stores obj;
+  get(key) returns the object or None if it has been garbage-collected; cleanup()
+  removes dead references.
+test_code: |
+  import gc
+
+  from solution import ObjectRegistry
+
+
+  class Thing:
+      pass
+
+
+  def test_weak_registry_cleans_dead_objects():
+      registry = ObjectRegistry()
+      thing = Thing()
+      registry.register('a', thing)
+      assert registry.get('a') is thing
+      del thing
+      gc.collect()
+      registry.cleanup()
+      assert registry.get('a') is None
+day2_prompt: |
+  Extend ObjectRegistry.register with tags: set[str] | None = None and add by_tag(tag)
+  returning live objects registered with that tag. Dead references should not be
+  returned.
+day2_test_code: |
+  from solution import ObjectRegistry
+
+
+  class Thing:
+      pass
+
+
+  def test_tag_lookup_returns_live_objects():
+      registry = ObjectRegistry()
+      one = Thing()
+      two = Thing()
+      registry.register('one', one, tags={'blue'})
+      registry.register('two', two, tags={'red', 'blue'})
+      assert registry.by_tag('blue') == [one, two]
+      assert registry.by_tag('red') == [two]
+human_reference: |
+  from __future__ import annotations
+
+  import weakref
+  from typing import Any
+
+
+  class ObjectRegistry:
+      def __init__(self) -> None:
+          self._refs: dict[str, weakref.ReferenceType[Any]] = {}
+
+      def register(self, key: str, obj: object) -> None:
+          self._refs[key] = weakref.ref(obj)
+
+      def get(self, key: str):
+          ref = self._refs.get(key)
+          return None if ref is None else ref()
+
+      def cleanup(self) -> None:
+          self._refs = {key: ref for key, ref in self._refs.items() if ref() is not None}
+mock_solution: |
+  from __future__ import annotations
+
+  import weakref
+
+
+  class ObjectRegistry:
+      def __init__(self):
+          self.refs = {}
+
+      def register(self, key: str, obj):
+          self.refs[key] = weakref.ref(obj)
+
+      def get(self, key: str):
+          if key not in self.refs:
+              return None
+          return self.refs[key]()
+
+      def cleanup(self):
+          for key in list(self.refs):
+              if self.refs[key]() is None:
+                  del self.refs[key]
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import weakref
+
+
+  class ObjectRegistry:
+      def __init__(self):
+          self.refs = {}
+          self.tags = {}
+
+      def register(self, key: str, obj, tags=None):
+          self.refs[key] = weakref.ref(obj)
+          for tag in tags or set():
+              self.tags.setdefault(tag, []).append(key)
+
+      def get(self, key: str):
+          ref = self.refs.get(key)
+          return None if ref is None else ref()
+
+      def cleanup(self):
+          self.refs = {key: ref for key, ref in self.refs.items() if ref() is not None}
+
+      def by_tag(self, tag: str):
+          out = []
+          for key in self.tags.get(tag, []):
+              value = self.get(key)
+              if value is not None:
+                  out.append(value)
+          return out

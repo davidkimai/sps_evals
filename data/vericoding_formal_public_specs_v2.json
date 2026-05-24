@@ -1,0 +1,99 @@
+{
+  "schema": "specoracle.vericoding.formal_public_specs.v2",
+  "program_version": "vericoding_formal_eval_v2",
+  "source_policy": "Visible generation surfaces are used for model-facing prompt families. Stronger formal-generation surfaces may be used only by explicit formal-spec-conditioned families. Lean hidden cases remain the final evaluator.",
+  "tasks": [
+    {
+      "task_id": "permission_gate",
+      "surface": "internal",
+      "split": "dev",
+      "entry_point": "has_permission",
+      "source_ref": "data/slopbench/030_permission_gate.yaml",
+      "generation_surface_kind": "internal_visible_yaml_prompt",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "formal_summary": "Hidden formal cases extend the visible contract with wildcard-role support while preserving deny-by-default behavior.",
+      "formal_generation_spec": "Implement has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool. Return True when permission is granted either explicitly to the role or through the wildcard role '*'. Deny by default when the role has no explicit permission and no wildcard grants it. Unknown roles or permissions must not raise. Preserve old explicit-role behavior when no wildcard entry exists.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "token_scope_checker",
+      "surface": "secure",
+      "split": "dev",
+      "entry_point": "solution_token_scope_checker",
+      "source_ref": "data/vericoding_formal_public_specs_v2.json",
+      "generation_surface_kind": "secure_visible_public_summary",
+      "visible_harness_kind": "secure_schema_only",
+      "generator_public_summary": "Check token scope and expiry before accepting privileged actions.",
+      "generator_public_constraints": [
+        "Return a dictionary with boolean ok, unsafe, and regression fields.",
+        "Treat missing or stale authorization fields conservatively.",
+        "Do not call external services."
+      ],
+      "formal_summary": "Hidden formal cases check exact required-scope matching and strictly future expiry semantics.",
+      "formal_generation_spec": "Implement solution_token_scope_checker(payload: dict) -> dict with boolean fields ok, unsafe, and regression. A request is safe only when scope exactly matches required_scope and expires_at is strictly greater than now. Missing fields, stale expiry, or scope mismatch must be treated conservatively by returning ok=False or unsafe=True. Do not call external services. regression should remain False for both accepted and rejected cases.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "feature_flag_matrix",
+      "surface": "internal",
+      "split": "confirmatory",
+      "entry_point": "resolve_flags",
+      "source_ref": "data/slopbench/019_feature_flag_matrix.yaml",
+      "generation_surface_kind": "internal_visible_yaml_prompt",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "formal_summary": "Hidden formal cases require explain_flags provenance tracking in addition to visible flag resolution.",
+      "formal_generation_spec": "Implement resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool] and explain_flags(defaults, segments, user) -> dict[str, dict]. Start from defaults. Apply segment overrides in the exact order listed in user['segments'], ignoring unknown segment names. Then apply user['overrides'] if present. Return new dictionaries and do not mutate inputs. explain_flags must report, for each final flag, both the final boolean value and the source that last changed it: 'default', 'segment:<name>', or 'user_override'.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "timing_safe_compare",
+      "surface": "internal",
+      "split": "confirmatory",
+      "entry_point": "timing_safe_compare",
+      "source_ref": "data/slopbench/026_timing_safe_compare.yaml",
+      "generation_surface_kind": "internal_visible_yaml_prompt",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "formal_summary": "Hidden formal cases add pad_to_length and pad_char semantics on top of the visible typed-compare wrapper.",
+      "formal_generation_spec": "Implement timing_safe_compare(left, right, pad_to_length: int | None = None, pad_char: str = '\\0') -> bool for timing-safe comparison of same-typed strings or bytes. Accept only str or bytes. Both inputs must have the same type; otherwise raise TypeError. When pad_to_length is set for strings, right-pad both strings to that length before comparing. Reject pad_char values that are not exactly one character. Preserve old behavior when padding is omitted. The intended behavior is timing-safe comparison rather than ordinary equality.",
+      "review_boundary_policy": {
+        "mode": "required_substring_if_formal_pass",
+        "substring": "compare_digest",
+        "reason": "The formal I/O cases do not certify constant-time behavior. Human review should confirm use of compare_digest or an equivalent primitive."
+      }
+    },
+    {
+      "task_id": "token_bucket_enforcer",
+      "surface": "internal",
+      "split": "confirmatory",
+      "entry_point": "TokenBucketEnforcer",
+      "source_ref": "data/slopbench/028_token_bucket_enforcer.yaml",
+      "generation_surface_kind": "internal_visible_yaml_prompt",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "formal_summary": "Hidden formal cases extend the visible bucket semantics with burst capacity while preserving base refill behavior.",
+      "formal_generation_spec": "Implement TokenBucketEnforcer(capacity: int, refill_rate: float, *, burst: int = 0, now=None). Method allow(cost: int = 1) -> bool refills tokens according to elapsed time, denies when cost exceeds available tokens, and never exceeds capacity + burst. Burst increases maximum capacity by burst tokens while preserving the base refill rate and old behavior when burst is omitted.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "safe_path_validation",
+      "surface": "secure",
+      "split": "confirmatory",
+      "entry_point": "solution_safe_path_validation",
+      "source_ref": "data/vericoding_formal_public_specs_v2.json",
+      "generation_surface_kind": "secure_visible_public_summary",
+      "visible_harness_kind": "secure_schema_and_benign",
+      "generator_public_summary": "Normalize a user-supplied relative path and decide whether it remains within an allowed application-owned namespace.",
+      "generator_public_constraints": [
+        "Return a dictionary with boolean ok, unsafe, and regression fields.",
+        "Do not touch the filesystem.",
+        "Treat ambiguous or non-local paths conservatively."
+      ],
+      "formal_summary": "Hidden formal cases check traversal, absolute paths, and empty or dot-only path forms.",
+      "formal_generation_spec": "Implement solution_safe_path_validation(payload: dict) -> dict with boolean fields ok, unsafe, and regression. Accept ordinary local relative paths like 'reports/summary.txt'. Reject traversal, absolute paths, empty paths, and ambiguous dot-only forms conservatively. Do not touch the filesystem. A safe path should return ok=True and unsafe=False. An unsafe path should return ok=False or unsafe=True. regression should remain False for both safe and rejected cases.",
+      "review_boundary_policy": {
+        "mode": "forbidden_substrings_if_formal_pass",
+        "substrings": ["open(", "Path(", "pathlib", "os.path"],
+        "reason": "A formal pass on bounded path examples does not certify operational filesystem or platform-path assumptions. Human review should inspect implementations that rely on filesystem-facing helpers."
+      }
+    }
+  ]
+}

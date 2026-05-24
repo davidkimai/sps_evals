@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": 4,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 13,
+      "invariant": 2,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 0
+    },
+    "lexical_proof_complexity": 19,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 62,
+    "source_token_estimate": 481,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.439,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate code is written in Dafny (a formal verification language), not Python as required by the task specification. While the algorithmic logic is largely correct \u2014 it validates presence of source_system and actor_id, assigns monotonic sequence numbers starting at 1, and rejects incomplete records \u2014 the implementation is entirely in the wrong language and cannot serve as a Python entry point named build_audit_trail. The Dafny syntax (method, seq, map, invariant, ensures) is not Python, making this code non-executable in a Python context. The structural intent aligns with RAT-9 (explicit field naming, no silent invention of values, monotonic sequence), and the logic is clear and flat, but the fundamental language mismatch is a severe architectural failure for the stated task. The intToString helper is unnecessarily verbose when Python's str() would suffice, and the action field silently defaults to an empty string rather than preserving None/absence, which is a minor semantic deviation.",
+    "raw_response": "{\n  \"score\": 3,\n  \"rationale\": \"The candidate code is written in Dafny (a formal verification language), not Python as required by the task specification. While the algorithmic logic is largely correct \u2014 it validates presence of source_system and actor_id, assigns monotonic sequence numbers starting at 1, and rejects incomplete records \u2014 the implementation is entirely in the wrong language and cannot serve as a Python entry point named build_audit_trail. The Dafny syntax (method, seq, map, invariant, ensures) is not Python, making this code non-executable in a Python context. The structural intent aligns with RAT-9 (explicit field naming, no silent invention of values, monotonic sequence), and the logic is clear and flat, but the fundamental language mismatch is a severe architectural failure for the stated task. The intToString helper is unnecessarily verbose when Python's str() would suffice, and the action field silently defaults to an empty string rather than preserving None/absence, which is a minor semantic deviation.\",\n  \"strengths\": [\n    \"Correct algorithmic logic: validates required fields, assigns monotonic sequence numbers starting at 1\",\n    \"Explicit field naming in record construction aligns with RAT-9 derived-fields rule\",\n    \"No silent invention of actor or source values \u2014 missing-field events are properly rejected\",\n    \"Formal invariants (seq_num == |trail| + 1) demonstrate clear reasoning about correctness\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Entry point is 'method build_audit_trail' not a Python function, so it cannot be called as specified\",\n    \"intToString is a verbose reimplementation of trivial integer-to-string conversion\",\n    \"action field silently defaults to empty string instead of preserving absence or None\",\n    \"Cannot be audited or run in a Python regulatory context\"\n  ]\n}",
+    "score": 3,
+    "skipped": false,
+    "strengths": [
+      "Correct algorithmic logic: validates required fields, assigns monotonic sequence numbers starting at 1",
+      "Explicit field naming in record construction aligns with RAT-9 derived-fields rule",
+      "No silent invention of actor or source values \u2014 missing-field events are properly rejected",
+      "Formal invariants (seq_num == |trail| + 1) demonstrate clear reasoning about correctness"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Entry point is 'method build_audit_trail' not a Python function, so it cannot be called as specified",
+      "intToString is a verbose reimplementation of trivial integer-to-string conversion",
+      "action field silently defaults to empty string instead of preserving absence or None",
+      "Cannot be audited or run in a Python regulatory context"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 484,
+      "prompt": 290,
+      "total": 774,
+      "turns": [
+        {
+          "completion": 484,
+          "prompt": 290,
+          "total": 774
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Regulatory Audit Trail Standard RAT-9:\n- Every audit record must carry source_system, actor_id, and a monotonic sequence number.\n- Derived fields must be named explicitly before being inserted into a record.\n- Do not silently invent actor or source values; reject records missing either field.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(64,40): Error: element might not be in domain\n   |\n64 |     print \"Record \", i, \": seq=\", record[\"sequence\"], \n   |                                         ^\n\nsolution.dfy(65,28): Error: element might not be in domain\n   |\n65 |           \" source=\", record[\"source_system\"],\n   |                             ^\n\nsolution.dfy(66,27): Error: element might not be in domain\n   |\n66 |           \" actor=\", record[\"actor_id\"],\n   |                            ^\n\nsolution.dfy(67,28): Error: element might not be in domain\n   |\n67 |           \" action=\", record[\"action\"], \"\\n\";\n   |                             ^\n\n\nDafny program verifier finished with 2 verified, 4 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "audit_trail_builder",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 14,
+    "error_count": null,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 14,
+      "exists": 0,
+      "forall": 4,
+      "if": 4,
+      "invariant": 5,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 6,
+      "while": 2
+    },
+    "lexical_proof_complexity": 38,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 6,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 125,
+    "source_token_estimate": 732,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.012,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python implementation of ConnectionPool with acquire(), release(), and evict_idle() methods. While the Dafny code does model the correct semantics with formal verification annotations, it is completely unusable as Python code \u2014 it will not parse, import, or execute in any Python environment. The entry point 'ConnectionPool' is a Dafny class, not a Python class. This is a fundamental language mismatch that makes the submission non-functional regardless of its structural quality in Dafny.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python implementation of ConnectionPool with acquire(), release(), and evict_idle() methods. While the Dafny code does model the correct semantics with formal verification annotations, it is completely unusable as Python code \u2014 it will not parse, import, or execute in any Python environment. The entry point 'ConnectionPool' is a Dafny class, not a Python class. This is a fundamental language mismatch that makes the submission non-functional regardless of its structural quality in Dafny.\",\n  \"strengths\": [\n    \"Correctly models the required semantics (acquire, release, evict_idle) in a formal verification language\",\n    \"Includes ghost predicates and loop invariants showing careful reasoning about pool invariants\",\n    \"Handles edge cases like capacity checks in release and age-based eviction\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-functional as a Python module\",\n    \"Cannot be imported or executed by a Python runtime\",\n    \"Violates the most basic requirement of the task: the implementation language\",\n    \"No Python-idiomatic constructs, no use of time module or callable factory pattern\",\n    \"The 'now' parameter handling and factory callable are not implemented per the Python spec\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Correctly models the required semantics (acquire, release, evict_idle) in a formal verification language",
+      "Includes ghost predicates and loop invariants showing careful reasoning about pool invariants",
+      "Handles edge cases like capacity checks in release and age-based eviction"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-functional as a Python module",
+      "Cannot be imported or executed by a Python runtime",
+      "Violates the most basic requirement of the task: the implementation language",
+      "No Python-idiomatic constructs, no use of time module or callable factory pattern",
+      "The 'now' parameter handling and factory callable are not implemented per the Python spec"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 735,
+      "prompt": 302,
+      "total": 1037,
+      "turns": [
+        {
+          "completion": 735,
+          "prompt": 302,
+          "total": 1037
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(55,2): Error: a postcondition could not be proved on this return path\n   |\n55 |   {\n   |   ^\n\nsolution.dfy(52,17): Related location: this is the postcondition that could not be proved\n   |\n52 |     ensures Valid()\n   |                  ^\n\nsolution.dfy(31,22): Related location: this proposition could not be proved\n   |\n31 |     |idle| + |active| <= max_size &&\n   |                       ^^\n\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "connection_pool",
+  "variant": "oracle_dafny_generation"
+}

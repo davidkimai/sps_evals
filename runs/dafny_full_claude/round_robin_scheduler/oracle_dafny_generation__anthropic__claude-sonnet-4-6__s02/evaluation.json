@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 1,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 1,
+      "forall": 0,
+      "if": 1,
+      "invariant": 1,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 0
+    },
+    "lexical_proof_complexity": 7,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 20,
+    "source_token_estimate": 132,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.441,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python. The task requires a Python function `assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]`, but the code provided is a Dafny method with Dafny syntax, types, and verification annotations. It cannot be executed as Python, does not handle the `dict` input format with optional `enabled` fields, does not raise `ValueError`, and does not return the required `list[dict]` shape. While the Dafny logic itself appears structurally sound and mirrors the intended algorithm, it is entirely the wrong language and fails every functional and structural requirement of the Python task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python. The task requires a Python function `assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]`, but the code provided is a Dafny method with Dafny syntax, types, and verification annotations. It cannot be executed as Python, does not handle the `dict` input format with optional `enabled` fields, does not raise `ValueError`, and does not return the required `list[dict]` shape. While the Dafny logic itself appears structurally sound and mirrors the intended algorithm, it is entirely the wrong language and fails every functional and structural requirement of the Python task.\",\n  \"strengths\": [\n    \"The algorithmic logic (filter enabled workers, round-robin index via modulo) is conceptually correct\",\n    \"Dafny loop invariants and preconditions are well-formed and reflect the spec's intent\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Does not accept `list[dict]` workers or handle the optional `enabled` field defaulting to True\",\n    \"Does not raise `ValueError` for no enabled workers\",\n    \"Does not return `list[dict]` with `{'job': str, 'worker': str}` shape\",\n    \"No Python code whatsoever; fails all functional requirements\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The algorithmic logic (filter enabled workers, round-robin index via modulo) is conceptually correct",
+      "Dafny loop invariants and preconditions are well-formed and reflect the spec's intent"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Does not accept `list[dict]` workers or handle the optional `enabled` field defaulting to True",
+      "Does not raise `ValueError` for no enabled workers",
+      "Does not return `list[dict]` with `{'job': str, 'worker': str}` shape",
+      "No Python code whatsoever; fails all functional requirements"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 136,
+      "prompt": 325,
+      "total": 461,
+      "turns": [
+        {
+          "completion": 136,
+          "prompt": 325,
+          "total": 461
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(18,32): Error: possible division by zero\n   |\n18 |     var workerName := enabled[j % |enabled|];\n   |                                 ^\n\n\nDafny program verifier finished with 1 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "round_robin_scheduler",
+  "variant": "oracle_dafny_generation"
+}

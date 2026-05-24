@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is a clean, minimal realization of the task. It uses a single Lock, flat control flow with guard clauses, explicit data movement (cached _total avoids recomputing sum), and clear error messages. Every method is locally auditable in a few lines. The snapshot returns a defensive copy, internal state is not exposed, and no speculative abstractions are present. The only minor quibble is that caching _total alongside _counts is a small redundancy (sum could be derived from _counts.values()), but it is a deliberate and reasonable performance trade-off that keeps increment O(1) and total() O(1) without adding complexity. Overall this is nearly ideal for the task.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is a clean, minimal realization of the task. It uses a single Lock, flat control flow with guard clauses, explicit data movement (cached _total avoids recomputing sum), and clear error messages. Every method is locally auditable in a few lines. The snapshot returns a defensive copy, internal state is not exposed, and no speculative abstractions are present. The only minor quibble is that caching _total alongside _counts is a small redundancy (sum could be derived from _counts.values()), but it is a deliberate and reasonable performance trade-off that keeps increment O(1) and total() O(1) without adding complexity. Overall this is nearly ideal for the task.\",\n  \"strengths\": [\n    \"Flat, guard-clause-first control flow in increment\",\n    \"Explicit defensive copy in snapshot prevents mutable state leakage\",\n    \"Lock used consistently across all three public methods\",\n    \"Clear, descriptive error messages for both ValueError and OverflowError\",\n    \"No speculative abstractions or unused extension points\",\n    \"Cached _total keeps all operations O(1) without obscuring logic\"\n  ],\n  \"weaknesses\": [\n    \"_total is redundant with sum(_counts.values()), introducing a dual-write that must stay in sync (minor consistency risk)\",\n    \"No type annotation on name parameter enforcement (minor, not a structural flaw)\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Flat, guard-clause-first control flow in increment",
+      "Explicit defensive copy in snapshot prevents mutable state leakage",
+      "Lock used consistently across all three public methods",
+      "Clear, descriptive error messages for both ValueError and OverflowError",
+      "No speculative abstractions or unused extension points",
+      "Cached _total keeps all operations O(1) without obscuring logic"
+    ],
+    "weaknesses": [
+      "_total is redundant with sum(_counts.values()), introducing a dual-write that must stay in sync (minor consistency risk)",
+      "No type annotation on name parameter enforcement (minor, not a structural flaw)"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 6.694,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "..                                                                       [100%]\n2 passed in 0.11s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 1.6,
+    "cyclomatic_complexity_max": 2,
+    "cyclomatic_complexity_total": 8,
+    "function_count": 4,
+    "loc": 23,
+    "maintainability_index": 58.289,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "thread_safe_counter",
+  "variant": "human_reference"
+}

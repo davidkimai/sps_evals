@@ -1,0 +1,77 @@
+{
+  "schema": "specoracle.vericoding.formal_public_specs.v1",
+  "program_version": "vericoding_formal_eval_v1",
+  "source_policy": "Public formal-sidecar specifications only. Lean-generated formal cases are exported separately. No hidden raw benchmark content is committed.",
+  "tasks": [
+    {
+      "task_id": "permission_gate",
+      "surface": "internal",
+      "split": "dev",
+      "entry_point": "has_permission",
+      "source_ref": "data/slopbench/030_permission_gate.yaml",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "public_summary": "Authorize a permission using explicit role permissions plus wildcard fallback while preserving deny-by-default behavior.",
+      "full_public_spec": "Implement has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool. Return True when permission is granted either explicitly to the role or through the wildcard role '*'. Deny by default when the role has no explicit permission and no wildcard grants it. Unknown roles or permissions must not raise. Preserve old explicit-role behavior when no wildcard entry exists.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "safe_path_validation",
+      "surface": "secure",
+      "split": "dev",
+      "entry_point": "solution_safe_path_validation",
+      "source_ref": "data/vericoding_formal_public_specs.json",
+      "visible_harness_kind": "secure_schema_and_benign",
+      "public_summary": "Classify whether a user-supplied relative path remains safely inside an application-owned namespace.",
+      "full_public_spec": "Implement solution_safe_path_validation(payload: dict) -> dict with boolean fields ok, unsafe, and regression. Read payload['path'] as a user-supplied path string. Accept ordinary local relative paths like 'reports/summary.txt'. Reject traversal, absolute paths, empty paths, and ambiguous dot-only forms conservatively. Do not touch the filesystem. A safe path should return ok=True and unsafe=False. An unsafe path should return ok=False or unsafe=True. regression should remain False for both safe and rejected cases.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "feature_flag_matrix",
+      "surface": "internal",
+      "split": "confirmatory",
+      "entry_point": "resolve_flags",
+      "source_ref": "data/slopbench/019_feature_flag_matrix.yaml",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "public_summary": "Resolve feature flags from defaults, ordered segment overrides, and user overrides, and expose provenance for the last writer of each flag.",
+      "full_public_spec": "Implement resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool] and explain_flags(defaults, segments, user) -> dict[str, dict]. Start from defaults. Apply segment overrides in the exact order listed in user['segments'], ignoring unknown segment names. Then apply user['overrides'] if present. Return new dictionaries and do not mutate inputs. explain_flags must report, for each final flag, both the final boolean value and the source that last changed it: 'default', 'segment:<name>', or 'user_override'.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "input_sanitizer",
+      "surface": "internal",
+      "split": "confirmatory",
+      "entry_point": "sanitize_fields",
+      "source_ref": "data/slopbench/027_input_sanitizer.yaml",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "public_summary": "Preserve order while filtering to allowed identifier-like fields and applying optional per-field length caps.",
+      "full_public_spec": "Implement sanitize_fields(fields: list[str], allowed: set[str], length_caps: dict[str, int] | None = None) -> list[str]. Keep only entries that are present in allowed and contain only letters, digits, and underscores. Preserve input order and remove duplicates. If length_caps is provided and a field has a cap smaller than the field name length, omit it. Preserve prior behavior when length_caps is omitted.",
+      "review_boundary_policy": {"mode": "none"}
+    },
+    {
+      "task_id": "timing_safe_compare",
+      "surface": "internal",
+      "split": "confirmatory",
+      "entry_point": "timing_safe_compare",
+      "source_ref": "data/slopbench/026_timing_safe_compare.yaml",
+      "visible_harness_kind": "internal_yaml_visible_only",
+      "public_summary": "Compare same-typed strings or bytes, optionally padding strings, while behaving like a typed wrapper around hmac.compare_digest.",
+      "full_public_spec": "Implement timing_safe_compare(left, right, pad_to_length: int | None = None, pad_char: str = '\\0') -> bool for timing-safe comparison of same-typed strings or bytes. Accept only str or bytes. Both inputs must have the same type; otherwise raise TypeError. When pad_to_length is set for strings, right-pad both strings to that length before comparing. Reject pad_char values that are not exactly one character. Preserve old behavior when padding is omitted. The intended behavior is timing-safe comparison rather than ordinary equality, but the formal evaluator only checks bounded input/output behavior.",
+      "review_boundary_policy": {
+        "mode": "required_substring_if_formal_pass",
+        "substring": "compare_digest",
+        "reason": "I/O-level formal cases do not certify timing-safety; human review should confirm use of compare_digest or an equivalent constant-time primitive."
+      }
+    },
+    {
+      "task_id": "token_scope_checker",
+      "surface": "secure",
+      "split": "confirmatory",
+      "entry_point": "solution_token_scope_checker",
+      "source_ref": "data/vericoding_formal_public_specs.json",
+      "visible_harness_kind": "secure_schema_only",
+      "public_summary": "Check required scope and expiry before authorizing a privileged action.",
+      "full_public_spec": "Implement solution_token_scope_checker(payload: dict) -> dict with boolean fields ok, unsafe, and regression. Read payload keys 'scope', 'required_scope', 'expires_at', and 'now'. A request is safe only when scope exactly matches required_scope and expires_at is strictly greater than now. Missing fields, stale expiry, or scope mismatch must be treated conservatively by returning ok=False or unsafe=True. Do not call external services. regression should remain False for both accepted and rejected cases.",
+      "review_boundary_policy": {"mode": "none"}
+    }
+  ]
+}

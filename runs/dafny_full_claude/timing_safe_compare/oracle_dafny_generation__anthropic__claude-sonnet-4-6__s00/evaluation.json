@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 7.554,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 2.942,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/timing_safe_compare/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 2,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 1
+    },
+    "lexical_proof_complexity": 6,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 19,
+    "source_token_estimate": 103,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 9.241,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop. It does not implement `timing_safe_compare` at all \u2014 there is no function with that name, no call to `hmac.compare_digest`, no type checking, and no return value. Instead it imports a nonexistent `module_` (which would raise an ImportError at runtime), then runs a complex metaclass-style symbol aliasing routine that has nothing to do with the task. The code is maximally indirect, opaque, and non-functional, violating every Zen of Python principle: it is implicit rather than explicit, deeply nested, unreadable, and solves a completely different (and imaginary) problem.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop. It does not implement `timing_safe_compare` at all \u2014 there is no function with that name, no call to `hmac.compare_digest`, no type checking, and no return value. Instead it imports a nonexistent `module_` (which would raise an ImportError at runtime), then runs a complex metaclass-style symbol aliasing routine that has nothing to do with the task. The code is maximally indirect, opaque, and non-functional, violating every Zen of Python principle: it is implicit rather than explicit, deeply nested, unreadable, and solves a completely different (and imaginary) problem.\",\n  \"strengths\": [\n    \"None \u2014 the implementation does not satisfy any part of the functional or structural requirements.\"\n  ],\n  \"weaknesses\": [\n    \"No `timing_safe_compare` function is defined anywhere\",\n    \"No use of `hmac.compare_digest`\",\n    \"No type checking for str/bytes inputs\",\n    \"Imports a nonexistent module (`module_`) causing immediate ImportError\",\n    \"Introduces massive unnecessary complexity via Dafny symbol aliasing\",\n    \"Completely unreadable and non-auditable\",\n    \"Violates every Zen of Python principle (explicit, simple, flat, readable)\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the implementation does not satisfy any part of the functional or structural requirements."
+    ],
+    "weaknesses": [
+      "No `timing_safe_compare` function is defined anywhere",
+      "No use of `hmac.compare_digest`",
+      "No type checking for str/bytes inputs",
+      "Imports a nonexistent module (`module_`) causing immediate ImportError",
+      "Introduces massive unnecessary complexity via Dafny symbol aliasing",
+      "Completely unreadable and non-auditable",
+      "Violates every Zen of Python principle (explicit, simple, flat, readable)"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 106,
+      "prompt": 292,
+      "total": 398,
+      "turns": [
+        {
+          "completion": 106,
+          "prompt": 292,
+          "total": 398
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 5.583,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_________________________ test_compare_digest_wrapper __________________________\n\n    def test_compare_digest_wrapper():\n        assert timing_safe_compare('abc', 'abc') is True\n        assert timing_safe_compare(b'abc', b'abd') is False\n>       with pytest.raises(TypeError):\nE       Failed: DID NOT RAISE <class 'TypeError'>\n\ntest_solution.py:9: Failed\n=========================== short test summary info ============================\nFAILED test_solution.py::test_compare_digest_wrapper - Failed: DID NOT RAISE ...\n1 failed in 0.19s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "timing_safe_compare",
+  "variant": "oracle_dafny_generation"
+}

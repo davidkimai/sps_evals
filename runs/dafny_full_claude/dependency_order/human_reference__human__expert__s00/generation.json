@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]:\n    tasks = set(dependencies)\n    for blockers in dependencies.values():\n        tasks.update(blockers)\n\n    remaining = {task: set(dependencies.get(task, [])) for task in tasks}\n    batches: list[list[str]] = []\n    while remaining:\n        ready = sorted(task for task, blockers in remaining.items() if not blockers)\n        if not ready:\n            raise ValueError(\"dependency graph contains a cycle\")\n\n        batches.append(ready)\n        completed = set(ready)\n        remaining = {\n            task: blockers - completed\n            for task, blockers in remaining.items()\n            if task not in completed\n        }\n    return batches\n",
+  "effective_temperature": null,
+  "entry_point": "plan_batches",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]:\n    tasks = set(dependencies)\n    for blockers in dependencies.values():\n        tasks.update(blockers)\n\n    remaining = {task: set(dependencies.get(task, [])) for task in tasks}\n    batches: list[list[str]] = []\n    while remaining:\n        ready = sorted(task for task, blockers in remaining.items() if not blockers)\n        if not ready:\n            raise ValueError(\"dependency graph contains a cycle\")\n\n        batches.append(ready)\n        completed = set(ready)\n        remaining = {\n            task: blockers - completed\n            for task, blockers in remaining.items()\n            if task not in completed\n        }\n    return batches\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend plan_batches to accept an optional keyword argument\ncompleted: set[str] | None = None. Completed tasks should be treated as\nalready done and omitted from the returned batches, while still satisfying\ndependencies for remaining tasks. Preserve the original behavior when\ncompleted is omitted.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import plan_batches\n\n\ndef test_completed_tasks_are_omitted_but_satisfy_dependencies():\n    dependencies = {\n        \"deploy\": [\"test\"],\n        \"test\": [\"build\", \"lint\"],\n        \"build\": [],\n        \"lint\": [],\n    }\n\n    assert plan_batches(dependencies, completed={\"build\"}) == [[\"lint\"], [\"test\"], [\"deploy\"]]\n    assert plan_batches(dependencies) == [[\"build\", \"lint\"], [\"test\"], [\"deploy\"]]\n\n\ndef test_detects_cycle_after_completed_tasks_removed():\n    with pytest.raises(ValueError):\n        plan_batches({\"a\": [\"b\"], \"b\": [\"a\"]}, completed=set())\n",
+    "entry_point": "plan_batches",
+    "human_reference": "from __future__ import annotations\n\n\ndef plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]:\n    tasks = set(dependencies)\n    for blockers in dependencies.values():\n        tasks.update(blockers)\n\n    remaining = {task: set(dependencies.get(task, [])) for task in tasks}\n    batches: list[list[str]] = []\n    while remaining:\n        ready = sorted(task for task, blockers in remaining.items() if not blockers)\n        if not ready:\n            raise ValueError(\"dependency graph contains a cycle\")\n\n        batches.append(ready)\n        completed = set(ready)\n        remaining = {\n            task: blockers - completed\n            for task, blockers in remaining.items()\n            if task not in completed\n        }\n    return batches\n",
+    "id": "dependency_order",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef plan_batches(\n    dependencies: dict[str, list[str]],\n    *,\n    completed: set[str] | None = None,\n) -> list[list[str]]:\n    done = set(completed or set())\n    tasks = set(dependencies)\n    for blockers in dependencies.values():\n        tasks.update(blockers)\n\n    remaining = {\n        task: set(dependencies.get(task, [])) - done\n        for task in tasks\n        if task not in done\n    }\n    batches: list[list[str]] = []\n\n    while remaining:\n        ready = sorted(task for task, blockers in remaining.items() if not blockers)\n        if not ready:\n            raise ValueError(\"dependency graph contains a cycle\")\n\n        batches.append(ready)\n        newly_completed = set(ready)\n        remaining = {\n            task: blockers - newly_completed\n            for task, blockers in remaining.items()\n            if task not in newly_completed\n        }\n\n    return batches\n",
+    "mock_solution": "from __future__ import annotations\n\nfrom collections import defaultdict\n\n\ndef plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]:\n    tasks = set(dependencies)\n    for blockers in dependencies.values():\n        tasks.update(blockers)\n\n    remaining = {task: set(dependencies.get(task, [])) for task in tasks}\n    batches: list[list[str]] = []\n\n    while remaining:\n        ready = sorted(task for task, blockers in remaining.items() if not blockers)\n        if not ready:\n            raise ValueError(\"dependency graph contains a cycle\")\n\n        batches.append(ready)\n        completed = set(ready)\n        remaining = {\n            task: blockers - completed\n            for task, blockers in remaining.items()\n            if task not in completed\n        }\n\n    return batches\n",
+    "prompt": "Implement plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]].\n\ndependencies maps a task name to the tasks that must be completed before it.\nReturn batches of tasks that can run in parallel, with each inner list sorted\nalphabetically. If the graph contains a cycle, raise ValueError. Include tasks\nthat only appear as dependencies. Do not mutate the input.\n",
+    "tags": [
+      "graphs",
+      "topological-sort",
+      "slop-trigger",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import plan_batches\n\n\ndef test_plans_parallel_batches():\n    dependencies = {\n        \"deploy\": [\"test\"],\n        \"test\": [\"build\", \"lint\"],\n        \"build\": [],\n        \"lint\": [],\n    }\n\n    assert plan_batches(dependencies) == [[\"build\", \"lint\"], [\"test\"], [\"deploy\"]]\n\n\ndef test_detects_cycle():\n    with pytest.raises(ValueError):\n        plan_batches({\"a\": [\"b\"], \"b\": [\"a\"]})\n"
+  },
+  "task_id": "dependency_order",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

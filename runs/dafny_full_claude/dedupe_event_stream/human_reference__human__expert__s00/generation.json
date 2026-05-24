@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "def dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]:\n    retained = []\n    last_seen: dict[tuple, int] = {}\n    for event in events:\n        parsed = _parse_event(event, key_fields)\n        if parsed is None:\n            continue\n        timestamp, key = parsed\n        previous = last_seen.get(key)\n        if previous is not None and timestamp - previous < window_seconds:\n            continue\n        retained.append(event)\n        last_seen[key] = timestamp\n    return retained\n\n\ndef _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:\n    timestamp = event.get(\"timestamp\")\n    if not isinstance(timestamp, int):\n        return None\n    values = []\n    for field in key_fields:\n        if field not in event:\n            return None\n        values.append(event[field])\n    return timestamp, tuple(values)\n",
+  "effective_temperature": null,
+  "entry_point": "dedupe_events",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "def dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]:\n    retained = []\n    last_seen: dict[tuple, int] = {}\n    for event in events:\n        parsed = _parse_event(event, key_fields)\n        if parsed is None:\n            continue\n        timestamp, key = parsed\n        previous = last_seen.get(key)\n        if previous is not None and timestamp - previous < window_seconds:\n            continue\n        retained.append(event)\n        last_seen[key] = timestamp\n    return retained\n\n\ndef _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:\n    timestamp = event.get(\"timestamp\")\n    if not isinstance(timestamp, int):\n        return None\n    values = []\n    for field in key_fields:\n        if field not in event:\n            return None\n        values.append(event[field])\n    return timestamp, tuple(values)\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add an optional return_stats: bool = False argument. When true, return a\ntuple of (retained_events, {\"kept\": int, \"duplicates\": int, \"malformed\": int}).\n",
+    "day2_stressors": [
+      "streaming_compatibility",
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import dedupe_events\n\n\ndef test_return_stats_counts_duplicate_and_malformed_events():\n    events = [\n        {\"timestamp\": 10, \"user\": \"u1\"},\n        {\"timestamp\": 11, \"user\": \"u1\"},\n        {\"timestamp\": \"bad\", \"user\": \"u1\"},\n    ]\n    kept, stats = dedupe_events(events, [\"user\"], 5, return_stats=True)\n    assert kept == [{\"timestamp\": 10, \"user\": \"u1\"}]\n    assert stats == {\"kept\": 1, \"duplicates\": 1, \"malformed\": 1}\n",
+    "entry_point": "dedupe_events",
+    "human_reference": "def dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]:\n    retained = []\n    last_seen: dict[tuple, int] = {}\n    for event in events:\n        parsed = _parse_event(event, key_fields)\n        if parsed is None:\n            continue\n        timestamp, key = parsed\n        previous = last_seen.get(key)\n        if previous is not None and timestamp - previous < window_seconds:\n            continue\n        retained.append(event)\n        last_seen[key] = timestamp\n    return retained\n\n\ndef _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:\n    timestamp = event.get(\"timestamp\")\n    if not isinstance(timestamp, int):\n        return None\n    values = []\n    for field in key_fields:\n        if field not in event:\n            return None\n        values.append(event[field])\n    return timestamp, tuple(values)\n",
+    "id": "dedupe_event_stream",
+    "mock_day2_solution": "def dedupe_events(\n    events: list[dict],\n    key_fields: list[str],\n    window_seconds: int,\n    return_stats: bool = False,\n):\n    retained = []\n    last_seen: dict[tuple, int] = {}\n    stats = {\"kept\": 0, \"duplicates\": 0, \"malformed\": 0}\n    for event in events:\n        parsed = _parse_event(event, key_fields)\n        if parsed is None:\n            stats[\"malformed\"] += 1\n            continue\n        timestamp, key = parsed\n        previous = last_seen.get(key)\n        if previous is not None and timestamp - previous < window_seconds:\n            stats[\"duplicates\"] += 1\n            continue\n        retained.append(event)\n        last_seen[key] = timestamp\n        stats[\"kept\"] += 1\n    if return_stats:\n        return retained, stats\n    return retained\n\n\ndef _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:\n    timestamp = event.get(\"timestamp\")\n    if not isinstance(timestamp, int):\n        return None\n    values = []\n    for field in key_fields:\n        if field not in event:\n            return None\n        values.append(event[field])\n    return timestamp, tuple(values)\n",
+    "mock_solution": "def dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]:\n    retained = []\n    last_seen: dict[tuple, int] = {}\n    for event in events:\n        parsed = _parse_event(event, key_fields)\n        if parsed is None:\n            continue\n        timestamp, key = parsed\n        previous = last_seen.get(key)\n        if previous is not None and timestamp - previous < window_seconds:\n            continue\n        retained.append(event)\n        last_seen[key] = timestamp\n    return retained\n\n\ndef _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:\n    timestamp = event.get(\"timestamp\")\n    if not isinstance(timestamp, int):\n        return None\n    values = []\n    for field in key_fields:\n        if field not in event:\n            return None\n        values.append(event[field])\n    return timestamp, tuple(values)\n",
+    "prompt": "Implement dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict].\n\nKeep the first event for each composite key within a rolling timestamp window.\nEach event must contain integer timestamp and every key field. Skip malformed\nevents. A duplicate is any later event with the same composite key and\ntimestamp less than window_seconds after the kept event. Preserve the order of\nretained events.\n",
+    "tags": [
+      "data_pipeline",
+      "streaming",
+      "json",
+      "day2-hard"
+    ],
+    "test_code": "from solution import dedupe_events\n\n\ndef test_dedupe_events_keeps_first_within_window():\n    events = [\n        {\"timestamp\": 10, \"user\": \"u1\", \"kind\": \"click\"},\n        {\"timestamp\": 12, \"user\": \"u1\", \"kind\": \"click\"},\n        {\"timestamp\": 25, \"user\": \"u1\", \"kind\": \"click\"},\n        {\"timestamp\": \"bad\", \"user\": \"u2\", \"kind\": \"click\"},\n        {\"timestamp\": 30, \"user\": \"u2\", \"kind\": \"view\"},\n    ]\n    assert dedupe_events(events, [\"user\", \"kind\"], 10) == [\n        {\"timestamp\": 10, \"user\": \"u1\", \"kind\": \"click\"},\n        {\"timestamp\": 25, \"user\": \"u1\", \"kind\": \"click\"},\n        {\"timestamp\": 30, \"user\": \"u2\", \"kind\": \"view\"},\n    ]\n"
+  },
+  "task_id": "dedupe_event_stream",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

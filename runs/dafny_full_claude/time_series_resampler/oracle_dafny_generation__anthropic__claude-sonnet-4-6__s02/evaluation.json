@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": 2,
+    "invariant_count": 13,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 3,
+      "invariant": 13,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 4,
+      "while": 8
+    },
+    "lexical_proof_complexity": 31,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 4,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 115,
+    "source_token_estimate": 698,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.118,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 0
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python, and does not implement the required `resample_series` Python function with the specified signature `resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]`. It cannot be executed as the entry point, fails to return `None` for unknown values (using `0.0` as a sentinel instead), and represents a complete architectural mismatch with the task requirements. While the Dafny code shows some structural reasoning about the algorithm, it is entirely non-functional as a Python implementation and violates every Pythonic principle including simplicity, explicitness, and readability in the target language.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python, and does not implement the required `resample_series` Python function with the specified signature `resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]`. It cannot be executed as the entry point, fails to return `None` for unknown values (using `0.0` as a sentinel instead), and represents a complete architectural mismatch with the task requirements. While the Dafny code shows some structural reasoning about the algorithm, it is entirely non-functional as a Python implementation and violates every Pythonic principle including simplicity, explicitness, and readability in the target language.\",\n  \"strengths\": [\n    \"Demonstrates algorithmic understanding of forward-fill via insertion sort and linear scan\",\n    \"Includes loop invariants showing formal verification awareness\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Does not implement the required Python entry point `resample_series`\",\n    \"Cannot return `None` for unknown values; uses `0.0` sentinel instead\",\n    \"Two separate methods defined instead of one clean function\",\n    \"Zero Pythonic qualities: no type hints, no list comprehensions, no idiomatic constructs\",\n    \"Not executable or importable as a Python module\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates algorithmic understanding of forward-fill via insertion sort and linear scan",
+      "Includes loop invariants showing formal verification awareness"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Does not implement the required Python entry point `resample_series`",
+      "Cannot return `None` for unknown values; uses `0.0` sentinel instead",
+      "Two separate methods defined instead of one clean function",
+      "Zero Pythonic qualities: no type hints, no list comprehensions, no idiomatic constructs",
+      "Not executable or importable as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 702,
+      "prompt": 309,
+      "total": 1011,
+      "turns": [
+        {
+          "completion": 702,
+          "prompt": 309,
+          "total": 1011
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(15,21): Error: this loop invariant could not be proved on entry\n Related message: loop invariant violation\n   |\n15 |     invariant 1 <= i <= n\n   |                      ^^\n\nsolution.dfy(81,21): Error: this loop invariant could not be proved on entry\n Related message: loop invariant violation\n   |\n81 |     invariant 1 <= i <= n\n   |                      ^^\n\n\nDafny program verifier finished with 0 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "time_series_resampler",
+  "variant": "oracle_dafny_generation"
+}

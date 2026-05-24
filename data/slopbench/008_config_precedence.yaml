@@ -1,0 +1,226 @@
+id: config_precedence_merge
+entry_point: merge_settings
+tags: [config_parsing, data_pipeline, validation, day2-hard]
+day2_stressors: [audit_provenance, parameter_threading, backwards_compatibility]
+prompt: |
+  Implement merge_settings(defaults: dict, file_config: dict, env: dict[str, str]) -> dict.
+
+  Return a new nested settings dictionary using this precedence order:
+  defaults < file_config < environment variables.
+
+  Environment variables are keys beginning with APP__. Split the remaining key
+  on "__", lowercase each segment, and write the parsed value into that nested
+  location. Parse "true"/"false" as booleans, base-10 integers as ints, and
+  comma-separated strings as lists of non-empty trimmed strings. Other values
+  remain strings.
+
+  Deep-merge dictionaries and never mutate the input dictionaries.
+test_code: |
+  from solution import merge_settings
+
+
+  def test_merge_settings_precedence_and_parsing():
+      defaults = {
+          "database": {"host": "localhost", "port": 5432},
+          "debug": False,
+          "workers": 2,
+      }
+      file_config = {"database": {"host": "db.local"}, "debug": True}
+      env = {
+          "APP__DATABASE__PORT": "6432",
+          "APP__FEATURES": "search, billing,",
+          "IGNORED": "yes",
+      }
+
+      merged = merge_settings(defaults, file_config, env)
+
+      assert merged == {
+          "database": {"host": "db.local", "port": 6432},
+          "debug": True,
+          "workers": 2,
+          "features": ["search", "billing"],
+      }
+      assert defaults["database"]["host"] == "localhost"
+
+
+  def test_merge_settings_handles_bool_and_plain_string():
+      merged = merge_settings({}, {}, {"APP__DEBUG": "false", "APP__NAME": "api"})
+      assert merged == {"debug": False, "name": "api"}
+day2_prompt: |
+  Add redact_secrets(config: dict) -> dict. Return a deep copy where keys named
+  password, token, secret, or api_key are replaced with "<redacted>" at any
+  nesting level. Do not mutate the input.
+day2_test_code: |
+  from solution import merge_settings, redact_secrets
+
+
+  def test_redact_secrets_and_original_merge_behavior():
+      config = merge_settings(
+          {"auth": {"password": "default", "user": "root"}},
+          {"auth": {"token": "file-token"}},
+          {"APP__AUTH__API_KEY": "env-key"},
+      )
+      redacted = redact_secrets(config)
+
+      assert redacted == {
+          "auth": {
+              "password": "<redacted>",
+              "user": "root",
+              "token": "<redacted>",
+              "api_key": "<redacted>",
+          }
+      }
+      assert config["auth"]["api_key"] == "env-key"
+human_reference: |
+  from copy import deepcopy
+
+
+  def merge_settings(defaults: dict, file_config: dict, env: dict[str, str]) -> dict:
+      merged = _deep_merge(defaults, file_config)
+      for key, value in env.items():
+          if key.startswith("APP__"):
+              path = [part.lower() for part in key[5:].split("__") if part]
+              if path:
+                  _assign_path(merged, path, _parse_env_value(value))
+      return merged
+
+
+  def _deep_merge(left: dict, right: dict) -> dict:
+      result = deepcopy(left)
+      for key, value in right.items():
+          if isinstance(result.get(key), dict) and isinstance(value, dict):
+              result[key] = _deep_merge(result[key], value)
+          else:
+              result[key] = deepcopy(value)
+      return result
+
+
+  def _assign_path(target: dict, path: list[str], value):
+      current = target
+      for segment in path[:-1]:
+          existing = current.get(segment)
+          if not isinstance(existing, dict):
+              existing = {}
+              current[segment] = existing
+          current = existing
+      current[path[-1]] = value
+
+
+  def _parse_env_value(value: str):
+      lowered = value.lower()
+      if lowered == "true":
+          return True
+      if lowered == "false":
+          return False
+      if value.isdigit() or (value.startswith("-") and value[1:].isdigit()):
+          return int(value)
+      if "," in value:
+          return [part.strip() for part in value.split(",") if part.strip()]
+      return value
+mock_solution: |
+  from copy import deepcopy
+
+
+  def merge_settings(defaults: dict, file_config: dict, env: dict[str, str]) -> dict:
+      merged = _deep_merge(defaults, file_config)
+      for key, value in env.items():
+          if key.startswith("APP__"):
+              path = [part.lower() for part in key[5:].split("__") if part]
+              if path:
+                  _assign_path(merged, path, _parse_env_value(value))
+      return merged
+
+
+  def _deep_merge(left: dict, right: dict) -> dict:
+      result = deepcopy(left)
+      for key, value in right.items():
+          if isinstance(result.get(key), dict) and isinstance(value, dict):
+              result[key] = _deep_merge(result[key], value)
+          else:
+              result[key] = deepcopy(value)
+      return result
+
+
+  def _assign_path(target: dict, path: list[str], value):
+      current = target
+      for segment in path[:-1]:
+          existing = current.get(segment)
+          if not isinstance(existing, dict):
+              existing = {}
+              current[segment] = existing
+          current = existing
+      current[path[-1]] = value
+
+
+  def _parse_env_value(value: str):
+      lowered = value.lower()
+      if lowered == "true":
+          return True
+      if lowered == "false":
+          return False
+      if value.isdigit() or (value.startswith("-") and value[1:].isdigit()):
+          return int(value)
+      if "," in value:
+          return [part.strip() for part in value.split(",") if part.strip()]
+      return value
+mock_day2_solution: |
+  from copy import deepcopy
+
+
+  SECRET_KEYS = {"password", "token", "secret", "api_key"}
+
+
+  def merge_settings(defaults: dict, file_config: dict, env: dict[str, str]) -> dict:
+      merged = _deep_merge(defaults, file_config)
+      for key, value in env.items():
+          if key.startswith("APP__"):
+              path = [part.lower() for part in key[5:].split("__") if part]
+              if path:
+                  _assign_path(merged, path, _parse_env_value(value))
+      return merged
+
+
+  def redact_secrets(config: dict) -> dict:
+      result = {}
+      for key, value in config.items():
+          if key.lower() in SECRET_KEYS:
+              result[key] = "<redacted>"
+          elif isinstance(value, dict):
+              result[key] = redact_secrets(value)
+          else:
+              result[key] = deepcopy(value)
+      return result
+
+
+  def _deep_merge(left: dict, right: dict) -> dict:
+      result = deepcopy(left)
+      for key, value in right.items():
+          if isinstance(result.get(key), dict) and isinstance(value, dict):
+              result[key] = _deep_merge(result[key], value)
+          else:
+              result[key] = deepcopy(value)
+      return result
+
+
+  def _assign_path(target: dict, path: list[str], value):
+      current = target
+      for segment in path[:-1]:
+          existing = current.get(segment)
+          if not isinstance(existing, dict):
+              existing = {}
+              current[segment] = existing
+          current = existing
+      current[path[-1]] = value
+
+
+  def _parse_env_value(value: str):
+      lowered = value.lower()
+      if lowered == "true":
+          return True
+      if lowered == "false":
+          return False
+      if value.isdigit() or (value.startswith("-") and value[1:].isdigit()):
+          return int(value)
+      if "," in value:
+          return [part.strip() for part in value.split(",") if part.strip()]
+      return value

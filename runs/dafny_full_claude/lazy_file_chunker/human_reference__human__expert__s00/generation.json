@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nfrom collections.abc import Iterator\nfrom typing import BinaryIO\n\n\ndef iter_file_chunks(file_obj: BinaryIO, chunk_size: int) -> Iterator[bytes]:\n    if chunk_size <= 0:\n        raise ValueError('chunk_size must be positive')\n    while True:\n        chunk = file_obj.read(chunk_size)\n        if not chunk:\n            break\n        yield chunk\n",
+  "effective_temperature": null,
+  "entry_point": "iter_file_chunks",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nfrom collections.abc import Iterator\nfrom typing import BinaryIO\n\n\ndef iter_file_chunks(file_obj: BinaryIO, chunk_size: int) -> Iterator[bytes]:\n    if chunk_size <= 0:\n        raise ValueError('chunk_size must be positive')\n    while True:\n        chunk = file_obj.read(chunk_size)\n        if not chunk:\n            break\n        yield chunk\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend iter_file_chunks with include_index: bool = False. When true, yield\n(index, chunk) tuples. Preserve byte-only output when false.\n",
+    "day2_stressors": [
+      "streaming_compatibility",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from io import BytesIO\n\nfrom solution import iter_file_chunks\n\n\ndef test_optional_chunk_index_metadata():\n    assert list(iter_file_chunks(BytesIO(b'abcd'), 2)) == [b'ab', b'cd']\n    assert list(iter_file_chunks(BytesIO(b'abcd'), 2, include_index=True)) == [(0, b'ab'), (1, b'cd')]\n",
+    "entry_point": "iter_file_chunks",
+    "human_reference": "from __future__ import annotations\n\nfrom collections.abc import Iterator\nfrom typing import BinaryIO\n\n\ndef iter_file_chunks(file_obj: BinaryIO, chunk_size: int) -> Iterator[bytes]:\n    if chunk_size <= 0:\n        raise ValueError('chunk_size must be positive')\n    while True:\n        chunk = file_obj.read(chunk_size)\n        if not chunk:\n            break\n        yield chunk\n",
+    "id": "lazy_file_chunker",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef iter_file_chunks(file_obj, chunk_size: int, include_index: bool = False):\n    if chunk_size < 1:\n        raise ValueError('chunk_size must be positive')\n    index = 0\n    while True:\n        chunk = file_obj.read(chunk_size)\n        if not chunk:\n            return\n        if include_index:\n            yield (index, chunk)\n        else:\n            yield chunk\n        index += 1\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef iter_file_chunks(file_obj, chunk_size: int):\n    if chunk_size < 1:\n        raise ValueError('chunk_size must be positive')\n    chunk = file_obj.read(chunk_size)\n    while chunk:\n        yield chunk\n        chunk = file_obj.read(chunk_size)\n",
+    "prompt": "Implement iter_file_chunks(file_obj, chunk_size: int) -> iterator[bytes].\nRead from a file-like object with read(size), yielding non-empty byte chunks.\nReject non-positive chunk sizes. Do not read the whole file at once.\n",
+    "tags": [
+      "async",
+      "streaming",
+      "io",
+      "day2-hard"
+    ],
+    "test_code": "from io import BytesIO\n\nimport pytest\n\nfrom solution import iter_file_chunks\n\n\ndef test_chunks_lazily():\n    assert list(iter_file_chunks(BytesIO(b'abcdef'), 2)) == [b'ab', b'cd', b'ef']\n\n\ndef test_rejects_bad_size():\n    with pytest.raises(ValueError):\n        list(iter_file_chunks(BytesIO(b'x'), 0))\n"
+  },
+  "task_id": "lazy_file_chunker",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

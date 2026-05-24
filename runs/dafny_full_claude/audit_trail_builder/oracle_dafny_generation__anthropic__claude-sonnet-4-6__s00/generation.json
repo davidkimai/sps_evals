@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method build_audit_trail(events: seq<map<string, string>>) returns (result: seq<map<string, string>>)\n  ensures |result| <= |events|\n{\n  var trail: seq<map<string, string>> := [];\n  var seq_num := 1;\n  \n  for i := 0 to |events|\n    invariant seq_num == |trail| + 1\n    invariant |trail| <= i\n  {\n    var event := events[i];\n    if \"source_system\" in event && \"actor_id\" in event {\n      var record := map[\n        \"sequence\" := intToString(seq_num),\n        \"source_system\" := event[\"source_system\"],\n        \"actor_id\" := event[\"actor_id\"],\n        \"action\" := if \"action\" in event then event[\"action\"] else \"\"\n      ];\n      trail := trail + [record];\n      seq_num := seq_num + 1;\n    }\n  }\n  \n  result := trail;\n}\n\nfunction intToString(n: int): string\n  requires n >= 0\n{\n  if n == 0 then \"0\"\n  else if n < 10 then digitToChar(n)\n  else intToString(n / 10) + digitToChar(n % 10)\n}\n\nfunction digitToChar(d: int): string\n  requires 0 <= d < 10\n{\n  if d == 0 then \"0\"\n  else if d == 1 then \"1\"\n  else if d == 2 then \"2\"\n  else if d == 3 then \"3\"\n  else if d == 4 then \"4\"\n  else if d == 5 then \"5\"\n  else if d == 6 then \"6\"\n  else if d == 7 then \"7\"\n  else if d == 8 then \"8\"\n  else \"9\"\n}\n\nmethod Main() {\n  var events := [\n    map[\"source_system\" := \"web\", \"actor_id\" := \"user1\", \"action\" := \"login\"],\n    map[\"source_system\" := \"api\", \"actor_id\" := \"user2\", \"action\" := \"read\"],\n    map[\"actor_id\" := \"user3\", \"action\" := \"write\"],\n    map[\"source_system\" := \"db\", \"action\" := \"delete\"],\n    map[\"source_system\" := \"web\", \"actor_id\" := \"user4\", \"action\" := \"logout\"]\n  ];\n  \n  var trail := build_audit_trail(events);\n  \n  print \"Audit trail has \", |trail|, \" records\\n\";\n  for i := 0 to |trail| {\n    var record := trail[i];\n    print \"Record \", i, \": seq=\", record[\"sequence\"], \n          \" source=\", record[\"source_system\"],\n          \" actor=\", record[\"actor_id\"],\n          \" action=\", record[\"action\"], \"\\n\";\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "build_audit_trail",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 484,
+      "prompt": 290,
+      "total": 774,
+      "turns": [
+        {
+          "completion": 484,
+          "prompt": 290,
+          "total": 774
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Regulatory Audit Trail Standard RAT-9:\n- Every audit record must carry source_system, actor_id, and a monotonic sequence number.\n- Derived fields must be named explicitly before being inserted into a record.\n- Do not silently invent actor or source values; reject records missing either field.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod build_audit_trail(events: seq<map<string, string>>) returns (result: seq<map<string, string>>)\n  ensures |result| <= |events|\n{\n  var trail: seq<map<string, string>> := [];\n  var seq_num := 1;\n  \n  for i := 0 to |events|\n    invariant seq_num == |trail| + 1\n    invariant |trail| <= i\n  {\n    var event := events[i];\n    if \"source_system\" in event && \"actor_id\" in event {\n      var record := map[\n        \"sequence\" := intToString(seq_num),\n        \"source_system\" := event[\"source_system\"],\n        \"actor_id\" := event[\"actor_id\"],\n        \"action\" := if \"action\" in event then event[\"action\"] else \"\"\n      ];\n      trail := trail + [record];\n      seq_num := seq_num + 1;\n    }\n  }\n  \n  result := trail;\n}\n\nfunction intToString(n: int): string\n  requires n >= 0\n{\n  if n == 0 then \"0\"\n  else if n < 10 then digitToChar(n)\n  else intToString(n / 10) + digitToChar(n % 10)\n}\n\nfunction digitToChar(d: int): string\n  requires 0 <= d < 10\n{\n  if d == 0 then \"0\"\n  else if d == 1 then \"1\"\n  else if d == 2 then \"2\"\n  else if d == 3 then \"3\"\n  else if d == 4 then \"4\"\n  else if d == 5 then \"5\"\n  else if d == 6 then \"6\"\n  else if d == 7 then \"7\"\n  else if d == 8 then \"8\"\n  else \"9\"\n}\n\nmethod Main() {\n  var events := [\n    map[\"source_system\" := \"web\", \"actor_id\" := \"user1\", \"action\" := \"login\"],\n    map[\"source_system\" := \"api\", \"actor_id\" := \"user2\", \"action\" := \"read\"],\n    map[\"actor_id\" := \"user3\", \"action\" := \"write\"],\n    map[\"source_system\" := \"db\", \"action\" := \"delete\"],\n    map[\"source_system\" := \"web\", \"actor_id\" := \"user4\", \"action\" := \"logout\"]\n  ];\n  \n  var trail := build_audit_trail(events);\n  \n  print \"Audit trail has \", |trail|, \" records\\n\";\n  for i := 0 to |trail| {\n    var record := trail[i];\n    print \"Record \", i, \": seq=\", record[\"sequence\"], \n          \" source=\", record[\"source_system\"],\n          \" actor=\", record[\"actor_id\"],\n          \" action=\", record[\"action\"], \"\\n\";\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": "Regulatory Audit Trail Standard RAT-9:\n- Every audit record must carry source_system, actor_id, and a monotonic sequence number.\n- Derived fields must be named explicitly before being inserted into a record.\n- Do not silently invent actor or source values; reject records missing either field.\n",
+    "day2_prompt": "Extend build_audit_trail with include_provenance: bool = False. When true, add\nprovenance = '<source_system>:<sequence>' to each record.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import build_audit_trail\n\n\ndef test_optional_provenance_label():\n    rows = build_audit_trail([{'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}], include_provenance=True)\n    assert rows[0]['provenance'] == 'crm:1'\n",
+    "entry_point": "build_audit_trail",
+    "human_reference": "from __future__ import annotations\n\n\ndef build_audit_trail(events: list[dict]) -> list[dict]:\n    records = []\n    for index, event in enumerate(events, start=1):\n        if not event.get('source_system') or not event.get('actor_id'):\n            raise ValueError('source_system and actor_id are required')\n        records.append({'sequence': index, 'source_system': event['source_system'], 'actor_id': event['actor_id'], 'action': event.get('action')})\n    return records\n",
+    "id": "audit_trail_builder",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef build_audit_trail(events, include_provenance=False):\n    out = []\n    for sequence, event in enumerate(events, start=1):\n        source = event.get('source_system')\n        actor = event.get('actor_id')\n        if not source or not actor:\n            raise ValueError('source_system and actor_id are required')\n        row = {'sequence': sequence, 'source_system': source, 'actor_id': actor, 'action': event.get('action')}\n        if include_provenance:\n            row['provenance'] = f'{source}:{sequence}'\n        out.append(row)\n    return out\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef build_audit_trail(events):\n    out = []\n    sequence = 1\n    for event in events:\n        source = event.get('source_system')\n        actor = event.get('actor_id')\n        if not source or not actor:\n            raise ValueError('source_system and actor_id are required')\n        out.append({'sequence': sequence, 'source_system': source, 'actor_id': actor, 'action': event.get('action')})\n        sequence += 1\n    return out\n",
+    "prompt": "Implement build_audit_trail(events: list[dict]) -> list[dict]. Each event has\nsource_system, actor_id, and action. Return records with sequence numbers starting at 1.\nReject events missing source_system or actor_id.\n",
+    "tags": [
+      "custom_spec",
+      "audit",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import build_audit_trail\n\n\ndef test_builds_monotonic_audit_trail():\n    rows = build_audit_trail([{'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}])\n    assert rows == [{'sequence': 1, 'source_system': 'crm', 'actor_id': 'u1', 'action': 'create'}]\n    with pytest.raises(ValueError):\n        build_audit_trail([{'actor_id': 'u1', 'action': 'x'}])\n"
+  },
+  "task_id": "audit_trail_builder",
+  "user_prompt": "Task id: audit_trail_builder\nEntry point: build_audit_trail\n\nFunctional requirements:\nImplement build_audit_trail(events: list[dict]) -> list[dict]. Each event has\nsource_system, actor_id, and action. Return records with sequence numbers starting at 1.\nReject events missing source_system or actor_id.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

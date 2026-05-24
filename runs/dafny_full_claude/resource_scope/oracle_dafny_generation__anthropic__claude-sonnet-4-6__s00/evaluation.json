@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 4,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 7,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 23,
+    "source_token_estimate": 138,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.012,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, and therefore completely fails to implement the required Python context manager (`ResourceScope`) with `__enter__`, `__exit__`, and `acquire` methods. The task explicitly requires a Python class usable with the `with` statement, but the submission provides a Dafny method with loop invariants and formal verification annotations. There is no Python entry point, no context manager protocol, no `acquire` method, and no actual resource tracking or reverse-order closing logic in Python. This is a fundamental language and architectural mismatch that renders the implementation entirely non-functional for the stated task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, and therefore completely fails to implement the required Python context manager (`ResourceScope`) with `__enter__`, `__exit__`, and `acquire` methods. The task explicitly requires a Python class usable with the `with` statement, but the submission provides a Dafny method with loop invariants and formal verification annotations. There is no Python entry point, no context manager protocol, no `acquire` method, and no actual resource tracking or reverse-order closing logic in Python. This is a fundamental language and architectural mismatch that renders the implementation entirely non-functional for the stated task.\",\n  \"strengths\": [\n    \"The Dafny code correctly models the reverse-order closing logic algorithmically\",\n    \"Loop invariants are well-specified and logically sound within Dafny\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"No Python class, no __enter__/__exit__, no acquire() method\",\n    \"Cannot be used as a context manager in any Python runtime\",\n    \"Does not satisfy the functional requirements at all as a Python implementation\",\n    \"No handling of exceptions during context exit\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny code correctly models the reverse-order closing logic algorithmically",
+      "Loop invariants are well-specified and logically sound within Dafny"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "No Python class, no __enter__/__exit__, no acquire() method",
+      "Cannot be used as a context manager in any Python runtime",
+      "Does not satisfy the functional requirements at all as a Python implementation",
+      "No handling of exceptions during context exit"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 141,
+      "prompt": 285,
+      "total": 426,
+      "turns": [
+        {
+          "completion": 141,
+          "prompt": 285,
+          "total": 426
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "resource_scope",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method sanitize_fields(fields: seq<string>, allowed: set<string>) returns (result: seq<string>)\n  ensures forall s :: s in result ==> s in allowed\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] != result[j]\n{\n  result := [];\n  var seen: set<string> := {};\n  \n  var i := 0;\n  while i < |fields|\n    invariant 0 <= i <= |fields|\n    invariant forall s :: s in result ==> s in allowed\n    invariant forall x, y :: 0 <= x < y < |result| ==> result[x] != result[y]\n    invariant forall s :: s in seen <==> s in result\n  {\n    var field := fields[i];\n    if field in allowed && field !in seen && IsValidField(field) {\n      result := result + [field];\n      seen := seen + {field};\n    }\n    i := i + 1;\n  }\n}\n\nfunction IsValidField(s: string): bool\n{\n  forall c :: c in s ==> IsAllowedChar(c)\n}\n\nfunction IsAllowedChar(c: char): bool\n{\n  ('a' <= c <= 'z') || ('A' <= c <= 'Z') || ('0' <= c <= '9') || c == '_'\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "sanitize_fields",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 234,
+      "prompt": 286,
+      "total": 520,
+      "turns": [
+        {
+          "completion": 234,
+          "prompt": 286,
+          "total": 520
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod sanitize_fields(fields: seq<string>, allowed: set<string>) returns (result: seq<string>)\n  ensures forall s :: s in result ==> s in allowed\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i] != result[j]\n{\n  result := [];\n  var seen: set<string> := {};\n  \n  var i := 0;\n  while i < |fields|\n    invariant 0 <= i <= |fields|\n    invariant forall s :: s in result ==> s in allowed\n    invariant forall x, y :: 0 <= x < y < |result| ==> result[x] != result[y]\n    invariant forall s :: s in seen <==> s in result\n  {\n    var field := fields[i];\n    if field in allowed && field !in seen && IsValidField(field) {\n      result := result + [field];\n      seen := seen + {field};\n    }\n    i := i + 1;\n  }\n}\n\nfunction IsValidField(s: string): bool\n{\n  forall c :: c in s ==> IsAllowedChar(c)\n}\n\nfunction IsAllowedChar(c: char): bool\n{\n  ('a' <= c <= 'z') || ('A' <= c <= 'Z') || ('0' <= c <= '9') || c == '_'\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend sanitize_fields with length_caps: dict[str, int] | None = None. If a field\nhas a cap and its name is longer than the cap, omit it. Preserve old behavior\nwhen omitted.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import sanitize_fields\n\n\ndef test_length_caps_are_field_specific():\n    fields = ['name', 'long_field', 'age']\n    allowed = {'name', 'long_field', 'age'}\n    assert sanitize_fields(fields, allowed, length_caps={'long_field': 5}) == ['name', 'age']\n    assert sanitize_fields(fields, allowed) == fields\n",
+    "entry_point": "sanitize_fields",
+    "human_reference": "from __future__ import annotations\n\n\ndef sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]:\n    clean: list[str] = []\n    seen: set[str] = set()\n    for field in fields:\n        if field in seen:\n            continue\n        if field not in allowed:\n            continue\n        if not field.replace('_', '').isalnum():\n            continue\n        seen.add(field)\n        clean.append(field)\n    return clean\n",
+    "id": "input_sanitizer",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef sanitize_fields(fields, allowed, length_caps=None):\n    output = []\n    caps = length_caps or {}\n    for field in fields:\n        if field in output or field not in allowed:\n            continue\n        if not all(char.isalnum() or char == '_' for char in field):\n            continue\n        if field in caps and len(field) > caps[field]:\n            continue\n        output.append(field)\n    return output\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef sanitize_fields(fields, allowed):\n    output = []\n    for field in fields:\n        if field in allowed and field not in output:\n            ok = True\n            for char in field:\n                if not (char.isalnum() or char == '_'):\n                    ok = False\n            if ok:\n                output.append(field)\n    return output\n",
+    "prompt": "Implement sanitize_fields(fields: list[str], allowed: set[str]) -> list[str].\nReturn fields that are in allowed and contain only letters, digits, and underscores.\nPreserve input order and remove duplicates.\n",
+    "tags": [
+      "reliability_critical",
+      "validation",
+      "day2-hard"
+    ],
+    "test_code": "from solution import sanitize_fields\n\n\ndef test_whitelist_and_identifier_filter():\n    assert sanitize_fields(['name', 'bad-field', 'age', 'name', 'role'], {'name', 'age'}) == ['name', 'age']\n"
+  },
+  "task_id": "input_sanitizer",
+  "user_prompt": "Task id: input_sanitizer\nEntry point: sanitize_fields\n\nFunctional requirements:\nImplement sanitize_fields(fields: list[str], allowed: set[str]) -> list[str].\nReturn fields that are in allowed and contain only letters, digits, and underscores.\nPreserve input order and remove duplicates.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

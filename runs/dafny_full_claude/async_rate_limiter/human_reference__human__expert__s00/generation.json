@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nimport time\nfrom collections import deque\nfrom typing import Callable\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now: Callable[[], float] | None = None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self._rate = rate\n        self._now = now or time.monotonic\n        self._hits: deque[float] = deque()\n\n    async def acquire(self) -> bool:\n        current = self._now()\n        while self._hits and current - self._hits[0] >= 1.0:\n            self._hits.popleft()\n        if len(self._hits) >= self._rate:\n            return False\n        self._hits.append(current)\n        return True\n",
+  "effective_temperature": null,
+  "entry_point": "AsyncRateLimiter",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nimport time\nfrom collections import deque\nfrom typing import Callable\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now: Callable[[], float] | None = None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self._rate = rate\n        self._now = now or time.monotonic\n        self._hits: deque[float] = deque()\n\n    async def acquire(self) -> bool:\n        current = self._now()\n        while self._hits and current - self._hits[0] >= 1.0:\n            self._hits.popleft()\n        if len(self._hits) >= self._rate:\n            return False\n        self._hits.append(current)\n        return True\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend AsyncRateLimiter so it can be used as an async context manager.\nEntering the context should call acquire(). If the acquisition is denied, raise\nRuntimeError. Preserve acquire() behavior.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import asyncio\n\nfrom solution import AsyncRateLimiter\n\n\ndef test_async_context_manager_preserves_acquire_semantics():\n    clock = {'t': 0.0}\n\n    async def _run():\n        limiter = AsyncRateLimiter(1, now=lambda: clock['t'])\n        async with limiter as acquired:\n            assert acquired is limiter\n        try:\n            async with limiter:\n                pass\n        except RuntimeError:\n            pass\n        else:\n            raise AssertionError('second acquire should be denied')\n        clock['t'] = 2.0\n        assert await limiter.acquire() is True\n\n    asyncio.run(_run())\n",
+    "entry_point": "AsyncRateLimiter",
+    "human_reference": "from __future__ import annotations\n\nimport time\nfrom collections import deque\nfrom typing import Callable\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now: Callable[[], float] | None = None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self._rate = rate\n        self._now = now or time.monotonic\n        self._hits: deque[float] = deque()\n\n    async def acquire(self) -> bool:\n        current = self._now()\n        while self._hits and current - self._hits[0] >= 1.0:\n            self._hits.popleft()\n        if len(self._hits) >= self._rate:\n            return False\n        self._hits.append(current)\n        return True\n",
+    "id": "async_rate_limiter",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport time\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now=None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self.rate = rate\n        self.now = now or time.monotonic\n        self.seen: list[float] = []\n\n    async def acquire(self) -> bool:\n        current = self.now()\n        self.seen = [stamp for stamp in self.seen if current - stamp < 1.0]\n        if len(self.seen) >= self.rate:\n            return False\n        self.seen.append(current)\n        return True\n\n    async def __aenter__(self):\n        if not await self.acquire():\n            raise RuntimeError('rate limit exceeded')\n        return self\n\n    async def __aexit__(self, exc_type, exc, tb) -> bool:\n        return False\n",
+    "mock_solution": "from __future__ import annotations\n\nimport time\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now=None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self.rate = rate\n        self.now = now or time.monotonic\n        self.seen: list[float] = []\n\n    async def acquire(self) -> bool:\n        current = self.now()\n        self.seen = [stamp for stamp in self.seen if current - stamp < 1.0]\n        if len(self.seen) < self.rate:\n            self.seen.append(current)\n            return True\n        return False\n",
+    "prompt": "Implement an AsyncRateLimiter class.\n\nConstructor: AsyncRateLimiter(rate: int, *, now: callable | None = None).\nMethod: async acquire() -> bool.\n\nThe limiter allows at most rate successful acquisitions per one-second window.\nUse the optional now callable for deterministic tests. Reject non-positive rates\nwith ValueError.\n",
+    "tags": [
+      "async",
+      "rate_limit",
+      "day2-hard"
+    ],
+    "test_code": "import asyncio\n\nfrom solution import AsyncRateLimiter\n\n\ndef test_allows_only_rate_per_window():\n    clock = {'t': 0.0}\n\n    async def _run():\n        limiter = AsyncRateLimiter(2, now=lambda: clock['t'])\n        assert await limiter.acquire() is True\n        assert await limiter.acquire() is True\n        assert await limiter.acquire() is False\n        clock['t'] = 1.1\n        assert await limiter.acquire() is True\n\n    asyncio.run(_run())\n\n\ndef test_rejects_bad_rate():\n    try:\n        AsyncRateLimiter(0)\n    except ValueError:\n        return\n    raise AssertionError('expected ValueError')\n"
+  },
+  "task_id": "async_rate_limiter",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

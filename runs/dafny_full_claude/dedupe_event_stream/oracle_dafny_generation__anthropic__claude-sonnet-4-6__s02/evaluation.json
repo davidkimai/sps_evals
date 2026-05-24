@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": 2,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 5,
+      "invariant": 5,
+      "logical_and": 2,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 1,
+      "while": 4
+    },
+    "lexical_proof_complexity": 20,
+    "logical_and_count": 2,
+    "logical_or_count": 2,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 58,
+    "source_token_estimate": 426,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.482,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 0
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, which completely fails to satisfy the functional requirements calling for a Python function `dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]`. While the Dafny code structurally mirrors the algorithm described and even includes formal verification annotations (invariants, pre/postconditions), it is entirely non-executable as a Python implementation. The entry point signature, language, data types, and runtime behavior are all wrong for the task. This is a category error \u2014 submitting formal specification code instead of the required implementation language.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, which completely fails to satisfy the functional requirements calling for a Python function `dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]`. While the Dafny code structurally mirrors the algorithm described and even includes formal verification annotations (invariants, pre/postconditions), it is entirely non-executable as a Python implementation. The entry point signature, language, data types, and runtime behavior are all wrong for the task. This is a category error \u2014 submitting formal specification code instead of the required implementation language.\",\n  \"strengths\": [\n    \"Algorithm logic is conceptually correct: checks well-formedness, composite key matching, and window-based deduplication\",\n    \"Includes formal verification annotations (requires, ensures, loop invariants) consistent with the Dafny oracle hint\",\n    \"Preserves order of retained events as required\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable for the stated task\",\n    \"Entry point signature does not match required Python function signature\",\n    \"Cannot be imported or called as a Python module\",\n    \"Uses Dafny-specific types (seq, map<string, int>) incompatible with Python dicts and lists\",\n    \"The 'rolling window' semantics are simplified \u2014 only checks against kept events, not a true rolling window anchored to the first kept event per key\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Algorithm logic is conceptually correct: checks well-formedness, composite key matching, and window-based deduplication",
+      "Includes formal verification annotations (requires, ensures, loop invariants) consistent with the Dafny oracle hint",
+      "Preserves order of retained events as required"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable for the stated task",
+      "Entry point signature does not match required Python function signature",
+      "Cannot be imported or called as a Python module",
+      "Uses Dafny-specific types (seq, map<string, int>) incompatible with Python dicts and lists",
+      "The 'rolling window' semantics are simplified \u2014 only checks against kept events, not a true rolling window anchored to the first kept event per key"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 429,
+      "prompt": 342,
+      "total": 771,
+      "turns": [
+        {
+          "completion": 429,
+          "prompt": 342,
+          "total": 771
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(27,21): Error: element might not be in domain\n   |\n27 |       var ts := event[\"timestamp\"];\n   |                      ^\n\nsolution.dfy(36,33): Error: element might not be in domain\n   |\n36 |         var kept_ts := kept_event[\"timestamp\"];\n   |                                  ^\n\n\nDafny program verifier finished with 0 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "dedupe_event_stream",
+  "variant": "oracle_dafny_generation"
+}

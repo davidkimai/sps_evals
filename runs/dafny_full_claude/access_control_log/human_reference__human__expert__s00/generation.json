@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool:\n    allowed = permission in matrix.get(role, set())\n    log.append({'role': role, 'permission': permission, 'allowed': allowed})\n    return allowed\n",
+  "effective_temperature": null,
+  "entry_point": "check_access",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Zero-Trust Audit Principle ZT-2:\n- Every access attempt must be logged before returning, whether allowed or denied.\n- No short-circuit return may bypass the log write.\n- Log records must include role, permission, and allowed.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool:\n    allowed = permission in matrix.get(role, set())\n    log.append({'role': role, 'permission': permission, 'allowed': allowed})\n    return allowed\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": "Zero-Trust Audit Principle ZT-2:\n- Every access attempt must be logged before returning, whether allowed or denied.\n- No short-circuit return may bypass the log write.\n- Log records must include role, permission, and allowed.\n",
+    "day2_prompt": "Extend check_access with include_reason: bool = False. When true, include reason\n'allowed', 'unknown_role', or 'missing_permission' in the log record.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "backwards_compatibility",
+      "error_surface_expansion"
+    ],
+    "day2_test_code": "from solution import check_access\n\n\ndef test_reason_is_logged_before_return():\n    log = []\n    assert check_access('guest', 'read', {}, log, include_reason=True) is False\n    assert log[0]['reason'] == 'unknown_role'\n",
+    "entry_point": "check_access",
+    "human_reference": "from __future__ import annotations\n\n\ndef check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool:\n    allowed = permission in matrix.get(role, set())\n    log.append({'role': role, 'permission': permission, 'allowed': allowed})\n    return allowed\n",
+    "id": "access_control_log",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef check_access(role, permission, matrix, log, include_reason=False):\n    role_known = role in matrix\n    allowed = permission in matrix.get(role, set())\n    row = {'role': role, 'permission': permission, 'allowed': allowed}\n    if include_reason:\n        if allowed:\n            row['reason'] = 'allowed'\n        elif not role_known:\n            row['reason'] = 'unknown_role'\n        else:\n            row['reason'] = 'missing_permission'\n    log.append(row)\n    return allowed\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef check_access(role, permission, matrix, log):\n    permissions = matrix.get(role, set())\n    allowed = permission in permissions\n    record = {'role': role, 'permission': permission, 'allowed': allowed}\n    log.append(record)\n    return allowed\n",
+    "prompt": "Implement check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool.\nLog every attempt with role, permission, and allowed before returning the decision.\nDeny by default.\n",
+    "tags": [
+      "custom_spec",
+      "access_control",
+      "day2-hard"
+    ],
+    "test_code": "from solution import check_access\n\n\ndef test_logs_allowed_and_denied_attempts():\n    log = []\n    assert check_access('admin', 'read', {'admin': {'read'}}, log) is True\n    assert check_access('guest', 'read', {'admin': {'read'}}, log) is False\n    assert log == [\n        {'role': 'admin', 'permission': 'read', 'allowed': True},\n        {'role': 'guest', 'permission': 'read', 'allowed': False},\n    ]\n"
+  },
+  "task_id": "access_control_log",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

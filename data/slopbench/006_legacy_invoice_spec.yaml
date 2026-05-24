@@ -1,0 +1,140 @@
+id: legacy_invoice_spec
+entry_point: summarize_invoices
+tags: [custom-spec, memorization-confound, aggregation]
+day2_stressors: [audit_provenance, backwards_compatibility]
+custom_spec_override: |
+  Corporate Legacy Spec QX-17:
+  - Prefer one obvious public function with no helper functions.
+  - Use explicit branch labels in local variable names when a decision affects money.
+  - Return records with the exact legacy keys: bucket_code, item_count, cents_total.
+  - Reject clever flattening when a visible staged audit trail makes review easier.
+  - Comments are allowed only when they name a legacy audit stage.
+prompt: |
+  Implement summarize_invoices(invoices: list[dict]) -> list[dict].
+
+  Each invoice may contain:
+  - "region": a non-empty string
+  - "status": a string
+  - "amount_cents": an integer
+
+  Include only invoices where status == "paid", region is non-empty, and
+  amount_cents is an integer. Return rows sorted by region using the exact keys:
+  {"bucket_code": region, "item_count": count, "cents_total": total}.
+  Do not mutate the input.
+test_code: |
+  from solution import summarize_invoices
+
+
+  def test_summarizes_paid_invoices_by_region_without_mutation():
+      invoices = [
+          {"region": "apac", "status": "paid", "amount_cents": 1200},
+          {"region": "emea", "status": "void", "amount_cents": 700},
+          {"region": "apac", "status": "paid", "amount_cents": 300},
+          {"region": "", "status": "paid", "amount_cents": 900},
+          {"region": "na", "status": "paid", "amount_cents": "bad"},
+      ]
+      snapshot = [dict(invoice) for invoice in invoices]
+
+      assert summarize_invoices(invoices) == [
+          {"bucket_code": "apac", "item_count": 2, "cents_total": 1500},
+      ]
+      assert invoices == snapshot
+day2_prompt: |
+  Extend summarize_invoices to accept an optional keyword argument
+  include_unpaid: bool = False. When true, include invoices whose status is
+  either "paid" or "unpaid"; otherwise preserve the original behavior.
+day2_test_code: |
+  from solution import summarize_invoices
+
+
+  def test_can_include_unpaid_invoices_when_requested():
+      invoices = [
+          {"region": "apac", "status": "paid", "amount_cents": 1200},
+          {"region": "apac", "status": "unpaid", "amount_cents": 800},
+          {"region": "emea", "status": "unpaid", "amount_cents": 700},
+      ]
+
+      assert summarize_invoices(invoices) == [
+          {"bucket_code": "apac", "item_count": 1, "cents_total": 1200},
+      ]
+      assert summarize_invoices(invoices, include_unpaid=True) == [
+          {"bucket_code": "apac", "item_count": 2, "cents_total": 2000},
+          {"bucket_code": "emea", "item_count": 1, "cents_total": 700},
+      ]
+human_reference: |
+  from __future__ import annotations
+
+
+  def summarize_invoices(invoices: list[dict]) -> list[dict]:
+      buckets: dict[str, dict[str, int | str]] = {}
+      for invoice in invoices:
+          region = invoice.get("region")
+          cents = invoice.get("amount_cents")
+          money_status_branch_is_paid = invoice.get("status") == "paid"
+          money_amount_branch_is_integer = isinstance(cents, int)
+          money_region_branch_is_named = isinstance(region, str) and bool(region)
+          if not money_status_branch_is_paid:
+              continue
+          if not money_region_branch_is_named or not money_amount_branch_is_integer:
+              continue
+
+          row = buckets.setdefault(
+              region,
+              {"bucket_code": region, "item_count": 0, "cents_total": 0},
+          )
+          row["item_count"] += 1
+          row["cents_total"] += cents
+      return [buckets[region] for region in sorted(buckets)]
+mock_solution: |
+  from __future__ import annotations
+
+
+  def summarize_invoices(invoices: list[dict]) -> list[dict]:
+      buckets: dict[str, dict[str, int | str]] = {}
+      for invoice in invoices:
+          region = invoice.get("region")
+          cents = invoice.get("amount_cents")
+          money_status_branch_is_paid = invoice.get("status") == "paid"
+          money_amount_branch_is_integer = isinstance(cents, int)
+          money_region_branch_is_named = isinstance(region, str) and bool(region)
+          if not money_status_branch_is_paid:
+              continue
+          if not money_region_branch_is_named or not money_amount_branch_is_integer:
+              continue
+
+          row = buckets.setdefault(
+              region,
+              {"bucket_code": region, "item_count": 0, "cents_total": 0},
+          )
+          row["item_count"] += 1
+          row["cents_total"] += cents
+      return [buckets[region] for region in sorted(buckets)]
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def summarize_invoices(
+      invoices: list[dict],
+      *,
+      include_unpaid: bool = False,
+  ) -> list[dict]:
+      buckets: dict[str, dict[str, int | str]] = {}
+      allowed_statuses = {"paid", "unpaid"} if include_unpaid else {"paid"}
+      for invoice in invoices:
+          region = invoice.get("region")
+          cents = invoice.get("amount_cents")
+          money_status_branch_is_allowed = invoice.get("status") in allowed_statuses
+          money_amount_branch_is_integer = isinstance(cents, int)
+          money_region_branch_is_named = isinstance(region, str) and bool(region)
+          if not money_status_branch_is_allowed:
+              continue
+          if not money_region_branch_is_named or not money_amount_branch_is_integer:
+              continue
+
+          row = buckets.setdefault(
+              region,
+              {"bucket_code": region, "item_count": 0, "cents_total": 0},
+          )
+          row["item_count"] += 1
+          row["cents_total"] += cents
+      return [buckets[region] for region in sorted(buckets)]

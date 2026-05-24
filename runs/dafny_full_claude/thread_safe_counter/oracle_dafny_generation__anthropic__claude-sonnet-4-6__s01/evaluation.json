@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 10,
+    "error_count": 6,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 6,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 10,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 0
+    },
+    "lexical_proof_complexity": 19,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 56,
+    "source_token_estimate": 330,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.618,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python class named BoundedCounter that is thread-safe, raises ValueError/OverflowError appropriately, and returns copies of internal state. Instead, the submission provides Dafny source code with Dafny syntax (var, map<string,int>, method, ensures, modifies, etc.) that cannot be executed as Python at all. It fails every functional requirement: no threading primitives, no Python exceptions, no actual implementation in the target language. The Dafny code itself is also incomplete as a formal verification artifact (e.g., snapshot returns the mutable map directly, violating the immutability requirement even in Dafny semantics). This is a complete mismatch between the required artifact and what was delivered.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python class named BoundedCounter that is thread-safe, raises ValueError/OverflowError appropriately, and returns copies of internal state. Instead, the submission provides Dafny source code with Dafny syntax (var, map<string,int>, method, ensures, modifies, etc.) that cannot be executed as Python at all. It fails every functional requirement: no threading primitives, no Python exceptions, no actual implementation in the target language. The Dafny code itself is also incomplete as a formal verification artifact (e.g., snapshot returns the mutable map directly, violating the immutability requirement even in Dafny semantics). This is a complete mismatch between the required artifact and what was delivered.\",\n  \"strengths\": [\n    \"The Dafny specification captures the logical intent of the counter semantics (pre/postconditions, modifies clause)\",\n    \"Demonstrates awareness of formal verification concepts relevant to the informal oracle\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely non-executable as the required implementation\",\n    \"No thread-safety mechanism (no locks, no threading primitives)\",\n    \"No ValueError raised for non-positive max_total\",\n    \"No OverflowError raised when total would exceed max_total\",\n    \"snapshot() returns internal mutable state directly rather than a copy\",\n    \"Cannot be imported or used as a Python module in any way\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny specification captures the logical intent of the counter semantics (pre/postconditions, modifies clause)",
+      "Demonstrates awareness of formal verification concepts relevant to the informal oracle"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely non-executable as the required implementation",
+      "No thread-safety mechanism (no locks, no threading primitives)",
+      "No ValueError raised for non-positive max_total",
+      "No OverflowError raised when total would exceed max_total",
+      "snapshot() returns internal mutable state directly rather than a copy",
+      "Cannot be imported or used as a Python module in any way"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 333,
+      "prompt": 383,
+      "total": 716,
+      "turns": [
+        {
+          "completion": 333,
+          "prompt": 383,
+          "total": 716
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(25,2): Error: a postcondition could not be proved on this return path\n   |\n25 |   {\n   |   ^\n\nsolution.dfy(24,19): Related location: this is the postcondition that could not be proved\n   |\n24 |     ensures newVal >= 1\n   |                    ^^\n\nsolution.dfy(51,2): Error: assertion might not hold\n   |\n51 |   assert v1 == 1;\n   |   ^^^^^^\n\nsolution.dfy(52,24): Error: a precondition for this call could not be proved\n   |\n52 |   var v2 := bc.increment(\"a\");\n   |                         ^\n\nsolution.dfy(18,24): Related location: this is the precondition that could not be proved\n   |\n18 |     requires totalCount < maxTotal\n   |                         ^\n\nsolution.dfy(53,2): Error: assertion might not hold\n   |\n53 |   assert v2 == 2;\n   |   ^^^^^^\n\nsolution.dfy(54,24): Error: a precondition for this call could not be proved\n   |\n54 |   var v3 := bc.increment(\"b\");\n   |                         ^\n\nsolution.dfy(18,24): Related location: this is the precondition that could not be proved\n   |\n18 |     requires totalCount < maxTotal\n   |                         ^\n\nsolution.dfy(55,2): Error: assertion might not hold\n   |\n55 |   assert v3 == 1;\n   |   ^^^^^^\n\n\nDafny program verifier finished with 4 verified, 6 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "thread_safe_counter",
+  "variant": "oracle_dafny_generation"
+}

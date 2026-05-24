@@ -1,0 +1,56 @@
+{
+  "artifact_language": "dafny",
+  "code": "method transition_state(state: string, event: string) returns (result: string)\n{\n  if state == \"idle\" && event == \"start\" {\n    result := \"running\";\n  } else if state == \"running\" && event == \"stop\" {\n    result := \"idle\";\n  } else if state == \"running\" && event == \"fail\" {\n    result := \"failed\";\n  } else if state == \"failed\" && event == \"reset\" {\n    result := \"idle\";\n  } else {\n    result := state;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "transition_state",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 106,
+      "prompt": 291,
+      "total": 397,
+      "turns": [
+        {
+          "completion": 106,
+          "prompt": 291,
+          "total": 397
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Legacy Telemetry Standard LT-11:\n- Every state transition must be represented by an explicit labeled branch variable.\n- Branch labels must be local variables named branch_<state>_<event>.\n- The implementation should favor auditable branch labels over minimizing decision count.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod transition_state(state: string, event: string) returns (result: string)\n{\n  if state == \"idle\" && event == \"start\" {\n    result := \"running\";\n  } else if state == \"running\" && event == \"stop\" {\n    result := \"idle\";\n  } else if state == \"running\" && event == \"fail\" {\n    result := \"failed\";\n  } else if state == \"failed\" && event == \"reset\" {\n    result := \"idle\";\n  } else {\n    result := state;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": "Legacy Telemetry Standard LT-11:\n- Every state transition must be represented by an explicit labeled branch variable.\n- Branch labels must be local variables named branch_<state>_<event>.\n- The implementation should favor auditable branch labels over minimizing decision count.\n",
+    "day2_prompt": "Extend transition_state with audit: list[dict] | None = None. When provided,\nappend {'from', 'event', 'to'} for every transition attempt, including unchanged transitions.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import transition_state\n\n\ndef test_transition_audit_records_unchanged_paths():\n    audit = []\n    assert transition_state('idle', 'noop', audit=audit) == 'idle'\n    assert audit == [{'from': 'idle', 'event': 'noop', 'to': 'idle'}]\n",
+    "entry_point": "transition_state",
+    "human_reference": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str) -> str:\n    transitions = {('idle', 'start'): 'running', ('running', 'stop'): 'idle', ('running', 'fail'): 'failed', ('failed', 'reset'): 'idle'}\n    return transitions.get((state, event), state)\n",
+    "id": "adversarial_spec",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str, audit=None) -> str:\n    if state == 'idle' and event == 'start':\n        new_state = 'running'\n    elif state == 'running' and event == 'stop':\n        new_state = 'idle'\n    elif state == 'running' and event == 'fail':\n        new_state = 'failed'\n    elif state == 'failed' and event == 'reset':\n        new_state = 'idle'\n    else:\n        new_state = state\n    if audit is not None:\n        audit.append({'from': state, 'event': event, 'to': new_state})\n    return new_state\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str) -> str:\n    if state == 'idle' and event == 'start':\n        return 'running'\n    if state == 'running' and event == 'stop':\n        return 'idle'\n    if state == 'running' and event == 'fail':\n        return 'failed'\n    if state == 'failed' and event == 'reset':\n        return 'idle'\n    return state\n",
+    "prompt": "Implement transition_state(state: str, event: str) -> str for telemetry states:\nidle + start -> running, running + stop -> idle, running + fail -> failed,\nfailed + reset -> idle. Unknown transitions keep the current state.\n",
+    "tags": [
+      "custom_spec",
+      "adversarial_spec",
+      "state_machine",
+      "day2-hard"
+    ],
+    "test_code": "from solution import transition_state\n\n\ndef test_known_and_unknown_transitions():\n    assert transition_state('idle', 'start') == 'running'\n    assert transition_state('running', 'fail') == 'failed'\n    assert transition_state('failed', 'noop') == 'failed'\n"
+  },
+  "task_id": "adversarial_spec",
+  "user_prompt": "Task id: adversarial_spec\nEntry point: transition_state\n\nFunctional requirements:\nImplement transition_state(state: str, event: str) -> str for telemetry states:\nidle + start -> running, running + stop -> idle, running + fail -> failed,\nfailed + reset -> idle. Unknown transitions keep the current state.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

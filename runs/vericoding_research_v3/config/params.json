@@ -1,0 +1,16 @@
+{
+  "canonical_root": "runs/vericoding_research_v3",
+  "main_claim": "executable trust boundaries improve acceptance/rejection for autonomous coding agents",
+  "primary_denominator_confirmatory": 16,
+  "primary_denominator_dev": 8,
+  "primary_denominator_total": 24,
+  "program_version": "vericoding_research_v3",
+  "runner_role": "thin Inspect-native scheduler, resume helper, and export wrapper",
+  "secondary_surfaces": [
+    "scbench_transfer"
+  ],
+  "tertiary_surfaces": [
+    "terminalbench_guardrail",
+    "formal_overlay"
+  ]
+}

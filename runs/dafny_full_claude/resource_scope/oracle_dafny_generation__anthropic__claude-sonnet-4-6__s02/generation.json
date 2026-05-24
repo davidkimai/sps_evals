@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method ResourceScope(resources: seq<int>) returns (closed: seq<int>)\n  ensures closed == resources\n{\n  var acquired: seq<int> := [];\n  var i := 0;\n  while i < |resources|\n    invariant 0 <= i <= |resources|\n    invariant acquired == resources[..i]\n  {\n    acquired := acquired + [resources[i]];\n    i := i + 1;\n  }\n  \n  var result: seq<int> := [];\n  var j := |acquired| - 1;\n  while j >= 0\n    invariant -1 <= j <= |acquired| - 1\n    invariant result == acquired[j+1..]\n  {\n    result := result + [acquired[j]];\n    j := j - 1;\n  }\n  \n  // Reverse of acquired equals resources closed in reverse order\n  // We need to show result == resources\n  // result is acquired reversed, and acquired == resources\n  // So result == reverse(resources)\n  // But ensures says closed == resources which would be wrong for reverse...\n  // Let me re-read: \"close tracked resources in reverse acquisition order\"\n  // So closed should be the reverse of acquired (which equals resources)\n  // The ensures should reflect this\n  \n  closed := result;\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "ResourceScope",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 527,
+      "prompt": 285,
+      "total": 812,
+      "turns": [
+        {
+          "completion": 527,
+          "prompt": 285,
+          "total": 812
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod ResourceScope(resources: seq<int>) returns (closed: seq<int>)\n  ensures closed == resources\n{\n  var acquired: seq<int> := [];\n  var i := 0;\n  while i < |resources|\n    invariant 0 <= i <= |resources|\n    invariant acquired == resources[..i]\n  {\n    acquired := acquired + [resources[i]];\n    i := i + 1;\n  }\n  \n  var result: seq<int> := [];\n  var j := |acquired| - 1;\n  while j >= 0\n    invariant -1 <= j <= |acquired| - 1\n    invariant result == acquired[j+1..]\n  {\n    result := result + [acquired[j]];\n    j := j - 1;\n  }\n  \n  // Reverse of acquired equals resources closed in reverse order\n  // We need to show result == resources\n  // result is acquired reversed, and acquired == resources\n  // So result == reverse(resources)\n  // But ensures says closed == resources which would be wrong for reverse...\n  // Let me re-read: \"close tracked resources in reverse acquisition order\"\n  // So closed should be the reverse of acquired (which equals resources)\n  // The ensures should reflect this\n  \n  closed := result;\n}\n```\n\nWait, let me reconsider the specification and make it correct:\n\n```dafny\nfunction Reverse(s: seq<int>): seq<int>\n{\n  if |s| == 0 then []\n  else Reverse(s[1..]) + [s[0]]\n}\n\nlemma ReverseLength(s: seq<int>)\n  ensures |Reverse(s)| == |s|\n{\n}\n\nlemma ReverseReverse(s: seq<int>)\n  ensures Reverse(Reverse(s)) == s\n{\n  if |s| == 0 {\n  } else {\n    ReverseReverse(s[1..]);\n  }\n}\n\nmethod ResourceScope(resources: seq<int>) returns (closed: seq<int>)\n  ensures closed == Reverse(resources)\n{\n  var acquired: seq<int> := [];\n  var i := 0;\n  while i < |resources|\n    invariant 0 <= i <= |resources|\n    invariant acquired == resources[..i]\n  {\n    acquired := acquired + [resources[i]];\n    i := i + 1;\n  }\n  assert acquired == resources;\n  \n  var result: seq<int> := [];\n  var j := |acquired| - 1;\n  while j >= 0\n    invariant -1 <= j <= |acquired| - 1\n    invariant result == Reverse(acquired[j+1..])\n  {\n    result := result + [acquired[j]];\n    j := j - 1;\n  }\n  assert result == Reverse(acquired[0..]);\n  assert acquired[0..] == acquired;\n  \n  closed := result;\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add release(resource) that closes and removes a specific tracked resource before\nscope exit. Releasing an untracked resource should raise ValueError.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import ResourceScope\n\n\nclass Resource:\n    def __init__(self, name, log):\n        self.name = name\n        self.log = log\n    def close(self):\n        self.log.append(self.name)\n\n\ndef test_partial_release_prevents_double_close():\n    log = []\n    with ResourceScope() as scope:\n        one = scope.acquire(Resource('one', log))\n        two = scope.acquire(Resource('two', log))\n        scope.release(one)\n    assert log == ['one', 'two']\n\n    with pytest.raises(ValueError):\n        ResourceScope().release(Resource('x', []))\n",
+    "entry_point": "ResourceScope",
+    "human_reference": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self) -> None:\n        self._resources: list[object] = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self._resources.append(resource)\n        return resource\n\n    def __exit__(self, exc_type, exc, tb) -> bool:\n        while self._resources:\n            resource = self._resources.pop()\n            close = getattr(resource, 'close', None)\n            if close is not None:\n                close()\n        return False\n",
+    "id": "resource_scope",
+    "mock_day2_solution": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self):\n        self.resources = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self.resources.append(resource)\n        return resource\n\n    def release(self, resource):\n        if resource not in self.resources:\n            raise ValueError('resource is not tracked')\n        self.resources.remove(resource)\n        if hasattr(resource, 'close'):\n            resource.close()\n\n    def __exit__(self, exc_type, exc, tb):\n        for resource in reversed(self.resources):\n            if hasattr(resource, 'close'):\n                resource.close()\n        self.resources.clear()\n        return False\n",
+    "mock_solution": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self):\n        self.resources = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self.resources.append(resource)\n        return resource\n\n    def __exit__(self, exc_type, exc, tb):\n        for resource in reversed(self.resources):\n            if hasattr(resource, 'close'):\n                resource.close()\n        self.resources.clear()\n        return False\n",
+    "prompt": "Implement ResourceScope as a context manager. acquire(resource) records a resource\nand returns it. On context exit, close tracked resources in reverse acquisition\norder, including when an exception occurs.\n",
+    "tags": [
+      "object_lifecycle",
+      "context_manager",
+      "day2-hard"
+    ],
+    "test_code": "from solution import ResourceScope\n\n\nclass Resource:\n    def __init__(self, name, log):\n        self.name = name\n        self.log = log\n    def close(self):\n        self.log.append(self.name)\n\n\ndef test_closes_reverse_order_on_exception():\n    log = []\n    try:\n        with ResourceScope() as scope:\n            scope.acquire(Resource('first', log))\n            scope.acquire(Resource('second', log))\n            raise RuntimeError('boom')\n    except RuntimeError:\n        pass\n    assert log == ['second', 'first']\n"
+  },
+  "task_id": "resource_scope",
+  "user_prompt": "Task id: resource_scope\nEntry point: ResourceScope\n\nFunctional requirements:\nImplement ResourceScope as a context manager. acquire(resource) records a resource\nand returns it. On context exit, close tracked resources in reverse acquisition\norder, including when an exception occurs.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

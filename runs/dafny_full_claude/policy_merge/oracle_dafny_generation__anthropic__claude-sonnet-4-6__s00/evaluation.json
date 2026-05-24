@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.017,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.935,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/policy_merge/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 4,
+    "error_count": 0,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 4,
+      "exists": 0,
+      "forall": 8,
+      "if": 2,
+      "invariant": 5,
+      "logical_and": 12,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 0,
+      "while": 1
+    },
+    "lexical_proof_complexity": 34,
+    "logical_and_count": 12,
+    "logical_or_count": 2,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 27,
+    "source_token_estimate": 324,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.771,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop: it imports a non-existent 'module_' (which would crash immediately with an ImportError), never defines the required 'merge_policy' entry point, and instead attempts to bootstrap a Dafny-compiled Python runtime through opaque symbol aliasing. There is no actual logic for merging dictionaries, handling None-removal, or recursive merging. The code is maximally indirect, non-readable, non-auditable, and completely fails to satisfy the functional requirements. It violates every Zen of Python principle: it is implicit, complex, nested, and practically unreadable.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop: it imports a non-existent 'module_' (which would crash immediately with an ImportError), never defines the required 'merge_policy' entry point, and instead attempts to bootstrap a Dafny-compiled Python runtime through opaque symbol aliasing. There is no actual logic for merging dictionaries, handling None-removal, or recursive merging. The code is maximally indirect, non-readable, non-auditable, and completely fails to satisfy the functional requirements. It violates every Zen of Python principle: it is implicit, complex, nested, and practically unreadable.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement any part of the required functionality\"\n  ],\n  \"weaknesses\": [\n    \"Imports a non-existent module ('module_'), causing immediate ImportError\",\n    \"The required 'merge_policy' function is never defined\",\n    \"No recursive merge logic, no None-key removal, no dict merging at all\",\n    \"Extremely opaque and indirect architecture (Dafny runtime bootstrapping) for a trivial dict merge task\",\n    \"Violates every Zen of Python principle: implicit, complex, unreadable, non-auditable\",\n    \"Mutates class objects at runtime via setattr, which is dangerous and unnecessary\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement any part of the required functionality"
+    ],
+    "weaknesses": [
+      "Imports a non-existent module ('module_'), causing immediate ImportError",
+      "The required 'merge_policy' function is never defined",
+      "No recursive merge logic, no None-key removal, no dict merging at all",
+      "Extremely opaque and indirect architecture (Dafny runtime bootstrapping) for a trivial dict merge task",
+      "Violates every Zen of Python principle: implicit, complex, unreadable, non-auditable",
+      "Mutates class objects at runtime via setattr, which is dangerous and unnecessary"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 327,
+      "prompt": 307,
+      "total": 634,
+      "turns": [
+        {
+          "completion": 327,
+          "prompt": 307,
+          "total": 634
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.301,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________ test_merges_recursively_and_removes_none_values ________________\n\n    def test_merges_recursively_and_removes_none_values():\n        defaults = {\n            \"retry\": {\"count\": 3, \"backoff\": \"linear\"},\n            \"log\": True,\n            \"region\": \"us\",\n        }\n        override = {\n            \"retry\": {\"backoff\": \"expo\"},\n            \"region\": None,\n        }\n    \n>       result = merge_policy(defaults, override)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:15: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ndefaults = {'log': True, 'region': 'us', 'retry': {'backoff': 'linear', 'count': 3}}\noverride = {'region': None, 'retry': {'backoff': 'expo'}}\n\n    @staticmethod\n    def merge__policy(defaults, override):\n        result: _dafny.Map = _dafny.Map({})\n        result = defaults\n        d_0_keys_: _dafny.Set\n        d_0_keys_ = (override).keys\n        while (d_0_keys_) != (_dafny.Set({})):\n            d_1_k_: _dafny.Seq\n            with _dafny.label(\"_ASSIGN_SUCH_THAT_d_0\"):\n                assign_such_that_0_: _dafny.Seq\n>               for assign_such_that_0_ in (d_0_keys_).Elements:\n                                           ^^^^^^^^^^^^^^^^^^^^\nE               AttributeError: 'builtin_function_or_method' object has no attribute 'Elements'\n\nmodule_.py:26: AttributeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_merges_recursively_and_removes_none_values - At...\n1 failed in 0.12s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "policy_merge",
+  "variant": "oracle_dafny_generation"
+}

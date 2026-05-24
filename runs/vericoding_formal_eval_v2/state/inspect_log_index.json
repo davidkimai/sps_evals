@@ -1,0 +1,32 @@
+{
+  "logs": [
+    {
+      "created_at": "2026-05-22T22:16:35Z",
+      "log_path": "inspect_logs/validation/2026-05-22T22-16-35-00-00_vericoding-formal-validation_irNMj2QoRX5pwxmgLwGkEG.eval",
+      "phase": "validation",
+      "program_version": "vericoding_formal_eval_v2",
+      "split": "dev",
+      "surface": "formal_validation",
+      "task_name": "src/slopbench_inspect/tasks/vericoding_formal_validation.py@vericoding_formal_validation"
+    },
+    {
+      "created_at": "2026-05-22T22:22:02Z",
+      "log_path": "inspect_logs/dev/2026-05-22T22-22-01-00-00_vericoding-formal-dev-dev_VX4SAGjmRmhwYd5pFFR6oQ.eval",
+      "phase": "dev",
+      "program_version": "vericoding_formal_eval_v2",
+      "split": "dev",
+      "surface": "formal_dev",
+      "task_name": "src/slopbench_inspect/tasks/vericoding_formal_dev.py@vericoding_formal_dev"
+    },
+    {
+      "created_at": "2026-05-22T22:41:14Z",
+      "log_path": "inspect_logs/confirmatory/2026-05-22T22-41-13-00-00_vericoding-formal-confirmatory-confirmatory_dQ4VQeZxxLZUWvyUgcQwnv.eval",
+      "phase": "confirmatory",
+      "program_version": "vericoding_formal_eval_v2",
+      "split": "confirmatory",
+      "surface": "formal_confirmatory",
+      "task_name": "src/slopbench_inspect/tasks/vericoding_formal_confirmatory.py@vericoding_formal_confirmatory"
+    }
+  ],
+  "program_version": "vericoding_formal_eval_v2"
+}

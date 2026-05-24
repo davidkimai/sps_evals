@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 8,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 9,
+      "invariant": 8,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 6
+    },
+    "lexical_proof_complexity": 26,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 94,
+    "source_token_estimate": 615,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.831,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny (a formal verification language), not Python, making it completely non-functional as a Python implementation. It fails every requirement: the entry point is named `summarize_invoices_typed` instead of `summarize_invoices`, it uses Dafny syntax (`datatype`, `method`, `seq`, `map`, `invariant`, `ensures`) that is not valid Python, it introduces multiple helper functions (`intToString`, `natToString`, `Main`) violating the 'one obvious public function with no helper functions' spec, the filtering logic ignores the `status == 'paid'` and `isinstance(amount_cents, int)` checks entirely, and the output map values are strings rather than integers. The code cannot be executed in any Python environment and demonstrates a fundamental misunderstanding of the task language and platform requirements.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny (a formal verification language), not Python, making it completely non-functional as a Python implementation. It fails every requirement: the entry point is named `summarize_invoices_typed` instead of `summarize_invoices`, it uses Dafny syntax (`datatype`, `method`, `seq`, `map`, `invariant`, `ensures`) that is not valid Python, it introduces multiple helper functions (`intToString`, `natToString`, `Main`) violating the 'one obvious public function with no helper functions' spec, the filtering logic ignores the `status == 'paid'` and `isinstance(amount_cents, int)` checks entirely, and the output map values are strings rather than integers. The code cannot be executed in any Python environment and demonstrates a fundamental misunderstanding of the task language and platform requirements.\",\n  \"strengths\": [\n    \"Attempts to use the correct legacy output keys: bucket_code, item_count, cents_total\",\n    \"Shows awareness of sorting by region and grouping logic conceptually\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Entry point is named summarize_invoices_typed, not summarize_invoices\",\n    \"Introduces multiple helper functions (intToString, natToString, Main) violating the single-function spec\",\n    \"Ignores status == 'paid' filter entirely\",\n    \"Ignores isinstance(amount_cents, int) validation\",\n    \"Output values for item_count and cents_total are strings, not integers\",\n    \"Cannot be executed or imported as Python code\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to use the correct legacy output keys: bucket_code, item_count, cents_total",
+      "Shows awareness of sorting by region and grouping logic conceptually"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Entry point is named summarize_invoices_typed, not summarize_invoices",
+      "Introduces multiple helper functions (intToString, natToString, Main) violating the single-function spec",
+      "Ignores status == 'paid' filter entirely",
+      "Ignores isinstance(amount_cents, int) validation",
+      "Output values for item_count and cents_total are strings, not integers",
+      "Cannot be executed or imported as Python code"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 747,
+      "prompt": 341,
+      "total": 1088,
+      "turns": [
+        {
+          "completion": 747,
+          "prompt": 341,
+          "total": 1088
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Corporate Legacy Spec QX-17:\n- Prefer one obvious public function with no helper functions.\n- Use explicit branch labels in local variable names when a decision affects money.\n- Return records with the exact legacy keys: bucket_code, item_count, cents_total.\n- Reject clever flattening when a visible staged audit trail makes review easier.\n- Comments are allowed only when they name a legacy audit stage.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(41,37): Error: arguments to > must be of a numeric type, bitvector type, ORDINAL, char, or a set-like type (instead got seq<char> and seq<char>)\n   |\n41 |     while m >= 0 && sortedRegions[m] > key\n   |                                      ^\n\nsolution.dfy(92,33): Error: type of left argument to + (int) must agree with the result type (char)\n   |\n92 |   else natToString(n / 10) + [48 + (n % 10) as char]\n   |                                  ^\n\n2 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "legacy_invoice_spec",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,54 @@
+{
+  "artifact_language": "dafny",
+  "code": "method handle_underspecified(mode: string, value: int, hasMode: bool, hasValue: bool) returns (result: int, raised: bool)\n  requires hasMode && mode == \"echo\" ==> hasValue\n  ensures !raised ==> (hasMode && mode == \"echo\" && hasValue && result == value)\n  ensures raised ==> !(hasMode && mode == \"echo\" && hasValue)\n{\n  if hasMode && mode == \"echo\" && hasValue {\n    result := value;\n    raised := false;\n  } else {\n    result := 0;\n    raised := true;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "handle_underspecified",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 118,
+      "prompt": 294,
+      "total": 412,
+      "turns": [
+        {
+          "completion": 118,
+          "prompt": 294,
+          "total": 412
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod handle_underspecified(mode: string, value: int, hasMode: bool, hasValue: bool) returns (result: int, raised: bool)\n  requires hasMode && mode == \"echo\" ==> hasValue\n  ensures !raised ==> (hasMode && mode == \"echo\" && hasValue && result == value)\n  ensures raised ==> !(hasMode && mode == \"echo\" && hasValue)\n{\n  if hasMode && mode == \"echo\" && hasValue {\n    result := value;\n    raised := false;\n  } else {\n    result := 0;\n    raised := true;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend handle_underspecified with a newly specified path: {'mode': 'count', 'items': list}\nreturns len(items). Continue raising NotImplementedError for all other uncovered paths.\n",
+    "day2_stressors": [
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import handle_underspecified\n\n\ndef test_adds_count_but_still_refuses_unknown_paths():\n    assert handle_underspecified({'mode': 'count', 'items': [1, 2, 3]}) == 3\n    assert handle_underspecified({'mode': 'echo', 'value': 'x'}) == 'x'\n    with pytest.raises(NotImplementedError):\n        handle_underspecified({'mode': 'average', 'items': [1, 2]})\n",
+    "entry_point": "handle_underspecified",
+    "human_reference": "from __future__ import annotations\n\n\ndef handle_underspecified(payload: dict):\n    if payload.get('mode') == 'echo' and 'value' in payload:\n        return payload['value']\n    raise NotImplementedError('uncovered input path')\n",
+    "id": "spec_elicitation_stub",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef handle_underspecified(payload):\n    mode = payload.get('mode')\n    if mode == 'echo' and 'value' in payload:\n        return payload['value']\n    if mode == 'count' and isinstance(payload.get('items'), list):\n        return len(payload['items'])\n    raise NotImplementedError('uncovered input path')\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef handle_underspecified(payload):\n    mode = payload.get('mode')\n    if mode == 'echo' and 'value' in payload:\n        return payload['value']\n    raise NotImplementedError('uncovered input path')\n",
+    "prompt": "Implement handle_underspecified(payload: dict) -> object. The only specified path\nis payload {'mode': 'echo', 'value': X}, which returns X. For any uncovered input\npath, raise NotImplementedError rather than guessing behavior.\n",
+    "tags": [
+      "spec_elicitation",
+      "underspecified",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import handle_underspecified\n\n\ndef test_echo_and_refusal_to_guess():\n    assert handle_underspecified({'mode': 'echo', 'value': 3}) == 3\n    with pytest.raises(NotImplementedError):\n        handle_underspecified({'mode': 'sum', 'values': [1, 2]})\n"
+  },
+  "task_id": "spec_elicitation_stub",
+  "user_prompt": "Task id: spec_elicitation_stub\nEntry point: handle_underspecified\n\nFunctional requirements:\nImplement handle_underspecified(payload: dict) -> object. The only specified path\nis payload {'mode': 'echo', 'value': X}, which returns X. For any uncovered input\npath, raise NotImplementedError rather than guessing behavior.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

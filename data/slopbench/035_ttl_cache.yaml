@@ -1,0 +1,136 @@
+id: ttl_cache
+entry_point: TTLCache
+tags: [object_lifecycle, cache, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement TTLCache(max_size: int, ttl_seconds: float, *, now=None). set(key, value)
+  stores a value. get(key) returns the value, or None if absent or expired. Evict
+  least-recently-used entries when max_size is exceeded.
+test_code: |
+  from solution import TTLCache
+
+
+  def test_ttl_and_lru_eviction():
+      clock = {'t': 0.0}
+      cache = TTLCache(2, 5.0, now=lambda: clock['t'])
+      cache.set('a', 1)
+      cache.set('b', 2)
+      assert cache.get('a') == 1
+      cache.set('c', 3)
+      assert cache.get('b') is None
+      clock['t'] = 10.0
+      assert cache.get('a') is None
+day2_prompt: |
+  Add warm(initial: dict) that pre-populates the cache from a dict using the current
+  time. It should respect max_size by keeping the latest inserted entries.
+day2_test_code: |
+  from solution import TTLCache
+
+
+  def test_cache_warming_respects_capacity():
+      clock = {'t': 0.0}
+      cache = TTLCache(2, 5.0, now=lambda: clock['t'])
+      cache.warm({'a': 1, 'b': 2, 'c': 3})
+      assert cache.get('a') is None
+      assert cache.get('b') == 2
+      assert cache.get('c') == 3
+human_reference: |
+  from __future__ import annotations
+
+  import time
+  from collections import OrderedDict
+  from collections.abc import Callable
+  from typing import Any
+
+
+  class TTLCache:
+      def __init__(self, max_size: int, ttl_seconds: float, *, now: Callable[[], float] | None = None) -> None:
+          if max_size <= 0 or ttl_seconds <= 0:
+              raise ValueError('max_size and ttl_seconds must be positive')
+          self._max_size = max_size
+          self._ttl = ttl_seconds
+          self._now = now or time.monotonic
+          self._items: OrderedDict[Any, tuple[Any, float]] = OrderedDict()
+
+      def set(self, key, value) -> None:
+          self._items[key] = (value, self._now())
+          self._items.move_to_end(key)
+          while len(self._items) > self._max_size:
+              self._items.popitem(last=False)
+
+      def get(self, key):
+          item = self._items.get(key)
+          if item is None:
+              return None
+          value, stamp = item
+          if self._now() - stamp > self._ttl:
+              del self._items[key]
+              return None
+          self._items.move_to_end(key)
+          return value
+mock_solution: |
+  from __future__ import annotations
+
+  import time
+  from collections import OrderedDict
+
+
+  class TTLCache:
+      def __init__(self, max_size: int, ttl_seconds: float, *, now=None):
+          if max_size <= 0 or ttl_seconds <= 0:
+              raise ValueError('max_size and ttl_seconds must be positive')
+          self.max_size = max_size
+          self.ttl = ttl_seconds
+          self.now = now or time.monotonic
+          self.data = OrderedDict()
+
+      def set(self, key, value):
+          self.data[key] = (value, self.now())
+          self.data.move_to_end(key)
+          if len(self.data) > self.max_size:
+              self.data.popitem(last=False)
+
+      def get(self, key):
+          if key not in self.data:
+              return None
+          value, stamp = self.data[key]
+          if self.now() - stamp > self.ttl:
+              del self.data[key]
+              return None
+          self.data.move_to_end(key)
+          return value
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import time
+  from collections import OrderedDict
+
+
+  class TTLCache:
+      def __init__(self, max_size: int, ttl_seconds: float, *, now=None):
+          if max_size <= 0 or ttl_seconds <= 0:
+              raise ValueError('max_size and ttl_seconds must be positive')
+          self.max_size = max_size
+          self.ttl = ttl_seconds
+          self.now = now or time.monotonic
+          self.data = OrderedDict()
+
+      def set(self, key, value):
+          self.data[key] = (value, self.now())
+          self.data.move_to_end(key)
+          while len(self.data) > self.max_size:
+              self.data.popitem(last=False)
+
+      def warm(self, initial: dict):
+          for key, value in initial.items():
+              self.set(key, value)
+
+      def get(self, key):
+          if key not in self.data:
+              return None
+          value, stamp = self.data[key]
+          if self.now() - stamp > self.ttl:
+              del self.data[key]
+              return None
+          self.data.move_to_end(key)
+          return value

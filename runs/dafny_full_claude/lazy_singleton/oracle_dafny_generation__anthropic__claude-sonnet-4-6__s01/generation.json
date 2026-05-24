@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "class LazySingleton {\n  var instance: object?\n  var factory: () -> object\n\n  constructor(f: () -> object)\n    ensures instance == null\n  {\n    instance := null;\n    factory := f;\n  }\n\n  method get() returns (obj: object)\n    modifies this\n    ensures obj == instance\n    ensures old(instance) != null ==> instance == old(instance)\n  {\n    if instance == null {\n      instance := factory();\n    }\n    obj := instance;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "LazySingleton",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 109,
+      "prompt": 274,
+      "total": 383,
+      "turns": [
+        {
+          "completion": 109,
+          "prompt": 274,
+          "total": 383
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nclass LazySingleton {\n  var instance: object?\n  var factory: () -> object\n\n  constructor(f: () -> object)\n    ensures instance == null\n  {\n    instance := null;\n    factory := f;\n  }\n\n  method get() returns (obj: object)\n    modifies this\n    ensures obj == instance\n    ensures old(instance) != null ==> instance == old(instance)\n  {\n    if instance == null {\n      instance := factory();\n    }\n    obj := instance;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add reset_for_test() that restores the uninitialized state so the next get()\ncreates a fresh object. Preserve thread safety.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import LazySingleton\n\n\ndef test_reset_for_test_creates_new_instance():\n    counter = {'n': 0}\n    def factory():\n        counter['n'] += 1\n        return {'n': counter['n']}\n    singleton = LazySingleton(factory)\n    first = singleton.get()\n    singleton.reset_for_test()\n    second = singleton.get()\n    assert first != second\n    assert counter['n'] == 2\n",
+    "entry_point": "LazySingleton",
+    "human_reference": "from __future__ import annotations\n\nfrom threading import Lock\nfrom typing import Callable, Generic, TypeVar\n\nT = TypeVar('T')\n_MISSING = object()\n\n\nclass LazySingleton(Generic[T]):\n    def __init__(self, factory: Callable[[], T]) -> None:\n        self._factory = factory\n        self._value: T | object = _MISSING\n        self._lock = Lock()\n\n    def get(self) -> T:\n        if self._value is _MISSING:\n            with self._lock:\n                if self._value is _MISSING:\n                    self._value = self._factory()\n        return self._value  # type: ignore[return-value]\n",
+    "id": "lazy_singleton",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport threading\n\n_EMPTY = object()\n\n\nclass LazySingleton:\n    def __init__(self, factory):\n        self.factory = factory\n        self.value = _EMPTY\n        self.lock = threading.Lock()\n\n    def get(self):\n        with self.lock:\n            if self.value is _EMPTY:\n                self.value = self.factory()\n            return self.value\n\n    def reset_for_test(self):\n        with self.lock:\n            self.value = _EMPTY\n",
+    "mock_solution": "from __future__ import annotations\n\nimport threading\n\n_EMPTY = object()\n\n\nclass LazySingleton:\n    def __init__(self, factory):\n        self.factory = factory\n        self.value = _EMPTY\n        self.lock = threading.Lock()\n\n    def get(self):\n        with self.lock:\n            if self.value is _EMPTY:\n                self.value = self.factory()\n            return self.value\n",
+    "prompt": "Implement LazySingleton(factory). Method get() returns the same lazily-created\nobject on every call. It must be safe under concurrent calls from multiple\nthreads.\n",
+    "tags": [
+      "object_lifecycle",
+      "threading",
+      "day2-hard"
+    ],
+    "test_code": "from concurrent.futures import ThreadPoolExecutor\n\nfrom solution import LazySingleton\n\n\ndef test_single_instance_under_threads():\n    calls = []\n    singleton = LazySingleton(lambda: calls.append(object()) or calls[-1])\n    with ThreadPoolExecutor(max_workers=4) as pool:\n        values = list(pool.map(lambda _: singleton.get(), range(20)))\n    assert len({id(value) for value in values}) == 1\n    assert len(calls) == 1\n"
+  },
+  "task_id": "lazy_singleton",
+  "user_prompt": "Task id: lazy_singleton\nEntry point: LazySingleton\n\nFunctional requirements:\nImplement LazySingleton(factory). Method get() returns the same lazily-created\nobject on every call. It must be safe under concurrent calls from multiple\nthreads.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

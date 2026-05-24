@@ -1,0 +1,134 @@
+id: incident_desk_spec
+entry_point: route_tickets
+tags: [custom-spec, state_machine, memorization-confound, day2-hard]
+day2_stressors: [audit_provenance, parameter_threading, backwards_compatibility]
+custom_spec_override: |
+  Incident Desk Spec N-9:
+  - Return review-facing rows with stable status_code values, never booleans.
+  - Prefer local lookup tables with names ending in _table.
+  - Keep branch reasons as short explicit strings, not hidden in comments.
+  - Do not introduce classes for single-pass ticket routing.
+  - Preserve ticket order because shift leads compare rows against the intake log.
+prompt: |
+  Implement route_tickets(tickets: list[dict], rules: dict[str, dict]) -> list[dict].
+
+  Each ticket has id, severity, and service. rules maps service names to a dict
+  with queue and priority. Use rules["default"] when a service is absent.
+  Return one row per valid ticket in input order:
+  {"id": str, "queue": str, "priority": int, "status_code": "routed"}.
+
+  Skip tickets missing id, severity, or service. Add 10 to priority for severity
+  "critical" and 5 for severity "high".
+test_code: |
+  from solution import route_tickets
+
+
+  def test_route_tickets_uses_default_and_severity_boosts():
+      tickets = [
+          {"id": "t1", "severity": "critical", "service": "api"},
+          {"id": "t2", "severity": "low", "service": "unknown"},
+          {"id": "bad", "service": "api"},
+      ]
+      rules = {
+          "api": {"queue": "backend", "priority": 20},
+          "default": {"queue": "triage", "priority": 1},
+      }
+      assert route_tickets(tickets, rules) == [
+          {"id": "t1", "queue": "backend", "priority": 30, "status_code": "routed"},
+          {"id": "t2", "queue": "triage", "priority": 1, "status_code": "routed"},
+      ]
+day2_prompt: |
+  Add optional escalate_after: int | None = None. If provided, tickets with
+  age_minutes greater than escalate_after should add 3 priority points and use
+  status_code "escalated".
+day2_test_code: |
+  from solution import route_tickets
+
+
+  def test_escalate_after_changes_status_and_priority():
+      tickets = [
+          {"id": "t1", "severity": "high", "service": "api", "age_minutes": 90},
+          {"id": "t2", "severity": "low", "service": "api", "age_minutes": 10},
+      ]
+      rules = {"api": {"queue": "backend", "priority": 20}, "default": {"queue": "triage", "priority": 1}}
+      assert route_tickets(tickets, rules, escalate_after=30) == [
+          {"id": "t1", "queue": "backend", "priority": 28, "status_code": "escalated"},
+          {"id": "t2", "queue": "backend", "priority": 20, "status_code": "routed"},
+      ]
+human_reference: |
+  def route_tickets(tickets: list[dict], rules: dict[str, dict]) -> list[dict]:
+      severity_boost_table = {"critical": 10, "high": 5}
+      routed_rows = []
+      for ticket in tickets:
+          if not _valid_ticket(ticket):
+              continue
+          service_rule_table = rules.get(ticket["service"], rules.get("default", {}))
+          priority = int(service_rule_table.get("priority", 0))
+          priority += severity_boost_table.get(ticket["severity"], 0)
+          routed_rows.append(
+              {
+                  "id": ticket["id"],
+                  "queue": service_rule_table.get("queue", "triage"),
+                  "priority": priority,
+                  "status_code": "routed",
+              }
+          )
+      return routed_rows
+
+
+  def _valid_ticket(ticket: dict) -> bool:
+      return all(ticket.get(field) for field in ("id", "severity", "service"))
+mock_solution: |
+  def route_tickets(tickets: list[dict], rules: dict[str, dict]) -> list[dict]:
+      severity_boost_table = {"critical": 10, "high": 5}
+      routed_rows = []
+      for ticket in tickets:
+          if not _valid_ticket(ticket):
+              continue
+          service_rule_table = rules.get(ticket["service"], rules.get("default", {}))
+          priority = int(service_rule_table.get("priority", 0))
+          priority += severity_boost_table.get(ticket["severity"], 0)
+          routed_rows.append(
+              {
+                  "id": ticket["id"],
+                  "queue": service_rule_table.get("queue", "triage"),
+                  "priority": priority,
+                  "status_code": "routed",
+              }
+          )
+      return routed_rows
+
+
+  def _valid_ticket(ticket: dict) -> bool:
+      return all(ticket.get(field) for field in ("id", "severity", "service"))
+mock_day2_solution: |
+  def route_tickets(
+      tickets: list[dict],
+      rules: dict[str, dict],
+      escalate_after: int | None = None,
+  ) -> list[dict]:
+      severity_boost_table = {"critical": 10, "high": 5}
+      routed_rows = []
+      for ticket in tickets:
+          if not _valid_ticket(ticket):
+              continue
+          service_rule_table = rules.get(ticket["service"], rules.get("default", {}))
+          priority = int(service_rule_table.get("priority", 0))
+          priority += severity_boost_table.get(ticket["severity"], 0)
+          status_code = "routed"
+          if escalate_after is not None and ticket.get("age_minutes", 0) > escalate_after:
+              priority += 3
+              status_code = "escalated"
+          routed_rows.append(
+              {
+                  "id": ticket["id"],
+                  "queue": service_rule_table.get("queue", "triage"),
+                  "priority": priority,
+                  "status_code": status_code,
+              }
+          )
+      return routed_rows
+
+
+  def _valid_ticket(ticket: dict) -> bool:
+      return all(ticket.get(field) for field in ("id", "severity", "service"))

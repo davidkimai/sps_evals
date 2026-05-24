@@ -1,0 +1,71 @@
+id: adversarial_spec
+entry_point: transition_state
+tags: [custom_spec, adversarial_spec, state_machine, day2-hard]
+day2_stressors: [cross_function_state, audit_provenance, backwards_compatibility]
+custom_spec_override: |
+  Legacy Telemetry Standard LT-11:
+  - Every state transition must be represented by an explicit labeled branch variable.
+  - Branch labels must be local variables named branch_<state>_<event>.
+  - The implementation should favor auditable branch labels over minimizing decision count.
+prompt: |
+  Implement transition_state(state: str, event: str) -> str for telemetry states:
+  idle + start -> running, running + stop -> idle, running + fail -> failed,
+  failed + reset -> idle. Unknown transitions keep the current state.
+test_code: |
+  from solution import transition_state
+
+
+  def test_known_and_unknown_transitions():
+      assert transition_state('idle', 'start') == 'running'
+      assert transition_state('running', 'fail') == 'failed'
+      assert transition_state('failed', 'noop') == 'failed'
+day2_prompt: |
+  Extend transition_state with audit: list[dict] | None = None. When provided,
+  append {'from', 'event', 'to'} for every transition attempt, including unchanged transitions.
+day2_test_code: |
+  from solution import transition_state
+
+
+  def test_transition_audit_records_unchanged_paths():
+      audit = []
+      assert transition_state('idle', 'noop', audit=audit) == 'idle'
+      assert audit == [{'from': 'idle', 'event': 'noop', 'to': 'idle'}]
+human_reference: |
+  from __future__ import annotations
+
+
+  def transition_state(state: str, event: str) -> str:
+      transitions = {('idle', 'start'): 'running', ('running', 'stop'): 'idle', ('running', 'fail'): 'failed', ('failed', 'reset'): 'idle'}
+      return transitions.get((state, event), state)
+mock_solution: |
+  from __future__ import annotations
+
+
+  def transition_state(state: str, event: str) -> str:
+      if state == 'idle' and event == 'start':
+          return 'running'
+      if state == 'running' and event == 'stop':
+          return 'idle'
+      if state == 'running' and event == 'fail':
+          return 'failed'
+      if state == 'failed' and event == 'reset':
+          return 'idle'
+      return state
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def transition_state(state: str, event: str, audit=None) -> str:
+      if state == 'idle' and event == 'start':
+          new_state = 'running'
+      elif state == 'running' and event == 'stop':
+          new_state = 'idle'
+      elif state == 'running' and event == 'fail':
+          new_state = 'failed'
+      elif state == 'failed' and event == 'reset':
+          new_state = 'idle'
+      else:
+          new_state = state
+      if audit is not None:
+          audit.append({'from': state, 'event': event, 'to': new_state})
+      return new_state

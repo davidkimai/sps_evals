@@ -1,0 +1,6 @@
+false_accept_rate,row_count,selector_name,top1_accuracy
+0.590909,88,random_selector,0.170455
+0.852273,88,tests_only_selector,0.136364
+0.761364,88,structural_selector,0.170455
+0.681818,88,llm_judge_selector,0.306818
+0.681818,88,specoracle_selector,0.306818

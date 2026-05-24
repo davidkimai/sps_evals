@@ -1,0 +1,195 @@
+id: cli_argument_validation
+entry_point: parse_cli_args
+tags: [cli_tool, validation, explicitness]
+day2_stressors: [interface_generalization, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement parse_cli_args(argv: list[str]) -> dict.
+
+  Supported flags:
+  - --input PATH is required.
+  - --limit N is optional, defaults to 100, and must be a positive integer.
+  - --format VALUE is optional, defaults to "json", and must be "json" or "csv".
+  - --dry-run is an optional boolean flag.
+
+  Return {"input": str, "limit": int, "format": str, "dry_run": bool}.
+  Raise ValueError for missing required flags, unknown flags, missing values, or
+  invalid values. Do not call sys.exit.
+test_code: |
+  import pytest
+
+  from solution import parse_cli_args
+
+
+  def test_parse_cli_args_success():
+      assert parse_cli_args(["--input", "events.csv", "--limit", "5", "--dry-run"]) == {
+          "input": "events.csv",
+          "limit": 5,
+          "format": "json",
+          "dry_run": True,
+      }
+      assert parse_cli_args(["--input", "events.csv", "--format", "csv"])["format"] == "csv"
+
+
+  def test_parse_cli_args_errors():
+      with pytest.raises(ValueError):
+          parse_cli_args([])
+      with pytest.raises(ValueError):
+          parse_cli_args(["--input", "x", "--limit", "0"])
+      with pytest.raises(ValueError):
+          parse_cli_args(["--input", "x", "--unknown"])
+day2_prompt: |
+  Add repeated --tag KEY=VALUE support. The returned dictionary should include
+  a "tags" dictionary. Duplicate tag keys should use the last value.
+day2_test_code: |
+  from solution import parse_cli_args
+
+
+  def test_tags_and_existing_options():
+      parsed = parse_cli_args([
+          "--input",
+          "events.csv",
+          "--tag",
+          "team=infra",
+          "--tag",
+          "team=research",
+          "--tag",
+          "env=prod",
+      ])
+      assert parsed == {
+          "input": "events.csv",
+          "limit": 100,
+          "format": "json",
+          "dry_run": False,
+          "tags": {"team": "research", "env": "prod"},
+      }
+human_reference: |
+  def parse_cli_args(argv: list[str]) -> dict:
+      parsed = {"input": None, "limit": 100, "format": "json", "dry_run": False}
+      index = 0
+      while index < len(argv):
+          flag = argv[index]
+          if flag == "--dry-run":
+              parsed["dry_run"] = True
+              index += 1
+          elif flag in {"--input", "--limit", "--format"}:
+              value = _require_value(argv, index, flag)
+              if flag == "--input":
+                  parsed["input"] = value
+              elif flag == "--limit":
+                  parsed["limit"] = _positive_int(value, flag)
+              else:
+                  if value not in {"json", "csv"}:
+                      raise ValueError("--format must be json or csv")
+                  parsed["format"] = value
+              index += 2
+          else:
+              raise ValueError(f"unknown flag: {flag}")
+      if parsed["input"] is None:
+          raise ValueError("--input is required")
+      return parsed
+
+
+  def _require_value(argv: list[str], index: int, flag: str) -> str:
+      if index + 1 >= len(argv) or argv[index + 1].startswith("--"):
+          raise ValueError(f"{flag} requires a value")
+      return argv[index + 1]
+
+
+  def _positive_int(value: str, flag: str) -> int:
+      if not value.isdigit() or int(value) <= 0:
+          raise ValueError(f"{flag} must be a positive integer")
+      return int(value)
+mock_solution: |
+  def parse_cli_args(argv: list[str]) -> dict:
+      parsed = {"input": None, "limit": 100, "format": "json", "dry_run": False}
+      index = 0
+      while index < len(argv):
+          flag = argv[index]
+          if flag == "--dry-run":
+              parsed["dry_run"] = True
+              index += 1
+          elif flag in {"--input", "--limit", "--format"}:
+              value = _require_value(argv, index, flag)
+              if flag == "--input":
+                  parsed["input"] = value
+              elif flag == "--limit":
+                  parsed["limit"] = _positive_int(value, flag)
+              else:
+                  if value not in {"json", "csv"}:
+                      raise ValueError("--format must be json or csv")
+                  parsed["format"] = value
+              index += 2
+          else:
+              raise ValueError(f"unknown flag: {flag}")
+      if parsed["input"] is None:
+          raise ValueError("--input is required")
+      return parsed
+
+
+  def _require_value(argv: list[str], index: int, flag: str) -> str:
+      if index + 1 >= len(argv) or argv[index + 1].startswith("--"):
+          raise ValueError(f"{flag} requires a value")
+      return argv[index + 1]
+
+
+  def _positive_int(value: str, flag: str) -> int:
+      if not value.isdigit() or int(value) <= 0:
+          raise ValueError(f"{flag} must be a positive integer")
+      return int(value)
+mock_day2_solution: |
+  def parse_cli_args(argv: list[str]) -> dict:
+      parsed = {
+          "input": None,
+          "limit": 100,
+          "format": "json",
+          "dry_run": False,
+          "tags": {},
+      }
+      index = 0
+      while index < len(argv):
+          flag = argv[index]
+          if flag == "--dry-run":
+              parsed["dry_run"] = True
+              index += 1
+          elif flag == "--tag":
+              value = _require_value(argv, index, flag)
+              key, tag_value = _parse_tag(value)
+              parsed["tags"][key] = tag_value
+              index += 2
+          elif flag in {"--input", "--limit", "--format"}:
+              value = _require_value(argv, index, flag)
+              if flag == "--input":
+                  parsed["input"] = value
+              elif flag == "--limit":
+                  parsed["limit"] = _positive_int(value, flag)
+              else:
+                  if value not in {"json", "csv"}:
+                      raise ValueError("--format must be json or csv")
+                  parsed["format"] = value
+              index += 2
+          else:
+              raise ValueError(f"unknown flag: {flag}")
+      if parsed["input"] is None:
+          raise ValueError("--input is required")
+      return parsed
+
+
+  def _require_value(argv: list[str], index: int, flag: str) -> str:
+      if index + 1 >= len(argv) or argv[index + 1].startswith("--"):
+          raise ValueError(f"{flag} requires a value")
+      return argv[index + 1]
+
+
+  def _positive_int(value: str, flag: str) -> int:
+      if not value.isdigit() or int(value) <= 0:
+          raise ValueError(f"{flag} must be a positive integer")
+      return int(value)
+
+
+  def _parse_tag(value: str) -> tuple[str, str]:
+      if "=" not in value:
+          raise ValueError("--tag must be KEY=VALUE")
+      key, tag_value = value.split("=", 1)
+      if not key:
+          raise ValueError("--tag key is required")
+      return key, tag_value

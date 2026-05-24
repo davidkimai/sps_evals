@@ -1,0 +1,77 @@
+id: retry_backoff_schedule
+entry_point: build_retry_schedule
+tags: [retry_backoff, validation, timing]
+day2_stressors: [interface_generalization, backwards_compatibility]
+prompt: |
+  Implement build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int].
+
+  Validate that attempts is non-negative and base_seconds/cap_seconds are
+  positive, otherwise raise ValueError. Return exponential backoff delays:
+  base_seconds, base_seconds*2, base_seconds*4, ... capped at cap_seconds.
+  attempts=0 returns an empty list.
+test_code: |
+  import pytest
+
+  from solution import build_retry_schedule
+
+
+  def test_build_retry_schedule_caps_values():
+      assert build_retry_schedule(0, 2, 10) == []
+      assert build_retry_schedule(5, 2, 10) == [2, 4, 8, 10, 10]
+
+
+  def test_build_retry_schedule_validation():
+      with pytest.raises(ValueError):
+          build_retry_schedule(-1, 1, 10)
+      with pytest.raises(ValueError):
+          build_retry_schedule(3, 0, 10)
+day2_prompt: |
+  Add next_allowed_times(start_timestamp: int, schedule: list[int]) -> list[int].
+  Return cumulative timestamps after applying each delay in schedule.
+day2_test_code: |
+  from solution import build_retry_schedule, next_allowed_times
+
+
+  def test_next_allowed_times_uses_cumulative_schedule():
+      schedule = build_retry_schedule(4, 3, 10)
+      assert schedule == [3, 6, 10, 10]
+      assert next_allowed_times(100, schedule) == [103, 109, 119, 129]
+human_reference: |
+  def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:
+      if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:
+          raise ValueError("invalid backoff parameters")
+      schedule = []
+      delay = base_seconds
+      for _ in range(attempts):
+          schedule.append(min(delay, cap_seconds))
+          delay *= 2
+      return schedule
+mock_solution: |
+  def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:
+      if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:
+          raise ValueError("invalid backoff parameters")
+      schedule = []
+      delay = base_seconds
+      for _ in range(attempts):
+          schedule.append(min(delay, cap_seconds))
+          delay *= 2
+      return schedule
+mock_day2_solution: |
+  def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:
+      if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:
+          raise ValueError("invalid backoff parameters")
+      schedule = []
+      delay = base_seconds
+      for _ in range(attempts):
+          schedule.append(min(delay, cap_seconds))
+          delay *= 2
+      return schedule
+
+
+  def next_allowed_times(start_timestamp: int, schedule: list[int]) -> list[int]:
+      current = start_timestamp
+      result = []
+      for delay in schedule:
+          current += delay
+          result.append(current)
+      return result

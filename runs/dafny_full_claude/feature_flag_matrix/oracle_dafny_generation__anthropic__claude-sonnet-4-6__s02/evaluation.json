@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.393,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.545,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/feature_flag_matrix/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 4,
+    "error_count": 0,
+    "invariant_count": 9,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 4,
+      "exists": 0,
+      "forall": 8,
+      "if": 1,
+      "invariant": 9,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 4
+    },
+    "lexical_proof_complexity": 28,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 67,
+    "source_token_estimate": 556,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.936,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 3
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is a complete failure on every dimension. It does not implement resolve_flags at all \u2014 the entry point function is entirely absent. Instead, the code attempts to import a non-existent 'module_' (which will raise ImportError at runtime), then performs bizarre Dafny-compiled-Python symbol aliasing that has nothing to do with the task. It violates every Zen of Python principle: it is implicit, deeply indirect, relies on dynamic namespace mutation, imports wildcard symbols, and provides zero readable logic. There is no dict merging, no segment iteration, no override application \u2014 none of the required semantics are present. This is pure architectural slop masquerading as a solution.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is a complete failure on every dimension. It does not implement resolve_flags at all \u2014 the entry point function is entirely absent. Instead, the code attempts to import a non-existent 'module_' (which will raise ImportError at runtime), then performs bizarre Dafny-compiled-Python symbol aliasing that has nothing to do with the task. It violates every Zen of Python principle: it is implicit, deeply indirect, relies on dynamic namespace mutation, imports wildcard symbols, and provides zero readable logic. There is no dict merging, no segment iteration, no override application \u2014 none of the required semantics are present. This is pure architectural slop masquerading as a solution.\",\n  \"strengths\": [\n    \"None \u2014 the required entry point function is not implemented\"\n  ],\n  \"weaknesses\": [\n    \"resolve_flags function is completely absent\",\n    \"Imports a non-existent module ('module_') causing immediate ImportError\",\n    \"Wildcard import violates explicitness\",\n    \"Dynamic namespace mutation via globals() is maximally implicit and unauditable\",\n    \"Dafny compilation scaffolding is irrelevant to the task\",\n    \"No functional logic whatsoever \u2014 zero task semantics implemented\",\n    \"Deeply nested closures and getattr chains are unreadable\",\n    \"Completely fails the informal structural spec and all functional requirements\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the required entry point function is not implemented"
+    ],
+    "weaknesses": [
+      "resolve_flags function is completely absent",
+      "Imports a non-existent module ('module_') causing immediate ImportError",
+      "Wildcard import violates explicitness",
+      "Dynamic namespace mutation via globals() is maximally implicit and unauditable",
+      "Dafny compilation scaffolding is irrelevant to the task",
+      "No functional logic whatsoever \u2014 zero task semantics implemented",
+      "Deeply nested closures and getattr chains are unreadable",
+      "Completely fails the informal structural spec and all functional requirements"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 559,
+      "prompt": 328,
+      "total": 887,
+      "turns": [
+        {
+          "completion": 559,
+          "prompt": 328,
+          "total": 887
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.103,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________ test_resolve_flags_applies_segments_in_user_order _______________\n\n    def test_resolve_flags_applies_segments_in_user_order():\n        defaults = {\"search\": False, \"billing\": False}\n        segments = {\n            \"beta\": {\"search\": True},\n            \"finance\": {\"billing\": True, \"search\": False},\n        }\n        user = {\"segments\": [\"beta\", \"finance\"], \"overrides\": {\"search\": True}}\n    \n>       assert resolve_flags(defaults, segments, user) == {\"search\": True, \"billing\": True}\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       TypeError: default__.resolve__flags() missing 2 required positional arguments: 'user__overrides' and 'user__segments'\n\ntest_solution.py:12: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_resolve_flags_applies_segments_in_user_order - ...\n1 failed in 0.18s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "feature_flag_matrix",
+  "variant": "oracle_dafny_generation"
+}

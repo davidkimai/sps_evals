@@ -1,0 +1,154 @@
+id: csv_sales_aggregate
+entry_point: aggregate_sales
+tags: [data_pipeline, csv, aggregation]
+day2_stressors: [parameter_threading, backwards_compatibility]
+prompt: |
+  Implement aggregate_sales(csv_text: str) -> list[dict].
+
+  The CSV has headers region, product, quantity, and cents. Skip malformed rows,
+  missing fields, and rows with non-integer quantity or cents. Group by
+  (region, product), summing quantity and cents. Return rows sorted by region
+  then product, each shaped as:
+  {"region": str, "product": str, "quantity": int, "cents": int}
+test_code: |
+  from solution import aggregate_sales
+
+
+  def test_aggregate_sales_skips_bad_rows_and_sorts():
+      csv_text = "\n".join([
+          "region,product,quantity,cents",
+          "west,book,2,300",
+          "east,pen,1,50",
+          "west,book,3,450",
+          "west,bad,nope,10",
+          "east,pen,4,200",
+      ])
+
+      assert aggregate_sales(csv_text) == [
+          {"region": "east", "product": "pen", "quantity": 5, "cents": 250},
+          {"region": "west", "product": "book", "quantity": 5, "cents": 750},
+      ]
+day2_prompt: |
+  Add an optional keyword-only min_quantity: int = 0 argument. Rows whose final
+  aggregate quantity is less than min_quantity should be omitted.
+day2_test_code: |
+  from solution import aggregate_sales
+
+
+  def test_min_quantity_filter_and_original_shape():
+      csv_text = "\n".join([
+          "region,product,quantity,cents",
+          "west,book,2,300",
+          "east,pen,1,50",
+          "west,book,3,450",
+      ])
+      assert aggregate_sales(csv_text, min_quantity=3) == [
+          {"region": "west", "product": "book", "quantity": 5, "cents": 750},
+      ]
+      assert aggregate_sales(csv_text)[0]["region"] == "east"
+human_reference: |
+  import csv
+  from io import StringIO
+
+
+  def aggregate_sales(csv_text: str) -> list[dict]:
+      totals: dict[tuple[str, str], dict[str, int]] = {}
+      for row in csv.DictReader(StringIO(csv_text)):
+          parsed = _parse_row(row)
+          if parsed is None:
+              continue
+          region, product, quantity, cents = parsed
+          bucket = totals.setdefault((region, product), {"quantity": 0, "cents": 0})
+          bucket["quantity"] += quantity
+          bucket["cents"] += cents
+      return [
+          {
+              "region": region,
+              "product": product,
+              "quantity": values["quantity"],
+              "cents": values["cents"],
+          }
+          for (region, product), values in sorted(totals.items())
+      ]
+
+
+  def _parse_row(row: dict) -> tuple[str, str, int, int] | None:
+      region = (row.get("region") or "").strip()
+      product = (row.get("product") or "").strip()
+      if not region or not product:
+          return None
+      try:
+          return region, product, int(row.get("quantity", "")), int(row.get("cents", ""))
+      except ValueError:
+          return None
+mock_solution: |
+  import csv
+  from io import StringIO
+
+
+  def aggregate_sales(csv_text: str) -> list[dict]:
+      totals: dict[tuple[str, str], dict[str, int]] = {}
+      for row in csv.DictReader(StringIO(csv_text)):
+          parsed = _parse_row(row)
+          if parsed is None:
+              continue
+          region, product, quantity, cents = parsed
+          bucket = totals.setdefault((region, product), {"quantity": 0, "cents": 0})
+          bucket["quantity"] += quantity
+          bucket["cents"] += cents
+      return [
+          {
+              "region": region,
+              "product": product,
+              "quantity": values["quantity"],
+              "cents": values["cents"],
+          }
+          for (region, product), values in sorted(totals.items())
+      ]
+
+
+  def _parse_row(row: dict) -> tuple[str, str, int, int] | None:
+      region = (row.get("region") or "").strip()
+      product = (row.get("product") or "").strip()
+      if not region or not product:
+          return None
+      try:
+          return region, product, int(row.get("quantity", "")), int(row.get("cents", ""))
+      except ValueError:
+          return None
+mock_day2_solution: |
+  import csv
+  from io import StringIO
+
+
+  def aggregate_sales(csv_text: str, *, min_quantity: int = 0) -> list[dict]:
+      totals: dict[tuple[str, str], dict[str, int]] = {}
+      for row in csv.DictReader(StringIO(csv_text)):
+          parsed = _parse_row(row)
+          if parsed is None:
+              continue
+          region, product, quantity, cents = parsed
+          bucket = totals.setdefault((region, product), {"quantity": 0, "cents": 0})
+          bucket["quantity"] += quantity
+          bucket["cents"] += cents
+      return [
+          {
+              "region": region,
+              "product": product,
+              "quantity": values["quantity"],
+              "cents": values["cents"],
+          }
+          for (region, product), values in sorted(totals.items())
+          if values["quantity"] >= min_quantity
+      ]
+
+
+  def _parse_row(row: dict) -> tuple[str, str, int, int] | None:
+      region = (row.get("region") or "").strip()
+      product = (row.get("product") or "").strip()
+      if not region or not product:
+          return None
+      try:
+          return region, product, int(row.get("quantity", "")), int(row.get("cents", ""))
+      except ValueError:
+          return None

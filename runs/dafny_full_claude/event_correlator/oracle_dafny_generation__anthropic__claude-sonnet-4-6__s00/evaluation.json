@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 3,
+      "if": 2,
+      "invariant": 5,
+      "logical_and": 16,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 2
+    },
+    "lexical_proof_complexity": 30,
+    "logical_and_count": 16,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 45,
+    "source_token_estimate": 393,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.257,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The entry point `correlate_events` is specified to be a Python function accepting `list[dict]` and returning `list[tuple[dict, dict]]`, but the code is a Dafny method operating on sequences of integer tuples. It cannot be imported, called, or tested as Python code at all. While the Dafny logic itself loosely mirrors the required pairing semantics (find first later B in same session within time window), the implementation is in the wrong language, uses the wrong data structures, and does not satisfy the functional interface. This is a complete architectural mismatch with the task requirements.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The entry point `correlate_events` is specified to be a Python function accepting `list[dict]` and returning `list[tuple[dict, dict]]`, but the code is a Dafny method operating on sequences of integer tuples. It cannot be imported, called, or tested as Python code at all. While the Dafny logic itself loosely mirrors the required pairing semantics (find first later B in same session within time window), the implementation is in the wrong language, uses the wrong data structures, and does not satisfy the functional interface. This is a complete architectural mismatch with the task requirements.\",\n  \"strengths\": [\n    \"The Dafny postcondition and loop invariants correctly capture the pairing constraints (same session, B after A, delta within limit)\",\n    \"The inner loop correctly searches for the first matching B event after each A event\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 cannot be executed as the required entry point\",\n    \"Input type is seq<(int,int,int)> instead of list[dict] with 'session_id', 'type', 'timestamp' keys\",\n    \"Output type is seq<(int,int,int,int,int,int)> instead of list[tuple[dict, dict]]\",\n    \"No Python module or function definition exists; the code is entirely non-runnable for the task\",\n    \"Does not handle dict-based event access or return paired dicts as specified\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny postcondition and loop invariants correctly capture the pairing constraints (same session, B after A, delta within limit)",
+      "The inner loop correctly searches for the first matching B event after each A event"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 cannot be executed as the required entry point",
+      "Input type is seq<(int,int,int)> instead of list[dict] with 'session_id', 'type', 'timestamp' keys",
+      "Output type is seq<(int,int,int,int,int,int)> instead of list[tuple[dict, dict]]",
+      "No Python module or function definition exists; the code is entirely non-runnable for the task",
+      "Does not handle dict-based event access or return paired dicts as specified"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 396,
+      "prompt": 289,
+      "total": 685,
+      "turns": [
+        {
+          "completion": 396,
+          "prompt": 289,
+          "total": 685
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(28,18): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n28 |         invariant !found\n   |                   ^\n\n\nDafny program verifier finished with 1 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "event_correlator",
+  "variant": "oracle_dafny_generation"
+}

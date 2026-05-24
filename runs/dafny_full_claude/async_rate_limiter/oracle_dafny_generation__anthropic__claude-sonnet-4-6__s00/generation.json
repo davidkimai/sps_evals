@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "class AsyncRateLimiter {\n  var rate: int\n  var count: int\n  var windowStart: real\n\n  predicate Valid()\n    reads this\n  {\n    rate > 0 && count >= 0 && count <= rate\n  }\n\n  constructor(r: int)\n    requires r > 0\n    ensures rate == r\n    ensures count == 0\n    ensures Valid()\n  {\n    rate := r;\n    count := 0;\n    windowStart := 0.0;\n  }\n\n  method acquire(now: real) returns (result: bool)\n    requires Valid()\n    requires now >= 0.0\n    modifies this\n    ensures Valid()\n    ensures result ==> count >= 1\n  {\n    if now - windowStart >= 1.0 {\n      windowStart := now;\n      count := 0;\n    }\n    if count < rate {\n      count := count + 1;\n      result := true;\n    } else {\n      result := false;\n    }\n  }\n\n  method reset(now: real)\n    requires Valid()\n    requires now >= 0.0\n    modifies this\n    ensures Valid()\n    ensures count == 0\n    ensures windowStart == now\n  {\n    windowStart := now;\n    count := 0;\n  }\n}\n\nmethod TestRateLimiter()\n{\n  var limiter := new AsyncRateLimiter(2);\n  assert limiter.rate == 2;\n  assert limiter.count == 0;\n\n  var r1 := limiter.acquire(0.0);\n  assert r1;\n  assert limiter.count == 1;\n\n  var r2 := limiter.acquire(0.5);\n  assert r2;\n  assert limiter.count == 2;\n\n  var r3 := limiter.acquire(0.9);\n  assert !r3;\n  assert limiter.count == 2;\n\n  var r4 := limiter.acquire(1.1);\n  assert r4;\n  assert limiter.count == 1;\n}\n\nmethod ValidateRate(r: int) returns (valid: bool)\n  ensures valid <==> r > 0\n{\n  valid := r > 0;\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "AsyncRateLimiter",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 370,
+      "prompt": 316,
+      "total": 686,
+      "turns": [
+        {
+          "completion": 370,
+          "prompt": 316,
+          "total": 686
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nclass AsyncRateLimiter {\n  var rate: int\n  var count: int\n  var windowStart: real\n\n  predicate Valid()\n    reads this\n  {\n    rate > 0 && count >= 0 && count <= rate\n  }\n\n  constructor(r: int)\n    requires r > 0\n    ensures rate == r\n    ensures count == 0\n    ensures Valid()\n  {\n    rate := r;\n    count := 0;\n    windowStart := 0.0;\n  }\n\n  method acquire(now: real) returns (result: bool)\n    requires Valid()\n    requires now >= 0.0\n    modifies this\n    ensures Valid()\n    ensures result ==> count >= 1\n  {\n    if now - windowStart >= 1.0 {\n      windowStart := now;\n      count := 0;\n    }\n    if count < rate {\n      count := count + 1;\n      result := true;\n    } else {\n      result := false;\n    }\n  }\n\n  method reset(now: real)\n    requires Valid()\n    requires now >= 0.0\n    modifies this\n    ensures Valid()\n    ensures count == 0\n    ensures windowStart == now\n  {\n    windowStart := now;\n    count := 0;\n  }\n}\n\nmethod TestRateLimiter()\n{\n  var limiter := new AsyncRateLimiter(2);\n  assert limiter.rate == 2;\n  assert limiter.count == 0;\n\n  var r1 := limiter.acquire(0.0);\n  assert r1;\n  assert limiter.count == 1;\n\n  var r2 := limiter.acquire(0.5);\n  assert r2;\n  assert limiter.count == 2;\n\n  var r3 := limiter.acquire(0.9);\n  assert !r3;\n  assert limiter.count == 2;\n\n  var r4 := limiter.acquire(1.1);\n  assert r4;\n  assert limiter.count == 1;\n}\n\nmethod ValidateRate(r: int) returns (valid: bool)\n  ensures valid <==> r > 0\n{\n  valid := r > 0;\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend AsyncRateLimiter so it can be used as an async context manager.\nEntering the context should call acquire(). If the acquisition is denied, raise\nRuntimeError. Preserve acquire() behavior.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import asyncio\n\nfrom solution import AsyncRateLimiter\n\n\ndef test_async_context_manager_preserves_acquire_semantics():\n    clock = {'t': 0.0}\n\n    async def _run():\n        limiter = AsyncRateLimiter(1, now=lambda: clock['t'])\n        async with limiter as acquired:\n            assert acquired is limiter\n        try:\n            async with limiter:\n                pass\n        except RuntimeError:\n            pass\n        else:\n            raise AssertionError('second acquire should be denied')\n        clock['t'] = 2.0\n        assert await limiter.acquire() is True\n\n    asyncio.run(_run())\n",
+    "entry_point": "AsyncRateLimiter",
+    "human_reference": "from __future__ import annotations\n\nimport time\nfrom collections import deque\nfrom typing import Callable\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now: Callable[[], float] | None = None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self._rate = rate\n        self._now = now or time.monotonic\n        self._hits: deque[float] = deque()\n\n    async def acquire(self) -> bool:\n        current = self._now()\n        while self._hits and current - self._hits[0] >= 1.0:\n            self._hits.popleft()\n        if len(self._hits) >= self._rate:\n            return False\n        self._hits.append(current)\n        return True\n",
+    "id": "async_rate_limiter",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport time\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now=None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self.rate = rate\n        self.now = now or time.monotonic\n        self.seen: list[float] = []\n\n    async def acquire(self) -> bool:\n        current = self.now()\n        self.seen = [stamp for stamp in self.seen if current - stamp < 1.0]\n        if len(self.seen) >= self.rate:\n            return False\n        self.seen.append(current)\n        return True\n\n    async def __aenter__(self):\n        if not await self.acquire():\n            raise RuntimeError('rate limit exceeded')\n        return self\n\n    async def __aexit__(self, exc_type, exc, tb) -> bool:\n        return False\n",
+    "mock_solution": "from __future__ import annotations\n\nimport time\n\n\nclass AsyncRateLimiter:\n    def __init__(self, rate: int, *, now=None) -> None:\n        if rate <= 0:\n            raise ValueError('rate must be positive')\n        self.rate = rate\n        self.now = now or time.monotonic\n        self.seen: list[float] = []\n\n    async def acquire(self) -> bool:\n        current = self.now()\n        self.seen = [stamp for stamp in self.seen if current - stamp < 1.0]\n        if len(self.seen) < self.rate:\n            self.seen.append(current)\n            return True\n        return False\n",
+    "prompt": "Implement an AsyncRateLimiter class.\n\nConstructor: AsyncRateLimiter(rate: int, *, now: callable | None = None).\nMethod: async acquire() -> bool.\n\nThe limiter allows at most rate successful acquisitions per one-second window.\nUse the optional now callable for deterministic tests. Reject non-positive rates\nwith ValueError.\n",
+    "tags": [
+      "async",
+      "rate_limit",
+      "day2-hard"
+    ],
+    "test_code": "import asyncio\n\nfrom solution import AsyncRateLimiter\n\n\ndef test_allows_only_rate_per_window():\n    clock = {'t': 0.0}\n\n    async def _run():\n        limiter = AsyncRateLimiter(2, now=lambda: clock['t'])\n        assert await limiter.acquire() is True\n        assert await limiter.acquire() is True\n        assert await limiter.acquire() is False\n        clock['t'] = 1.1\n        assert await limiter.acquire() is True\n\n    asyncio.run(_run())\n\n\ndef test_rejects_bad_rate():\n    try:\n        AsyncRateLimiter(0)\n    except ValueError:\n        return\n    raise AssertionError('expected ValueError')\n"
+  },
+  "task_id": "async_rate_limiter",
+  "user_prompt": "Task id: async_rate_limiter\nEntry point: AsyncRateLimiter\n\nFunctional requirements:\nImplement an AsyncRateLimiter class.\n\nConstructor: AsyncRateLimiter(rate: int, *, now: callable | None = None).\nMethod: async acquire() -> bool.\n\nThe limiter allows at most rate successful acquisitions per one-second window.\nUse the optional now callable for deterministic tests. Reject non-positive rates\nwith ValueError.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

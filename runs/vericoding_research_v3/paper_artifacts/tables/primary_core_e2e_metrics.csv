@@ -1,0 +1,6 @@
+false_accept_rate,final_success_rate,pipeline_name,row_count
+0.590909,0.147727,single_sample,88
+0.852273,0.136364,best_of_n_tests_only,88
+0.681818,0.306818,best_of_n_specoracle,88
+0.681818,0.306818,best_of_n_specoracle_plus_one_repair,88
+0.722222,0.263889,best_of_n_specoracle_plus_equal_cost_sample,72

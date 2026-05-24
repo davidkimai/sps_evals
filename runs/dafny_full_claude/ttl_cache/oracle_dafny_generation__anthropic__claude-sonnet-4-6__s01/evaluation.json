@@ -1,0 +1,115 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 9,
+    "error_count": null,
+    "invariant_count": 6,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 9,
+      "exists": 0,
+      "forall": 0,
+      "if": 5,
+      "invariant": 6,
+      "logical_and": 2,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 19,
+      "while": 2
+    },
+    "lexical_proof_complexity": 45,
+    "logical_and_count": 2,
+    "logical_or_count": 2,
+    "requires_count": 19,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 136,
+    "source_token_estimate": 876,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.78,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python TTLCache implementation. The entry point requires a Python class named TTLCache with set(key, value) and get(key) methods returning None on miss/expiry, but instead we get Dafny syntax with formal verification constructs, typed arrays of int (not arbitrary keys/values), a two-return-value get() signature, and no Python-compatible interface whatsoever. The 'now' injectable clock parameter is absent. The code cannot be imported or executed as Python, fails all functional requirements, and represents a fundamental category error in language choice.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python TTLCache implementation. The entry point requires a Python class named TTLCache with set(key, value) and get(key) methods returning None on miss/expiry, but instead we get Dafny syntax with formal verification constructs, typed arrays of int (not arbitrary keys/values), a two-return-value get() signature, and no Python-compatible interface whatsoever. The 'now' injectable clock parameter is absent. The code cannot be imported or executed as Python, fails all functional requirements, and represents a fundamental category error in language choice.\",\n  \"strengths\": [\n    \"The LRU eviction logic (move-to-end on access, evict-from-front on overflow) is conceptually correct\",\n    \"TTL expiry check on get is present\",\n    \"Formal invariants and preconditions show careful reasoning about correctness\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required implementation\",\n    \"Entry point TTLCache is a Dafny method, not a Python class\",\n    \"get() returns a tuple (result, found) instead of value-or-None\",\n    \"Keys and values are typed as int arrays, not supporting arbitrary Python objects\",\n    \"Missing the injectable 'now' parameter for testable time control\",\n    \"No expired-entry eviction during set(), only during get()\",\n    \"Cannot satisfy any of the functional test requirements\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The LRU eviction logic (move-to-end on access, evict-from-front on overflow) is conceptually correct",
+      "TTL expiry check on get is present",
+      "Formal invariants and preconditions show careful reasoning about correctness"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required implementation",
+      "Entry point TTLCache is a Dafny method, not a Python class",
+      "get() returns a tuple (result, found) instead of value-or-None",
+      "Keys and values are typed as int arrays, not supporting arbitrary Python objects",
+      "Missing the injectable 'now' parameter for testable time control",
+      "No expired-entry eviction during set(), only during get()",
+      "Cannot satisfy any of the functional test requirements"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 879,
+      "prompt": 286,
+      "total": 1165,
+      "turns": [
+        {
+          "completion": 879,
+          "prompt": 286,
+          "total": 1165
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(83,9): Error: a method must be given a name (expecting identifier)\n   |\n83 |   method set(key: int, value: int)\n   |          ^^^\n\nsolution.dfy(83,9): Error: invalid MethodDecl\n   |\n83 |   method set(key: int, value: int)\n   |          ^\n\n2 parse errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "ttl_cache",
+  "variant": "oracle_dafny_generation"
+}

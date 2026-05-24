@@ -1,0 +1,54 @@
+{
+  "artifact_language": "dafny",
+  "code": "method resolve_flags(\n  defaults: map<string, bool>,\n  segments: map<string, map<string, bool>>,\n  user: map<string, seq<string>>,\n  user_overrides: map<string, bool>\n) returns (result: map<string, bool>)\n{\n  result := defaults;\n\n  if \"segments\" in user {\n    var seg_list := user[\"segments\"];\n    var i := 0;\n    while i < |seg_list|\n      invariant 0 <= i <= |seg_list|\n    {\n      var seg_name := seg_list[i];\n      if seg_name in segments {\n        var seg_overrides := segments[seg_name];\n        var keys := seg_overrides.Keys;\n        var ks := set k | k in keys;\n        var ks_seq: seq<string> := [];\n        // iterate over segment overrides\n        var remaining := ks;\n        while |remaining| > 0\n          invariant remaining <= ks\n        {\n          var k :| k in remaining;\n          result := result[k := seg_overrides[k]];\n          remaining := remaining - {k};\n        }\n      }\n      i := i + 1;\n    }\n  }\n\n  // Apply user overrides\n  var override_keys := user_overrides.Keys;\n  var remaining2 := set k | k in override_keys;\n  while |remaining2| > 0\n    invariant remaining2 <= override_keys\n  {\n    var k :| k in remaining2;\n    result := result[k := user_overrides[k]];\n    remaining2 := remaining2 - {k};\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "resolve_flags",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 313,
+      "prompt": 328,
+      "total": 641,
+      "turns": [
+        {
+          "completion": 313,
+          "prompt": 328,
+          "total": 641
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod resolve_flags(\n  defaults: map<string, bool>,\n  segments: map<string, map<string, bool>>,\n  user: map<string, seq<string>>,\n  user_overrides: map<string, bool>\n) returns (result: map<string, bool>)\n{\n  result := defaults;\n\n  if \"segments\" in user {\n    var seg_list := user[\"segments\"];\n    var i := 0;\n    while i < |seg_list|\n      invariant 0 <= i <= |seg_list|\n    {\n      var seg_name := seg_list[i];\n      if seg_name in segments {\n        var seg_overrides := segments[seg_name];\n        var keys := seg_overrides.Keys;\n        var ks := set k | k in keys;\n        var ks_seq: seq<string> := [];\n        // iterate over segment overrides\n        var remaining := ks;\n        while |remaining| > 0\n          invariant remaining <= ks\n        {\n          var k :| k in remaining;\n          result := result[k := seg_overrides[k]];\n          remaining := remaining - {k};\n        }\n      }\n      i := i + 1;\n    }\n  }\n\n  // Apply user overrides\n  var override_keys := user_overrides.Keys;\n  var remaining2 := set k | k in override_keys;\n  while |remaining2| > 0\n    invariant remaining2 <= override_keys\n  {\n    var k :| k in remaining2;\n    result := result[k := user_overrides[k]];\n    remaining2 := remaining2 - {k};\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add explain_flags(defaults, segments, user) -> dict[str, dict]. It should\nreturn each final flag value with the source that last changed it:\n{\"flag\": {\"value\": bool, \"source\": str}} where source is default,\nsegment:<name>, or user_override.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import explain_flags, resolve_flags\n\n\ndef test_explain_flags_reports_last_source():\n    defaults = {\"search\": False, \"billing\": False}\n    segments = {\"beta\": {\"search\": True}}\n    user = {\"segments\": [\"beta\"], \"overrides\": {\"billing\": True}}\n\n    assert resolve_flags(defaults, segments, user) == {\"search\": True, \"billing\": True}\n    assert explain_flags(defaults, segments, user) == {\n        \"search\": {\"value\": True, \"source\": \"segment:beta\"},\n        \"billing\": {\"value\": True, \"source\": \"user_override\"},\n    }\n",
+    "entry_point": "resolve_flags",
+    "human_reference": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    resolved = dict(defaults)\n    for segment_name in user.get(\"segments\", []):\n        resolved.update(segments.get(segment_name, {}))\n    resolved.update(user.get(\"overrides\", {}))\n    return resolved\n",
+    "id": "feature_flag_matrix",
+    "mock_day2_solution": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    return {key: value[\"value\"] for key, value in explain_flags(defaults, segments, user).items()}\n\n\ndef explain_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, dict]:\n    explained = {\n        key: {\"value\": value, \"source\": \"default\"}\n        for key, value in defaults.items()\n    }\n    for segment_name in user.get(\"segments\", []):\n        for key, value in segments.get(segment_name, {}).items():\n            explained[key] = {\"value\": value, \"source\": f\"segment:{segment_name}\"}\n    for key, value in user.get(\"overrides\", {}).items():\n        explained[key] = {\"value\": value, \"source\": \"user_override\"}\n    return explained\n",
+    "mock_solution": "def resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool]:\n    resolved = dict(defaults)\n    for segment_name in user.get(\"segments\", []):\n        resolved.update(segments.get(segment_name, {}))\n    resolved.update(user.get(\"overrides\", {}))\n    return resolved\n",
+    "prompt": "Implement resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool].\n\nStart from defaults. user may contain \"segments\", a list of segment names.\nApply segment overrides in the order listed on the user, ignoring unknown\nsegments. Then apply user[\"overrides\"] if present. Return a new dictionary and\ndo not mutate inputs.\n",
+    "tags": [
+      "config_parsing",
+      "policy",
+      "json"
+    ],
+    "test_code": "from solution import resolve_flags\n\n\ndef test_resolve_flags_applies_segments_in_user_order():\n    defaults = {\"search\": False, \"billing\": False}\n    segments = {\n        \"beta\": {\"search\": True},\n        \"finance\": {\"billing\": True, \"search\": False},\n    }\n    user = {\"segments\": [\"beta\", \"finance\"], \"overrides\": {\"search\": True}}\n\n    assert resolve_flags(defaults, segments, user) == {\"search\": True, \"billing\": True}\n    assert defaults == {\"search\": False, \"billing\": False}\n"
+  },
+  "task_id": "feature_flag_matrix",
+  "user_prompt": "Task id: feature_flag_matrix\nEntry point: resolve_flags\n\nFunctional requirements:\nImplement resolve_flags(defaults: dict[str, bool], segments: dict[str, dict[str, bool]], user: dict) -> dict[str, bool].\n\nStart from defaults. user may contain \"segments\", a list of segment names.\nApply segment overrides in the order listed on the user, ignoring unknown\nsegments. Then apply user[\"overrides\"] if present. Return a new dictionary and\ndo not mutate inputs.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

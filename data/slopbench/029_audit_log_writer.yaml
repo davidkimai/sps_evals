@@ -1,0 +1,87 @@
+id: audit_log_writer
+entry_point: AuditLogWriter
+tags: [reliability_critical, audit, day2-hard]
+day2_stressors: [audit_provenance, cross_function_state, backwards_compatibility]
+prompt: |
+  Implement AuditLogWriter(sink: list[dict]). Method write(actor: str, action: str) -> dict
+  appends a record with monotonic sequence numbers starting at 1. The returned
+  record and appended record must not be the same mutable object.
+test_code: |
+  from solution import AuditLogWriter
+
+
+  def test_writes_monotonic_records_without_aliasing():
+      sink = []
+      writer = AuditLogWriter(sink)
+      first = writer.write('alice', 'create')
+      second = writer.write('bob', 'delete')
+      assert [row['sequence'] for row in sink] == [1, 2]
+      assert first == {'sequence': 1, 'actor': 'alice', 'action': 'create'}
+      first['actor'] = 'changed'
+      assert sink[0]['actor'] == 'alice'
+      assert second['sequence'] == 2
+day2_prompt: |
+  Extend AuditLogWriter so each appended record includes checksum: str. The checksum
+  must be computed over sequence, actor, and action before the checksum is added.
+  Preserve sequence behavior.
+day2_test_code: |
+  import hashlib
+  import json
+
+  from solution import AuditLogWriter
+
+
+  def test_checksum_covers_record_fields():
+      sink = []
+      row = AuditLogWriter(sink).write('alice', 'create')
+      expected = hashlib.sha256(json.dumps({'sequence': 1, 'actor': 'alice', 'action': 'create'}, sort_keys=True).encode()).hexdigest()
+      assert row['checksum'] == expected
+      assert sink[0]['checksum'] == expected
+human_reference: |
+  from __future__ import annotations
+
+
+  class AuditLogWriter:
+      def __init__(self, sink: list[dict]) -> None:
+          self._sink = sink
+          self._sequence = 0
+
+      def write(self, actor: str, action: str) -> dict:
+          self._sequence += 1
+          record = {'sequence': self._sequence, 'actor': actor, 'action': action}
+          self._sink.append(dict(record))
+          return dict(record)
+mock_solution: |
+  from __future__ import annotations
+
+
+  class AuditLogWriter:
+      def __init__(self, sink):
+          self.sink = sink
+          self.next_sequence = 1
+
+      def write(self, actor: str, action: str):
+          row = {'sequence': self.next_sequence, 'actor': actor, 'action': action}
+          self.next_sequence += 1
+          self.sink.append(row.copy())
+          return row.copy()
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import hashlib
+  import json
+
+
+  class AuditLogWriter:
+      def __init__(self, sink):
+          self.sink = sink
+          self.next_sequence = 1
+
+      def write(self, actor: str, action: str):
+          base = {'sequence': self.next_sequence, 'actor': actor, 'action': action}
+          checksum = hashlib.sha256(json.dumps(base, sort_keys=True).encode()).hexdigest()
+          row = dict(base)
+          row['checksum'] = checksum
+          self.next_sequence += 1
+          self.sink.append(row.copy())
+          return row.copy()

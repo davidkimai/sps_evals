@@ -1,0 +1,15 @@
+{
+  "completed_harbor_rows": 10,
+  "completed_non_nop_rows": 4,
+  "completed_non_nop_tasks": [
+    "cancel-async-tasks",
+    "log-summary-date-ranges",
+    "reshard-c4-data"
+  ],
+  "created_at": "2026-05-19T12:46:27Z",
+  "interpretation": "Demoted to tertiary runtime sanity: the non-nop Harbor slice did not meet the predeclared portability standard.",
+  "program_version": "vericoding_research_v3",
+  "schema": "specoracle.vericoding.v3.secondary_surface_status.v1",
+  "status": "demoted",
+  "surface": "external_terminalbench_harbor"
+}

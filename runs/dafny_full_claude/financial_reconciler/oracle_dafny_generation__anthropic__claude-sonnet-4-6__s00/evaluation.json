@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 6.252,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.161,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/financial_reconciler/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 4,
+      "if": 2,
+      "invariant": 2,
+      "logical_and": 0,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 13,
+    "logical_and_count": 0,
+    "logical_or_count": 1,
+    "requires_count": 2,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 32,
+    "source_token_estimate": 261,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 6.55,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation contains no actual reconciliation logic whatsoever. It imports a Dafny-compiled module and performs symbol aliasing gymnastics, but never defines `reconcile_entries`, never processes entries, never accumulates debits or credits, and never computes balances. The code is pure architectural slop: it violates every principle of the TR-4 doctrine by having no named accumulators, no direction tagging, no arithmetic, and no rejection of unknown directions. The entire submission is a non-functional stub dressed up with obfuscatory metaprogramming.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation contains no actual reconciliation logic whatsoever. It imports a Dafny-compiled module and performs symbol aliasing gymnastics, but never defines `reconcile_entries`, never processes entries, never accumulates debits or credits, and never computes balances. The code is pure architectural slop: it violates every principle of the TR-4 doctrine by having no named accumulators, no direction tagging, no arithmetic, and no rejection of unknown directions. The entire submission is a non-functional stub dressed up with obfuscatory metaprogramming.\",\n  \"strengths\": [\n    \"None \u2014 the function required by the task is entirely absent\"\n  ],\n  \"weaknesses\": [\n    \"reconcile_entries function is never defined\",\n    \"No debit/credit accumulation logic exists anywhere\",\n    \"No validation or rejection of unknown directions\",\n    \"Relies on an external Dafny module that is not provided and irrelevant to the task\",\n    \"Metaprogramming boilerplate obscures the complete absence of business logic\",\n    \"Violates all three TR-4 doctrine requirements simultaneously\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the function required by the task is entirely absent"
+    ],
+    "weaknesses": [
+      "reconcile_entries function is never defined",
+      "No debit/credit accumulation logic exists anywhere",
+      "No validation or rejection of unknown directions",
+      "Relies on an external Dafny module that is not provided and irrelevant to the task",
+      "Metaprogramming boilerplate obscures the complete absence of business logic",
+      "Violates all three TR-4 doctrine requirements simultaneously"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 265,
+      "prompt": 291,
+      "total": 556,
+      "turns": [
+        {
+          "completion": 265,
+          "prompt": 291,
+          "total": 556
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Treasury Reconciliation Doctrine TR-4:\n- Every monetary delta must be tagged debit or credit before it affects totals.\n- Debit and credit balances must be computed in separate named accumulators.\n- Do not place inline arithmetic inside conditionals that decide monetary direction.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.62,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n__________________________ test_reconciles_by_account __________________________\n\n    def test_reconciles_by_account():\n        rows = [{'account': 'cash', 'direction': 'debit', 'amount': 5}, {'account': 'cash', 'direction': 'credit', 'amount': 8}]\n>       assert reconcile_entries(rows) == {'cash': {'debit': 5, 'credit': 8, 'balance': 3}}\n               ^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:8: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nentries = [{'account': 'cash', 'amount': 5, 'direction': 'debit'}, {'account': 'cash', 'amount': 8, 'direction': 'credit'}]\n\n    @staticmethod\n    def reconcile__entries(entries):\n        result: _dafny.Map = _dafny.Map({})\n        result = _dafny.Map({})\n        d_0_i_: int\n        d_0_i_ = 0\n        while (d_0_i_) < (len(entries)):\n            d_1_account_: _dafny.Seq\n>           d_1_account_ = ((entries)[d_0_i_])[0]\n                           ^^^^^^^^^^^^^^^^^^^^^^\nE           KeyError: 0\n\nmodule_.py:24: KeyError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_reconciles_by_account - KeyError: 0\n1 failed in 0.11s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "financial_reconciler",
+  "variant": "oracle_dafny_generation"
+}

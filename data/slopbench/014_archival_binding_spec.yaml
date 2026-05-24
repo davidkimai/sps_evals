@@ -1,0 +1,129 @@
+id: archival_binding_spec
+entry_point: parse_bindings
+tags: [custom-spec, config_parsing, memorization-confound, day2-hard]
+day2_stressors: [audit_provenance, interface_generalization, backwards_compatibility]
+custom_spec_override: |
+  Archival Binder Spec R-04:
+  - Prefer visibly staged parsing over compressed one-liners.
+  - Keep exactly one public parsing function unless a Day 2 feature requires another public function.
+  - Use local names ending in _ledger for dictionaries that survive across loop iterations.
+  - Preserve input order whenever the output is review-facing.
+  - Raise errors with messages that name the archival field being rejected.
+prompt: |
+  Implement parse_bindings(lines: list[str]) -> dict[str, dict[str, str]].
+
+  Each non-empty, non-comment line must be "section.key=value". Comments start
+  with "#". Whitespace around section, key, and value should be stripped.
+  Return an insertion-ordered nested dictionary of sections to key/value pairs.
+  Raise ValueError for malformed lines, empty section names, or empty keys.
+test_code: |
+  import pytest
+
+  from solution import parse_bindings
+
+
+  def test_parse_bindings_preserves_order_and_strips():
+      lines = [
+          "# comment",
+          " database.host = localhost ",
+          "database.port=5432",
+          "api.enabled=true",
+      ]
+      assert parse_bindings(lines) == {
+          "database": {"host": "localhost", "port": "5432"},
+          "api": {"enabled": "true"},
+      }
+
+
+  def test_parse_bindings_rejects_bad_lines():
+      with pytest.raises(ValueError, match="line"):
+          parse_bindings(["missing"])
+      with pytest.raises(ValueError, match="section"):
+          parse_bindings([".key=value"])
+day2_prompt: |
+  Add flatten_bindings(bindings: dict[str, dict[str, str]]) -> list[str]. It
+  should return ["section.key=value", ...] in the dictionary iteration order.
+day2_test_code: |
+  from solution import flatten_bindings, parse_bindings
+
+
+  def test_flatten_bindings_preserves_review_order():
+      bindings = parse_bindings(["a.one=1", "a.two=2", "b.three=3"])
+      assert flatten_bindings(bindings) == ["a.one=1", "a.two=2", "b.three=3"]
+human_reference: |
+  def parse_bindings(lines: list[str]) -> dict[str, dict[str, str]]:
+      binding_ledger: dict[str, dict[str, str]] = {}
+      for line_number, raw_line in enumerate(lines, start=1):
+          cleaned_line = raw_line.strip()
+          if not cleaned_line or cleaned_line.startswith("#"):
+              continue
+          section, key, value = _split_binding_line(cleaned_line, line_number)
+          section_ledger = binding_ledger.setdefault(section, {})
+          section_ledger[key] = value
+      return binding_ledger
+
+
+  def _split_binding_line(line: str, line_number: int) -> tuple[str, str, str]:
+      if "=" not in line or "." not in line.split("=", 1)[0]:
+          raise ValueError(f"line {line_number} is malformed")
+      left, value = line.split("=", 1)
+      section, key = [part.strip() for part in left.split(".", 1)]
+      if not section:
+          raise ValueError(f"section is empty on line {line_number}")
+      if not key:
+          raise ValueError(f"key is empty on line {line_number}")
+      return section, key, value.strip()
+mock_solution: |
+  def parse_bindings(lines: list[str]) -> dict[str, dict[str, str]]:
+      binding_ledger: dict[str, dict[str, str]] = {}
+      for line_number, raw_line in enumerate(lines, start=1):
+          cleaned_line = raw_line.strip()
+          if not cleaned_line or cleaned_line.startswith("#"):
+              continue
+          section, key, value = _split_binding_line(cleaned_line, line_number)
+          section_ledger = binding_ledger.setdefault(section, {})
+          section_ledger[key] = value
+      return binding_ledger
+
+
+  def _split_binding_line(line: str, line_number: int) -> tuple[str, str, str]:
+      if "=" not in line or "." not in line.split("=", 1)[0]:
+          raise ValueError(f"line {line_number} is malformed")
+      left, value = line.split("=", 1)
+      section, key = [part.strip() for part in left.split(".", 1)]
+      if not section:
+          raise ValueError(f"section is empty on line {line_number}")
+      if not key:
+          raise ValueError(f"key is empty on line {line_number}")
+      return section, key, value.strip()
+mock_day2_solution: |
+  def parse_bindings(lines: list[str]) -> dict[str, dict[str, str]]:
+      binding_ledger: dict[str, dict[str, str]] = {}
+      for line_number, raw_line in enumerate(lines, start=1):
+          cleaned_line = raw_line.strip()
+          if not cleaned_line or cleaned_line.startswith("#"):
+              continue
+          section, key, value = _split_binding_line(cleaned_line, line_number)
+          section_ledger = binding_ledger.setdefault(section, {})
+          section_ledger[key] = value
+      return binding_ledger
+
+
+  def flatten_bindings(bindings: dict[str, dict[str, str]]) -> list[str]:
+      flattened_ledger = []
+      for section, section_ledger in bindings.items():
+          for key, value in section_ledger.items():
+              flattened_ledger.append(f"{section}.{key}={value}")
+      return flattened_ledger
+
+
+  def _split_binding_line(line: str, line_number: int) -> tuple[str, str, str]:
+      if "=" not in line or "." not in line.split("=", 1)[0]:
+          raise ValueError(f"line {line_number} is malformed")
+      left, value = line.split("=", 1)
+      section, key = [part.strip() for part in left.split(".", 1)]
+      if not section:
+          raise ValueError(f"section is empty on line {line_number}")
+      if not key:
+          raise ValueError(f"key is empty on line {line_number}")
+      return section, key, value.strip()

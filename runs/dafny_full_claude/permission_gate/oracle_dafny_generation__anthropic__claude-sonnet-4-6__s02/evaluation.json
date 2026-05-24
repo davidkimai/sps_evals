@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 3.946,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 3.293,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/permission_gate/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 0,
+      "logical_and": 1,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 0
+    },
+    "lexical_proof_complexity": 4,
+    "logical_and_count": 1,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 0,
+    "runtime_passed": true,
+    "runtime_timed_out": false,
+    "source_loc": 14,
+    "source_token_estimate": 92,
+    "status": "verified",
+    "verification_duration_seconds": 5.358,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop. It imports a non-existent 'module_' (which would cause an ImportError at runtime), contains no actual implementation of has_permission, and instead attempts to wire up Dafny-compiled symbols through a convoluted aliasing function that manipulates globals. The actual functional requirement\u2014a simple dict lookup returning a bool\u2014could be implemented in one line, but instead this code introduces fake dependencies, wildcard imports, metaclass manipulation, and a complex symbol-aliasing routine that serves no purpose here. It violates virtually every Zen of Python principle: it is implicit, complex, nested, not readable, not locally auditable, and the 'has_permission' entry point is entirely absent.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop. It imports a non-existent 'module_' (which would cause an ImportError at runtime), contains no actual implementation of has_permission, and instead attempts to wire up Dafny-compiled symbols through a convoluted aliasing function that manipulates globals. The actual functional requirement\u2014a simple dict lookup returning a bool\u2014could be implemented in one line, but instead this code introduces fake dependencies, wildcard imports, metaclass manipulation, and a complex symbol-aliasing routine that serves no purpose here. It violates virtually every Zen of Python principle: it is implicit, complex, nested, not readable, not locally auditable, and the 'has_permission' entry point is entirely absent.\",\n  \"strengths\": [\n    \"The comment at least acknowledges the intent to compile from Dafny\"\n  ],\n  \"weaknesses\": [\n    \"has_permission function is completely absent\u2014the entry point does not exist\",\n    \"Imports a non-existent module ('module_') causing immediate ImportError\",\n    \"Wildcard import pollutes namespace with unknown symbols\",\n    \"Complex _specoracle_alias_dafny_symbols function adds zero value and is unreadable\",\n    \"Violates explicit-over-implicit, simple-over-complex, and flat-over-nested principles\",\n    \"No actual logic for the functional requirement whatsoever\",\n    \"Architectural slop: fake Dafny compilation pipeline for a trivial dict lookup\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The comment at least acknowledges the intent to compile from Dafny"
+    ],
+    "weaknesses": [
+      "has_permission function is completely absent\u2014the entry point does not exist",
+      "Imports a non-existent module ('module_') causing immediate ImportError",
+      "Wildcard import pollutes namespace with unknown symbols",
+      "Complex _specoracle_alias_dafny_symbols function adds zero value and is unreadable",
+      "Violates explicit-over-implicit, simple-over-complex, and flat-over-nested principles",
+      "No actual logic for the functional requirement whatsoever",
+      "Architectural slop: fake Dafny compilation pipeline for a trivial dict lookup"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 95,
+      "prompt": 289,
+      "total": 384,
+      "turns": [
+        {
+          "completion": 95,
+          "prompt": 289,
+          "total": 384
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.33,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.20s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "permission_gate",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,135 @@
+id: json_path_projection
+entry_point: extract_fields
+tags: [json, config_parsing, edge-cases, day2-hard]
+day2_stressors: [error_surface_expansion, parameter_threading, backwards_compatibility]
+prompt: |
+  Implement extract_fields(record: dict, paths: dict[str, str], default=None) -> dict.
+
+  Each path is dot-separated and may include integer list indexes, such as
+  "orders.0.total". Return a dictionary mapping each output key to the extracted
+  value. If a path cannot be resolved, use default. Do not mutate the input.
+test_code: |
+  from solution import extract_fields
+
+
+  def test_extract_fields_handles_dicts_lists_and_defaults():
+      record = {
+          "user": {"id": "u1", "profile": {"name": "Ada"}},
+          "orders": [{"total": 30}, {"total": 40}],
+      }
+      paths = {
+          "user_id": "user.id",
+          "name": "user.profile.name",
+          "first_total": "orders.0.total",
+          "missing": "orders.3.total",
+      }
+      assert extract_fields(record, paths, default="NA") == {
+          "user_id": "u1",
+          "name": "Ada",
+          "first_total": 30,
+          "missing": "NA",
+      }
+day2_prompt: |
+  Add an optional required: set[str] | None = None argument. If an output key is
+  in required and its path cannot be resolved, raise KeyError for that output
+  key instead of returning default.
+day2_test_code: |
+  import pytest
+
+  from solution import extract_fields
+
+
+  def test_required_paths_raise_key_error():
+      record = {"user": {"id": "u1"}}
+      assert extract_fields(record, {"id": "user.id"}, required={"id"}) == {"id": "u1"}
+      with pytest.raises(KeyError):
+          extract_fields(record, {"name": "user.name"}, default=None, required={"name"})
+human_reference: |
+  _MISSING = object()
+
+
+  def extract_fields(record: dict, paths: dict[str, str], default=None) -> dict:
+      result = {}
+      for output_key, path in paths.items():
+          value = _resolve_path(record, path)
+          result[output_key] = default if value is _MISSING else value
+      return result
+
+
+  def _resolve_path(value, path: str):
+      current = value
+      for segment in path.split("."):
+          if isinstance(current, dict):
+              if segment not in current:
+                  return _MISSING
+              current = current[segment]
+          elif isinstance(current, list) and segment.isdigit():
+              index = int(segment)
+              if index >= len(current):
+                  return _MISSING
+              current = current[index]
+          else:
+              return _MISSING
+      return current
+mock_solution: |
+  _MISSING = object()
+
+
+  def extract_fields(record: dict, paths: dict[str, str], default=None) -> dict:
+      result = {}
+      for output_key, path in paths.items():
+          value = _resolve_path(record, path)
+          result[output_key] = default if value is _MISSING else value
+      return result
+
+
+  def _resolve_path(value, path: str):
+      current = value
+      for segment in path.split("."):
+          if isinstance(current, dict):
+              if segment not in current:
+                  return _MISSING
+              current = current[segment]
+          elif isinstance(current, list) and segment.isdigit():
+              index = int(segment)
+              if index >= len(current):
+                  return _MISSING
+              current = current[index]
+          else:
+              return _MISSING
+      return current
+mock_day2_solution: |
+  _MISSING = object()
+
+
+  def extract_fields(
+      record: dict,
+      paths: dict[str, str],
+      default=None,
+      required: set[str] | None = None,
+  ) -> dict:
+      required = required or set()
+      result = {}
+      for output_key, path in paths.items():
+          value = _resolve_path(record, path)
+          if value is _MISSING and output_key in required:
+              raise KeyError(output_key)
+          result[output_key] = default if value is _MISSING else value
+      return result
+
+
+  def _resolve_path(value, path: str):
+      current = value
+      for segment in path.split("."):
+          if isinstance(current, dict):
+              if segment not in current:
+                  return _MISSING
+              current = current[segment]
+          elif isinstance(current, list) and segment.isdigit():
+              index = int(segment)
+              if index >= len(current):
+                  return _MISSING
+              current = current[index]
+          else:
+              return _MISSING
+      return current

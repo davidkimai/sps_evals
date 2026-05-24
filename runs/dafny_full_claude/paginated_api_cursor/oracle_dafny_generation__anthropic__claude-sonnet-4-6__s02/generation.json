@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method collect_cursor_items(pages: seq<seq<int>>) returns (result: seq<int>)\n  requires |pages| >= 0\n  ensures |result| >= 0\n{\n  result := [];\n  var i := 0;\n  while i < |pages|\n    invariant 0 <= i <= |pages|\n    invariant |result| >= 0\n  {\n    result := result + pages[i];\n    i := i + 1;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "collect_cursor_items",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 77,
+      "prompt": 298,
+      "total": 375,
+      "turns": [
+        {
+          "completion": 77,
+          "prompt": 298,
+          "total": 375
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod collect_cursor_items(pages: seq<seq<int>>) returns (result: seq<int>)\n  requires |pages| >= 0\n  ensures |result| >= 0\n{\n  result := [];\n  var i := 0;\n  while i < |pages|\n    invariant 0 <= i <= |pages|\n    invariant |result| >= 0\n  {\n    result := result + pages[i];\n    i := i + 1;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend collect_cursor_items with per_page_timeout: float | None = None. When set,\nwrap each page fetch in asyncio.wait_for. Preserve original behavior when omitted.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import asyncio\n\nimport pytest\n\nfrom solution import collect_cursor_items\n\n\ndef test_per_page_timeout_and_original_behavior():\n    async def fetch(cursor):\n        return ([cursor or 'start'], None)\n\n    assert asyncio.run(collect_cursor_items(fetch, start_cursor='x')) == ['x']\n\n    async def slow(_cursor):\n        await asyncio.sleep(0.05)\n        return ([], None)\n\n    with pytest.raises(asyncio.TimeoutError):\n        asyncio.run(collect_cursor_items(slow, per_page_timeout=0.001))\n",
+    "entry_point": "collect_cursor_items",
+    "human_reference": "from __future__ import annotations\n\nfrom collections.abc import Awaitable, Callable\nfrom typing import Any\n\n\nasync def collect_cursor_items(\n    fetch_page: Callable[[Any], Awaitable[tuple[list[Any], Any]]],\n    *,\n    start_cursor: Any = None,\n) -> list[Any]:\n    cursor = start_cursor\n    collected: list[Any] = []\n    while True:\n        items, cursor = await fetch_page(cursor)\n        collected.extend(items)\n        if cursor is None:\n            return collected\n",
+    "id": "paginated_api_cursor",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport asyncio\n\n\nasync def collect_cursor_items(fetch_page, *, start_cursor=None, per_page_timeout=None):\n    out = []\n    cursor = start_cursor\n    while True:\n        if per_page_timeout is None:\n            items, cursor = await fetch_page(cursor)\n        else:\n            items, cursor = await asyncio.wait_for(fetch_page(cursor), timeout=per_page_timeout)\n        out.extend(items)\n        if cursor is None:\n            return out\n",
+    "mock_solution": "from __future__ import annotations\n\n\nasync def collect_cursor_items(fetch_page, *, start_cursor=None):\n    out = []\n    cursor = start_cursor\n    done = False\n    while not done:\n        page_items, next_cursor = await fetch_page(cursor)\n        for item in page_items:\n            out.append(item)\n        cursor = next_cursor\n        done = cursor is None\n    return out\n",
+    "prompt": "Implement async collect_cursor_items(fetch_page, *, start_cursor=None) -> list.\n\nfetch_page(cursor) is an async callable returning (items, next_cursor). Append\nitems from each page until next_cursor is None. Pass start_cursor to the first\ncall.\n",
+    "tags": [
+      "async",
+      "pagination",
+      "day2-hard"
+    ],
+    "test_code": "import asyncio\n\nfrom solution import collect_cursor_items\n\n\ndef test_collects_all_pages():\n    async def fetch(cursor):\n        pages = {\n            None: ([1, 2], 'b'),\n            'b': ([3], None),\n        }\n        return pages[cursor]\n\n    assert asyncio.run(collect_cursor_items(fetch)) == [1, 2, 3]\n"
+  },
+  "task_id": "paginated_api_cursor",
+  "user_prompt": "Task id: paginated_api_cursor\nEntry point: collect_cursor_items\n\nFunctional requirements:\nImplement async collect_cursor_items(fetch_page, *, start_cursor=None) -> list.\n\nfetch_page(cursor) is an async callable returning (items, next_cursor). Append\nitems from each page until next_cursor is None. Pass start_cursor to the first\ncall.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

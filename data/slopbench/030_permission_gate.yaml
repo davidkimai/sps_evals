@@ -1,0 +1,52 @@
+id: permission_gate
+entry_point: has_permission
+tags: [reliability_critical, access_control, day2-hard]
+day2_stressors: [interface_generalization, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool.
+  Return True only when role exists and permission is explicitly listed for it.
+  Deny by default for unknown roles or permissions.
+test_code: |
+  from solution import has_permission
+
+
+  def test_deny_by_default():
+      matrix = {'admin': {'read', 'write'}, 'viewer': {'read'}}
+      assert has_permission(matrix, 'admin', 'write') is True
+      assert has_permission(matrix, 'viewer', 'write') is False
+      assert has_permission(matrix, 'missing', 'read') is False
+day2_prompt: |
+  Extend has_permission so a wildcard role '*' grants permissions to all roles.
+  Explicit role permissions and wildcard permissions should both be considered.
+  Preserve deny-by-default behavior when no wildcard exists.
+day2_test_code: |
+  from solution import has_permission
+
+
+  def test_wildcard_role_expansion():
+      matrix = {'*': {'read'}, 'admin': {'write'}}
+      assert has_permission(matrix, 'admin', 'write') is True
+      assert has_permission(matrix, 'guest', 'read') is True
+      assert has_permission(matrix, 'guest', 'write') is False
+human_reference: |
+  from __future__ import annotations
+
+
+  def has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool:
+      return permission in matrix.get(role, set())
+mock_solution: |
+  from __future__ import annotations
+
+
+  def has_permission(matrix, role: str, permission: str) -> bool:
+      if role not in matrix:
+          return False
+      return permission in matrix[role]
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def has_permission(matrix, role: str, permission: str) -> bool:
+      role_permissions = matrix.get(role, set())
+      wildcard_permissions = matrix.get('*', set())
+      return permission in role_permissions or permission in wildcard_permissions

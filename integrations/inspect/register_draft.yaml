@@ -1,0 +1,26 @@
+name: slopbench
+display_name: SlopBench Structural Auditability
+repository: https://github.com/davidkimai/specoracle
+status: local_register_ready_draft
+version: sprint9
+description: >
+  Inspect-native structural auditability layer for SlopBench / SpecOracle.
+  The Sprint 9 surface is parity-checked locally and exposes a diagnostic
+  external subset without committing raw external benchmark content.
+entry_points:
+  - package: slopbench_inspect
+    task: slopbench_internal_smoke
+  - package: slopbench_inspect
+    task: scbench_external_subset
+install:
+  command: python3 -m pip install -e '.[inspect]'
+sandbox:
+  required: docker
+metrics:
+  - pytest_passed
+  - cc_average
+  - cc_max
+  - max_nesting_depth
+  - maintainability_index
+  - redundancy_score
+claim_boundary: register-ready local draft; no upstream submission in Sprint 9

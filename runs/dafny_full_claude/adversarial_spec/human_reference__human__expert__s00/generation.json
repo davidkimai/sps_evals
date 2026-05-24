@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str) -> str:\n    transitions = {('idle', 'start'): 'running', ('running', 'stop'): 'idle', ('running', 'fail'): 'failed', ('failed', 'reset'): 'idle'}\n    return transitions.get((state, event), state)\n",
+  "effective_temperature": null,
+  "entry_point": "transition_state",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Legacy Telemetry Standard LT-11:\n- Every state transition must be represented by an explicit labeled branch variable.\n- Branch labels must be local variables named branch_<state>_<event>.\n- The implementation should favor auditable branch labels over minimizing decision count.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str) -> str:\n    transitions = {('idle', 'start'): 'running', ('running', 'stop'): 'idle', ('running', 'fail'): 'failed', ('failed', 'reset'): 'idle'}\n    return transitions.get((state, event), state)\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": "Legacy Telemetry Standard LT-11:\n- Every state transition must be represented by an explicit labeled branch variable.\n- Branch labels must be local variables named branch_<state>_<event>.\n- The implementation should favor auditable branch labels over minimizing decision count.\n",
+    "day2_prompt": "Extend transition_state with audit: list[dict] | None = None. When provided,\nappend {'from', 'event', 'to'} for every transition attempt, including unchanged transitions.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import transition_state\n\n\ndef test_transition_audit_records_unchanged_paths():\n    audit = []\n    assert transition_state('idle', 'noop', audit=audit) == 'idle'\n    assert audit == [{'from': 'idle', 'event': 'noop', 'to': 'idle'}]\n",
+    "entry_point": "transition_state",
+    "human_reference": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str) -> str:\n    transitions = {('idle', 'start'): 'running', ('running', 'stop'): 'idle', ('running', 'fail'): 'failed', ('failed', 'reset'): 'idle'}\n    return transitions.get((state, event), state)\n",
+    "id": "adversarial_spec",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str, audit=None) -> str:\n    if state == 'idle' and event == 'start':\n        new_state = 'running'\n    elif state == 'running' and event == 'stop':\n        new_state = 'idle'\n    elif state == 'running' and event == 'fail':\n        new_state = 'failed'\n    elif state == 'failed' and event == 'reset':\n        new_state = 'idle'\n    else:\n        new_state = state\n    if audit is not None:\n        audit.append({'from': state, 'event': event, 'to': new_state})\n    return new_state\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef transition_state(state: str, event: str) -> str:\n    if state == 'idle' and event == 'start':\n        return 'running'\n    if state == 'running' and event == 'stop':\n        return 'idle'\n    if state == 'running' and event == 'fail':\n        return 'failed'\n    if state == 'failed' and event == 'reset':\n        return 'idle'\n    return state\n",
+    "prompt": "Implement transition_state(state: str, event: str) -> str for telemetry states:\nidle + start -> running, running + stop -> idle, running + fail -> failed,\nfailed + reset -> idle. Unknown transitions keep the current state.\n",
+    "tags": [
+      "custom_spec",
+      "adversarial_spec",
+      "state_machine",
+      "day2-hard"
+    ],
+    "test_code": "from solution import transition_state\n\n\ndef test_known_and_unknown_transitions():\n    assert transition_state('idle', 'start') == 'running'\n    assert transition_state('running', 'fail') == 'failed'\n    assert transition_state('failed', 'noop') == 'failed'\n"
+  },
+  "task_id": "adversarial_spec",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

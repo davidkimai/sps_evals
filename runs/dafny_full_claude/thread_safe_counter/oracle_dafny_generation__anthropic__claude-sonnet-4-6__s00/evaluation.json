@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 13,
+    "error_count": 6,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 6,
+      "assume": 1,
+      "decreases": 0,
+      "ensures": 13,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 0,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 4,
+      "while": 0
+    },
+    "lexical_proof_complexity": 28,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 4,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 74,
+    "source_token_estimate": 445,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.587,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 5
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. It is syntactically invalid as Python code and cannot be executed or imported as a Python module. The entry point BoundedCounter is not a Python class, there is no threading primitive (no threading.Lock or similar), no ValueError/OverflowError is raised at runtime, snapshot() does not return a copy of nonzero counts, and none of the functional requirements are actually implemented in the target language. The Dafny formal specification is interesting as a design artifact but completely fails to satisfy the task of delivering a working, thread-safe Python implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. It is syntactically invalid as Python code and cannot be executed or imported as a Python module. The entry point BoundedCounter is not a Python class, there is no threading primitive (no threading.Lock or similar), no ValueError/OverflowError is raised at runtime, snapshot() does not return a copy of nonzero counts, and none of the functional requirements are actually implemented in the target language. The Dafny formal specification is interesting as a design artifact but completely fails to satisfy the task of delivering a working, thread-safe Python implementation.\",\n  \"strengths\": [\n    \"Captures the logical invariants (Valid predicate, pre/postconditions) that a correct implementation should satisfy\",\n    \"Demonstrates awareness of the bounded-total constraint and the need to check overflow before incrementing\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 entirely wrong language for the task\",\n    \"No Python class, no threading.Lock, no actual thread safety\",\n    \"ValueError and OverflowError are not raised; overflow path uses 'assume false' which is meaningless at runtime\",\n    \"snapshot() does not filter nonzero counts and does not return a Python dict copy\",\n    \"Cannot be imported or executed as a Python module at all\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Captures the logical invariants (Valid predicate, pre/postconditions) that a correct implementation should satisfy",
+      "Demonstrates awareness of the bounded-total constraint and the need to check overflow before incrementing"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 entirely wrong language for the task",
+      "No Python class, no threading.Lock, no actual thread safety",
+      "ValueError and OverflowError are not raised; overflow path uses 'assume false' which is meaningless at runtime",
+      "snapshot() does not filter nonzero counts and does not return a Python dict copy",
+      "Cannot be imported or executed as a Python module at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 448,
+      "prompt": 383,
+      "total": 831,
+      "turns": [
+        {
+          "completion": 448,
+          "prompt": 383,
+          "total": 831
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(40,6): Warning: assume statement has no {:axiom} annotation\n   |\n40 |       assume false;\n   |       ^^^^^^\n\nsolution.dfy(35,2): Error: a postcondition could not be proved on this return path\n   |\n35 |   {\n   |   ^\n\nsolution.dfy(34,19): Related location: this is the postcondition that could not be proved\n   |\n34 |     ensures newVal >= 1\n   |                    ^^\n\nsolution.dfy(70,2): Error: assertion might not hold\n   |\n70 |   assert v1 == 1;\n   |   ^^^^^^\n\nsolution.dfy(72,2): Error: assertion might not hold\n   |\n72 |   assert v2 == 2;\n   |   ^^^^^^\n\nsolution.dfy(74,2): Error: assertion might not hold\n   |\n74 |   assert v3 == 1;\n   |   ^^^^^^\n\nsolution.dfy(78,2): Error: assertion might not hold\n   |\n78 |   assert s[\"alice\"] == 2;\n   |   ^^^^^^\n\nsolution.dfy(78,10): Error: element might not be in domain\n   |\n78 |   assert s[\"alice\"] == 2;\n   |           ^\n\n\nDafny program verifier finished with 5 verified, 6 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "thread_safe_counter",
+  "variant": "oracle_dafny_generation"
+}

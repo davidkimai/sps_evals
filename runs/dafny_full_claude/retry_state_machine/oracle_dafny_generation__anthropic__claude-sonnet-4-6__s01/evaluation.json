@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": 2,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 4,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 7,
+      "while": 0
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 7,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 53,
+    "source_token_estimate": 299,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.832,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 5
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. It uses Dafny class/method/constructor syntax, precondition/postcondition annotations (requires/ensures), and imperative assignment with ':=' \u2014 none of which are valid Python. The entry point 'RetryGate' as a Python class does not exist in this submission. While the logical structure and invariants described are correct and well-reasoned (showing understanding of the problem), the code is completely non-functional as a Python implementation and would cause a syntax error immediately. This is a fundamental language mismatch, not a style issue.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. It uses Dafny class/method/constructor syntax, precondition/postcondition annotations (requires/ensures), and imperative assignment with ':=' \u2014 none of which are valid Python. The entry point 'RetryGate' as a Python class does not exist in this submission. While the logical structure and invariants described are correct and well-reasoned (showing understanding of the problem), the code is completely non-functional as a Python implementation and would cause a syntax error immediately. This is a fundamental language mismatch, not a style issue.\",\n  \"strengths\": [\n    \"Correct logical structure and invariants for the retry state machine\",\n    \"Formal pre/postconditions demonstrate clear understanding of required behavior\",\n    \"Includes a Main method that exercises all code paths correctly\"\n  ],\n  \"weaknesses\": [\n    \"Entire implementation is in Dafny, not Python \u2014 will not parse or run as Python\",\n    \"No Python class, no __init__, no Python methods exist\",\n    \"Cannot satisfy the functional requirements since it is the wrong language entirely\",\n    \"Uses ':=' assignment, curly-brace blocks, and Dafny-specific keywords \u2014 all invalid Python syntax\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Correct logical structure and invariants for the retry state machine",
+      "Formal pre/postconditions demonstrate clear understanding of required behavior",
+      "Includes a Main method that exercises all code paths correctly"
+    ],
+    "weaknesses": [
+      "Entire implementation is in Dafny, not Python \u2014 will not parse or run as Python",
+      "No Python class, no __init__, no Python methods exist",
+      "Cannot satisfy the functional requirements since it is the wrong language entirely",
+      "Uses ':=' assignment, curly-brace blocks, and Dafny-specific keywords \u2014 all invalid Python syntax"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 303,
+      "prompt": 368,
+      "total": 671,
+      "turns": [
+        {
+          "completion": 303,
+          "prompt": 368,
+          "total": 671
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(26,4): Error: assignment might update an object not in the enclosing context's modifies clause\n   |\n26 |     failures := 0;\n   |     ^^^^^^^^\n\nsolution.dfy(33,4): Error: assignment might update an object not in the enclosing context's modifies clause\n   |\n33 |     failures := failures + 1;\n   |     ^^^^^^^^\n\n\nDafny program verifier finished with 5 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "retry_state_machine",
+  "variant": "oracle_dafny_generation"
+}

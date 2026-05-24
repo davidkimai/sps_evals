@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 3,
+    "error_count": null,
+    "invariant_count": 19,
+    "keyword_counts": {
+      "assert": 2,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 16,
+      "if": 8,
+      "invariant": 19,
+      "logical_and": 5,
+      "logical_or": 6,
+      "match": 0,
+      "requires": 2,
+      "while": 7
+    },
+    "lexical_proof_complexity": 69,
+    "logical_and_count": 5,
+    "logical_or_count": 6,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 114,
+    "source_token_estimate": 942,
+    "status": "verification_failed",
+    "verification_duration_seconds": 3.987,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task explicitly requires implementing `merge_sorted_iterators` as a Python function with a specific entry point signature. The code does not define any Python function, does not use `heapq` or any Python iterator/generator pattern, and cannot be imported or called as Python code at all. This is a complete language mismatch \u2014 the submission is Dafny pseudocode with loop invariants, `seq<int>` types, and `method` declarations, none of which are valid Python. There is zero functional correctness in the Python runtime context, and the structural quality relative to the Zen of Python oracle is entirely absent.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task explicitly requires implementing `merge_sorted_iterators` as a Python function with a specific entry point signature. The code does not define any Python function, does not use `heapq` or any Python iterator/generator pattern, and cannot be imported or called as Python code at all. This is a complete language mismatch \u2014 the submission is Dafny pseudocode with loop invariants, `seq<int>` types, and `method` declarations, none of which are valid Python. There is zero functional correctness in the Python runtime context, and the structural quality relative to the Zen of Python oracle is entirely absent.\",\n  \"strengths\": [\n    \"The algorithmic logic (min-heap style k-way merge via index tracking) is conceptually correct for the problem domain\",\n    \"Loop invariants are carefully annotated, showing attention to correctness reasoning\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"No Python entry point `merge_sorted_iterators` defined\",\n    \"No use of generators, iterators, or `heapq` as expected for a lazy Python merge\",\n    \"Cannot be executed or imported as Python code\",\n    \"Violates every Zen of Python principle by being in the wrong language entirely\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The algorithmic logic (min-heap style k-way merge via index tracking) is conceptually correct for the problem domain",
+      "Loop invariants are carefully annotated, showing attention to correctness reasoning"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "No Python entry point `merge_sorted_iterators` defined",
+      "No use of generators, iterators, or `heapq` as expected for a lazy Python merge",
+      "Cannot be executed or imported as Python code",
+      "Violates every Zen of Python principle by being in the wrong language entirely"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 946,
+      "prompt": 272,
+      "total": 1218,
+      "turns": [
+        {
+          "completion": 946,
+          "prompt": 272,
+          "total": 1218
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(4,81): Error: type set<multiset<?>> does not have a member Sum\n  |\n4 |   ensures multiset(result) == (set i | 0 <= i < |arrays| :: multiset(arrays[i])).Sum()\n  |                                                                                  ^^^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "priority_queue_merger",
+  "variant": "oracle_dafny_generation"
+}

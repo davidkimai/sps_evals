@@ -1,0 +1,147 @@
+id: retry_state_machine
+entry_point: RetryGate
+tags: [state, control-flow, maintainability]
+day2_stressors: [cross_function_state, backwards_compatibility]
+prompt: |
+  Implement a RetryGate class.
+
+  Constructor: RetryGate(max_attempts: int)
+  - max_attempts must be positive, otherwise raise ValueError.
+
+  Methods:
+  - allow() -> bool: True while the number of recorded failures is less than max_attempts.
+  - record_success() -> None: reset the failure count to zero.
+  - record_failure() -> None: increment the failure count by one.
+  - remaining() -> int: remaining attempts before allow() becomes False.
+
+  The implementation should be deterministic and should not use time, threads,
+  networking, or global state.
+test_code: |
+  import pytest
+
+  from solution import RetryGate
+
+
+  def test_retry_gate_tracks_failures_and_reset():
+      gate = RetryGate(2)
+      assert gate.allow()
+      assert gate.remaining() == 2
+
+      gate.record_failure()
+      assert gate.allow()
+      assert gate.remaining() == 1
+
+      gate.record_failure()
+      assert not gate.allow()
+      assert gate.remaining() == 0
+
+      gate.record_success()
+      assert gate.allow()
+      assert gate.remaining() == 2
+
+
+  def test_retry_gate_rejects_invalid_limit():
+      with pytest.raises(ValueError):
+          RetryGate(0)
+day2_prompt: |
+  Add a snapshot() -> dict method that returns the current state without
+  mutating it. The dictionary must contain max_attempts, failures, remaining,
+  and allowed.
+day2_test_code: |
+  import pytest
+
+  from solution import RetryGate
+
+
+  def test_snapshot_reports_state_without_mutation():
+      gate = RetryGate(3)
+      gate.record_failure()
+      snapshot = gate.snapshot()
+
+      assert snapshot == {
+          "max_attempts": 3,
+          "failures": 1,
+          "remaining": 2,
+          "allowed": True,
+      }
+      assert gate.remaining() == 2
+      assert gate.allow()
+
+
+  def test_original_limit_validation_remains():
+      with pytest.raises(ValueError):
+          RetryGate(0)
+human_reference: |
+  from __future__ import annotations
+
+
+  class RetryGate:
+      def __init__(self, max_attempts: int) -> None:
+          if max_attempts <= 0:
+              raise ValueError("max_attempts must be positive")
+          self._max_attempts = max_attempts
+          self._failures = 0
+
+      def allow(self) -> bool:
+          return self._failures < self._max_attempts
+
+      def record_success(self) -> None:
+          self._failures = 0
+
+      def record_failure(self) -> None:
+          self._failures += 1
+
+      def remaining(self) -> int:
+          return max(0, self._max_attempts - self._failures)
+mock_solution: |
+  from __future__ import annotations
+
+
+  class RetryGate:
+      def __init__(self, max_attempts: int) -> None:
+          if max_attempts <= 0:
+              raise ValueError("max_attempts must be positive")
+          self._max_attempts = max_attempts
+          self._failures = 0
+
+      def allow(self) -> bool:
+          return self._failures < self._max_attempts
+
+      def record_success(self) -> None:
+          self._failures = 0
+
+      def record_failure(self) -> None:
+          self._failures += 1
+
+      def remaining(self) -> int:
+          return max(0, self._max_attempts - self._failures)
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  class RetryGate:
+      def __init__(self, max_attempts: int) -> None:
+          if max_attempts <= 0:
+              raise ValueError("max_attempts must be positive")
+          self._max_attempts = max_attempts
+          self._failures = 0
+
+      def allow(self) -> bool:
+          return self._failures < self._max_attempts
+
+      def record_success(self) -> None:
+          self._failures = 0
+
+      def record_failure(self) -> None:
+          self._failures += 1
+
+      def remaining(self) -> int:
+          return max(0, self._max_attempts - self._failures)
+
+      def snapshot(self) -> dict[str, int | bool]:
+          return {
+              "max_attempts": self._max_attempts,
+              "failures": self._failures,
+              "remaining": self.remaining(),
+              "allowed": self.allow(),
+          }

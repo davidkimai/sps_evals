@@ -1,0 +1,75 @@
+id: input_sanitizer
+entry_point: sanitize_fields
+tags: [reliability_critical, validation, day2-hard]
+day2_stressors: [parameter_threading, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement sanitize_fields(fields: list[str], allowed: set[str]) -> list[str].
+  Return fields that are in allowed and contain only letters, digits, and underscores.
+  Preserve input order and remove duplicates.
+test_code: |
+  from solution import sanitize_fields
+
+
+  def test_whitelist_and_identifier_filter():
+      assert sanitize_fields(['name', 'bad-field', 'age', 'name', 'role'], {'name', 'age'}) == ['name', 'age']
+day2_prompt: |
+  Extend sanitize_fields with length_caps: dict[str, int] | None = None. If a field
+  has a cap and its name is longer than the cap, omit it. Preserve old behavior
+  when omitted.
+day2_test_code: |
+  from solution import sanitize_fields
+
+
+  def test_length_caps_are_field_specific():
+      fields = ['name', 'long_field', 'age']
+      allowed = {'name', 'long_field', 'age'}
+      assert sanitize_fields(fields, allowed, length_caps={'long_field': 5}) == ['name', 'age']
+      assert sanitize_fields(fields, allowed) == fields
+human_reference: |
+  from __future__ import annotations
+
+
+  def sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]:
+      clean: list[str] = []
+      seen: set[str] = set()
+      for field in fields:
+          if field in seen:
+              continue
+          if field not in allowed:
+              continue
+          if not field.replace('_', '').isalnum():
+              continue
+          seen.add(field)
+          clean.append(field)
+      return clean
+mock_solution: |
+  from __future__ import annotations
+
+
+  def sanitize_fields(fields, allowed):
+      output = []
+      for field in fields:
+          if field in allowed and field not in output:
+              ok = True
+              for char in field:
+                  if not (char.isalnum() or char == '_'):
+                      ok = False
+              if ok:
+                  output.append(field)
+      return output
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def sanitize_fields(fields, allowed, length_caps=None):
+      output = []
+      caps = length_caps or {}
+      for field in fields:
+          if field in output or field not in allowed:
+              continue
+          if not all(char.isalnum() or char == '_' for char in field):
+              continue
+          if field in caps and len(field) > caps[field]:
+              continue
+          output.append(field)
+      return output

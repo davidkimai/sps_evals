@@ -1,0 +1,60 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation correctly validates all required fields before accepting any into the output, names failing fields in the ValueError, and returns a clean dict only after all validations pass \u2014 satisfying CD-7's core requirements. The collect-all-errors approach is a reasonable and readable design choice that actually exceeds the spec's minimum (which only requires naming the bad field). The code is flat, explicit, and locally auditable with no unnecessary abstraction. Minor weaknesses include: the `bool` subclass edge case for `age` (since `isinstance(True, int)` is True, `age=True` would pass), the empty-string patient_id check using `not payload.get('patient_id')` which conflates missing and empty, and the double `.get()` calls on `patient_id` and `age` which are slightly redundant. Overall the implementation is clean, readable, and structurally sound.",
+    "raw_response": "{\n  \"score\": 8,\n  \"rationale\": \"The implementation correctly validates all required fields before accepting any into the output, names failing fields in the ValueError, and returns a clean dict only after all validations pass \u2014 satisfying CD-7's core requirements. The collect-all-errors approach is a reasonable and readable design choice that actually exceeds the spec's minimum (which only requires naming the bad field). The code is flat, explicit, and locally auditable with no unnecessary abstraction. Minor weaknesses include: the `bool` subclass edge case for `age` (since `isinstance(True, int)` is True, `age=True` would pass), the empty-string patient_id check using `not payload.get('patient_id')` which conflates missing and empty, and the double `.get()` calls on `patient_id` and `age` which are slightly redundant. Overall the implementation is clean, readable, and structurally sound.\",\n  \"strengths\": [\n    \"Validates all fields before returning any output, fully satisfying CD-7's partial-validation prohibition\",\n    \"Error messages name the failing fields explicitly\",\n    \"Returns a clean, explicitly constructed dict rather than passing through the raw payload\",\n    \"Flat, readable structure with no unnecessary abstraction or indirection\",\n    \"Collects all errors before raising, giving callers complete feedback\"\n  ],\n  \"weaknesses\": [\n    \"bool values (True/False) pass the age isinstance check since bool is a subclass of int\",\n    \"Double .get() calls on patient_id and age are slightly redundant; could assign to variables first\",\n    \"Empty-string patient_id check via `not payload.get('patient_id')` also catches missing key, slightly obscuring the distinction between missing and invalid\",\n    \"No validation that symptoms list is non-empty if that is a clinical requirement (spec is ambiguous)\"\n  ]\n}",
+    "score": 8,
+    "skipped": false,
+    "strengths": [
+      "Validates all fields before returning any output, fully satisfying CD-7's partial-validation prohibition",
+      "Error messages name the failing fields explicitly",
+      "Returns a clean, explicitly constructed dict rather than passing through the raw payload",
+      "Flat, readable structure with no unnecessary abstraction or indirection",
+      "Collects all errors before raising, giving callers complete feedback"
+    ],
+    "weaknesses": [
+      "bool values (True/False) pass the age isinstance check since bool is a subclass of int",
+      "Double .get() calls on patient_id and age are slightly redundant; could assign to variables first",
+      "Empty-string patient_id check via `not payload.get('patient_id')` also catches missing key, slightly obscuring the distinction between missing and invalid",
+      "No validation that symptoms list is non-empty if that is a clinical requirement (spec is ambiguous)"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Clinical Data Standard CD-7:\n- Validate every required field before accepting any field into the output.\n- Error messages must name the field that failed validation.\n- Partial validation is not permitted; return only after all required fields pass.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 3.65,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.04s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 9.0,
+    "cyclomatic_complexity_max": 9,
+    "cyclomatic_complexity_total": 9,
+    "function_count": 1,
+    "loc": 13,
+    "maintainability_index": 60.173,
+    "max_nesting_depth": 1,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "medical_intake_form",
+  "variant": "human_reference"
+}

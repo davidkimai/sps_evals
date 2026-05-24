@@ -1,0 +1,73 @@
+artifact,review_reason,surface,task_id
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,policy_merge
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,policy_merge
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,policy_merge
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,config_precedence_merge
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,config_precedence_merge
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,config_precedence_merge
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,cli_argument_validation
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,cli_argument_validation
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,cli_argument_validation
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,retry_backoff_schedule
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,retry_backoff_schedule
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,retry_backoff_schedule
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,sliding_window_limiter
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,sliding_window_limiter
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,sliding_window_limiter
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,feature_flag_matrix
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,feature_flag_matrix
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,feature_flag_matrix
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,async_rate_limiter
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,async_rate_limiter
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,async_rate_limiter
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,timing_safe_compare
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,timing_safe_compare
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,timing_safe_compare
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,input_sanitizer
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,input_sanitizer
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,input_sanitizer
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,token_bucket_enforcer
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,token_bucket_enforcer
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,token_bucket_enforcer
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,audit_log_writer
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,audit_log_writer
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,audit_log_writer
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,internal,permission_gate
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,internal,permission_gate
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,internal,permission_gate
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,safe_path_validation
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,safe_path_validation
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,safe_path_validation
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,shell_argument_construction
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,shell_argument_construction
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,shell_argument_construction
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,archive_extract_filter
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,archive_extract_filter
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,archive_extract_filter
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,url_domain_allowlist
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,url_domain_allowlist
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,url_domain_allowlist
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,parser_validator_edges
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,parser_validator_edges
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,parser_validator_edges
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,input_canonicalization
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,input_canonicalization
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,input_canonicalization
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,authorization_rule_sequence
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,authorization_rule_sequence
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,authorization_rule_sequence
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,config_schema_enforcement
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,config_schema_enforcement
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,config_schema_enforcement
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,token_scope_checker
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,token_scope_checker
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,token_scope_checker
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,redaction_policy_engine
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,redaction_policy_engine
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,redaction_policy_engine
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,webhook_signature_validator
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,webhook_signature_validator
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,webhook_signature_validator
+natural_language_spec,Human must confirm the stated boundary matches deployment intent.,secure,rate_limit_key_builder
+hidden_oracle_summary,Human must confirm hidden checks reject the right unsafe behavior.,secure,rate_limit_key_builder
+wrapper_runtime_assumptions,Human must confirm wrappers and runtime do not bypass the oracle boundary.,secure,rate_limit_key_builder

@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 3,
+    "error_count": null,
+    "invariant_count": 7,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 4,
+      "if": 4,
+      "invariant": 7,
+      "logical_and": 5,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 4
+    },
+    "lexical_proof_complexity": 28,
+    "logical_and_count": 5,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 68,
+    "source_token_estimate": 584,
+    "status": "verification_failed",
+    "verification_duration_seconds": 2.839,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written in Dafny (a formal verification language), not Python, making it completely incompatible with the task's entry point signature `diff_versions(previous: dict, current: dict) -> list[dict]`. The Zen of Python oracle emphasizes simplicity, explicitness, and readability in Python \u2014 none of which apply here. The code cannot be executed as Python, uses Dafny-specific syntax (`method`, `map<string, string>`, `seq<string>`, `ensures`, `invariant`, `decreases`), and would fail immediately if imported or called. While the algorithmic logic (collecting all keys, checking membership, building records, sorting by field) is conceptually correct, the implementation language mismatch is a fundamental architectural failure. The use of formal verification constructs adds significant complexity that is antithetical to Pythonic simplicity. There is no valid Python code present whatsoever.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written in Dafny (a formal verification language), not Python, making it completely incompatible with the task's entry point signature `diff_versions(previous: dict, current: dict) -> list[dict]`. The Zen of Python oracle emphasizes simplicity, explicitness, and readability in Python \u2014 none of which apply here. The code cannot be executed as Python, uses Dafny-specific syntax (`method`, `map<string, string>`, `seq<string>`, `ensures`, `invariant`, `decreases`), and would fail immediately if imported or called. While the algorithmic logic (collecting all keys, checking membership, building records, sorting by field) is conceptually correct, the implementation language mismatch is a fundamental architectural failure. The use of formal verification constructs adds significant complexity that is antithetical to Pythonic simplicity. There is no valid Python code present whatsoever.\",\n  \"strengths\": [\n    \"Algorithmic intent is correct: collects all keys from both dicts, creates records for added/removed/changed fields, sorts by field name\",\n    \"Each change is represented as an explicit record with field, before, and after \u2014 matching SRL-3 requirements conceptually\",\n    \"Insertion sort approach is explicit and auditable in intent\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong programming language for the task\",\n    \"Cannot be executed as Python; the entry point `diff_versions` does not exist as a callable Python function\",\n    \"Extreme complexity (formal verification annotations, invariants, ensures clauses) violates Zen of Python simplicity\",\n    \"Uses `''` (empty string) as sentinel for missing values instead of Python's `None`, which misrepresents absence\",\n    \"No Python imports, no Python syntax, no compatibility with the specified function signature\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Algorithmic intent is correct: collects all keys from both dicts, creates records for added/removed/changed fields, sorts by field name",
+      "Each change is represented as an explicit record with field, before, and after \u2014 matching SRL-3 requirements conceptually",
+      "Insertion sort approach is explicit and auditable in intent"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong programming language for the task",
+      "Cannot be executed as Python; the entry point `diff_versions` does not exist as a callable Python function",
+      "Extreme complexity (formal verification annotations, invariants, ensures clauses) violates Zen of Python simplicity",
+      "Uses `''` (empty string) as sentinel for missing values instead of Python's `None`, which misrepresents absence",
+      "No Python imports, no Python syntax, no compatibility with the specified function signature"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 587,
+      "prompt": 289,
+      "total": 876,
+      "turns": [
+        {
+          "completion": 587,
+          "prompt": 289,
+          "total": 876
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(64,39): Error: arguments to > must be of a numeric type, bitvector type, ORDINAL, char, or a set-like type (instead got seq<char> and seq<char>)\n   |\n64 |     while j >= 0 && sorted[j][\"field\"] > key[\"field\"]\n   |                                        ^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "state_diff_tracker",
+  "variant": "oracle_dafny_generation"
+}

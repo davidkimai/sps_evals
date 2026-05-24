@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-05-19T08:07:05Z",
+  "external_cached": 32,
+  "external_failed": 3,
+  "failure_policy": "Failures are explicit in resource_manifest; grounding can proceed if core Track 3, OpenAI, Inspect, SPS, and local runtime resources are available.",
+  "primary_vs_expansion_scope_locked": true,
+  "prompt_provenance_policy_locked": true,
+  "ready_for_code_changes": true,
+  "resources_read": true,
+  "schema": "specoracle.vericoding.v3.full_track3_grounding_complete.v1",
+  "track3_object_locked": true,
+  "triage_object_definition_locked": true,
+  "validity_threat_model_locked": true
+}

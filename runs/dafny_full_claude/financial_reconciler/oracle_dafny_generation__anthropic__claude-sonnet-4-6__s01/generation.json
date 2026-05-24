@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method reconcile_entries(entries: seq<(string, string, int)>) returns (result: map<string, (int, int, int)>)\n  requires forall i :: 0 <= i < |entries| ==> (entries[i].1 == \"debit\" || entries[i].1 == \"credit\")\n  requires forall i :: 0 <= i < |entries| ==> entries[i].2 >= 0\n  ensures forall acct :: acct in result ==>\n    result[acct].2 == result[acct].1 - result[acct].0\n{\n  result := map[];\n  var i := 0;\n  while i < |entries|\n    invariant 0 <= i <= |entries|\n    invariant forall acct :: acct in result ==>\n      result[acct].2 == result[acct].1 - result[acct].0\n  {\n    var account := entries[i].0;\n    var direction := entries[i].1;\n    var amount := entries[i].2;\n\n    var debit := 0;\n    var credit := 0;\n    if account in result {\n      debit := result[account].0;\n      credit := result[account].1;\n    }\n\n    if direction == \"debit\" {\n      debit := debit + amount;\n    } else {\n      credit := credit + amount;\n    }\n\n    var balance := credit - debit;\n    result := result[account := (debit, credit, balance)];\n    i := i + 1;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "reconcile_entries",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 265,
+      "prompt": 291,
+      "total": 556,
+      "turns": [
+        {
+          "completion": 265,
+          "prompt": 291,
+          "total": 556
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Treasury Reconciliation Doctrine TR-4:\n- Every monetary delta must be tagged debit or credit before it affects totals.\n- Debit and credit balances must be computed in separate named accumulators.\n- Do not place inline arithmetic inside conditionals that decide monetary direction.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod reconcile_entries(entries: seq<(string, string, int)>) returns (result: map<string, (int, int, int)>)\n  requires forall i :: 0 <= i < |entries| ==> (entries[i].1 == \"debit\" || entries[i].1 == \"credit\")\n  requires forall i :: 0 <= i < |entries| ==> entries[i].2 >= 0\n  ensures forall acct :: acct in result ==>\n    result[acct].2 == result[acct].1 - result[acct].0\n{\n  result := map[];\n  var i := 0;\n  while i < |entries|\n    invariant 0 <= i <= |entries|\n    invariant forall acct :: acct in result ==>\n      result[acct].2 == result[acct].1 - result[acct].0\n  {\n    var account := entries[i].0;\n    var direction := entries[i].1;\n    var amount := entries[i].2;\n\n    var debit := 0;\n    var credit := 0;\n    if account in result {\n      debit := result[account].0;\n      credit := result[account].1;\n    }\n\n    if direction == \"debit\" {\n      debit := debit + amount;\n    } else {\n      credit := credit + amount;\n    }\n\n    var balance := credit - debit;\n    result := result[account := (debit, credit, balance)];\n    i := i + 1;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": "Treasury Reconciliation Doctrine TR-4:\n- Every monetary delta must be tagged debit or credit before it affects totals.\n- Debit and credit balances must be computed in separate named accumulators.\n- Do not place inline arithmetic inside conditionals that decide monetary direction.\n",
+    "day2_prompt": "Extend reconcile_entries with include_zero_accounts: iterable[str] | None = None.\nAccounts listed there must appear with zero debit, credit, and balance even when\nno entries exist.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import reconcile_entries\n\n\ndef test_includes_zero_accounts():\n    assert reconcile_entries([], include_zero_accounts=['cash']) == {'cash': {'debit': 0, 'credit': 0, 'balance': 0}}\n",
+    "entry_point": "reconcile_entries",
+    "human_reference": "from __future__ import annotations\n\n\ndef reconcile_entries(entries: list[dict]) -> dict:\n    totals = {}\n    for entry in entries:\n        direction = entry.get('direction')\n        if direction not in {'debit', 'credit'}:\n            raise ValueError('unknown direction')\n        account = entry['account']\n        amount = entry.get('amount', 0)\n        bucket = totals.setdefault(account, {'debit': 0, 'credit': 0, 'balance': 0})\n        bucket[direction] += amount\n        bucket['balance'] = bucket['credit'] - bucket['debit']\n    return totals\n",
+    "id": "financial_reconciler",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef reconcile_entries(entries, include_zero_accounts=None):\n    totals = {account: {'debit': 0, 'credit': 0, 'balance': 0} for account in (include_zero_accounts or [])}\n    for entry in entries:\n        account = entry['account']\n        totals.setdefault(account, {'debit': 0, 'credit': 0, 'balance': 0})\n        direction = entry.get('direction')\n        if direction not in {'debit', 'credit'}:\n            raise ValueError('unknown direction')\n        totals[account][direction] += entry.get('amount', 0)\n        totals[account]['balance'] = totals[account]['credit'] - totals[account]['debit']\n    return totals\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef reconcile_entries(entries):\n    totals = {}\n    for entry in entries:\n        account = entry['account']\n        if account not in totals:\n            totals[account] = {'debit': 0, 'credit': 0, 'balance': 0}\n        direction = entry.get('direction')\n        if direction == 'debit':\n            totals[account]['debit'] += entry.get('amount', 0)\n        elif direction == 'credit':\n            totals[account]['credit'] += entry.get('amount', 0)\n        else:\n            raise ValueError('unknown direction')\n        totals[account]['balance'] = totals[account]['credit'] - totals[account]['debit']\n    return totals\n",
+    "prompt": "Implement reconcile_entries(entries: list[dict]) -> dict. Entries contain account,\ndirection ('debit' or 'credit'), and amount. Return per-account debit, credit,\nand balance = credit - debit. Reject unknown directions.\n",
+    "tags": [
+      "custom_spec",
+      "finance",
+      "day2-hard"
+    ],
+    "test_code": "import pytest\n\nfrom solution import reconcile_entries\n\n\ndef test_reconciles_by_account():\n    rows = [{'account': 'cash', 'direction': 'debit', 'amount': 5}, {'account': 'cash', 'direction': 'credit', 'amount': 8}]\n    assert reconcile_entries(rows) == {'cash': {'debit': 5, 'credit': 8, 'balance': 3}}\n    with pytest.raises(ValueError):\n        reconcile_entries([{'account': 'x', 'direction': 'other', 'amount': 1}])\n"
+  },
+  "task_id": "financial_reconciler",
+  "user_prompt": "Task id: financial_reconciler\nEntry point: reconcile_entries\n\nFunctional requirements:\nImplement reconcile_entries(entries: list[dict]) -> dict. Entries contain account,\ndirection ('debit' or 'credit'), and amount. Return per-account debit, credit,\nand balance = credit - debit. Reject unknown directions.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

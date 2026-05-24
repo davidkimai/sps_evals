@@ -1,0 +1,78 @@
+id: lazy_file_chunker
+entry_point: iter_file_chunks
+tags: [async, streaming, io, day2-hard]
+day2_stressors: [streaming_compatibility, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement iter_file_chunks(file_obj, chunk_size: int) -> iterator[bytes].
+  Read from a file-like object with read(size), yielding non-empty byte chunks.
+  Reject non-positive chunk sizes. Do not read the whole file at once.
+test_code: |
+  from io import BytesIO
+
+  import pytest
+
+  from solution import iter_file_chunks
+
+
+  def test_chunks_lazily():
+      assert list(iter_file_chunks(BytesIO(b'abcdef'), 2)) == [b'ab', b'cd', b'ef']
+
+
+  def test_rejects_bad_size():
+      with pytest.raises(ValueError):
+          list(iter_file_chunks(BytesIO(b'x'), 0))
+day2_prompt: |
+  Extend iter_file_chunks with include_index: bool = False. When true, yield
+  (index, chunk) tuples. Preserve byte-only output when false.
+day2_test_code: |
+  from io import BytesIO
+
+  from solution import iter_file_chunks
+
+
+  def test_optional_chunk_index_metadata():
+      assert list(iter_file_chunks(BytesIO(b'abcd'), 2)) == [b'ab', b'cd']
+      assert list(iter_file_chunks(BytesIO(b'abcd'), 2, include_index=True)) == [(0, b'ab'), (1, b'cd')]
+human_reference: |
+  from __future__ import annotations
+
+  from collections.abc import Iterator
+  from typing import BinaryIO
+
+
+  def iter_file_chunks(file_obj: BinaryIO, chunk_size: int) -> Iterator[bytes]:
+      if chunk_size <= 0:
+          raise ValueError('chunk_size must be positive')
+      while True:
+          chunk = file_obj.read(chunk_size)
+          if not chunk:
+              break
+          yield chunk
+mock_solution: |
+  from __future__ import annotations
+
+
+  def iter_file_chunks(file_obj, chunk_size: int):
+      if chunk_size < 1:
+          raise ValueError('chunk_size must be positive')
+      chunk = file_obj.read(chunk_size)
+      while chunk:
+          yield chunk
+          chunk = file_obj.read(chunk_size)
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def iter_file_chunks(file_obj, chunk_size: int, include_index: bool = False):
+      if chunk_size < 1:
+          raise ValueError('chunk_size must be positive')
+      index = 0
+      while True:
+          chunk = file_obj.read(chunk_size)
+          if not chunk:
+              return
+          if include_index:
+              yield (index, chunk)
+          else:
+              yield chunk
+          index += 1

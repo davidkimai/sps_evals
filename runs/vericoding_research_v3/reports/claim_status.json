@@ -1,0 +1,50 @@
+{
+  "claims": [
+    {
+      "claim": "Visible tests are insufficient proxies for trustworthy code acceptance.",
+      "claim_id": "Claim A",
+      "observed": {
+        "confirmatory_visible_pass_hidden_fail_tasks": 16,
+        "secure_visible_pass_hidden_secure_fail_tasks": 8
+      },
+      "status": "success"
+    },
+    {
+      "claim": "Selection and bounded repair help only when support exists.",
+      "claim_id": "Claim B",
+      "observed": {
+        "specoracle_or_llm_beats_tests_only_tasks": 2,
+        "support_absent_tasks_observed": 9,
+        "support_present_tasks_observed": 8
+      },
+      "status": "partial"
+    },
+    {
+      "claim": "Specs improve acceptance decisions as hidden rejection and ranking oracles.",
+      "claim_id": "Claim C",
+      "observed": {
+        "secure_false_accept_tasks_reduced": 6,
+        "specoracle_secure_false_accept_tasks": 1,
+        "tests_only_secure_false_accept_tasks": 7
+      },
+      "status": "success"
+    },
+    {
+      "claim": "Verified or passed is not enough; humans still need explicit review surfaces.",
+      "claim_id": "Claim D",
+      "observed": {
+        "escalate_to_review_decisions": 6
+      },
+      "status": "success"
+    },
+    {
+      "claim": "Bounded repair helps only near the support boundary and must beat equal-cost fresh generation.",
+      "claim_id": "Claim E",
+      "observed": {
+        "equal_cost_repair_wins": 0
+      },
+      "status": "null"
+    }
+  ],
+  "program_version": "vericoding_research_v3"
+}

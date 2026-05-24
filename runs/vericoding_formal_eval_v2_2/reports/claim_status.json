@@ -1,0 +1,22 @@
+{
+  "ClaimA_visible_tests_insufficient": {
+    "status": "success",
+    "visible_formal_fail_tasks": 1
+  },
+  "ClaimB_support_conditioned_ranking": {
+    "status": "partial",
+    "support_absent_tasks": 0,
+    "support_present_tasks": 2
+  },
+  "ClaimC_false_accept_reduction": {
+    "formal_false_accept_tasks": 0,
+    "formal_secure_false_accept_tasks": 0,
+    "status": "partial",
+    "tests_only_false_accept_tasks": 0,
+    "tests_only_secure_false_accept_tasks": 0
+  },
+  "ClaimD_review_boundary": {
+    "review_escalation_count": 1,
+    "status": "success"
+  }
+}

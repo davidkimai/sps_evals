@@ -1,0 +1,90 @@
+id: priority_queue_merger
+entry_point: merge_sorted_iterators
+tags: [data_pipeline_advanced, streaming, day2-hard]
+day2_stressors: [streaming_compatibility, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement merge_sorted_iterators(iterators: list[iterable[int]]) -> iterator[int].
+  Merge sorted input iterators lazily into sorted output.
+test_code: |
+  from solution import merge_sorted_iterators
+
+
+  def test_merges_sorted_iterators_lazily():
+      assert list(merge_sorted_iterators([[1, 4], [2, 3]])) == [1, 2, 3, 4]
+day2_prompt: |
+  Extend merge_sorted_iterators with source_weights: list[int] | None = None. When
+  values tie, lower weight wins; if weights are omitted, lower source index wins.
+day2_test_code: |
+  from solution import merge_sorted_iterators
+
+
+  def test_weighted_tie_breaking_keeps_values_sorted():
+      assert list(merge_sorted_iterators([[1, 2], [1, 3]], source_weights=[5, 1])) == [1, 1, 2, 3]
+human_reference: |
+  from __future__ import annotations
+
+  import heapq
+
+
+  def merge_sorted_iterators(iterators):
+      heap = []
+      sources = [iter(source) for source in iterators]
+      for index, iterator in enumerate(sources):
+          try:
+              value = next(iterator)
+          except StopIteration:
+              continue
+          heapq.heappush(heap, (value, index))
+      while heap:
+          value, index = heapq.heappop(heap)
+          yield value
+          try:
+              heapq.heappush(heap, (next(sources[index]), index))
+          except StopIteration:
+              pass
+mock_solution: |
+  from __future__ import annotations
+
+  import heapq
+
+
+  def merge_sorted_iterators(iterators):
+      active = []
+      iterators = [iter(item) for item in iterators]
+      for idx, iterator in enumerate(iterators):
+          try:
+              active.append((next(iterator), idx))
+          except StopIteration:
+              pass
+      heapq.heapify(active)
+      while active:
+          value, idx = heapq.heappop(active)
+          yield value
+          try:
+              heapq.heappush(active, (next(iterators[idx]), idx))
+          except StopIteration:
+              continue
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import heapq
+
+
+  def merge_sorted_iterators(iterators, source_weights=None):
+      iterators = [iter(item) for item in iterators]
+      weights = source_weights or list(range(len(iterators)))
+      heap = []
+      for idx, iterator in enumerate(iterators):
+          try:
+              value = next(iterator)
+              heapq.heappush(heap, (value, weights[idx], idx))
+          except StopIteration:
+              pass
+      while heap:
+          value, _weight, idx = heapq.heappop(heap)
+          yield value
+          try:
+              next_value = next(iterators[idx])
+              heapq.heappush(heap, (next_value, weights[idx], idx))
+          except StopIteration:
+              pass

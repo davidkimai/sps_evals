@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.049,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 2.525,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/medical_intake_form/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 3,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 0,
+      "if": 0,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 0
+    },
+    "lexical_proof_complexity": 5,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 16,
+    "source_token_estimate": 120,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 4.562,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is entirely non-functional for the stated task. It contains no `validate_intake` function whatsoever, and instead consists of Dafny-to-Python interop scaffolding that attempts to import from a `module_` that doesn't exist in this context. There is no field validation, no error raising, no output dict construction, and no adherence to any of the Clinical Data Standard CD-7 requirements. The code is pure architectural slop \u2014 a misapplied template that has nothing to do with the medical intake form validation task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This implementation is entirely non-functional for the stated task. It contains no `validate_intake` function whatsoever, and instead consists of Dafny-to-Python interop scaffolding that attempts to import from a `module_` that doesn't exist in this context. There is no field validation, no error raising, no output dict construction, and no adherence to any of the Clinical Data Standard CD-7 requirements. The code is pure architectural slop \u2014 a misapplied template that has nothing to do with the medical intake form validation task.\",\n  \"strengths\": [\n    \"None applicable \u2014 the code does not implement any part of the required functionality\"\n  ],\n  \"weaknesses\": [\n    \"No `validate_intake` function defined\",\n    \"Imports a non-existent `module_` which would cause an immediate ImportError\",\n    \"Zero validation logic for patient_id, age, or symptoms\",\n    \"No ValueError raised for any bad field\",\n    \"No output dict returned\",\n    \"Completely wrong abstraction \u2014 Dafny interop scaffolding is irrelevant to the task\",\n    \"Violates every point of CD-7: no field validation, no error naming, no clean return\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None applicable \u2014 the code does not implement any part of the required functionality"
+    ],
+    "weaknesses": [
+      "No `validate_intake` function defined",
+      "Imports a non-existent `module_` which would cause an immediate ImportError",
+      "Zero validation logic for patient_id, age, or symptoms",
+      "No ValueError raised for any bad field",
+      "No output dict returned",
+      "Completely wrong abstraction \u2014 Dafny interop scaffolding is irrelevant to the task",
+      "Violates every point of CD-7: no field validation, no error naming, no clean return"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 123,
+      "prompt": 287,
+      "total": 410,
+      "turns": [
+        {
+          "completion": 123,
+          "prompt": 287,
+          "total": 410
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Clinical Data Standard CD-7:\n- Validate every required field before accepting any field into the output.\n- Error messages must name the field that failed validation.\n- Partial validation is not permitted; return only after all required fields pass.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.952,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_validates_required_clinical_fields ____________________\n\n    def test_validates_required_clinical_fields():\n>       assert validate_intake({'patient_id': 'p1', 'age': 30, 'symptoms': ['cough']}) == {'patient_id': 'p1', 'age': 30, 'symptoms': ['cough']}\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       TypeError: default__.validate__intake() missing 2 required positional arguments: 'age' and 'symptoms'\n\ntest_solution.py:7: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_validates_required_clinical_fields - TypeError:...\n1 failed in 0.08s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "medical_intake_form",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-05-19T12:44:39Z",
+  "demotion_condition": "Any case type with no material rows is explicitly excluded from flagship use.",
+  "expected_outputs": [
+    "ledgers/manual_adjudication.jsonl",
+    "reports/adjudication_coverage_audit.md",
+    "reports/secure_flagship_casebook.md",
+    "reports/review_boundary_casebook.md"
+  ],
+  "objective": "Harden secure flagship, auto-accept, and review-boundary cases that were under-covered by the first adjudication wave.",
+  "program_version": "vericoding_research_v3",
+  "schema": "specoracle.vericoding.v3.current_wave.v1",
+  "success_condition": "Claim C, auto-accept, and escalation cases all have deep ledger-backed adjudication coverage.",
+  "surfaces": [
+    "secure_flagship",
+    "auto_accept",
+    "escalate_to_review"
+  ],
+  "wave_id": "claim_hardening_adjudication_wave_1"
+}

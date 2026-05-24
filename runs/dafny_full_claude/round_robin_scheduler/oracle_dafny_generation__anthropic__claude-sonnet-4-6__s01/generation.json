@@ -1,0 +1,54 @@
+{
+  "artifact_language": "dafny",
+  "code": "method assign_round_robin(workers: seq<(string, bool)>, jobs: seq<string>) returns (result: seq<(string, string)>)\n  requires exists i :: 0 <= i < |workers| && workers[i].1\n  ensures |result| == |jobs|\n  ensures forall k :: 0 <= k < |result| ==> result[k].0 == jobs[k]\n{\n  // Collect enabled workers\n  var enabled: seq<string> := [];\n  var i := 0;\n  while i < |workers|\n    invariant 0 <= i <= |workers|\n    invariant |enabled| <= i\n  {\n    if workers[i].1 {\n      enabled := enabled + [workers[i].0];\n    }\n    i := i + 1;\n  }\n  \n  // Build result\n  result := [];\n  var j := 0;\n  while j < |jobs|\n    invariant 0 <= j <= |jobs|\n    invariant |result| == j\n    invariant forall k :: 0 <= k < |result| ==> result[k].0 == jobs[k]\n  {\n    var workerIdx := j % |enabled|;\n    result := result + [(jobs[j], enabled[workerIdx])];\n    j := j + 1;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "assign_round_robin",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 215,
+      "prompt": 325,
+      "total": 540,
+      "turns": [
+        {
+          "completion": 215,
+          "prompt": 325,
+          "total": 540
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod assign_round_robin(workers: seq<(string, bool)>, jobs: seq<string>) returns (result: seq<(string, string)>)\n  requires exists i :: 0 <= i < |workers| && workers[i].1\n  ensures |result| == |jobs|\n  ensures forall k :: 0 <= k < |result| ==> result[k].0 == jobs[k]\n{\n  // Collect enabled workers\n  var enabled: seq<string> := [];\n  var i := 0;\n  while i < |workers|\n    invariant 0 <= i <= |workers|\n    invariant |enabled| <= i\n  {\n    if workers[i].1 {\n      enabled := enabled + [workers[i].0];\n    }\n    i := i + 1;\n  }\n  \n  // Build result\n  result := [];\n  var j := 0;\n  while j < |jobs|\n    invariant 0 <= j <= |jobs|\n    invariant |result| == j\n    invariant forall k :: 0 <= k < |result| ==> result[k].0 == jobs[k]\n  {\n    var workerIdx := j % |enabled|;\n    result := result + [(jobs[j], enabled[workerIdx])];\n    j := j + 1;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add optional capacities: dict[str, int] | None = None. When provided, a worker\nmay receive at most its capacity. Workers missing from capacities have no cap.\nUnassigned overflow jobs should be omitted.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import assign_round_robin\n\n\ndef test_capacities_omit_overflow_jobs():\n    workers = [{\"name\": \"a\"}, {\"name\": \"b\"}]\n    rows = assign_round_robin(workers, [\"j1\", \"j2\", \"j3\", \"j4\"], capacities={\"a\": 1, \"b\": 2})\n    assert rows == [\n        {\"job\": \"j1\", \"worker\": \"a\"},\n        {\"job\": \"j2\", \"worker\": \"b\"},\n        {\"job\": \"j3\", \"worker\": \"b\"},\n    ]\n",
+    "entry_point": "assign_round_robin",
+    "human_reference": "def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    assignments = []\n    for index, job in enumerate(jobs):\n        assignments.append({\"job\": job, \"worker\": enabled[index % len(enabled)]})\n    return assignments\n",
+    "id": "round_robin_scheduler",
+    "mock_day2_solution": "def assign_round_robin(\n    workers: list[dict],\n    jobs: list[str],\n    capacities: dict[str, int] | None = None,\n) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    capacities = capacities or {}\n    used = {name: 0 for name in enabled}\n    assignments = []\n    cursor = 0\n    for job in jobs:\n        chosen = _next_available(enabled, capacities, used, cursor)\n        if chosen is None:\n            break\n        worker, cursor = chosen\n        used[worker] += 1\n        assignments.append({\"job\": job, \"worker\": worker})\n    return assignments\n\n\ndef _next_available(enabled, capacities, used, cursor):\n    for offset in range(len(enabled)):\n        index = (cursor + offset) % len(enabled)\n        worker = enabled[index]\n        cap = capacities.get(worker)\n        if cap is None or used[worker] < cap:\n            return worker, (index + 1) % len(enabled)\n    return None\n",
+    "mock_solution": "def assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict]:\n    enabled = [worker[\"name\"] for worker in workers if worker.get(\"enabled\", True)]\n    if not enabled:\n        raise ValueError(\"at least one worker must be enabled\")\n    assignments = []\n    for index, job in enumerate(jobs):\n        assignments.append({\"job\": job, \"worker\": enabled[index % len(enabled)]})\n    return assignments\n",
+    "prompt": "Implement assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict].\n\nEach worker has \"name\" and optional \"enabled\" fields. Enabled defaults to\nTrue. Assign jobs in input order to enabled workers in round-robin order.\nReturn rows shaped as {\"job\": str, \"worker\": str}. Raise ValueError if there\nare no enabled workers. Do not mutate inputs.\n",
+    "tags": [
+      "state_machine",
+      "scheduling",
+      "cli_tool"
+    ],
+    "test_code": "import pytest\n\nfrom solution import assign_round_robin\n\n\ndef test_assign_round_robin_skips_disabled_workers():\n    workers = [\n        {\"name\": \"a\"},\n        {\"name\": \"b\", \"enabled\": False},\n        {\"name\": \"c\"},\n    ]\n    assert assign_round_robin(workers, [\"j1\", \"j2\", \"j3\", \"j4\"]) == [\n        {\"job\": \"j1\", \"worker\": \"a\"},\n        {\"job\": \"j2\", \"worker\": \"c\"},\n        {\"job\": \"j3\", \"worker\": \"a\"},\n        {\"job\": \"j4\", \"worker\": \"c\"},\n    ]\n\n\ndef test_assign_round_robin_requires_enabled_worker():\n    with pytest.raises(ValueError):\n        assign_round_robin([{\"name\": \"a\", \"enabled\": False}], [\"j\"])\n"
+  },
+  "task_id": "round_robin_scheduler",
+  "user_prompt": "Task id: round_robin_scheduler\nEntry point: assign_round_robin\n\nFunctional requirements:\nImplement assign_round_robin(workers: list[dict], jobs: list[str]) -> list[dict].\n\nEach worker has \"name\" and optional \"enabled\" fields. Enabled defaults to\nTrue. Assign jobs in input order to enabled workers in round-robin order.\nReturn rows shaped as {\"job\": str, \"worker\": str}. Raise ValueError if there\nare no enabled workers. Do not mutate inputs.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

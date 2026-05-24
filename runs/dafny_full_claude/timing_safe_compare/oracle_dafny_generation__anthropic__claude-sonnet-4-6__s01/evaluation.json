@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 2,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 8,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 21,
+    "source_token_estimate": 114,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.014,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, a formal verification language, rather than Python. The task explicitly requires a Python function `timing_safe_compare(left, right) -> bool` that wraps `hmac.compare_digest`, accepts `str` or `bytes`, raises `TypeError` on type mismatch, and returns a bool. None of these requirements are met: there is no Python code, no `hmac.compare_digest` usage, no type checking for `str`/`bytes`, no `TypeError` raising, and no Python type annotations. The Dafny code is entirely the wrong language and paradigm for the task, representing complete architectural mismatch regardless of its internal correctness as a Dafny method.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, a formal verification language, rather than Python. The task explicitly requires a Python function `timing_safe_compare(left, right) -> bool` that wraps `hmac.compare_digest`, accepts `str` or `bytes`, raises `TypeError` on type mismatch, and returns a bool. None of these requirements are met: there is no Python code, no `hmac.compare_digest` usage, no type checking for `str`/`bytes`, no `TypeError` raising, and no Python type annotations. The Dafny code is entirely the wrong language and paradigm for the task, representing complete architectural mismatch regardless of its internal correctness as a Dafny method.\",\n  \"strengths\": [\n    \"The Dafny method correctly implements a timing-safe comparison algorithm conceptually (accumulates diff without early exit)\",\n    \"Includes formal invariants and postconditions that are logically sound\"\n  ],\n  \"weaknesses\": [\n    \"Wrong programming language entirely \u2014 Dafny instead of Python\",\n    \"Does not use hmac.compare_digest as required\",\n    \"No type checking for str/bytes inputs\",\n    \"No TypeError raised for mismatched types\",\n    \"No Python type annotations or entry point\",\n    \"Cannot be executed as a Python module\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny method correctly implements a timing-safe comparison algorithm conceptually (accumulates diff without early exit)",
+      "Includes formal invariants and postconditions that are logically sound"
+    ],
+    "weaknesses": [
+      "Wrong programming language entirely \u2014 Dafny instead of Python",
+      "Does not use hmac.compare_digest as required",
+      "No type checking for str/bytes inputs",
+      "No TypeError raised for mismatched types",
+      "No Python type annotations or entry point",
+      "Cannot be executed as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 118,
+      "prompt": 292,
+      "total": 410,
+      "turns": [
+        {
+          "completion": 118,
+          "prompt": 292,
+          "total": 410
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "timing_safe_compare",
+  "variant": "oracle_dafny_generation"
+}

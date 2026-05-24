@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self) -> None:\n        self._resources: list[object] = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self._resources.append(resource)\n        return resource\n\n    def __exit__(self, exc_type, exc, tb) -> bool:\n        while self._resources:\n            resource = self._resources.pop()\n            close = getattr(resource, 'close', None)\n            if close is not None:\n                close()\n        return False\n",
+  "effective_temperature": null,
+  "entry_point": "ResourceScope",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self) -> None:\n        self._resources: list[object] = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self._resources.append(resource)\n        return resource\n\n    def __exit__(self, exc_type, exc, tb) -> bool:\n        while self._resources:\n            resource = self._resources.pop()\n            close = getattr(resource, 'close', None)\n            if close is not None:\n                close()\n        return False\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add release(resource) that closes and removes a specific tracked resource before\nscope exit. Releasing an untracked resource should raise ValueError.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import ResourceScope\n\n\nclass Resource:\n    def __init__(self, name, log):\n        self.name = name\n        self.log = log\n    def close(self):\n        self.log.append(self.name)\n\n\ndef test_partial_release_prevents_double_close():\n    log = []\n    with ResourceScope() as scope:\n        one = scope.acquire(Resource('one', log))\n        two = scope.acquire(Resource('two', log))\n        scope.release(one)\n    assert log == ['one', 'two']\n\n    with pytest.raises(ValueError):\n        ResourceScope().release(Resource('x', []))\n",
+    "entry_point": "ResourceScope",
+    "human_reference": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self) -> None:\n        self._resources: list[object] = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self._resources.append(resource)\n        return resource\n\n    def __exit__(self, exc_type, exc, tb) -> bool:\n        while self._resources:\n            resource = self._resources.pop()\n            close = getattr(resource, 'close', None)\n            if close is not None:\n                close()\n        return False\n",
+    "id": "resource_scope",
+    "mock_day2_solution": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self):\n        self.resources = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self.resources.append(resource)\n        return resource\n\n    def release(self, resource):\n        if resource not in self.resources:\n            raise ValueError('resource is not tracked')\n        self.resources.remove(resource)\n        if hasattr(resource, 'close'):\n            resource.close()\n\n    def __exit__(self, exc_type, exc, tb):\n        for resource in reversed(self.resources):\n            if hasattr(resource, 'close'):\n                resource.close()\n        self.resources.clear()\n        return False\n",
+    "mock_solution": "from __future__ import annotations\n\n\nclass ResourceScope:\n    def __init__(self):\n        self.resources = []\n\n    def __enter__(self):\n        return self\n\n    def acquire(self, resource):\n        self.resources.append(resource)\n        return resource\n\n    def __exit__(self, exc_type, exc, tb):\n        for resource in reversed(self.resources):\n            if hasattr(resource, 'close'):\n                resource.close()\n        self.resources.clear()\n        return False\n",
+    "prompt": "Implement ResourceScope as a context manager. acquire(resource) records a resource\nand returns it. On context exit, close tracked resources in reverse acquisition\norder, including when an exception occurs.\n",
+    "tags": [
+      "object_lifecycle",
+      "context_manager",
+      "day2-hard"
+    ],
+    "test_code": "from solution import ResourceScope\n\n\nclass Resource:\n    def __init__(self, name, log):\n        self.name = name\n        self.log = log\n    def close(self):\n        self.log.append(self.name)\n\n\ndef test_closes_reverse_order_on_exception():\n    log = []\n    try:\n        with ResourceScope() as scope:\n            scope.acquire(Resource('first', log))\n            scope.acquire(Resource('second', log))\n            raise RuntimeError('boom')\n    except RuntimeError:\n        pass\n    assert log == ['second', 'first']\n"
+  },
+  "task_id": "resource_scope",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

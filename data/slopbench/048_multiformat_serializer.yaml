@@ -1,0 +1,78 @@
+id: multiformat_serializer
+entry_point: serialize_record
+tags: [data_pipeline_advanced, serialization, day2-hard]
+day2_stressors: [interface_generalization, parameter_threading, backwards_compatibility]
+prompt: |
+  Implement serialize_record(record: dict, format: str) -> str. Support 'json',
+  'csv', and 'toml'. JSON should sort keys. CSV should emit header and one row.
+  TOML should emit key = value lines for primitive values.
+test_code: |
+  from solution import serialize_record
+
+
+  def test_serializes_supported_formats():
+      assert serialize_record({'b': 2, 'a': 1}, 'json') == '{"a": 1, "b": 2}'
+      assert serialize_record({'a': 1, 'b': 2}, 'csv') == 'a,b\n1,2'
+      assert serialize_record({'a': 'x'}, 'toml') == 'a = "x"'
+day2_prompt: |
+  Extend serialize_record with schema_version: str | None = None. When provided,
+  include the version as a header field before other fields in all formats.
+day2_test_code: |
+  from solution import serialize_record
+
+
+  def test_schema_version_header():
+      assert serialize_record({'a': 1}, 'csv', schema_version='v1') == 'schema_version,a\nv1,1'
+      assert '"schema_version": "v1"' in serialize_record({'a': 1}, 'json', schema_version='v1')
+human_reference: |
+  from __future__ import annotations
+
+  import json
+
+
+  def serialize_record(record: dict, format: str) -> str:
+      if format == 'json':
+          return json.dumps(record, sort_keys=True)
+      if format == 'csv':
+          keys = list(record)
+          return ','.join(keys) + '\n' + ','.join(str(record[key]) for key in keys)
+      if format == 'toml':
+          lines = []
+          for key, value in record.items():
+              rendered = json.dumps(value) if isinstance(value, str) else str(value)
+              lines.append(f'{key} = {rendered}')
+          return '\n'.join(lines)
+      raise ValueError('unsupported format')
+mock_solution: |
+  from __future__ import annotations
+
+  import json
+
+
+  def serialize_record(record, format: str):
+      if format == 'json':
+          return json.dumps(record, sort_keys=True)
+      elif format == 'csv':
+          fields = list(record.keys())
+          return ','.join(fields) + '\n' + ','.join(str(record[field]) for field in fields)
+      elif format == 'toml':
+          return '\n'.join(f'{key} = {json.dumps(value) if isinstance(value, str) else value}' for key, value in record.items())
+      raise ValueError('unsupported format')
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import json
+
+
+  def serialize_record(record, format: str, schema_version=None):
+      data = dict(record)
+      if schema_version is not None:
+          data = {'schema_version': schema_version, **data}
+      if format == 'json':
+          return json.dumps(data, sort_keys=True)
+      if format == 'csv':
+          fields = list(data.keys())
+          return ','.join(fields) + '\n' + ','.join(str(data[field]) for field in fields)
+      if format == 'toml':
+          return '\n'.join(f'{key} = {json.dumps(value) if isinstance(value, str) else value}' for key, value in data.items())
+      raise ValueError('unsupported format')

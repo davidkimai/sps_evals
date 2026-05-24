@@ -1,0 +1,16 @@
+{
+  "minimally_adapted": [
+    "primary denominator changed from broad v2 core to 24 narrow-waist trust-boundary tasks",
+    "completion booleans add worldview, trust-boundary, and review-boundary gates",
+    "Inspect task matrix adds trust-boundary review phase"
+  ],
+  "no_greenfield_rewrite": true,
+  "program_version": "vericoding_research_v3",
+  "reused_unchanged": [
+    "slopbench_inspect dataset loading structure",
+    "v2 Inspect log archiving pattern",
+    "v2 completion-contract split into artifact/backbone/conference",
+    "existing secure task templates",
+    "existing SlopBench YAML task source format"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nimport time\nfrom collections.abc import Callable\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, now: Callable[[], float] | None = None) -> None:\n        if capacity <= 0 or refill_rate <= 0:\n            raise ValueError('capacity and refill_rate must be positive')\n        self._capacity = capacity\n        self._refill_rate = refill_rate\n        self._now = now or time.monotonic\n        self._tokens = float(capacity)\n        self._last = self._now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self._now()\n        elapsed = max(0.0, current - self._last)\n        self._tokens = min(float(self._capacity), self._tokens + elapsed * self._refill_rate)\n        self._last = current\n        if self._tokens < cost:\n            return False\n        self._tokens -= cost\n        return True\n",
+  "effective_temperature": null,
+  "entry_point": "TokenBucketEnforcer",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nimport time\nfrom collections.abc import Callable\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, now: Callable[[], float] | None = None) -> None:\n        if capacity <= 0 or refill_rate <= 0:\n            raise ValueError('capacity and refill_rate must be positive')\n        self._capacity = capacity\n        self._refill_rate = refill_rate\n        self._now = now or time.monotonic\n        self._tokens = float(capacity)\n        self._last = self._now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self._now()\n        elapsed = max(0.0, current - self._last)\n        self._tokens = min(float(self._capacity), self._tokens + elapsed * self._refill_rate)\n        self._last = current\n        if self._tokens < cost:\n            return False\n        self._tokens -= cost\n        return True\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend TokenBucketEnforcer with burst: int = 0. Burst increases maximum capacity\nby burst tokens while preserving the base refill rate and old behavior when burst\nis omitted.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import TokenBucketEnforcer\n\n\ndef test_burst_extends_capacity_only():\n    clock = {'t': 0.0}\n    bucket = TokenBucketEnforcer(2, 1.0, burst=2, now=lambda: clock['t'])\n    assert bucket.allow(4) is True\n    assert bucket.allow(1) is False\n    clock['t'] = 1.0\n    assert bucket.allow(1) is True\n",
+    "entry_point": "TokenBucketEnforcer",
+    "human_reference": "from __future__ import annotations\n\nimport time\nfrom collections.abc import Callable\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, now: Callable[[], float] | None = None) -> None:\n        if capacity <= 0 or refill_rate <= 0:\n            raise ValueError('capacity and refill_rate must be positive')\n        self._capacity = capacity\n        self._refill_rate = refill_rate\n        self._now = now or time.monotonic\n        self._tokens = float(capacity)\n        self._last = self._now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self._now()\n        elapsed = max(0.0, current - self._last)\n        self._tokens = min(float(self._capacity), self._tokens + elapsed * self._refill_rate)\n        self._last = current\n        if self._tokens < cost:\n            return False\n        self._tokens -= cost\n        return True\n",
+    "id": "token_bucket_enforcer",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport time\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, burst: int = 0, now=None) -> None:\n        if capacity <= 0 or refill_rate <= 0 or burst < 0:\n            raise ValueError('invalid bucket parameters')\n        self.capacity = capacity + burst\n        self.refill_rate = refill_rate\n        self.now = now or time.monotonic\n        self.tokens = float(self.capacity)\n        self.last = self.now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self.now()\n        self.tokens = min(self.capacity, self.tokens + max(0, current - self.last) * self.refill_rate)\n        self.last = current\n        if self.tokens < cost:\n            return False\n        self.tokens -= cost\n        return True\n",
+    "mock_solution": "from __future__ import annotations\n\nimport time\n\n\nclass TokenBucketEnforcer:\n    def __init__(self, capacity: int, refill_rate: float, *, now=None) -> None:\n        if capacity <= 0 or refill_rate <= 0:\n            raise ValueError('capacity and refill_rate must be positive')\n        self.capacity = capacity\n        self.refill_rate = refill_rate\n        self.now = now or time.monotonic\n        self.tokens = float(capacity)\n        self.last = self.now()\n\n    def allow(self, cost: int = 1) -> bool:\n        if cost <= 0:\n            raise ValueError('cost must be positive')\n        current = self.now()\n        self.tokens = min(self.capacity, self.tokens + max(0, current - self.last) * self.refill_rate)\n        self.last = current\n        if self.tokens >= cost:\n            self.tokens -= cost\n            return True\n        return False\n",
+    "prompt": "Implement TokenBucketEnforcer(capacity: int, refill_rate: float, *, now=None).\nMethod allow(cost: int = 1) -> bool refills tokens according to elapsed time,\ndenies when cost exceeds available tokens, and never exceeds capacity.\n",
+    "tags": [
+      "reliability_critical",
+      "rate_limit",
+      "day2-hard"
+    ],
+    "test_code": "from solution import TokenBucketEnforcer\n\n\ndef test_token_bucket_enforces_costs():\n    clock = {'t': 0.0}\n    bucket = TokenBucketEnforcer(3, 1.0, now=lambda: clock['t'])\n    assert bucket.allow(2) is True\n    assert bucket.allow(2) is False\n    clock['t'] = 2.0\n    assert bucket.allow(2) is True\n"
+  },
+  "task_id": "token_bucket_enforcer",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

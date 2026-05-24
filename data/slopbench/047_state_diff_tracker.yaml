@@ -1,0 +1,71 @@
+id: state_diff_tracker
+entry_point: diff_versions
+tags: [custom_spec, state_machine, day2-hard]
+day2_stressors: [audit_provenance, interface_generalization, backwards_compatibility]
+custom_spec_override: |
+  State Review Ledger SRL-3:
+  - Every field-level change must be represented as an explicit record with field, before, and after.
+  - Do not collapse multiple changed fields into a summary string.
+  - Exported graph edges must preserve the same field labels as the diff records.
+prompt: |
+  Implement diff_versions(previous: dict, current: dict) -> list[dict]. Return one
+  record per field whose value changed, including fields added or removed. Each
+  record has field, before, and after. Sort records by field.
+test_code: |
+  from solution import diff_versions
+
+
+  def test_field_level_diffs_sorted():
+      assert diff_versions({'a': 1, 'b': 2}, {'a': 1, 'b': 3, 'c': 4}) == [
+          {'field': 'b', 'before': 2, 'after': 3},
+          {'field': 'c', 'before': None, 'after': 4},
+      ]
+day2_prompt: |
+  Extend diff_versions with as_graph: bool = False. When true, return {'nodes', 'edges'}
+  where each edge is labeled with the changed field.
+day2_test_code: |
+  from solution import diff_versions
+
+
+  def test_diffgraph_export():
+      graph = diff_versions({'a': 1}, {'a': 2}, as_graph=True)
+      assert graph == {'nodes': ['previous', 'current'], 'edges': [{'from': 'previous', 'to': 'current', 'field': 'a', 'before': 1, 'after': 2}]}
+human_reference: |
+  from __future__ import annotations
+
+
+  def diff_versions(previous: dict, current: dict) -> list[dict]:
+      changes = []
+      for field in sorted(set(previous) | set(current)):
+          before = previous.get(field)
+          after = current.get(field)
+          if before != after:
+              changes.append({'field': field, 'before': before, 'after': after})
+      return changes
+mock_solution: |
+  from __future__ import annotations
+
+
+  def diff_versions(previous, current):
+      output = []
+      fields = sorted(set(list(previous.keys()) + list(current.keys())))
+      for field in fields:
+          old = previous.get(field)
+          new = current.get(field)
+          if old != new:
+              output.append({'field': field, 'before': old, 'after': new})
+      return output
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def diff_versions(previous, current, as_graph=False):
+      changes = []
+      for field in sorted(set(previous) | set(current)):
+          before = previous.get(field)
+          after = current.get(field)
+          if before != after:
+              changes.append({'field': field, 'before': before, 'after': after})
+      if not as_graph:
+          return changes
+      return {'nodes': ['previous', 'current'], 'edges': [{'from': 'previous', 'to': 'current', **change} for change in changes]}

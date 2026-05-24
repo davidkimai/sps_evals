@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and explicit. It uses a simple loop with guard clauses rather than deep nesting, makes data movement visible through explicit `seen` and `clean` collections, and avoids any speculative abstraction. The logic is locally auditable in a single pass. One minor concern is that `field.replace('_', '').isalnum()` is a slightly indirect way to check alphanumeric-plus-underscore; `re.match(r'^\\w+$', field)` or `all(c.isalnum() or c == '_' for c in field)` would be more explicit about intent, though the current approach is still readable. There's no input validation (e.g., raising on non-list/non-set inputs), but the spec doesn't strongly demand it. The absence of a small named helper for the character-validity check is a minor missed opportunity for explicitness, but the overall structure is appropriately sparse and maintainable.",
+    "raw_response": "{\n  \"score\": 8,\n  \"rationale\": \"The implementation is clean, flat, and explicit. It uses a simple loop with guard clauses rather than deep nesting, makes data movement visible through explicit `seen` and `clean` collections, and avoids any speculative abstraction. The logic is locally auditable in a single pass. One minor concern is that `field.replace('_', '').isalnum()` is a slightly indirect way to check alphanumeric-plus-underscore; `re.match(r'^\\\\w+$', field)` or `all(c.isalnum() or c == '_' for c in field)` would be more explicit about intent, though the current approach is still readable. There's no input validation (e.g., raising on non-list/non-set inputs), but the spec doesn't strongly demand it. The absence of a small named helper for the character-validity check is a minor missed opportunity for explicitness, but the overall structure is appropriately sparse and maintainable.\",\n  \"strengths\": [\n    \"Flat control flow with guard clauses avoids nesting\",\n    \"Explicit deduplication via `seen` set with visible state\",\n    \"No hidden mutation or global state\",\n    \"Minimal and auditable \u2014 easy to trace behavior locally\",\n    \"Preserves input order correctly\"\n  ],\n  \"weaknesses\": [\n    \"`field.replace('_', '').isalnum()` is slightly indirect for expressing 'only letters, digits, underscores'\",\n    \"No input type validation or clear error for invalid inputs\",\n    \"Character-validity check could be a small named helper for better readability\"\n  ]\n}",
+    "score": 8,
+    "skipped": false,
+    "strengths": [
+      "Flat control flow with guard clauses avoids nesting",
+      "Explicit deduplication via `seen` set with visible state",
+      "No hidden mutation or global state",
+      "Minimal and auditable \u2014 easy to trace behavior locally",
+      "Preserves input order correctly"
+    ],
+    "weaknesses": [
+      "`field.replace('_', '').isalnum()` is slightly indirect for expressing 'only letters, digits, underscores'",
+      "No input type validation or clear error for invalid inputs",
+      "Character-validity check could be a small named helper for better readability"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 5.802,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.03s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 5.0,
+    "cyclomatic_complexity_max": 5,
+    "cyclomatic_complexity_total": 5,
+    "function_count": 1,
+    "loc": 14,
+    "maintainability_index": 63.598,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "input_sanitizer",
+  "variant": "human_reference"
+}

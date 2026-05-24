@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.825,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.602,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/nested_json_index/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s02/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 2,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 2,
+      "if": 12,
+      "invariant": 2,
+      "logical_and": 5,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 1
+    },
+    "lexical_proof_complexity": 25,
+    "logical_and_count": 5,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 66,
+    "source_token_estimate": 503,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.275,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 5
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop. It does not implement the required `build_user_purchase_index` function at all \u2014 the entry point is completely absent. Instead, it imports a non-existent `module_` (which will raise an ImportError at runtime), performs bizarre symbol aliasing with Dafny-compiled artifacts, and wraps everything in a fabricated 'formal verification' narrative that has no bearing on the actual task. The code is maximally indirect, opaque, and non-functional, violating every Zen of Python principle: it is implicit rather than explicit, deeply complex rather than simple, and provides zero readability or auditability for the actual business logic required.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop. It does not implement the required `build_user_purchase_index` function at all \u2014 the entry point is completely absent. Instead, it imports a non-existent `module_` (which will raise an ImportError at runtime), performs bizarre symbol aliasing with Dafny-compiled artifacts, and wraps everything in a fabricated 'formal verification' narrative that has no bearing on the actual task. The code is maximally indirect, opaque, and non-functional, violating every Zen of Python principle: it is implicit rather than explicit, deeply complex rather than simple, and provides zero readability or auditability for the actual business logic required.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement the required function and will fail at import time\"\n  ],\n  \"weaknesses\": [\n    \"Entry point `build_user_purchase_index` is entirely missing\",\n    \"Imports a non-existent `module_` causing immediate ImportError\",\n    \"Fabricated Dafny/formal-verification framing is pure architectural theater with no functional value\",\n    \"Wildcard imports and dynamic symbol aliasing are maximally unreadable and violate explicitness\",\n    \"No filtering logic, no aggregation logic, no dict construction \u2014 zero task semantics implemented\",\n    \"Mutates globals() dynamically, which is dangerous and opaque\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement the required function and will fail at import time"
+    ],
+    "weaknesses": [
+      "Entry point `build_user_purchase_index` is entirely missing",
+      "Imports a non-existent `module_` causing immediate ImportError",
+      "Fabricated Dafny/formal-verification framing is pure architectural theater with no functional value",
+      "Wildcard imports and dynamic symbol aliasing are maximally unreadable and violate explicitness",
+      "No filtering logic, no aggregation logic, no dict construction \u2014 zero task semantics implemented",
+      "Mutates globals() dynamically, which is dangerous and opaque"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 506,
+      "prompt": 347,
+      "total": 853,
+      "turns": [
+        {
+          "completion": 506,
+          "prompt": 347,
+          "total": 853
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.628,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_builds_index_without_mutating_input ___________________\n\n    def test_builds_index_without_mutating_input():\n        events = [\n            {\"user_id\": \"alice\", \"kind\": \"purchase\", \"amount\": 4},\n            {\"user_id\": \"alice\", \"kind\": \"refund\", \"amount\": 1},\n            {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": 7},\n            {\"user_id\": \"\", \"kind\": \"purchase\", \"amount\": 10},\n            {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": \"9\"},\n        ]\n        snapshot = [dict(event) for event in events]\n    \n>       assert build_user_purchase_index(events) == {\n            \"alice\": {\"count\": 1, \"total\": 4},\n            \"bob\": {\"count\": 1, \"total\": 7},\n        }\nE       AssertionError: assert {} == {'alice': {'c..., 'total': 7}}\nE         \nE         Right contains 2 more items:\nE         {'alice': {'count': 1, 'total': 4}, 'bob': {'count': 1, 'total': 7}}\nE         Use -v to get more diff\n\ntest_solution.py:14: AssertionError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_builds_index_without_mutating_input - Assertion...\n1 failed in 0.16s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "nested_json_index",
+  "variant": "oracle_dafny_generation"
+}

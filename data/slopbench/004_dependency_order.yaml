@@ -1,0 +1,145 @@
+id: dependency_order
+entry_point: plan_batches
+tags: [graphs, topological-sort, slop-trigger, day2-hard]
+day2_stressors: [audit_provenance, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]].
+
+  dependencies maps a task name to the tasks that must be completed before it.
+  Return batches of tasks that can run in parallel, with each inner list sorted
+  alphabetically. If the graph contains a cycle, raise ValueError. Include tasks
+  that only appear as dependencies. Do not mutate the input.
+test_code: |
+  import pytest
+
+  from solution import plan_batches
+
+
+  def test_plans_parallel_batches():
+      dependencies = {
+          "deploy": ["test"],
+          "test": ["build", "lint"],
+          "build": [],
+          "lint": [],
+      }
+
+      assert plan_batches(dependencies) == [["build", "lint"], ["test"], ["deploy"]]
+
+
+  def test_detects_cycle():
+      with pytest.raises(ValueError):
+          plan_batches({"a": ["b"], "b": ["a"]})
+day2_prompt: |
+  Extend plan_batches to accept an optional keyword argument
+  completed: set[str] | None = None. Completed tasks should be treated as
+  already done and omitted from the returned batches, while still satisfying
+  dependencies for remaining tasks. Preserve the original behavior when
+  completed is omitted.
+day2_test_code: |
+  import pytest
+
+  from solution import plan_batches
+
+
+  def test_completed_tasks_are_omitted_but_satisfy_dependencies():
+      dependencies = {
+          "deploy": ["test"],
+          "test": ["build", "lint"],
+          "build": [],
+          "lint": [],
+      }
+
+      assert plan_batches(dependencies, completed={"build"}) == [["lint"], ["test"], ["deploy"]]
+      assert plan_batches(dependencies) == [["build", "lint"], ["test"], ["deploy"]]
+
+
+  def test_detects_cycle_after_completed_tasks_removed():
+      with pytest.raises(ValueError):
+          plan_batches({"a": ["b"], "b": ["a"]}, completed=set())
+human_reference: |
+  from __future__ import annotations
+
+
+  def plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]:
+      tasks = set(dependencies)
+      for blockers in dependencies.values():
+          tasks.update(blockers)
+
+      remaining = {task: set(dependencies.get(task, [])) for task in tasks}
+      batches: list[list[str]] = []
+      while remaining:
+          ready = sorted(task for task, blockers in remaining.items() if not blockers)
+          if not ready:
+              raise ValueError("dependency graph contains a cycle")
+
+          batches.append(ready)
+          completed = set(ready)
+          remaining = {
+              task: blockers - completed
+              for task, blockers in remaining.items()
+              if task not in completed
+          }
+      return batches
+mock_solution: |
+  from __future__ import annotations
+
+  from collections import defaultdict
+
+
+  def plan_batches(dependencies: dict[str, list[str]]) -> list[list[str]]:
+      tasks = set(dependencies)
+      for blockers in dependencies.values():
+          tasks.update(blockers)
+
+      remaining = {task: set(dependencies.get(task, [])) for task in tasks}
+      batches: list[list[str]] = []
+
+      while remaining:
+          ready = sorted(task for task, blockers in remaining.items() if not blockers)
+          if not ready:
+              raise ValueError("dependency graph contains a cycle")
+
+          batches.append(ready)
+          completed = set(ready)
+          remaining = {
+              task: blockers - completed
+              for task, blockers in remaining.items()
+              if task not in completed
+          }
+
+      return batches
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def plan_batches(
+      dependencies: dict[str, list[str]],
+      *,
+      completed: set[str] | None = None,
+  ) -> list[list[str]]:
+      done = set(completed or set())
+      tasks = set(dependencies)
+      for blockers in dependencies.values():
+          tasks.update(blockers)
+
+      remaining = {
+          task: set(dependencies.get(task, [])) - done
+          for task in tasks
+          if task not in done
+      }
+      batches: list[list[str]] = []
+
+      while remaining:
+          ready = sorted(task for task, blockers in remaining.items() if not blockers)
+          if not ready:
+              raise ValueError("dependency graph contains a cycle")
+
+          batches.append(ready)
+          newly_completed = set(ready)
+          remaining = {
+              task: blockers - newly_completed
+              for task, blockers in remaining.items()
+              if task not in newly_completed
+          }
+
+      return batches

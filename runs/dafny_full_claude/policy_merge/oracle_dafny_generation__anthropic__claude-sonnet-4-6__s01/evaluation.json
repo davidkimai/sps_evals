@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 3,
+    "error_count": 4,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 5,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 4,
+      "if": 2,
+      "invariant": 2,
+      "logical_and": 5,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 0,
+      "while": 2
+    },
+    "lexical_proof_complexity": 25,
+    "logical_and_count": 5,
+    "logical_or_count": 1,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 51,
+    "source_token_estimate": 420,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.892,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `merge_policy(defaults: dict, override: dict) -> dict`, but the code is a Dafny method with Dafny syntax, types, and verification annotations. It cannot be executed as Python, fails to handle actual Python dicts, does not support recursive merging of nested dicts (a core requirement), and uses a sentinel value (-999999) instead of Python's None for deletion. This is a complete language mismatch and does not satisfy any of the functional or structural requirements of the task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `merge_policy(defaults: dict, override: dict) -> dict`, but the code is a Dafny method with Dafny syntax, types, and verification annotations. It cannot be executed as Python, fails to handle actual Python dicts, does not support recursive merging of nested dicts (a core requirement), and uses a sentinel value (-999999) instead of Python's None for deletion. This is a complete language mismatch and does not satisfy any of the functional or structural requirements of the task.\",\n  \"strengths\": [\n    \"Shows awareness of formal verification concepts (postconditions, loop invariants)\",\n    \"Attempts to model the removal and override semantics\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Cannot be imported or called as a Python function\",\n    \"Does not implement recursive dict merging as required\",\n    \"Uses a magic sentinel (-999999) instead of Python None for key removal\",\n    \"No handling of nested dictionary values\",\n    \"Violates every Zen of Python principle: wrong language, wrong idioms, not readable or auditable as Python\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows awareness of formal verification concepts (postconditions, loop invariants)",
+      "Attempts to model the removal and override semantics"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Cannot be imported or called as a Python function",
+      "Does not implement recursive dict merging as required",
+      "Uses a magic sentinel (-999999) instead of Python None for key removal",
+      "No handling of nested dictionary values",
+      "Violates every Zen of Python principle: wrong language, wrong idioms, not readable or auditable as Python"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 423,
+      "prompt": 307,
+      "total": 730,
+      "turns": [
+        {
+          "completion": 423,
+          "prompt": 307,
+          "total": 730
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(5,0): Error: a postcondition could not be proved on this return path\n  |\n5 | {\n  | ^\n\nsolution.dfy(2,10): Related location: this is the postcondition that could not be proved\n  |\n2 |   ensures forall k :: k in override && override[k] != -999999 ==> k in result && result[k] == override[k]\n  |           ^^^^^^\n\nsolution.dfy(5,0): Error: a postcondition could not be proved on this return path\n  |\n5 | {\n  | ^\n\nsolution.dfy(3,10): Related location: this is the postcondition that could not be proved\n  |\n3 |   ensures forall k :: k in defaults && k !in override ==> k in result && result[k] == defaults[k]\n  |           ^^^^^^\n\nsolution.dfy(5,0): Error: a postcondition could not be proved on this return path\n  |\n5 | {\n  | ^\n\nsolution.dfy(4,10): Related location: this is the postcondition that could not be proved\n  |\n4 |   ensures forall k :: k in override && override[k] == -999999 ==> k !in result\n  |           ^^^^^^\n\nsolution.dfy(26,15): Error: element might not be in domain\n   |\n26 |     if override[k] == -999999 {\n   |                ^\n\n\nDafny program verifier finished with 2 verified, 4 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "policy_merge",
+  "variant": "oracle_dafny_generation"
+}

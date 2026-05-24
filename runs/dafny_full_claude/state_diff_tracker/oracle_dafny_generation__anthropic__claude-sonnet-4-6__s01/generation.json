@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method diff_versions(previous: map<string, string>, current: map<string, string>) returns (result: seq<map<string, string>>)\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i][\"field\"] <= result[j][\"field\"]\n{\n  // Collect all keys from both maps\n  var allKeys: set<string> := previous.Keys + current.Keys;\n  \n  // Find changed/added/removed fields\n  var changes: seq<map<string, string>> := [];\n  \n  // Convert set to sequence for iteration\n  var keySeq: seq<string> := [];\n  var remaining := allKeys;\n  while remaining != {}\n    decreases |remaining|\n  {\n    var k :| k in remaining;\n    remaining := remaining - {k};\n    keySeq := keySeq + [k];\n  }\n  \n  // For each key, check if value changed\n  var i := 0;\n  while i < |keySeq|\n    invariant 0 <= i <= |keySeq|\n  {\n    var key := keySeq[i];\n    var inPrev := key in previous;\n    var inCurr := key in current;\n    \n    if inPrev && inCurr {\n      if previous[key] != current[key] {\n        var record := map[\"field\" := key, \"before\" := previous[key], \"after\" := current[key]];\n        changes := changes + [record];\n      }\n    } else if inPrev && !inCurr {\n      var record := map[\"field\" := key, \"before\" := previous[key], \"after\" := \"\"];\n      changes := changes + [record];\n    } else if !inPrev && inCurr {\n      var record := map[\"field\" := key, \"before\" := \"\", \"after\" := current[key]];\n      changes := changes + [record];\n    }\n    \n    i := i + 1;\n  }\n  \n  // Sort changes by field name using insertion sort\n  result := SortByField(changes);\n}\n\nmethod SortByField(s: seq<map<string, string>>) returns (sorted: seq<map<string, string>>)\n  ensures |sorted| == |s|\n  ensures forall i, j :: 0 <= i < j < |sorted| ==> sorted[i][\"field\"] <= sorted[j][\"field\"]\n{\n  sorted := s;\n  var n := |sorted|;\n  var i := 1;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |sorted| == n\n    invariant forall a, b :: 0 <= a < b < i ==> sorted[a][\"field\"] <= sorted[b][\"field\"]\n  {\n    var key := sorted[i];\n    var j := i - 1;\n    while j >= 0 && sorted[j][\"field\"] > key[\"field\"]\n      invariant -1 <= j < i\n      invariant |sorted| == n\n      invariant forall a, b :: 0 <= a < b <= i && b != j + 1 ==> sorted[a][\"field\"] <= sorted[b][\"field\"]\n    {\n      sorted := sorted[j + 1 := sorted[j]];\n      j := j - 1;\n    }\n    sorted := sorted[j + 1 := key];\n    i := i + 1;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "diff_versions",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 587,
+      "prompt": 289,
+      "total": 876,
+      "turns": [
+        {
+          "completion": 587,
+          "prompt": 289,
+          "total": 876
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod diff_versions(previous: map<string, string>, current: map<string, string>) returns (result: seq<map<string, string>>)\n  ensures forall i, j :: 0 <= i < j < |result| ==> result[i][\"field\"] <= result[j][\"field\"]\n{\n  // Collect all keys from both maps\n  var allKeys: set<string> := previous.Keys + current.Keys;\n  \n  // Find changed/added/removed fields\n  var changes: seq<map<string, string>> := [];\n  \n  // Convert set to sequence for iteration\n  var keySeq: seq<string> := [];\n  var remaining := allKeys;\n  while remaining != {}\n    decreases |remaining|\n  {\n    var k :| k in remaining;\n    remaining := remaining - {k};\n    keySeq := keySeq + [k];\n  }\n  \n  // For each key, check if value changed\n  var i := 0;\n  while i < |keySeq|\n    invariant 0 <= i <= |keySeq|\n  {\n    var key := keySeq[i];\n    var inPrev := key in previous;\n    var inCurr := key in current;\n    \n    if inPrev && inCurr {\n      if previous[key] != current[key] {\n        var record := map[\"field\" := key, \"before\" := previous[key], \"after\" := current[key]];\n        changes := changes + [record];\n      }\n    } else if inPrev && !inCurr {\n      var record := map[\"field\" := key, \"before\" := previous[key], \"after\" := \"\"];\n      changes := changes + [record];\n    } else if !inPrev && inCurr {\n      var record := map[\"field\" := key, \"before\" := \"\", \"after\" := current[key]];\n      changes := changes + [record];\n    }\n    \n    i := i + 1;\n  }\n  \n  // Sort changes by field name using insertion sort\n  result := SortByField(changes);\n}\n\nmethod SortByField(s: seq<map<string, string>>) returns (sorted: seq<map<string, string>>)\n  ensures |sorted| == |s|\n  ensures forall i, j :: 0 <= i < j < |sorted| ==> sorted[i][\"field\"] <= sorted[j][\"field\"]\n{\n  sorted := s;\n  var n := |sorted|;\n  var i := 1;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |sorted| == n\n    invariant forall a, b :: 0 <= a < b < i ==> sorted[a][\"field\"] <= sorted[b][\"field\"]\n  {\n    var key := sorted[i];\n    var j := i - 1;\n    while j >= 0 && sorted[j][\"field\"] > key[\"field\"]\n      invariant -1 <= j < i\n      invariant |sorted| == n\n      invariant forall a, b :: 0 <= a < b <= i && b != j + 1 ==> sorted[a][\"field\"] <= sorted[b][\"field\"]\n    {\n      sorted := sorted[j + 1 := sorted[j]];\n      j := j - 1;\n    }\n    sorted := sorted[j + 1 := key];\n    i := i + 1;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.\n",
+    "day2_prompt": "Extend diff_versions with as_graph: bool = False. When true, return {'nodes', 'edges'}\nwhere each edge is labeled with the changed field.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import diff_versions\n\n\ndef test_diffgraph_export():\n    graph = diff_versions({'a': 1}, {'a': 2}, as_graph=True)\n    assert graph == {'nodes': ['previous', 'current'], 'edges': [{'from': 'previous', 'to': 'current', 'field': 'a', 'before': 1, 'after': 2}]}\n",
+    "entry_point": "diff_versions",
+    "human_reference": "from __future__ import annotations\n\n\ndef diff_versions(previous: dict, current: dict) -> list[dict]:\n    changes = []\n    for field in sorted(set(previous) | set(current)):\n        before = previous.get(field)\n        after = current.get(field)\n        if before != after:\n            changes.append({'field': field, 'before': before, 'after': after})\n    return changes\n",
+    "id": "state_diff_tracker",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef diff_versions(previous, current, as_graph=False):\n    changes = []\n    for field in sorted(set(previous) | set(current)):\n        before = previous.get(field)\n        after = current.get(field)\n        if before != after:\n            changes.append({'field': field, 'before': before, 'after': after})\n    if not as_graph:\n        return changes\n    return {'nodes': ['previous', 'current'], 'edges': [{'from': 'previous', 'to': 'current', **change} for change in changes]}\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef diff_versions(previous, current):\n    output = []\n    fields = sorted(set(list(previous.keys()) + list(current.keys())))\n    for field in fields:\n        old = previous.get(field)\n        new = current.get(field)\n        if old != new:\n            output.append({'field': field, 'before': old, 'after': new})\n    return output\n",
+    "prompt": "Implement diff_versions(previous: dict, current: dict) -> list[dict]. Return one\nrecord per field whose value changed, including fields added or removed. Each\nrecord has field, before, and after. Sort records by field.\n",
+    "tags": [
+      "custom_spec",
+      "state_machine",
+      "day2-hard"
+    ],
+    "test_code": "from solution import diff_versions\n\n\ndef test_field_level_diffs_sorted():\n    assert diff_versions({'a': 1, 'b': 2}, {'a': 1, 'b': 3, 'c': 4}) == [\n        {'field': 'b', 'before': 2, 'after': 3},\n        {'field': 'c', 'before': None, 'after': 4},\n    ]\n"
+  },
+  "task_id": "state_diff_tracker",
+  "user_prompt": "Task id: state_diff_tracker\nEntry point: diff_versions\n\nFunctional requirements:\nImplement diff_versions(previous: dict, current: dict) -> list[dict]. Return one\nrecord per field whose value changed, including fields added or removed. Each\nrecord has field, before, and after. Sort records by field.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

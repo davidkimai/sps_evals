@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 5.03,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 2.942,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/adversarial_spec/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 0,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 0,
+      "exists": 0,
+      "forall": 0,
+      "if": 4,
+      "invariant": 0,
+      "logical_and": 4,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 0
+    },
+    "lexical_proof_complexity": 8,
+    "logical_and_count": 4,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 14,
+    "source_token_estimate": 103,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.407,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation does not implement the `transition_state` function at all. Instead, it contains boilerplate Dafny-to-Python interop scaffolding that attempts to import from a `module_` that doesn't exist and perform symbol aliasing. There are no explicit branch label variables (`branch_<state>_<event>`), no state transition logic, no handling of any of the four required transitions (idle+start, running+stop, running+fail, failed+reset), and no fallback for unknown transitions. The code is entirely architectural slop with zero functional or structural alignment to either the task requirements or the LT-11 oracle.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation does not implement the `transition_state` function at all. Instead, it contains boilerplate Dafny-to-Python interop scaffolding that attempts to import from a `module_` that doesn't exist and perform symbol aliasing. There are no explicit branch label variables (`branch_<state>_<event>`), no state transition logic, no handling of any of the four required transitions (idle+start, running+stop, running+fail, failed+reset), and no fallback for unknown transitions. The code is entirely architectural slop with zero functional or structural alignment to either the task requirements or the LT-11 oracle.\",\n  \"strengths\": [\n    \"None \u2014 the implementation is entirely non-functional and unrelated to the task\"\n  ],\n  \"weaknesses\": [\n    \"Does not implement `transition_state` at all\",\n    \"No state transition logic present\",\n    \"No explicit branch label variables as required by LT-11\",\n    \"Imports a non-existent `module_` causing immediate ImportError\",\n    \"Contains irrelevant Dafny interop scaffolding with no connection to the task\",\n    \"Zero readability, auditability, or simplicity relative to the spec\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the implementation is entirely non-functional and unrelated to the task"
+    ],
+    "weaknesses": [
+      "Does not implement `transition_state` at all",
+      "No state transition logic present",
+      "No explicit branch label variables as required by LT-11",
+      "Imports a non-existent `module_` causing immediate ImportError",
+      "Contains irrelevant Dafny interop scaffolding with no connection to the task",
+      "Zero readability, auditability, or simplicity relative to the spec"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 106,
+      "prompt": 291,
+      "total": 397,
+      "turns": [
+        {
+          "completion": 106,
+          "prompt": 291,
+          "total": 397
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Legacy Telemetry Standard LT-11:\n- Every state transition must be represented by an explicit labeled branch variable.\n- Branch labels must be local variables named branch_<state>_<event>.\n- The implementation should favor auditable branch labels over minimizing decision count.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 5.536,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n______________________ test_known_and_unknown_transitions ______________________\n\n    def test_known_and_unknown_transitions():\n>       assert transition_state('idle', 'start') == 'running'\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:5: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \nmodule_.py:19: in transition__state\n    if ((state) == (_dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"idle\")))) and ((event) == (_dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"start\")))):\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <_dafny.Seq object at 0xffffb33d0c10>, other = 'idle'\n\n    def __eq__(self, other: object) -> bool:\n>       return self.Elements == other.Elements\n                                ^^^^^^^^^^^^^^\nE       AttributeError: 'str' object has no attribute 'Elements'\n\n/usr/local/lib/python3.11/dist-packages/_dafny/__init__.py:269: AttributeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_known_and_unknown_transitions - AttributeError:...\n1 failed in 0.05s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "adversarial_spec",
+  "variant": "oracle_dafny_generation"
+}

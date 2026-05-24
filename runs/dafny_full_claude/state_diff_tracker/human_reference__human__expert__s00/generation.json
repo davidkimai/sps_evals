@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef diff_versions(previous: dict, current: dict) -> list[dict]:\n    changes = []\n    for field in sorted(set(previous) | set(current)):\n        before = previous.get(field)\n        after = current.get(field)\n        if before != after:\n            changes.append({'field': field, 'before': before, 'after': after})\n    return changes\n",
+  "effective_temperature": null,
+  "entry_point": "diff_versions",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef diff_versions(previous: dict, current: dict) -> list[dict]:\n    changes = []\n    for field in sorted(set(previous) | set(current)):\n        before = previous.get(field)\n        after = current.get(field)\n        if before != after:\n            changes.append({'field': field, 'before': before, 'after': after})\n    return changes\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.\n",
+    "day2_prompt": "Extend diff_versions with as_graph: bool = False. When true, return {'nodes', 'edges'}\nwhere each edge is labeled with the changed field.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import diff_versions\n\n\ndef test_diffgraph_export():\n    graph = diff_versions({'a': 1}, {'a': 2}, as_graph=True)\n    assert graph == {'nodes': ['previous', 'current'], 'edges': [{'from': 'previous', 'to': 'current', 'field': 'a', 'before': 1, 'after': 2}]}\n",
+    "entry_point": "diff_versions",
+    "human_reference": "from __future__ import annotations\n\n\ndef diff_versions(previous: dict, current: dict) -> list[dict]:\n    changes = []\n    for field in sorted(set(previous) | set(current)):\n        before = previous.get(field)\n        after = current.get(field)\n        if before != after:\n            changes.append({'field': field, 'before': before, 'after': after})\n    return changes\n",
+    "id": "state_diff_tracker",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef diff_versions(previous, current, as_graph=False):\n    changes = []\n    for field in sorted(set(previous) | set(current)):\n        before = previous.get(field)\n        after = current.get(field)\n        if before != after:\n            changes.append({'field': field, 'before': before, 'after': after})\n    if not as_graph:\n        return changes\n    return {'nodes': ['previous', 'current'], 'edges': [{'from': 'previous', 'to': 'current', **change} for change in changes]}\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef diff_versions(previous, current):\n    output = []\n    fields = sorted(set(list(previous.keys()) + list(current.keys())))\n    for field in fields:\n        old = previous.get(field)\n        new = current.get(field)\n        if old != new:\n            output.append({'field': field, 'before': old, 'after': new})\n    return output\n",
+    "prompt": "Implement diff_versions(previous: dict, current: dict) -> list[dict]. Return one\nrecord per field whose value changed, including fields added or removed. Each\nrecord has field, before, and after. Sort records by field.\n",
+    "tags": [
+      "custom_spec",
+      "state_machine",
+      "day2-hard"
+    ],
+    "test_code": "from solution import diff_versions\n\n\ndef test_field_level_diffs_sorted():\n    assert diff_versions({'a': 1, 'b': 2}, {'a': 1, 'b': 3, 'c': 4}) == [\n        {'field': 'b', 'before': 2, 'after': 3},\n        {'field': 'c', 'before': None, 'after': 4},\n    ]\n"
+  },
+  "task_id": "state_diff_tracker",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

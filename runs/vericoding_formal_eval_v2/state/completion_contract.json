@@ -1,0 +1,10 @@
+{
+  "confirmatory_complete": true,
+  "created_at": "2026-05-22T22:16:20Z",
+  "final_submit_ready": true,
+  "live_runs_complete": true,
+  "main_claim": "Lean-backed evaluators catch visible-pass semantic regressions and improve trust-boundary acceptance decisions on a bounded mechanized slice.",
+  "program_version": "vericoding_formal_eval_v2",
+  "status": "bootstrapped",
+  "updated_at": "2026-05-23T00:25:13Z"
+}

@@ -1,0 +1,140 @@
+id: event_windows
+entry_point: summarize_windows
+tags: [intervals, aggregation, edge-cases]
+day2_stressors: [interface_generalization, backwards_compatibility]
+prompt: |
+  Implement summarize_windows(events: list[dict], window_size: int) -> list[dict].
+
+  Each event has "timestamp" and "value" integer fields. Ignore malformed
+  events. window_size must be positive, otherwise raise ValueError.
+
+  Group events into half-open windows [k * window_size, (k + 1) * window_size)
+  using integer floor division. Return rows sorted by window start:
+  {"start": start, "count": count, "total": total}.
+test_code: |
+  import pytest
+
+  from solution import summarize_windows
+
+
+  def test_summarizes_sorted_windows():
+      events = [
+          {"timestamp": 12, "value": 5},
+          {"timestamp": 2, "value": 3},
+          {"timestamp": 9, "value": 4},
+          {"timestamp": "bad", "value": 10},
+          {"timestamp": 1, "value": None},
+      ]
+
+      assert summarize_windows(events, 10) == [
+          {"start": 0, "count": 2, "total": 7},
+          {"start": 10, "count": 1, "total": 5},
+      ]
+
+
+  def test_rejects_bad_window_size():
+      with pytest.raises(ValueError):
+          summarize_windows([], 0)
+day2_prompt: |
+  Extend summarize_windows to accept an optional keyword argument
+  include_average: bool = False. When true, each returned row must include an
+  "average" field equal to total / count. Preserve the original output shape
+  when include_average is omitted or false.
+day2_test_code: |
+  import pytest
+
+  from solution import summarize_windows
+
+
+  def test_can_include_average_without_changing_default_shape():
+      events = [
+          {"timestamp": 2, "value": 3},
+          {"timestamp": 9, "value": 5},
+          {"timestamp": 12, "value": 7},
+      ]
+
+      assert summarize_windows(events, 10) == [
+          {"start": 0, "count": 2, "total": 8},
+          {"start": 10, "count": 1, "total": 7},
+      ]
+      assert summarize_windows(events, 10, include_average=True) == [
+          {"start": 0, "count": 2, "total": 8, "average": 4.0},
+          {"start": 10, "count": 1, "total": 7, "average": 7.0},
+      ]
+
+
+  def test_rejects_bad_window_size():
+      with pytest.raises(ValueError):
+          summarize_windows([], 0)
+human_reference: |
+  from __future__ import annotations
+
+
+  def summarize_windows(events: list[dict], window_size: int) -> list[dict]:
+      if window_size <= 0:
+          raise ValueError("window_size must be positive")
+
+      windows: dict[int, dict[str, int]] = {}
+      for event in events:
+          timestamp = event.get("timestamp")
+          value = event.get("value")
+          if not isinstance(timestamp, int) or not isinstance(value, int):
+              continue
+
+          start = (timestamp // window_size) * window_size
+          summary = windows.setdefault(start, {"start": start, "count": 0, "total": 0})
+          summary["count"] += 1
+          summary["total"] += value
+
+      return [windows[start] for start in sorted(windows)]
+mock_solution: |
+  from __future__ import annotations
+
+
+  def summarize_windows(events: list[dict], window_size: int) -> list[dict]:
+      if window_size <= 0:
+          raise ValueError("window_size must be positive")
+
+      windows: dict[int, dict[str, int]] = {}
+      for event in events:
+          timestamp = event.get("timestamp")
+          value = event.get("value")
+          if not isinstance(timestamp, int) or not isinstance(value, int):
+              continue
+
+          start = (timestamp // window_size) * window_size
+          row = windows.setdefault(start, {"start": start, "count": 0, "total": 0})
+          row["count"] += 1
+          row["total"] += value
+
+      return [windows[start] for start in sorted(windows)]
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def summarize_windows(
+      events: list[dict],
+      window_size: int,
+      *,
+      include_average: bool = False,
+  ) -> list[dict]:
+      if window_size <= 0:
+          raise ValueError("window_size must be positive")
+
+      windows: dict[int, dict[str, int]] = {}
+      for event in events:
+          timestamp = event.get("timestamp")
+          value = event.get("value")
+          if not isinstance(timestamp, int) or not isinstance(value, int):
+              continue
+
+          start = (timestamp // window_size) * window_size
+          row = windows.setdefault(start, {"start": start, "count": 0, "total": 0})
+          row["count"] += 1
+          row["total"] += value
+
+      rows = [dict(windows[start]) for start in sorted(windows)]
+      if include_average:
+          for row in rows:
+              row["average"] = row["total"] / row["count"]
+      return rows

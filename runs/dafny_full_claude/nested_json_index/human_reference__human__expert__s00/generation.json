@@ -1,0 +1,42 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]]:\n    index: dict[str, dict[str, int]] = {}\n    for event in events:\n        user_id = event.get(\"user_id\")\n        amount = event.get(\"amount\")\n        if event.get(\"kind\") != \"purchase\":\n            continue\n        if not isinstance(user_id, str) or not user_id:\n            continue\n        if not isinstance(amount, int):\n            continue\n\n        totals = index.setdefault(user_id, {\"count\": 0, \"total\": 0})\n        totals[\"count\"] += 1\n        totals[\"total\"] += amount\n    return index\n",
+  "effective_temperature": null,
+  "entry_point": "build_user_purchase_index",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]]:\n    index: dict[str, dict[str, int]] = {}\n    for event in events:\n        user_id = event.get(\"user_id\")\n        amount = event.get(\"amount\")\n        if event.get(\"kind\") != \"purchase\":\n            continue\n        if not isinstance(user_id, str) or not user_id:\n            continue\n        if not isinstance(amount, int):\n            continue\n\n        totals = index.setdefault(user_id, {\"count\": 0, \"total\": 0})\n        totals[\"count\"] += 1\n        totals[\"total\"] += amount\n    return index\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend build_user_purchase_index to accept an optional keyword argument\nmin_amount: int = 0. Include only purchases whose amount is greater than or\nequal to min_amount. If min_amount is negative, raise ValueError. Preserve the\noriginal behavior when min_amount is omitted.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "audit_provenance",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import build_user_purchase_index\n\n\ndef test_preserves_original_behavior_and_filters_minimum_amount():\n    events = [\n        {\"user_id\": \"alice\", \"kind\": \"purchase\", \"amount\": 4},\n        {\"user_id\": \"alice\", \"kind\": \"purchase\", \"amount\": 9},\n        {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": 7},\n    ]\n\n    assert build_user_purchase_index(events) == {\n        \"alice\": {\"count\": 2, \"total\": 13},\n        \"bob\": {\"count\": 1, \"total\": 7},\n    }\n    assert build_user_purchase_index(events, min_amount=8) == {\n        \"alice\": {\"count\": 1, \"total\": 9},\n    }\n\n\ndef test_rejects_negative_min_amount():\n    with pytest.raises(ValueError):\n        build_user_purchase_index([], min_amount=-1)\n",
+    "entry_point": "build_user_purchase_index",
+    "human_reference": "from __future__ import annotations\n\n\ndef build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]]:\n    index: dict[str, dict[str, int]] = {}\n    for event in events:\n        user_id = event.get(\"user_id\")\n        amount = event.get(\"amount\")\n        if event.get(\"kind\") != \"purchase\":\n            continue\n        if not isinstance(user_id, str) or not user_id:\n            continue\n        if not isinstance(amount, int):\n            continue\n\n        totals = index.setdefault(user_id, {\"count\": 0, \"total\": 0})\n        totals[\"count\"] += 1\n        totals[\"total\"] += amount\n    return index\n",
+    "id": "nested_json_index",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef build_user_purchase_index(\n    events: list[dict],\n    *,\n    min_amount: int = 0,\n) -> dict[str, dict[str, int]]:\n    if min_amount < 0:\n        raise ValueError(\"min_amount must be non-negative\")\n\n    index: dict[str, dict[str, int]] = {}\n    for event in events:\n        user_id = event.get(\"user_id\")\n        amount = event.get(\"amount\")\n        if event.get(\"kind\") != \"purchase\" or not isinstance(user_id, str) or not user_id:\n            continue\n        if not isinstance(amount, int) or amount < min_amount:\n            continue\n\n        bucket = index.setdefault(user_id, {\"count\": 0, \"total\": 0})\n        bucket[\"count\"] += 1\n        bucket[\"total\"] += amount\n    return index\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]]:\n    index: dict[str, dict[str, int]] = {}\n    for event in events:\n        user_id = event.get(\"user_id\")\n        amount = event.get(\"amount\")\n        if event.get(\"kind\") != \"purchase\" or not isinstance(user_id, str) or not user_id:\n            continue\n        if not isinstance(amount, int):\n            continue\n\n        bucket = index.setdefault(user_id, {\"count\": 0, \"total\": 0})\n        bucket[\"count\"] += 1\n        bucket[\"total\"] += amount\n    return index\n",
+    "prompt": "Implement build_user_purchase_index(events: list[dict]) -> dict[str, dict[str, int]].\n\nEach event may contain:\n- \"user_id\": a string\n- \"kind\": a string\n- \"amount\": an integer\n\nInclude only events where kind == \"purchase\", user_id is a non-empty string,\nand amount is an integer. Return a dictionary keyed by user_id. Each value\nmust have {\"count\": purchase_count, \"total\": total_amount}. Do not mutate the\ninput list or event dictionaries.\n",
+    "tags": [
+      "json",
+      "aggregation",
+      "nesting",
+      "day2-hard"
+    ],
+    "test_code": "from solution import build_user_purchase_index\n\n\ndef test_builds_index_without_mutating_input():\n    events = [\n        {\"user_id\": \"alice\", \"kind\": \"purchase\", \"amount\": 4},\n        {\"user_id\": \"alice\", \"kind\": \"refund\", \"amount\": 1},\n        {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": 7},\n        {\"user_id\": \"\", \"kind\": \"purchase\", \"amount\": 10},\n        {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": \"9\"},\n    ]\n    snapshot = [dict(event) for event in events]\n\n    assert build_user_purchase_index(events) == {\n        \"alice\": {\"count\": 1, \"total\": 4},\n        \"bob\": {\"count\": 1, \"total\": 7},\n    }\n    assert events == snapshot\n"
+  },
+  "task_id": "nested_json_index",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

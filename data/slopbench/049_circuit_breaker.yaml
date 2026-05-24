@@ -1,0 +1,151 @@
+id: circuit_breaker
+entry_point: CircuitBreaker
+tags: [custom_spec, reliability_critical, state_machine, day2-hard]
+day2_stressors: [cross_function_state, parameter_threading, backwards_compatibility]
+custom_spec_override: |
+  Resilience Control Standard RCS-5:
+  - State transitions must be explicit and inspectable through a state attribute.
+  - Failure thresholds and recovery timers must be named configuration values, not magic constants.
+  - Half-open trials must either close on success or reopen on failure.
+prompt: |
+  Implement CircuitBreaker(failure_threshold: int, recovery_timeout: float, *, now=None).
+  call(func) executes func while closed. After threshold failures, state becomes open
+  and later calls raise RuntimeError until recovery_timeout elapses, then one half-open trial is allowed.
+test_code: |
+  import pytest
+
+  from solution import CircuitBreaker
+
+
+  def test_circuit_opens_and_recovers():
+      clock = {'t': 0.0}
+      breaker = CircuitBreaker(1, 5.0, now=lambda: clock['t'])
+      with pytest.raises(ValueError):
+          breaker.call(lambda: (_ for _ in ()).throw(ValueError('bad')))
+      assert breaker.state == 'open'
+      with pytest.raises(RuntimeError):
+          breaker.call(lambda: 'blocked')
+      clock['t'] = 6.0
+      assert breaker.call(lambda: 'ok') == 'ok'
+      assert breaker.state == 'closed'
+day2_prompt: |
+  Add update_thresholds(failure_threshold=None, recovery_timeout=None). Provided values
+  replace the active configuration and must be positive.
+day2_test_code: |
+  from solution import CircuitBreaker
+
+
+  def test_threshold_update_changes_configuration():
+      breaker = CircuitBreaker(3, 5.0)
+      breaker.update_thresholds(failure_threshold=2, recovery_timeout=1.5)
+      assert breaker.failure_threshold == 2
+      assert breaker.recovery_timeout == 1.5
+human_reference: |
+  from __future__ import annotations
+
+  import time
+
+
+  class CircuitBreaker:
+      def __init__(self, failure_threshold: int, recovery_timeout: float, *, now=None) -> None:
+          if failure_threshold <= 0 or recovery_timeout <= 0:
+              raise ValueError('invalid circuit breaker configuration')
+          self.failure_threshold = failure_threshold
+          self.recovery_timeout = recovery_timeout
+          self._now = now or time.monotonic
+          self.failures = 0
+          self.opened_at = None
+          self.state = 'closed'
+
+      def call(self, func):
+          if self.state == 'open':
+              if self._now() - self.opened_at < self.recovery_timeout:
+                  raise RuntimeError('circuit open')
+              self.state = 'half_open'
+          try:
+              result = func()
+          except Exception:
+              self.failures += 1
+              if self.failures >= self.failure_threshold or self.state == 'half_open':
+                  self.state = 'open'
+                  self.opened_at = self._now()
+              raise
+          self.failures = 0
+          self.state = 'closed'
+          return result
+mock_solution: |
+  from __future__ import annotations
+
+  import time
+
+
+  class CircuitBreaker:
+      def __init__(self, failure_threshold: int, recovery_timeout: float, *, now=None):
+          if failure_threshold <= 0 or recovery_timeout <= 0:
+              raise ValueError('invalid circuit breaker configuration')
+          self.failure_threshold = failure_threshold
+          self.recovery_timeout = recovery_timeout
+          self.now = now or time.monotonic
+          self.failures = 0
+          self.opened_at = 0.0
+          self.state = 'closed'
+
+      def call(self, func):
+          if self.state == 'open' and self.now() - self.opened_at < self.recovery_timeout:
+              raise RuntimeError('circuit open')
+          if self.state == 'open':
+              self.state = 'half_open'
+          try:
+              value = func()
+          except Exception:
+              self.failures += 1
+              if self.failures >= self.failure_threshold:
+                  self.state = 'open'
+                  self.opened_at = self.now()
+              raise
+          self.failures = 0
+          self.state = 'closed'
+          return value
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import time
+
+
+  class CircuitBreaker:
+      def __init__(self, failure_threshold: int, recovery_timeout: float, *, now=None):
+          if failure_threshold <= 0 or recovery_timeout <= 0:
+              raise ValueError('invalid circuit breaker configuration')
+          self.failure_threshold = failure_threshold
+          self.recovery_timeout = recovery_timeout
+          self.now = now or time.monotonic
+          self.failures = 0
+          self.opened_at = 0.0
+          self.state = 'closed'
+
+      def update_thresholds(self, failure_threshold=None, recovery_timeout=None):
+          if failure_threshold is not None:
+              if failure_threshold <= 0:
+                  raise ValueError('failure_threshold must be positive')
+              self.failure_threshold = failure_threshold
+          if recovery_timeout is not None:
+              if recovery_timeout <= 0:
+                  raise ValueError('recovery_timeout must be positive')
+              self.recovery_timeout = recovery_timeout
+
+      def call(self, func):
+          if self.state == 'open' and self.now() - self.opened_at < self.recovery_timeout:
+              raise RuntimeError('circuit open')
+          if self.state == 'open':
+              self.state = 'half_open'
+          try:
+              value = func()
+          except Exception:
+              self.failures += 1
+              if self.failures >= self.failure_threshold or self.state == 'half_open':
+                  self.state = 'open'
+                  self.opened_at = self.now()
+              raise
+          self.failures = 0
+          self.state = 'closed'
+          return value

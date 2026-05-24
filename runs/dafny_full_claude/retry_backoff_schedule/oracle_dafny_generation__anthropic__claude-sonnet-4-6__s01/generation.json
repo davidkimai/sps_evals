@@ -1,0 +1,54 @@
+{
+  "artifact_language": "dafny",
+  "code": "method build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) returns (result: seq<int>)\n  requires attempts >= 0\n  requires base_seconds >= 1\n  requires cap_seconds >= 1\n  ensures |result| == attempts\n  ensures forall i :: 0 <= i < |result| ==> result[i] >= 1\n  ensures forall i :: 0 <= i < |result| ==> result[i] <= cap_seconds\n{\n  if attempts == 0 {\n    return [];\n  }\n  \n  var schedule: seq<int> := [];\n  var i := 0;\n  var current := base_seconds;\n  \n  while i < attempts\n    invariant 0 <= i <= attempts\n    invariant |schedule| == i\n    invariant current >= 1\n    invariant forall k :: 0 <= k < |schedule| ==> schedule[k] >= 1\n    invariant forall k :: 0 <= k < |schedule| ==> schedule[k] <= cap_seconds\n  {\n    var delay: int;\n    if current > cap_seconds {\n      delay := cap_seconds;\n    } else {\n      delay := current;\n    }\n    schedule := schedule + [delay];\n    \n    // Double current for next iteration, but cap to avoid overflow\n    if current <= cap_seconds / 2 {\n      current := current * 2;\n    } else {\n      current := cap_seconds;\n    }\n    \n    i := i + 1;\n  }\n  \n  return schedule;\n}\n\nmethod Main() {\n  var s1 := build_retry_schedule(0, 1, 100);\n  assert |s1| == 0;\n  \n  var s2 := build_retry_schedule(3, 1, 100);\n  assert |s2| == 3;\n  \n  var s3 := build_retry_schedule(5, 2, 10);\n  assert |s3| == 5;\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "build_retry_schedule",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 340,
+      "prompt": 325,
+      "total": 665,
+      "turns": [
+        {
+          "completion": 340,
+          "prompt": 325,
+          "total": 665
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) returns (result: seq<int>)\n  requires attempts >= 0\n  requires base_seconds >= 1\n  requires cap_seconds >= 1\n  ensures |result| == attempts\n  ensures forall i :: 0 <= i < |result| ==> result[i] >= 1\n  ensures forall i :: 0 <= i < |result| ==> result[i] <= cap_seconds\n{\n  if attempts == 0 {\n    return [];\n  }\n  \n  var schedule: seq<int> := [];\n  var i := 0;\n  var current := base_seconds;\n  \n  while i < attempts\n    invariant 0 <= i <= attempts\n    invariant |schedule| == i\n    invariant current >= 1\n    invariant forall k :: 0 <= k < |schedule| ==> schedule[k] >= 1\n    invariant forall k :: 0 <= k < |schedule| ==> schedule[k] <= cap_seconds\n  {\n    var delay: int;\n    if current > cap_seconds {\n      delay := cap_seconds;\n    } else {\n      delay := current;\n    }\n    schedule := schedule + [delay];\n    \n    // Double current for next iteration, but cap to avoid overflow\n    if current <= cap_seconds / 2 {\n      current := current * 2;\n    } else {\n      current := cap_seconds;\n    }\n    \n    i := i + 1;\n  }\n  \n  return schedule;\n}\n\nmethod Main() {\n  var s1 := build_retry_schedule(0, 1, 100);\n  assert |s1| == 0;\n  \n  var s2 := build_retry_schedule(3, 1, 100);\n  assert |s2| == 3;\n  \n  var s3 := build_retry_schedule(5, 2, 10);\n  assert |s3| == 5;\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add next_allowed_times(start_timestamp: int, schedule: list[int]) -> list[int].\nReturn cumulative timestamps after applying each delay in schedule.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import build_retry_schedule, next_allowed_times\n\n\ndef test_next_allowed_times_uses_cumulative_schedule():\n    schedule = build_retry_schedule(4, 3, 10)\n    assert schedule == [3, 6, 10, 10]\n    assert next_allowed_times(100, schedule) == [103, 109, 119, 129]\n",
+    "entry_point": "build_retry_schedule",
+    "human_reference": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n",
+    "id": "retry_backoff_schedule",
+    "mock_day2_solution": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n\n\ndef next_allowed_times(start_timestamp: int, schedule: list[int]) -> list[int]:\n    current = start_timestamp\n    result = []\n    for delay in schedule:\n        current += delay\n        result.append(current)\n    return result\n",
+    "mock_solution": "def build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int]:\n    if attempts < 0 or base_seconds <= 0 or cap_seconds <= 0:\n        raise ValueError(\"invalid backoff parameters\")\n    schedule = []\n    delay = base_seconds\n    for _ in range(attempts):\n        schedule.append(min(delay, cap_seconds))\n        delay *= 2\n    return schedule\n",
+    "prompt": "Implement build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int].\n\nValidate that attempts is non-negative and base_seconds/cap_seconds are\npositive, otherwise raise ValueError. Return exponential backoff delays:\nbase_seconds, base_seconds*2, base_seconds*4, ... capped at cap_seconds.\nattempts=0 returns an empty list.\n",
+    "tags": [
+      "retry_backoff",
+      "validation",
+      "timing"
+    ],
+    "test_code": "import pytest\n\nfrom solution import build_retry_schedule\n\n\ndef test_build_retry_schedule_caps_values():\n    assert build_retry_schedule(0, 2, 10) == []\n    assert build_retry_schedule(5, 2, 10) == [2, 4, 8, 10, 10]\n\n\ndef test_build_retry_schedule_validation():\n    with pytest.raises(ValueError):\n        build_retry_schedule(-1, 1, 10)\n    with pytest.raises(ValueError):\n        build_retry_schedule(3, 0, 10)\n"
+  },
+  "task_id": "retry_backoff_schedule",
+  "user_prompt": "Task id: retry_backoff_schedule\nEntry point: build_retry_schedule\n\nFunctional requirements:\nImplement build_retry_schedule(attempts: int, base_seconds: int, cap_seconds: int) -> list[int].\n\nValidate that attempts is non-negative and base_seconds/cap_seconds are\npositive, otherwise raise ValueError. Return exponential backoff delays:\nbase_seconds, base_seconds*2, base_seconds*4, ... capped at cap_seconds.\nattempts=0 returns an empty list.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

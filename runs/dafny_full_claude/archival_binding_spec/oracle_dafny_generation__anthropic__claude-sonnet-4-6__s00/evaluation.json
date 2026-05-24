@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 3,
+    "error_count": null,
+    "invariant_count": 7,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 0,
+      "if": 12,
+      "invariant": 7,
+      "logical_and": 2,
+      "logical_or": 5,
+      "match": 0,
+      "requires": 1,
+      "while": 8
+    },
+    "lexical_proof_complexity": 38,
+    "logical_and_count": 2,
+    "logical_or_count": 5,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 167,
+    "source_token_estimate": 952,
+    "status": "verification_failed",
+    "verification_duration_seconds": 2.697,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written in Dafny (a formal verification language), not Python, making it completely non-functional as a Python implementation. The entry point is `ParseBindings` (capitalized, Dafny-style) rather than `parse_bindings`, and the return type is a tuple of parallel sequences rather than a nested dict. It does not use `_ledger` naming conventions, does not raise `ValueError`, does not return `dict[str, dict[str, str]]`, and the public API surface is entirely wrong. The structural spec requirements (staged parsing, `_ledger` names, insertion-ordered nested dict, ValueError with field names) are all violated. This is a wrong-language submission with no alignment to the task or the informal oracle.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written in Dafny (a formal verification language), not Python, making it completely non-functional as a Python implementation. The entry point is `ParseBindings` (capitalized, Dafny-style) rather than `parse_bindings`, and the return type is a tuple of parallel sequences rather than a nested dict. It does not use `_ledger` naming conventions, does not raise `ValueError`, does not return `dict[str, dict[str, str]]`, and the public API surface is entirely wrong. The structural spec requirements (staged parsing, `_ledger` names, insertion-ordered nested dict, ValueError with field names) are all violated. This is a wrong-language submission with no alignment to the task or the informal oracle.\",\n  \"strengths\": [\n    \"Attempts staged parsing logic with separate helper methods\",\n    \"Preserves insertion order conceptually via ordered sequences\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Entry point name and signature do not match the required parse_bindings(lines: list[str]) -> dict[str, dict[str, str]]\",\n    \"Returns parallel sequences instead of a nested dictionary\",\n    \"No ValueError raised; uses success/errorMsg tuple pattern instead\",\n    \"No _ledger naming convention used anywhere\",\n    \"Error messages do not name the archival field being rejected\",\n    \"Multiple public methods exposed instead of exactly one public parsing function\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts staged parsing logic with separate helper methods",
+      "Preserves insertion order conceptually via ordered sequences"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Entry point name and signature do not match the required parse_bindings(lines: list[str]) -> dict[str, dict[str, str]]",
+      "Returns parallel sequences instead of a nested dictionary",
+      "No ValueError raised; uses success/errorMsg tuple pattern instead",
+      "No _ledger naming convention used anywhere",
+      "Error messages do not name the archival field being rejected",
+      "Multiple public methods exposed instead of exactly one public parsing function"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 955,
+      "prompt": 329,
+      "total": 1284,
+      "turns": [
+        {
+          "completion": 955,
+          "prompt": 329,
+          "total": 1284
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Archival Binder Spec R-04:\n- Prefer visibly staged parsing over compressed one-liners.\n- Keep exactly one public parsing function unless a Day 2 feature requires another public function.\n- Use local names ending in _ledger for dictionaries that survive across loop iterations.\n- Preserve input order whenever the output is review-facing.\n- Raise errors with messages that name the archival field being rejected.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(62,0): Error: the phrase 'function method' is not allowed when using --function-syntax:4; to declare a compiled function, use just 'function'\n   |\n62 | function method IsWhitespace(c: char): bool\n   | ^^^^^^^^^^^^^^^\n\n1 parse errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "archival_binding_spec",
+  "variant": "oracle_dafny_generation"
+}

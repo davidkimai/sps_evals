@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.797,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.93,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/access_control_log/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 3,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 0
+    },
+    "lexical_proof_complexity": 4,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 17,
+    "source_token_estimate": 157,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 5.953,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This candidate does not implement check_access at all. Instead of a straightforward function that checks a permission matrix, logs the attempt, and returns a boolean, it imports a Dafny-compiled module and attempts to alias symbols from it. There is no visible check_access function, no logging logic, no deny-by-default behavior, and no matrix lookup. The code is entirely architectural slop: it relies on opaque external modules, uses wildcard imports, and provides zero auditability of the actual access-control logic. It violates every principle in ZT-2 and the Zen of Python simultaneously.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This candidate does not implement check_access at all. Instead of a straightforward function that checks a permission matrix, logs the attempt, and returns a boolean, it imports a Dafny-compiled module and attempts to alias symbols from it. There is no visible check_access function, no logging logic, no deny-by-default behavior, and no matrix lookup. The code is entirely architectural slop: it relies on opaque external modules, uses wildcard imports, and provides zero auditability of the actual access-control logic. It violates every principle in ZT-2 and the Zen of Python simultaneously.\",\n  \"strengths\": [\n    \"None identifiable\"\n  ],\n  \"weaknesses\": [\n    \"check_access function is completely absent\",\n    \"No logging of role, permission, or allowed status\",\n    \"No deny-by-default logic\",\n    \"Relies on opaque Dafny-compiled external module with wildcard import\",\n    \"Zero local auditability or readability\",\n    \"Violates ZT-2 audit principle entirely\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None identifiable"
+    ],
+    "weaknesses": [
+      "check_access function is completely absent",
+      "No logging of role, permission, or allowed status",
+      "No deny-by-default logic",
+      "Relies on opaque Dafny-compiled external module with wildcard import",
+      "Zero local auditability or readability",
+      "Violates ZT-2 audit principle entirely"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 160,
+      "prompt": 286,
+      "total": 446,
+      "turns": [
+        {
+          "completion": 160,
+          "prompt": 286,
+          "total": 446
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Zero-Trust Audit Principle ZT-2:\n- Every access attempt must be logged before returning, whether allowed or denied.\n- No short-circuit return may bypass the log write.\n- Log records must include role, permission, and allowed.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.33,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n____________________ test_logs_allowed_and_denied_attempts _____________________\n\n    def test_logs_allowed_and_denied_attempts():\n        log = []\n>       assert check_access('admin', 'read', {'admin': {'read'}}, log) is True\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:6: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nrole = 'admin', permission = 'read', matrix = {'admin': {'read'}}, log = []\n\n    @staticmethod\n    def check__access(role, permission, matrix, log):\n        allowed: bool = False\n        newLog: _dafny.Seq = _dafny.Seq({})\n        allowed = False\n        if (role) in (matrix):\n            d_0_perms_: _dafny.Set\n            d_0_perms_ = (matrix)[role]\n            if (permission) in (d_0_perms_):\n                allowed = True\n        d_1_allowedStr_: _dafny.Seq\n        if allowed:\n            d_1_allowedStr_ = _dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"true\"))\n        elif True:\n            d_1_allowedStr_ = _dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"false\"))\n        d_2_entry_: _dafny.Map\n        d_2_entry_ = _dafny.Map({_dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"role\")): role, _dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"permission\")): permission, _dafny.SeqWithoutIsStrInference(map(_dafny.CodePoint, \"allowed\")): d_1_allowedStr_})\n>       newLog = (log) + (_dafny.SeqWithoutIsStrInference([d_2_entry_]))\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       TypeError: can only concatenate list (not \"Seq\") to list\n\nmodule_.py:33: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_logs_allowed_and_denied_attempts - TypeError: c...\n1 failed in 0.11s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "access_control_log",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,114 @@
+id: token_bucket_enforcer
+entry_point: TokenBucketEnforcer
+tags: [reliability_critical, rate_limit, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement TokenBucketEnforcer(capacity: int, refill_rate: float, *, now=None).
+  Method allow(cost: int = 1) -> bool refills tokens according to elapsed time,
+  denies when cost exceeds available tokens, and never exceeds capacity.
+test_code: |
+  from solution import TokenBucketEnforcer
+
+
+  def test_token_bucket_enforces_costs():
+      clock = {'t': 0.0}
+      bucket = TokenBucketEnforcer(3, 1.0, now=lambda: clock['t'])
+      assert bucket.allow(2) is True
+      assert bucket.allow(2) is False
+      clock['t'] = 2.0
+      assert bucket.allow(2) is True
+day2_prompt: |
+  Extend TokenBucketEnforcer with burst: int = 0. Burst increases maximum capacity
+  by burst tokens while preserving the base refill rate and old behavior when burst
+  is omitted.
+day2_test_code: |
+  from solution import TokenBucketEnforcer
+
+
+  def test_burst_extends_capacity_only():
+      clock = {'t': 0.0}
+      bucket = TokenBucketEnforcer(2, 1.0, burst=2, now=lambda: clock['t'])
+      assert bucket.allow(4) is True
+      assert bucket.allow(1) is False
+      clock['t'] = 1.0
+      assert bucket.allow(1) is True
+human_reference: |
+  from __future__ import annotations
+
+  import time
+  from collections.abc import Callable
+
+
+  class TokenBucketEnforcer:
+      def __init__(self, capacity: int, refill_rate: float, *, now: Callable[[], float] | None = None) -> None:
+          if capacity <= 0 or refill_rate <= 0:
+              raise ValueError('capacity and refill_rate must be positive')
+          self._capacity = capacity
+          self._refill_rate = refill_rate
+          self._now = now or time.monotonic
+          self._tokens = float(capacity)
+          self._last = self._now()
+
+      def allow(self, cost: int = 1) -> bool:
+          if cost <= 0:
+              raise ValueError('cost must be positive')
+          current = self._now()
+          elapsed = max(0.0, current - self._last)
+          self._tokens = min(float(self._capacity), self._tokens + elapsed * self._refill_rate)
+          self._last = current
+          if self._tokens < cost:
+              return False
+          self._tokens -= cost
+          return True
+mock_solution: |
+  from __future__ import annotations
+
+  import time
+
+
+  class TokenBucketEnforcer:
+      def __init__(self, capacity: int, refill_rate: float, *, now=None) -> None:
+          if capacity <= 0 or refill_rate <= 0:
+              raise ValueError('capacity and refill_rate must be positive')
+          self.capacity = capacity
+          self.refill_rate = refill_rate
+          self.now = now or time.monotonic
+          self.tokens = float(capacity)
+          self.last = self.now()
+
+      def allow(self, cost: int = 1) -> bool:
+          if cost <= 0:
+              raise ValueError('cost must be positive')
+          current = self.now()
+          self.tokens = min(self.capacity, self.tokens + max(0, current - self.last) * self.refill_rate)
+          self.last = current
+          if self.tokens >= cost:
+              self.tokens -= cost
+              return True
+          return False
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import time
+
+
+  class TokenBucketEnforcer:
+      def __init__(self, capacity: int, refill_rate: float, *, burst: int = 0, now=None) -> None:
+          if capacity <= 0 or refill_rate <= 0 or burst < 0:
+              raise ValueError('invalid bucket parameters')
+          self.capacity = capacity + burst
+          self.refill_rate = refill_rate
+          self.now = now or time.monotonic
+          self.tokens = float(self.capacity)
+          self.last = self.now()
+
+      def allow(self, cost: int = 1) -> bool:
+          if cost <= 0:
+              raise ValueError('cost must be positive')
+          current = self.now()
+          self.tokens = min(self.capacity, self.tokens + max(0, current - self.last) * self.refill_rate)
+          self.last = current
+          if self.tokens < cost:
+              return False
+          self.tokens -= cost
+          return True

@@ -1,0 +1,97 @@
+id: event_correlator
+entry_point: correlate_events
+tags: [data_pipeline_advanced, events, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]].
+  Pair event type 'A' with the first later type 'B' in the same session_id where
+  the time delta is no more than within seconds.
+test_code: |
+  from solution import correlate_events
+
+
+  def test_correlates_a_before_b_by_session():
+      events = [{'session_id': 's', 'type': 'A', 'ts': 1}, {'session_id': 's', 'type': 'B', 'ts': 3}]
+      pairs = correlate_events(events, within=5)
+      assert pairs == [(events[0], events[1])]
+day2_prompt: |
+  Extend correlate_events with chain_types: list[str] | None = None. When provided,
+  return chains of events matching the ordered types within the same session, with
+  each adjacent step within the window.
+day2_test_code: |
+  from solution import correlate_events
+
+
+  def test_multi_type_chain_matching():
+      events = [
+          {'session_id': 's', 'type': 'A', 'ts': 1},
+          {'session_id': 's', 'type': 'B', 'ts': 2},
+          {'session_id': 's', 'type': 'C', 'ts': 4},
+      ]
+      assert correlate_events(events, within=3, chain_types=['A', 'B', 'C']) == [events]
+human_reference: |
+  from __future__ import annotations
+
+
+  def correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]:
+      ordered = sorted(events, key=lambda row: row.get('ts', 0))
+      pairs = []
+      for left in ordered:
+          if left.get('type') != 'A':
+              continue
+          for right in ordered:
+              if right.get('session_id') != left.get('session_id') or right.get('type') != 'B':
+                  continue
+              if 0 < right.get('ts', 0) - left.get('ts', 0) <= within:
+                  pairs.append((left, right))
+                  break
+      return pairs
+mock_solution: |
+  from __future__ import annotations
+
+
+  def correlate_events(events, *, within: int):
+      out = []
+      ordered = sorted(events, key=lambda row: row['ts'])
+      for index, event in enumerate(ordered):
+          if event.get('type') == 'A':
+              for candidate in ordered[index + 1:]:
+                  if candidate.get('session_id') == event.get('session_id') and candidate.get('type') == 'B' and candidate['ts'] - event['ts'] <= within:
+                      out.append((event, candidate))
+                      break
+      return out
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def correlate_events(events, *, within: int, chain_types=None):
+      ordered = sorted(events, key=lambda row: row['ts'])
+      if chain_types is None:
+          out = []
+          for index, event in enumerate(ordered):
+              if event.get('type') == 'A':
+                  for candidate in ordered[index + 1:]:
+                      if candidate.get('session_id') == event.get('session_id') and candidate.get('type') == 'B' and candidate['ts'] - event['ts'] <= within:
+                          out.append((event, candidate))
+                          break
+          return out
+      chains = []
+      for event in ordered:
+          if event.get('type') != chain_types[0]:
+              continue
+          chain = [event]
+          cursor = event
+          for expected in chain_types[1:]:
+              match = None
+              for candidate in ordered:
+                  if candidate.get('session_id') == cursor.get('session_id') and candidate.get('type') == expected and 0 < candidate['ts'] - cursor['ts'] <= within:
+                      match = candidate
+                      break
+              if match is None:
+                  chain = []
+                  break
+              chain.append(match)
+              cursor = match
+          if chain:
+              chains.append(chain)
+      return chains

@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 5,
+    "error_count": 2,
+    "invariant_count": 7,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 5,
+      "exists": 0,
+      "forall": 1,
+      "if": 10,
+      "invariant": 7,
+      "logical_and": 3,
+      "logical_or": 9,
+      "match": 0,
+      "requires": 1,
+      "while": 6
+    },
+    "lexical_proof_complexity": 42,
+    "logical_and_count": 3,
+    "logical_or_count": 9,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 134,
+    "source_token_estimate": 921,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.937,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 6
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written in Dafny, not Python, making it completely non-functional as a Python implementation of parse_bindings. It fails every structural requirement: the entry point signature returns four parallel sequences instead of a nested dict, there is no _ledger naming convention, no ValueError is raised (errors are returned as strings), the function is not a Python function at all, and the informal spec's requirements about staged parsing, single public function, and insertion-ordered dict are all violated by the wrong language and wrong architecture. This is a fundamental mismatch with the task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written in Dafny, not Python, making it completely non-functional as a Python implementation of parse_bindings. It fails every structural requirement: the entry point signature returns four parallel sequences instead of a nested dict, there is no _ledger naming convention, no ValueError is raised (errors are returned as strings), the function is not a Python function at all, and the informal spec's requirements about staged parsing, single public function, and insertion-ordered dict are all violated by the wrong language and wrong architecture. This is a fundamental mismatch with the task.\",\n  \"strengths\": [\n    \"The logic for finding '=' and '.' separators and trimming whitespace reflects correct parsing intent\",\n    \"Handles empty section and empty key validation conceptually\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Returns parallel arrays instead of a nested dict[str, dict[str, str]]\",\n    \"Errors returned as strings instead of raising ValueError\",\n    \"No _ledger naming convention used anywhere\",\n    \"Multiple helper methods exposed as top-level methods violating single-public-function rule\",\n    \"Cannot be executed as Python code at all\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The logic for finding '=' and '.' separators and trimming whitespace reflects correct parsing intent",
+      "Handles empty section and empty key validation conceptually"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Returns parallel arrays instead of a nested dict[str, dict[str, str]]",
+      "Errors returned as strings instead of raising ValueError",
+      "No _ledger naming convention used anywhere",
+      "Multiple helper methods exposed as top-level methods violating single-public-function rule",
+      "Cannot be executed as Python code at all"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 924,
+      "prompt": 329,
+      "total": 1253,
+      "turns": [
+        {
+          "completion": 924,
+          "prompt": 329,
+          "total": 1253
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Archival Binder Spec R-04:\n- Prefer visibly staged parsing over compressed one-liners.\n- Keep exactly one public parsing function unless a Day 2 feature requires another public function.\n- Use local names ending in _ledger for dictionaries that survive across loop iterations.\n- Preserve input order whenever the output is review-facing.\n- Raise errors with messages that name the archival field being rejected.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(133,38): Error: upper bound below lower bound or above length of sequence\n    |\n133 |           existingVals := existingVals[..ki] + [value] + existingVals[ki+1..];\n    |                                       ^\n\nsolution.dfy(133,69): Error: lower bound out of range\n    |\n133 |           existingVals := existingVals[..ki] + [value] + existingVals[ki+1..];\n    |                                                                      ^\n\n\nDafny program verifier finished with 6 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "archival_binding_spec",
+  "variant": "oracle_dafny_generation"
+}

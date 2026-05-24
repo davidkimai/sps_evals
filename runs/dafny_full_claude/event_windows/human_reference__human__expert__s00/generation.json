@@ -1,0 +1,40 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef summarize_windows(events: list[dict], window_size: int) -> list[dict]:\n    if window_size <= 0:\n        raise ValueError(\"window_size must be positive\")\n\n    windows: dict[int, dict[str, int]] = {}\n    for event in events:\n        timestamp = event.get(\"timestamp\")\n        value = event.get(\"value\")\n        if not isinstance(timestamp, int) or not isinstance(value, int):\n            continue\n\n        start = (timestamp // window_size) * window_size\n        summary = windows.setdefault(start, {\"start\": start, \"count\": 0, \"total\": 0})\n        summary[\"count\"] += 1\n        summary[\"total\"] += value\n\n    return [windows[start] for start in sorted(windows)]\n",
+  "effective_temperature": null,
+  "entry_point": "summarize_windows",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef summarize_windows(events: list[dict], window_size: int) -> list[dict]:\n    if window_size <= 0:\n        raise ValueError(\"window_size must be positive\")\n\n    windows: dict[int, dict[str, int]] = {}\n    for event in events:\n        timestamp = event.get(\"timestamp\")\n        value = event.get(\"value\")\n        if not isinstance(timestamp, int) or not isinstance(value, int):\n            continue\n\n        start = (timestamp // window_size) * window_size\n        summary = windows.setdefault(start, {\"start\": start, \"count\": 0, \"total\": 0})\n        summary[\"count\"] += 1\n        summary[\"total\"] += value\n\n    return [windows[start] for start in sorted(windows)]\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend summarize_windows to accept an optional keyword argument\ninclude_average: bool = False. When true, each returned row must include an\n\"average\" field equal to total / count. Preserve the original output shape\nwhen include_average is omitted or false.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import summarize_windows\n\n\ndef test_can_include_average_without_changing_default_shape():\n    events = [\n        {\"timestamp\": 2, \"value\": 3},\n        {\"timestamp\": 9, \"value\": 5},\n        {\"timestamp\": 12, \"value\": 7},\n    ]\n\n    assert summarize_windows(events, 10) == [\n        {\"start\": 0, \"count\": 2, \"total\": 8},\n        {\"start\": 10, \"count\": 1, \"total\": 7},\n    ]\n    assert summarize_windows(events, 10, include_average=True) == [\n        {\"start\": 0, \"count\": 2, \"total\": 8, \"average\": 4.0},\n        {\"start\": 10, \"count\": 1, \"total\": 7, \"average\": 7.0},\n    ]\n\n\ndef test_rejects_bad_window_size():\n    with pytest.raises(ValueError):\n        summarize_windows([], 0)\n",
+    "entry_point": "summarize_windows",
+    "human_reference": "from __future__ import annotations\n\n\ndef summarize_windows(events: list[dict], window_size: int) -> list[dict]:\n    if window_size <= 0:\n        raise ValueError(\"window_size must be positive\")\n\n    windows: dict[int, dict[str, int]] = {}\n    for event in events:\n        timestamp = event.get(\"timestamp\")\n        value = event.get(\"value\")\n        if not isinstance(timestamp, int) or not isinstance(value, int):\n            continue\n\n        start = (timestamp // window_size) * window_size\n        summary = windows.setdefault(start, {\"start\": start, \"count\": 0, \"total\": 0})\n        summary[\"count\"] += 1\n        summary[\"total\"] += value\n\n    return [windows[start] for start in sorted(windows)]\n",
+    "id": "event_windows",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef summarize_windows(\n    events: list[dict],\n    window_size: int,\n    *,\n    include_average: bool = False,\n) -> list[dict]:\n    if window_size <= 0:\n        raise ValueError(\"window_size must be positive\")\n\n    windows: dict[int, dict[str, int]] = {}\n    for event in events:\n        timestamp = event.get(\"timestamp\")\n        value = event.get(\"value\")\n        if not isinstance(timestamp, int) or not isinstance(value, int):\n            continue\n\n        start = (timestamp // window_size) * window_size\n        row = windows.setdefault(start, {\"start\": start, \"count\": 0, \"total\": 0})\n        row[\"count\"] += 1\n        row[\"total\"] += value\n\n    rows = [dict(windows[start]) for start in sorted(windows)]\n    if include_average:\n        for row in rows:\n            row[\"average\"] = row[\"total\"] / row[\"count\"]\n    return rows\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef summarize_windows(events: list[dict], window_size: int) -> list[dict]:\n    if window_size <= 0:\n        raise ValueError(\"window_size must be positive\")\n\n    windows: dict[int, dict[str, int]] = {}\n    for event in events:\n        timestamp = event.get(\"timestamp\")\n        value = event.get(\"value\")\n        if not isinstance(timestamp, int) or not isinstance(value, int):\n            continue\n\n        start = (timestamp // window_size) * window_size\n        row = windows.setdefault(start, {\"start\": start, \"count\": 0, \"total\": 0})\n        row[\"count\"] += 1\n        row[\"total\"] += value\n\n    return [windows[start] for start in sorted(windows)]\n",
+    "prompt": "Implement summarize_windows(events: list[dict], window_size: int) -> list[dict].\n\nEach event has \"timestamp\" and \"value\" integer fields. Ignore malformed\nevents. window_size must be positive, otherwise raise ValueError.\n\nGroup events into half-open windows [k * window_size, (k + 1) * window_size)\nusing integer floor division. Return rows sorted by window start:\n{\"start\": start, \"count\": count, \"total\": total}.\n",
+    "tags": [
+      "intervals",
+      "aggregation",
+      "edge-cases"
+    ],
+    "test_code": "import pytest\n\nfrom solution import summarize_windows\n\n\ndef test_summarizes_sorted_windows():\n    events = [\n        {\"timestamp\": 12, \"value\": 5},\n        {\"timestamp\": 2, \"value\": 3},\n        {\"timestamp\": 9, \"value\": 4},\n        {\"timestamp\": \"bad\", \"value\": 10},\n        {\"timestamp\": 1, \"value\": None},\n    ]\n\n    assert summarize_windows(events, 10) == [\n        {\"start\": 0, \"count\": 2, \"total\": 7},\n        {\"start\": 10, \"count\": 1, \"total\": 5},\n    ]\n\n\ndef test_rejects_bad_window_size():\n    with pytest.raises(ValueError):\n        summarize_windows([], 0)\n"
+  },
+  "task_id": "event_windows",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

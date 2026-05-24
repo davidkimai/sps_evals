@@ -1,0 +1,58 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, minimal, and well-structured. It uses a sentinel `_MISSING` object to distinguish between a missing path and a legitimate `None` value, which is a correct and explicit design choice. The separation into a small pure helper `_resolve_path` and the main `extract_fields` function keeps control flow flat and responsibilities clear. The loop in `_resolve_path` uses guard clauses to return early on failure, avoiding deep nesting. Names are self-explanatory, there is no mutation of the input, no speculative abstractions, and no framework-shaped code. The only minor quibble is that negative list indexes are silently treated as missing (since `isdigit()` returns False for negative numbers), which could be considered either a reasonable constraint or a subtle gap depending on requirements, but given the spec says 'integer list indexes' with the example '0', this is acceptable. Overall this is a textbook example of the Zen-aligned implementation.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, minimal, and well-structured. It uses a sentinel `_MISSING` object to distinguish between a missing path and a legitimate `None` value, which is a correct and explicit design choice. The separation into a small pure helper `_resolve_path` and the main `extract_fields` function keeps control flow flat and responsibilities clear. The loop in `_resolve_path` uses guard clauses to return early on failure, avoiding deep nesting. Names are self-explanatory, there is no mutation of the input, no speculative abstractions, and no framework-shaped code. The only minor quibble is that negative list indexes are silently treated as missing (since `isdigit()` returns False for negative numbers), which could be considered either a reasonable constraint or a subtle gap depending on requirements, but given the spec says 'integer list indexes' with the example '0', this is acceptable. Overall this is a textbook example of the Zen-aligned implementation.\",\n  \"strengths\": [\n    \"Sentinel `_MISSING` correctly handles `None` as a valid stored value\",\n    \"Clean separation between orchestration (`extract_fields`) and path resolution (`_resolve_path`)\",\n    \"Flat control flow with early returns instead of nested conditionals\",\n    \"No input mutation, no global state, no hidden side effects\",\n    \"Minimal and readable \u2014 easy to audit locally\"\n  ],\n  \"weaknesses\": [\n    \"Negative list indexes silently fall through to `_MISSING` rather than raising a clear error or being supported\",\n    \"No input validation (e.g., non-dict `record` or non-string path values) with explicit errors as the spec suggests\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Sentinel `_MISSING` correctly handles `None` as a valid stored value",
+      "Clean separation between orchestration (`extract_fields`) and path resolution (`_resolve_path`)",
+      "Flat control flow with early returns instead of nested conditionals",
+      "No input mutation, no global state, no hidden side effects",
+      "Minimal and readable \u2014 easy to audit locally"
+    ],
+    "weaknesses": [
+      "Negative list indexes silently fall through to `_MISSING` rather than raising a clear error or being supported",
+      "No input validation (e.g., non-dict `record` or non-string path values) with explicit errors as the spec suggests"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 4.986,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.06s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 5.0,
+    "cyclomatic_complexity_max": 7,
+    "cyclomatic_complexity_total": 10,
+    "function_count": 2,
+    "loc": 22,
+    "maintainability_index": 58.067,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "json_path_projection",
+  "variant": "human_reference"
+}

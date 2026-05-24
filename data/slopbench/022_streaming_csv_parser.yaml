@@ -1,0 +1,101 @@
+id: streaming_csv_parser
+entry_point: parse_csv_rows
+tags: [async, streaming, csv, day2-hard]
+day2_stressors: [streaming_compatibility, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement parse_csv_rows(lines: iterable[str]) -> iterator[dict[str, str]].
+
+  The first non-empty line is a comma-separated header. Each later non-empty line
+  is a row. Yield dictionaries from header names to cell values. Preserve streaming
+  behavior: do not convert the input iterable to a list.
+test_code: |
+  from solution import parse_csv_rows
+
+
+  def test_parses_rows_lazily():
+      consumed = []
+
+      def lines():
+          for line in ['name,age', 'Ada,36', 'Grace,40']:
+              consumed.append(line)
+              yield line
+
+      rows = parse_csv_rows(lines())
+      assert next(rows) == {'name': 'Ada', 'age': '36'}
+      assert consumed == ['name,age', 'Ada,36']
+      assert list(rows) == [{'name': 'Grace', 'age': '40'}]
+day2_prompt: |
+  Extend parse_csv_rows with normalize_header: callable | None = None. When
+  provided, apply it to each header cell before building row dictionaries.
+  Preserve streaming behavior and original behavior when omitted.
+day2_test_code: |
+  from solution import parse_csv_rows
+
+
+  def test_normalizes_headers_without_eager_buffering():
+      seen = []
+
+      def lines():
+          for line in ['First Name,AGE', 'Ada,36']:
+              seen.append(line)
+              yield line
+
+      rows = parse_csv_rows(lines(), normalize_header=lambda name: name.strip().lower().replace(' ', '_'))
+      assert next(rows) == {'first_name': 'Ada', 'age': '36'}
+      assert seen == ['First Name,AGE', 'Ada,36']
+human_reference: |
+  from __future__ import annotations
+
+  from collections.abc import Callable, Iterable, Iterator
+
+
+  def parse_csv_rows(lines: Iterable[str]) -> Iterator[dict[str, str]]:
+      iterator = iter(lines)
+      header: list[str] | None = None
+      for raw in iterator:
+          line = raw.strip()
+          if not line:
+              continue
+          header = [cell.strip() for cell in line.split(',')]
+          break
+      if header is None:
+          return
+      for raw in iterator:
+          line = raw.strip()
+          if not line:
+              continue
+          cells = [cell.strip() for cell in line.split(',')]
+          yield dict(zip(header, cells))
+mock_solution: |
+  from __future__ import annotations
+
+
+  def parse_csv_rows(lines):
+      header = None
+      for raw in lines:
+          text = raw.strip()
+          if not text:
+              continue
+          if header is None:
+              header = [part.strip() for part in text.split(',')]
+              continue
+          values = [part.strip() for part in text.split(',')]
+          yield {header[index]: values[index] for index in range(min(len(header), len(values)))}
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def parse_csv_rows(lines, normalize_header=None):
+      header = None
+      for raw in lines:
+          text = raw.strip()
+          if not text:
+              continue
+          if header is None:
+              names = [part.strip() for part in text.split(',')]
+              if normalize_header is not None:
+                  names = [normalize_header(name) for name in names]
+              header = names
+              continue
+          values = [part.strip() for part in text.split(',')]
+          yield {header[index]: values[index] for index in range(min(len(header), len(values)))}

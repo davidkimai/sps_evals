@@ -1,0 +1,3 @@
+alt_good_formal_pass,alt_good_visible_pass,mutant_first_failure_case_id,mutant_formal_pass,mutant_visible_pass,reference_formal_pass,reference_visible_pass,review_boundary_triggered,task_id
+True,True,path_traversal,False,True,True,True,False,safe_path_validation
+True,True,pad_spaces,False,False,True,True,False,timing_safe_compare

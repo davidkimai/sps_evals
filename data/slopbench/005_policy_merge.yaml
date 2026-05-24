@@ -1,0 +1,107 @@
+id: policy_merge
+entry_point: merge_policy
+tags: [config, validation, explicitness]
+day2_stressors: [parameter_threading, backwards_compatibility]
+prompt: |
+  Implement merge_policy(defaults: dict, override: dict) -> dict.
+
+  Return a new dictionary. The override wins over defaults. If both values for a
+  key are dictionaries, merge them recursively. If override contains a key with
+  value None, remove that key from the result. Do not mutate either input.
+test_code: |
+  from solution import merge_policy
+
+
+  def test_merges_recursively_and_removes_none_values():
+      defaults = {
+          "retry": {"count": 3, "backoff": "linear"},
+          "log": True,
+          "region": "us",
+      }
+      override = {
+          "retry": {"backoff": "expo"},
+          "region": None,
+      }
+
+      result = merge_policy(defaults, override)
+
+      assert result == {
+          "retry": {"count": 3, "backoff": "expo"},
+          "log": True,
+      }
+      assert defaults["retry"]["backoff"] == "linear"
+      assert "region" in defaults
+day2_prompt: |
+  Extend merge_policy to accept an optional keyword argument
+  allow_delete: bool = True. When allow_delete is false, None values in the
+  override should be ignored instead of deleting keys. Preserve the original
+  behavior when allow_delete is omitted.
+day2_test_code: |
+  from solution import merge_policy
+
+
+  def test_can_disable_none_as_delete_marker():
+      defaults = {"retry": {"count": 3, "backoff": "linear"}, "region": "us"}
+      override = {"retry": {"backoff": None}, "region": None}
+
+      assert merge_policy(defaults, override) == {"retry": {"count": 3}}
+      assert merge_policy(defaults, override, allow_delete=False) == defaults
+      assert defaults == {"retry": {"count": 3, "backoff": "linear"}, "region": "us"}
+human_reference: |
+  from __future__ import annotations
+
+  from copy import deepcopy
+
+
+  def merge_policy(defaults: dict, override: dict) -> dict:
+      result = deepcopy(defaults)
+      for key, value in override.items():
+          if value is None:
+              result.pop(key, None)
+              continue
+
+          current = result.get(key)
+          if isinstance(current, dict) and isinstance(value, dict):
+              result[key] = merge_policy(current, value)
+              continue
+          result[key] = deepcopy(value)
+      return result
+mock_solution: |
+  from __future__ import annotations
+
+  from copy import deepcopy
+
+
+  def merge_policy(defaults: dict, override: dict) -> dict:
+      result = deepcopy(defaults)
+      for key, value in override.items():
+          if value is None:
+              result.pop(key, None)
+              continue
+
+          existing = result.get(key)
+          if isinstance(existing, dict) and isinstance(value, dict):
+              result[key] = merge_policy(existing, value)
+          else:
+              result[key] = deepcopy(value)
+      return result
+mock_day2_solution: |
+  from __future__ import annotations
+
+  from copy import deepcopy
+
+
+  def merge_policy(defaults: dict, override: dict, *, allow_delete: bool = True) -> dict:
+      result = deepcopy(defaults)
+      for key, value in override.items():
+          if value is None:
+              if allow_delete:
+                  result.pop(key, None)
+              continue
+
+          existing = result.get(key)
+          if isinstance(existing, dict) and isinstance(value, dict):
+              result[key] = merge_policy(existing, value, allow_delete=allow_delete)
+          else:
+              result[key] = deepcopy(value)
+      return result

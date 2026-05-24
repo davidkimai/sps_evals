@@ -1,0 +1,7 @@
+candidate_count,formal_support_present,split,surface,task_id,visible_formal_fail_present
+10,True,dev,internal,permission_gate,True
+10,False,dev,secure,token_scope_checker,True
+16,True,confirmatory,internal,feature_flag_matrix,True
+16,True,confirmatory,internal,timing_safe_compare,True
+16,True,confirmatory,internal,token_bucket_enforcer,True
+16,True,confirmatory,secure,safe_path_validation,False

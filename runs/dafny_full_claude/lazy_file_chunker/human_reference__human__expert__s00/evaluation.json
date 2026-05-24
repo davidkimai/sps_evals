@@ -1,0 +1,58 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is a near-perfect realization of the Zen of Python oracle for this task. It validates the input immediately with a clear error message, uses a simple while-True/break loop that reads lazily without loading the whole file, yields only non-empty chunks, and has zero speculative abstractions or unnecessary complexity. The type annotations are precise and informative without being burdensome. The control flow is completely flat with a single guard clause at the top. Every line is locally auditable and the behavior is obvious at a glance.",
+    "raw_response": "{\n  \"score\": 10,\n  \"rationale\": \"This implementation is a near-perfect realization of the Zen of Python oracle for this task. It validates the input immediately with a clear error message, uses a simple while-True/break loop that reads lazily without loading the whole file, yields only non-empty chunks, and has zero speculative abstractions or unnecessary complexity. The type annotations are precise and informative without being burdensome. The control flow is completely flat with a single guard clause at the top. Every line is locally auditable and the behavior is obvious at a glance.\",\n  \"strengths\": [\n    \"Immediate, explicit validation with a descriptive ValueError\",\n    \"Lazy reading via a simple while-True/break loop \u2014 no clever itertools or hidden buffering\",\n    \"Non-empty chunk guarantee handled naturally by the truthiness check\",\n    \"Precise type annotations (BinaryIO, Iterator[bytes]) without over-engineering\",\n    \"Zero dead code, unused imports, or speculative extension points\",\n    \"Flat control flow \u2014 no nesting beyond the loop itself\"\n  ],\n  \"weaknesses\": [\n    \"No weaknesses of note; the implementation is minimal and correct\"\n  ]\n}",
+    "score": 10,
+    "skipped": false,
+    "strengths": [
+      "Immediate, explicit validation with a descriptive ValueError",
+      "Lazy reading via a simple while-True/break loop \u2014 no clever itertools or hidden buffering",
+      "Non-empty chunk guarantee handled naturally by the truthiness check",
+      "Precise type annotations (BinaryIO, Iterator[bytes]) without over-engineering",
+      "Zero dead code, unused imports, or speculative extension points",
+      "Flat control flow \u2014 no nesting beyond the loop itself"
+    ],
+    "weaknesses": [
+      "No weaknesses of note; the implementation is minimal and correct"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 8.805,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "..                                                                       [100%]\n2 passed in 0.10s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 4.0,
+    "cyclomatic_complexity_max": 4,
+    "cyclomatic_complexity_total": 4,
+    "function_count": 1,
+    "loc": 11,
+    "maintainability_index": 69.289,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "lazy_file_chunker",
+  "variant": "human_reference"
+}

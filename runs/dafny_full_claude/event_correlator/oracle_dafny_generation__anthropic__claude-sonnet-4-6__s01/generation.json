@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method correlate_events(events: seq<(int, int, int)>, within: int) returns (result: seq<(int, int, int, int, int, int)>)\n  // Each event is (session_id, event_type, timestamp) where event_type 0=A, 1=B\n  // Result pairs are (session_idA, typeA=0, timestampA, session_idB, typeB=1, timestampB)\n  requires within >= 0\n  ensures forall i :: 0 <= i < |result| ==>\n    result[i].0 == result[i].3 &&  // same session\n    result[i].1 == 0 &&             // first is type A\n    result[i].4 == 1 &&             // second is type B\n    result[i].5 - result[i].2 >= 0 &&  // B is later\n    result[i].5 - result[i].2 <= within  // within time window\n{\n  result := [];\n  var usedB: seq<int> := [];\n  \n  var i := 0;\n  while i < |events|\n    invariant 0 <= i <= |events|\n    invariant forall k :: 0 <= k < |result| ==>\n      result[k].0 == result[k].3 &&\n      result[k].1 == 0 &&\n      result[k].4 == 1 &&\n      result[k].5 - result[k].2 >= 0 &&\n      result[k].5 - result[k].2 <= within\n  {\n    if events[i].1 == 0 {  // event type A\n      var sessionA := events[i].0;\n      var timeA := events[i].2;\n      \n      // Find first later B in same session within time window\n      var j := 0;\n      var found := false;\n      while j < |events| && !found\n        invariant 0 <= j <= |events|\n        invariant !found\n      {\n        if events[j].1 == 1 &&           // type B\n           events[j].0 == sessionA &&     // same session\n           events[j].2 >= timeA &&        // B is later or equal\n           events[j].2 - timeA <= within && // within window\n           events[j].2 > timeA            // strictly later\n        {\n          // Check if this B index is already used\n          var alreadyUsed := false;\n          var k := 0;\n          while k < |usedB|\n            invariant 0 <= k <= |usedB|\n          {\n            if usedB[k] == j {\n              alreadyUsed := true;\n            }\n            k := k + 1;\n          }\n          if !alreadyUsed {\n            result := result + [(sessionA, 0, timeA, events[j].0, 1, events[j].2)];\n            usedB := usedB + [j];\n            found := true;\n          }\n        }\n        if !found {\n          j := j + 1;\n        }\n      }\n    }\n    i := i + 1;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "correlate_events",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 553,
+      "prompt": 289,
+      "total": 842,
+      "turns": [
+        {
+          "completion": 553,
+          "prompt": 289,
+          "total": 842
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod correlate_events(events: seq<(int, int, int)>, within: int) returns (result: seq<(int, int, int, int, int, int)>)\n  // Each event is (session_id, event_type, timestamp) where event_type 0=A, 1=B\n  // Result pairs are (session_idA, typeA=0, timestampA, session_idB, typeB=1, timestampB)\n  requires within >= 0\n  ensures forall i :: 0 <= i < |result| ==>\n    result[i].0 == result[i].3 &&  // same session\n    result[i].1 == 0 &&             // first is type A\n    result[i].4 == 1 &&             // second is type B\n    result[i].5 - result[i].2 >= 0 &&  // B is later\n    result[i].5 - result[i].2 <= within  // within time window\n{\n  result := [];\n  var usedB: seq<int> := [];\n  \n  var i := 0;\n  while i < |events|\n    invariant 0 <= i <= |events|\n    invariant forall k :: 0 <= k < |result| ==>\n      result[k].0 == result[k].3 &&\n      result[k].1 == 0 &&\n      result[k].4 == 1 &&\n      result[k].5 - result[k].2 >= 0 &&\n      result[k].5 - result[k].2 <= within\n  {\n    if events[i].1 == 0 {  // event type A\n      var sessionA := events[i].0;\n      var timeA := events[i].2;\n      \n      // Find first later B in same session within time window\n      var j := 0;\n      var found := false;\n      while j < |events| && !found\n        invariant 0 <= j <= |events|\n        invariant !found\n      {\n        if events[j].1 == 1 &&           // type B\n           events[j].0 == sessionA &&     // same session\n           events[j].2 >= timeA &&        // B is later or equal\n           events[j].2 - timeA <= within && // within window\n           events[j].2 > timeA            // strictly later\n        {\n          // Check if this B index is already used\n          var alreadyUsed := false;\n          var k := 0;\n          while k < |usedB|\n            invariant 0 <= k <= |usedB|\n          {\n            if usedB[k] == j {\n              alreadyUsed := true;\n            }\n            k := k + 1;\n          }\n          if !alreadyUsed {\n            result := result + [(sessionA, 0, timeA, events[j].0, 1, events[j].2)];\n            usedB := usedB + [j];\n            found := true;\n          }\n        }\n        if !found {\n          j := j + 1;\n        }\n      }\n    }\n    i := i + 1;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend correlate_events with chain_types: list[str] | None = None. When provided,\nreturn chains of events matching the ordered types within the same session, with\neach adjacent step within the window.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "interface_generalization",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import correlate_events\n\n\ndef test_multi_type_chain_matching():\n    events = [\n        {'session_id': 's', 'type': 'A', 'ts': 1},\n        {'session_id': 's', 'type': 'B', 'ts': 2},\n        {'session_id': 's', 'type': 'C', 'ts': 4},\n    ]\n    assert correlate_events(events, within=3, chain_types=['A', 'B', 'C']) == [events]\n",
+    "entry_point": "correlate_events",
+    "human_reference": "from __future__ import annotations\n\n\ndef correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]]:\n    ordered = sorted(events, key=lambda row: row.get('ts', 0))\n    pairs = []\n    for left in ordered:\n        if left.get('type') != 'A':\n            continue\n        for right in ordered:\n            if right.get('session_id') != left.get('session_id') or right.get('type') != 'B':\n                continue\n            if 0 < right.get('ts', 0) - left.get('ts', 0) <= within:\n                pairs.append((left, right))\n                break\n    return pairs\n",
+    "id": "event_correlator",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef correlate_events(events, *, within: int, chain_types=None):\n    ordered = sorted(events, key=lambda row: row['ts'])\n    if chain_types is None:\n        out = []\n        for index, event in enumerate(ordered):\n            if event.get('type') == 'A':\n                for candidate in ordered[index + 1:]:\n                    if candidate.get('session_id') == event.get('session_id') and candidate.get('type') == 'B' and candidate['ts'] - event['ts'] <= within:\n                        out.append((event, candidate))\n                        break\n        return out\n    chains = []\n    for event in ordered:\n        if event.get('type') != chain_types[0]:\n            continue\n        chain = [event]\n        cursor = event\n        for expected in chain_types[1:]:\n            match = None\n            for candidate in ordered:\n                if candidate.get('session_id') == cursor.get('session_id') and candidate.get('type') == expected and 0 < candidate['ts'] - cursor['ts'] <= within:\n                    match = candidate\n                    break\n            if match is None:\n                chain = []\n                break\n            chain.append(match)\n            cursor = match\n        if chain:\n            chains.append(chain)\n    return chains\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef correlate_events(events, *, within: int):\n    out = []\n    ordered = sorted(events, key=lambda row: row['ts'])\n    for index, event in enumerate(ordered):\n        if event.get('type') == 'A':\n            for candidate in ordered[index + 1:]:\n                if candidate.get('session_id') == event.get('session_id') and candidate.get('type') == 'B' and candidate['ts'] - event['ts'] <= within:\n                    out.append((event, candidate))\n                    break\n    return out\n",
+    "prompt": "Implement correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]].\nPair event type 'A' with the first later type 'B' in the same session_id where\nthe time delta is no more than within seconds.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "events",
+      "day2-hard"
+    ],
+    "test_code": "from solution import correlate_events\n\n\ndef test_correlates_a_before_b_by_session():\n    events = [{'session_id': 's', 'type': 'A', 'ts': 1}, {'session_id': 's', 'type': 'B', 'ts': 3}]\n    pairs = correlate_events(events, within=5)\n    assert pairs == [(events[0], events[1])]\n"
+  },
+  "task_id": "event_correlator",
+  "user_prompt": "Task id: event_correlator\nEntry point: correlate_events\n\nFunctional requirements:\nImplement correlate_events(events: list[dict], *, within: int) -> list[tuple[dict, dict]].\nPair event type 'A' with the first later type 'B' in the same session_id where\nthe time delta is no more than within seconds.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

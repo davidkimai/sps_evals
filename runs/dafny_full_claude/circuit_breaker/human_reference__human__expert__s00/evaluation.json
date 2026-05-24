@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, flat, and explicit. State is tracked via a named `state` attribute with clear string literals ('closed', 'open', 'half_open'), satisfying RCS-5's inspectability requirement. Configuration values are stored as named instance attributes. The half-open trial logic correctly reopens on failure and closes on success. The `now` injection pattern is idiomatic and testable. The logic is contained in a single, readable method with no unnecessary abstraction layers. Minor issues: the failure counter isn't reset when transitioning to half_open (though this doesn't affect correctness since it's overwritten on success/failure), and the guard `failure_threshold <= 0` rejects zero which is reasonable but undocumented. Overall this is a tight, auditable implementation with minimal slop.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, flat, and explicit. State is tracked via a named `state` attribute with clear string literals ('closed', 'open', 'half_open'), satisfying RCS-5's inspectability requirement. Configuration values are stored as named instance attributes. The half-open trial logic correctly reopens on failure and closes on success. The `now` injection pattern is idiomatic and testable. The logic is contained in a single, readable method with no unnecessary abstraction layers. Minor issues: the failure counter isn't reset when transitioning to half_open (though this doesn't affect correctness since it's overwritten on success/failure), and the guard `failure_threshold <= 0` rejects zero which is reasonable but undocumented. Overall this is a tight, auditable implementation with minimal slop.\",\n  \"strengths\": [\n    \"Explicit state attribute with clear string values satisfies RCS-5 inspectability\",\n    \"Named configuration attributes (failure_threshold, recovery_timeout) \u2014 no magic constants\",\n    \"Half-open trial correctly closes on success and reopens on failure\",\n    \"Injectable `now` function enables deterministic testing\",\n    \"Flat, single-method control flow with no unnecessary abstraction\"\n  ],\n  \"weaknesses\": [\n    \"Failure counter not reset when entering half_open state (minor, doesn't affect correctness)\",\n    \"Input validation raises ValueError for zero thresholds but this behavior is undocumented\",\n    \"String literals for state could be an enum for stronger type safety, though strings are more readable here\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Explicit state attribute with clear string values satisfies RCS-5 inspectability",
+      "Named configuration attributes (failure_threshold, recovery_timeout) \u2014 no magic constants",
+      "Half-open trial correctly closes on success and reopens on failure",
+      "Injectable `now` function enables deterministic testing",
+      "Flat, single-method control flow with no unnecessary abstraction"
+    ],
+    "weaknesses": [
+      "Failure counter not reset when entering half_open state (minor, doesn't affect correctness)",
+      "Input validation raises ValueError for zero thresholds but this behavior is undocumented",
+      "String literals for state could be an enum for stronger type safety, though strings are more readable here"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Resilience Control Standard RCS-5:\n- State transitions must be explicit and inspectable through a state attribute.\n- Failure thresholds and recovery timers must be named configuration values, not magic constants.\n- Half-open trials must either close on success or reopen on failure.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 3.998,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.22s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 5.333,
+    "cyclomatic_complexity_max": 6,
+    "cyclomatic_complexity_total": 16,
+    "function_count": 2,
+    "loc": 28,
+    "maintainability_index": 51.613,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "circuit_breaker",
+  "variant": "human_reference"
+}

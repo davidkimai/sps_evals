@@ -1,0 +1,111 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 3,
+    "error_count": null,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 0
+    },
+    "lexical_proof_complexity": 4,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 20,
+    "source_token_estimate": 97,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.905,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation. The task requires a Python class with thread-safe lazy initialization, but instead the code is a Dafny formal specification with Dafny syntax (var, constructor, method, modifies, ensures, null checks with ==). It cannot be executed as Python, fails all functional requirements (no threading safety, no Python get() method, not even valid Python syntax), and violates every Zen of Python principle by being in the wrong language entirely. There are no redeemable Python-specific qualities to evaluate.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny, not Python, making it completely non-functional as a Python implementation. The task requires a Python class with thread-safe lazy initialization, but instead the code is a Dafny formal specification with Dafny syntax (var, constructor, method, modifies, ensures, null checks with ==). It cannot be executed as Python, fails all functional requirements (no threading safety, no Python get() method, not even valid Python syntax), and violates every Zen of Python principle by being in the wrong language entirely. There are no redeemable Python-specific qualities to evaluate.\",\n  \"strengths\": [\n    \"The Dafny specification correctly models the logical intent of lazy initialization with a null check and factory invocation\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"No thread safety mechanism (no lock, no threading module usage)\",\n    \"Not valid Python syntax; would cause a SyntaxError if executed\",\n    \"Does not implement the required Python class interface\",\n    \"Zero adherence to Zen of Python principles since it is not Python code\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny specification correctly models the logical intent of lazy initialization with a null check and factory invocation"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "No thread safety mechanism (no lock, no threading module usage)",
+      "Not valid Python syntax; would cause a SyntaxError if executed",
+      "Does not implement the required Python class interface",
+      "Zero adherence to Zen of Python principles since it is not Python code"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 100,
+      "prompt": 274,
+      "total": 374,
+      "turns": [
+        {
+          "completion": 100,
+          "prompt": 274,
+          "total": 374
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(9,12): Error: To prevent the creation of non-terminating functions, storing functions into an object's fields that reads the object is disallowed\n  |\n9 |     factory := f;\n  |             ^^\n\n1 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "lazy_singleton",
+  "variant": "oracle_dafny_generation"
+}

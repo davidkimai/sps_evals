@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is a clean, minimal realization of the task. It uses a plain dict of weak references, exposes exactly the three required methods, keeps control flow flat with guard clauses, makes data movement explicit, and relies entirely on standard-library constructs. The only minor quibble is that `cleanup` iterates the dict twice (once to filter, once to rebuild) and could race if a reference dies mid-comprehension, but this is a negligible practical concern for a single-threaded context and the chosen approach is still the most readable. Type annotations are present but not over-engineered, and there are no speculative abstractions or unused extension points.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is a clean, minimal realization of the task. It uses a plain dict of weak references, exposes exactly the three required methods, keeps control flow flat with guard clauses, makes data movement explicit, and relies entirely on standard-library constructs. The only minor quibble is that `cleanup` iterates the dict twice (once to filter, once to rebuild) and could race if a reference dies mid-comprehension, but this is a negligible practical concern for a single-threaded context and the chosen approach is still the most readable. Type annotations are present but not over-engineered, and there are no speculative abstractions or unused extension points.\",\n  \"strengths\": [\n    \"Minimal surface area: exactly three methods, no extras\",\n    \"Flat control flow with a simple guard clause in get()\",\n    \"Explicit data movement; no hidden mutation or global state\",\n    \"Standard-library only (weakref, dict); no clever metaprogramming\",\n    \"Names are self-explanatory and locally auditable\"\n  ],\n  \"weaknesses\": [\n    \"cleanup() rebuilds the entire dict via comprehension, calling ref() twice per entry (filter + potential future access); a single-pass approach would be marginally cleaner\",\n    \"No input validation on key type (task says 'key' but doesn't enforce str; silently accepts anything hashable)\",\n    \"Missing docstrings or inline comments for the non-obvious weakref semantics\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Minimal surface area: exactly three methods, no extras",
+      "Flat control flow with a simple guard clause in get()",
+      "Explicit data movement; no hidden mutation or global state",
+      "Standard-library only (weakref, dict); no clever metaprogramming",
+      "Names are self-explanatory and locally auditable"
+    ],
+    "weaknesses": [
+      "cleanup() rebuilds the entire dict via comprehension, calling ref() twice per entry (filter + potential future access); a single-pass approach would be marginally cleaner",
+      "No input validation on key type (task says 'key' but doesn't enforce str; silently accepts anything hashable)",
+      "Missing docstrings or inline comments for the non-obvious weakref semantics"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 5.037,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.02s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 2.0,
+    "cyclomatic_complexity_max": 3,
+    "cyclomatic_complexity_total": 10,
+    "function_count": 4,
+    "loc": 13,
+    "maintainability_index": 64.932,
+    "max_nesting_depth": 0,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "object_registry",
+  "variant": "human_reference"
+}

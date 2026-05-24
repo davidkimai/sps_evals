@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 10,
+    "error_count": 6,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 6,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 10,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 0
+    },
+    "lexical_proof_complexity": 19,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 56,
+    "source_token_estimate": 330,
+    "status": "verification_failed",
+    "verification_duration_seconds": 4.91,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny syntax, not Python. It cannot be executed as a Python module, does not define a Python class, has no threading primitives (no locks, no threading.Lock), and does not implement the required Python interface (BoundedCounter with increment, total, snapshot methods returning Python types). The code is syntactically invalid Python and would raise a SyntaxError immediately. While the Dafny logic captures some of the correct semantics (bounds checking, counter tracking), it completely fails to satisfy the functional requirements in the target language, is not thread-safe in any Python sense, and represents a fundamental category error in the submission.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny syntax, not Python. It cannot be executed as a Python module, does not define a Python class, has no threading primitives (no locks, no threading.Lock), and does not implement the required Python interface (BoundedCounter with increment, total, snapshot methods returning Python types). The code is syntactically invalid Python and would raise a SyntaxError immediately. While the Dafny logic captures some of the correct semantics (bounds checking, counter tracking), it completely fails to satisfy the functional requirements in the target language, is not thread-safe in any Python sense, and represents a fundamental category error in the submission.\",\n  \"strengths\": [\n    \"The Dafny specification correctly models the counter semantics including preconditions and postconditions\",\n    \"The logical structure (counts map, maxTotal, currentTotal) mirrors a reasonable Python design\"\n  ],\n  \"weaknesses\": [\n    \"Submitted Dafny code instead of Python \u2014 completely invalid as a Python implementation\",\n    \"No thread-safety mechanism whatsoever (no threading.Lock or equivalent)\",\n    \"Does not raise ValueError or OverflowError as required Python exceptions\",\n    \"snapshot() returns the internal map directly with no copy, violating immutability requirement\",\n    \"Cannot be imported or executed as a Python module\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny specification correctly models the counter semantics including preconditions and postconditions",
+      "The logical structure (counts map, maxTotal, currentTotal) mirrors a reasonable Python design"
+    ],
+    "weaknesses": [
+      "Submitted Dafny code instead of Python \u2014 completely invalid as a Python implementation",
+      "No thread-safety mechanism whatsoever (no threading.Lock or equivalent)",
+      "Does not raise ValueError or OverflowError as required Python exceptions",
+      "snapshot() returns the internal map directly with no copy, violating immutability requirement",
+      "Cannot be imported or executed as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 333,
+      "prompt": 383,
+      "total": 716,
+      "turns": [
+        {
+          "completion": 333,
+          "prompt": 383,
+          "total": 716
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(25,2): Error: a postcondition could not be proved on this return path\n   |\n25 |   {\n   |   ^\n\nsolution.dfy(24,19): Related location: this is the postcondition that could not be proved\n   |\n24 |     ensures newVal >= 1\n   |                    ^^\n\nsolution.dfy(51,2): Error: assertion might not hold\n   |\n51 |   assert v1 == 1;\n   |   ^^^^^^\n\nsolution.dfy(52,23): Error: a precondition for this call could not be proved\n   |\n52 |   var v2 := c.increment(\"a\");\n   |                        ^\n\nsolution.dfy(18,26): Related location: this is the precondition that could not be proved\n   |\n18 |     requires currentTotal < maxTotal\n   |                           ^\n\nsolution.dfy(53,2): Error: assertion might not hold\n   |\n53 |   assert v2 == 2;\n   |   ^^^^^^\n\nsolution.dfy(54,23): Error: a precondition for this call could not be proved\n   |\n54 |   var v3 := c.increment(\"b\");\n   |                        ^\n\nsolution.dfy(18,26): Related location: this is the precondition that could not be proved\n   |\n18 |     requires currentTotal < maxTotal\n   |                           ^\n\nsolution.dfy(55,2): Error: assertion might not hold\n   |\n55 |   assert v3 == 1;\n   |   ^^^^^^\n\n\nDafny program verifier finished with 4 verified, 6 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "thread_safe_counter",
+  "variant": "oracle_dafny_generation"
+}

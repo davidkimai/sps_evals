@@ -1,0 +1,20 @@
+[
+  {
+    "cached_input_tokens": 0,
+    "cost_usd": 5.6e-05,
+    "input_tokens": 21,
+    "model": "gpt-5.4-mini",
+    "ok": true,
+    "output_tokens": 9,
+    "provider": "openai"
+  },
+  {
+    "cached_input_tokens": 0,
+    "cost_usd": 0.000885,
+    "input_tokens": 21,
+    "model": "gpt-5.5",
+    "ok": true,
+    "output_tokens": 26,
+    "provider": "openai"
+  }
+]

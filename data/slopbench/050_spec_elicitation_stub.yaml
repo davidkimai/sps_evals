@@ -1,0 +1,60 @@
+id: spec_elicitation_stub
+entry_point: handle_underspecified
+tags: [spec_elicitation, underspecified, day2-hard]
+day2_stressors: [error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement handle_underspecified(payload: dict) -> object. The only specified path
+  is payload {'mode': 'echo', 'value': X}, which returns X. For any uncovered input
+  path, raise NotImplementedError rather than guessing behavior.
+test_code: |
+  import pytest
+
+  from solution import handle_underspecified
+
+
+  def test_echo_and_refusal_to_guess():
+      assert handle_underspecified({'mode': 'echo', 'value': 3}) == 3
+      with pytest.raises(NotImplementedError):
+          handle_underspecified({'mode': 'sum', 'values': [1, 2]})
+day2_prompt: |
+  Extend handle_underspecified with a newly specified path: {'mode': 'count', 'items': list}
+  returns len(items). Continue raising NotImplementedError for all other uncovered paths.
+day2_test_code: |
+  import pytest
+
+  from solution import handle_underspecified
+
+
+  def test_adds_count_but_still_refuses_unknown_paths():
+      assert handle_underspecified({'mode': 'count', 'items': [1, 2, 3]}) == 3
+      assert handle_underspecified({'mode': 'echo', 'value': 'x'}) == 'x'
+      with pytest.raises(NotImplementedError):
+          handle_underspecified({'mode': 'average', 'items': [1, 2]})
+human_reference: |
+  from __future__ import annotations
+
+
+  def handle_underspecified(payload: dict):
+      if payload.get('mode') == 'echo' and 'value' in payload:
+          return payload['value']
+      raise NotImplementedError('uncovered input path')
+mock_solution: |
+  from __future__ import annotations
+
+
+  def handle_underspecified(payload):
+      mode = payload.get('mode')
+      if mode == 'echo' and 'value' in payload:
+          return payload['value']
+      raise NotImplementedError('uncovered input path')
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def handle_underspecified(payload):
+      mode = payload.get('mode')
+      if mode == 'echo' and 'value' in payload:
+          return payload['value']
+      if mode == 'count' and isinstance(payload.get('items'), list):
+          return len(payload['items'])
+      raise NotImplementedError('uncovered input path')

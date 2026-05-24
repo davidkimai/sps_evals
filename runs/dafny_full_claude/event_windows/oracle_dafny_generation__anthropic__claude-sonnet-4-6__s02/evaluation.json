@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": null,
+    "invariant_count": 16,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 1,
+      "decreases": 2,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 9,
+      "if": 7,
+      "invariant": 16,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 7
+    },
+    "lexical_proof_complexity": 52,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 120,
+    "source_token_estimate": 900,
+    "status": "verification_failed",
+    "verification_duration_seconds": 2.866,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python as required by the task. The entry point `summarize_windows` must be a Python function accepting `list[dict]` and returning `list[dict]`, but instead the code provides Dafny method signatures, Dafny invariants, Dafny map/set operations, and even uses `assume` to bypass proof obligations. This is not executable Python code at all \u2014 it would cause a syntax error if run. The functional requirements (handling malformed events, raising ValueError for non-positive window_size, returning dicts with 'start'/'count'/'total' keys) are entirely unaddressed. The Zen of Python principles of simplicity, explicitness, and readability are irrelevant here since the submission is in the wrong language entirely. The informal oracle reference to 'Dafny formal verification skill' appears to have been misread as an instruction to write Dafny code rather than Python code verified against Dafny-style reasoning.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python as required by the task. The entry point `summarize_windows` must be a Python function accepting `list[dict]` and returning `list[dict]`, but instead the code provides Dafny method signatures, Dafny invariants, Dafny map/set operations, and even uses `assume` to bypass proof obligations. This is not executable Python code at all \u2014 it would cause a syntax error if run. The functional requirements (handling malformed events, raising ValueError for non-positive window_size, returning dicts with 'start'/'count'/'total' keys) are entirely unaddressed. The Zen of Python principles of simplicity, explicitness, and readability are irrelevant here since the submission is in the wrong language entirely. The informal oracle reference to 'Dafny formal verification skill' appears to have been misread as an instruction to write Dafny code rather than Python code verified against Dafny-style reasoning.\",\n  \"strengths\": [\n    \"Demonstrates knowledge of Dafny syntax and formal verification concepts\",\n    \"Includes loop invariants and postconditions that correctly describe the intended algorithm\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as a Python module\",\n    \"Does not implement the required Python function signature summarize_windows(events: list[dict], window_size: int) -> list[dict]\",\n    \"Does not handle malformed event dicts or raise ValueError for invalid window_size\",\n    \"Returns tuples instead of dicts with 'start', 'count', 'total' keys\",\n    \"Uses `assume` to bypass a proof obligation, which is unsound even in Dafny\",\n    \"Zero adherence to Zen of Python principles \u2014 wrong language entirely\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates knowledge of Dafny syntax and formal verification concepts",
+      "Includes loop invariants and postconditions that correctly describe the intended algorithm"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as a Python module",
+      "Does not implement the required Python function signature summarize_windows(events: list[dict], window_size: int) -> list[dict]",
+      "Does not handle malformed event dicts or raise ValueError for invalid window_size",
+      "Returns tuples instead of dicts with 'start', 'count', 'total' keys",
+      "Uses `assume` to bypass a proof obligation, which is unsound even in Dafny",
+      "Zero adherence to Zen of Python principles \u2014 wrong language entirely"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 903,
+      "prompt": 338,
+      "total": 1241,
+      "turns": [
+        {
+          "completion": 903,
+          "prompt": 338,
+          "total": 1241
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(21,10): Error: invalid Ident\n   |\n21 |       var old := windows[start];\n   |           ^\n\nsolution.dfy(22,38): Error: openparen expected\n   |\n22 |       windows := windows[start := (old.0 + 1, old.1 + v)];\n   |                                       ^\n\nsolution.dfy(22,44): Error: closeparen expected\n   |\n22 |       windows := windows[start := (old.0 + 1, old.1 + v)];\n   |                                             ^\n\nsolution.dfy(22,49): Error: openparen expected\n   |\n22 |       windows := windows[start := (old.0 + 1, old.1 + v)];\n   |                                                  ^\n\nsolution.dfy(22,56): Error: closeparen expected\n   |\n22 |       windows := windows[start := (old.0 + 1, old.1 + v)];\n   |                                                         ^\n\n5 parse errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "event_windows",
+  "variant": "oracle_dafny_generation"
+}

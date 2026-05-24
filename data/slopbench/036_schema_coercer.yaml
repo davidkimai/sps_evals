@@ -1,0 +1,75 @@
+id: schema_coercer
+entry_point: coerce_schema
+tags: [data_pipeline_advanced, schema, day2-hard]
+day2_stressors: [parameter_threading, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement coerce_schema(raw: dict, schema: dict) -> dict. Schema maps field names
+  to (type_callable, default). If raw contains a field, cast it with the callable;
+  if missing, use the default. Raise ValueError with the field name when casting fails.
+test_code: |
+  import pytest
+
+  from solution import coerce_schema
+
+
+  def test_coerces_defaults_and_errors_by_field():
+      schema = {'age': (int, 0), 'name': (str, 'unknown'), 'active': (bool, False)}
+      assert coerce_schema({'age': '41', 'name': 'Ada'}, schema) == {'age': 41, 'name': 'Ada', 'active': False}
+      with pytest.raises(ValueError, match='age'):
+          coerce_schema({'age': 'bad'}, schema)
+day2_prompt: |
+  Extend coerce_schema with nullable: set[str] | None = None. If a nullable field is
+  present with value None, preserve None instead of casting. Preserve old behavior otherwise.
+day2_test_code: |
+  from solution import coerce_schema
+
+
+  def test_nullable_fields_are_preserved():
+      schema = {'age': (int, 0), 'name': (str, 'unknown')}
+      assert coerce_schema({'age': None}, schema, nullable={'age'}) == {'age': None, 'name': 'unknown'}
+      assert coerce_schema({}, schema, nullable={'age'}) == {'age': 0, 'name': 'unknown'}
+human_reference: |
+  from __future__ import annotations
+
+
+  def coerce_schema(raw: dict, schema: dict) -> dict:
+      output = {}
+      for field, (caster, default) in schema.items():
+          value = raw.get(field, default)
+          try:
+              output[field] = caster(value)
+          except Exception as exc:
+              raise ValueError(f'could not coerce {field}') from exc
+      return output
+mock_solution: |
+  from __future__ import annotations
+
+
+  def coerce_schema(raw, schema):
+      result = {}
+      for field in schema:
+          caster, default = schema[field]
+          candidate = raw[field] if field in raw else default
+          try:
+              result[field] = caster(candidate)
+          except Exception as exc:
+              raise ValueError(f'bad field: {field}') from exc
+      return result
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def coerce_schema(raw, schema, nullable=None):
+      nullable = nullable or set()
+      result = {}
+      for field, pair in schema.items():
+          caster, default = pair
+          candidate = raw[field] if field in raw else default
+          if field in nullable and field in raw and candidate is None:
+              result[field] = None
+              continue
+          try:
+              result[field] = caster(candidate)
+          except Exception as exc:
+              raise ValueError(f'bad field: {field}') from exc
+      return result

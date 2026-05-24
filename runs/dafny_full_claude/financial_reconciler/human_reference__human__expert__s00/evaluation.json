@@ -1,0 +1,58 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation closely follows TR-4 doctrine: direction is validated before any monetary accumulation occurs, debit and credit are stored in separate named accumulators within the bucket dict, and the balance computation is a clean named assignment outside any conditional. The code is flat, explicit, and locally auditable with no hidden arithmetic inside conditionals. Minor quibbles: recomputing balance on every iteration rather than once at the end is slightly wasteful but not a structural violation, and using `entry.get('amount', 0)` silently defaults missing amounts to zero rather than raising, which could mask malformed entries.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation closely follows TR-4 doctrine: direction is validated before any monetary accumulation occurs, debit and credit are stored in separate named accumulators within the bucket dict, and the balance computation is a clean named assignment outside any conditional. The code is flat, explicit, and locally auditable with no hidden arithmetic inside conditionals. Minor quibbles: recomputing balance on every iteration rather than once at the end is slightly wasteful but not a structural violation, and using `entry.get('amount', 0)` silently defaults missing amounts to zero rather than raising, which could mask malformed entries.\",\n  \"strengths\": [\n    \"Direction validated before any amount is touched, satisfying TR-4's tagging requirement\",\n    \"Separate named accumulators 'debit' and 'credit' in the bucket dict are explicit and auditable\",\n    \"No inline arithmetic inside the direction-deciding conditional\",\n    \"Flat single-loop structure with no nested functions or lambdas\",\n    \"setdefault cleanly initializes per-account state without repetition\"\n  ],\n  \"weaknesses\": [\n    \"Balance is recomputed on every entry rather than once after all entries are processed, a minor inefficiency\",\n    \"Silent default of amount=0 for missing 'amount' key may mask malformed input instead of raising\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Direction validated before any amount is touched, satisfying TR-4's tagging requirement",
+      "Separate named accumulators 'debit' and 'credit' in the bucket dict are explicit and auditable",
+      "No inline arithmetic inside the direction-deciding conditional",
+      "Flat single-loop structure with no nested functions or lambdas",
+      "setdefault cleanly initializes per-account state without repetition"
+    ],
+    "weaknesses": [
+      "Balance is recomputed on every entry rather than once after all entries are processed, a minor inefficiency",
+      "Silent default of amount=0 for missing 'amount' key may mask malformed input instead of raising"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treasury Reconciliation Doctrine TR-4:\n- Every monetary delta must be tagged debit or credit before it affects totals.\n- Debit and credit balances must be computed in separate named accumulators.\n- Do not place inline arithmetic inside conditionals that decide monetary direction.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 5.056,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.01s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 3.0,
+    "cyclomatic_complexity_max": 3,
+    "cyclomatic_complexity_total": 3,
+    "function_count": 1,
+    "loc": 13,
+    "maintainability_index": 64.405,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "financial_reconciler",
+  "variant": "human_reference"
+}

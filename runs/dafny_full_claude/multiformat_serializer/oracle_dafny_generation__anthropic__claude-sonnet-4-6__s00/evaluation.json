@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": 2,
+    "invariant_count": 6,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 6,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 7,
+      "if": 9,
+      "invariant": 6,
+      "logical_and": 0,
+      "logical_or": 3,
+      "match": 0,
+      "requires": 1,
+      "while": 6
+    },
+    "lexical_proof_complexity": 44,
+    "logical_and_count": 0,
+    "logical_or_count": 3,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 132,
+    "source_token_estimate": 831,
+    "status": "verification_failed",
+    "verification_duration_seconds": 6.467,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 6
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires a Python function `serialize_record(record: dict, format: str) -> str`, but the code uses Dafny syntax (`method`, `map<string, string>`, `requires`, `ensures`, `seq`, etc.) which is completely incompatible with Python execution. While the structural logic (sorting keys, dispatching on format, escaping strings) shows some understanding of the requirements, the code cannot be executed as Python at all, making it functionally invalid. The Zen of Python principles (simplicity, readability, explicitness in Python) are entirely irrelevant here since this is not Python code. This is a fundamental language mismatch that renders the implementation unusable for the stated task.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires a Python function `serialize_record(record: dict, format: str) -> str`, but the code uses Dafny syntax (`method`, `map<string, string>`, `requires`, `ensures`, `seq`, etc.) which is completely incompatible with Python execution. While the structural logic (sorting keys, dispatching on format, escaping strings) shows some understanding of the requirements, the code cannot be executed as Python at all, making it functionally invalid. The Zen of Python principles (simplicity, readability, explicitness in Python) are entirely irrelevant here since this is not Python code. This is a fundamental language mismatch that renders the implementation unusable for the stated task.\",\n  \"strengths\": [\n    \"Demonstrates understanding of the three required formats (JSON, CSV, TOML)\",\n    \"Includes key sorting logic consistent with the JSON sort-keys requirement\",\n    \"Shows formal verification annotations (preconditions, postconditions, loop invariants) that reflect careful reasoning about correctness\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong programming language for the task\",\n    \"Cannot be executed as the required Python entry point `serialize_record`\",\n    \"No Python imports, no Python types, no Python syntax whatsoever\",\n    \"Fails all functional requirements since the code is not runnable Python\",\n    \"CSV and TOML implementations sort keys unnecessarily (CSV order is unspecified, TOML likewise), and values are not quoted/escaped properly for CSV\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Demonstrates understanding of the three required formats (JSON, CSV, TOML)",
+      "Includes key sorting logic consistent with the JSON sort-keys requirement",
+      "Shows formal verification annotations (preconditions, postconditions, loop invariants) that reflect careful reasoning about correctness"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong programming language for the task",
+      "Cannot be executed as the required Python entry point `serialize_record`",
+      "No Python imports, no Python types, no Python syntax whatsoever",
+      "Fails all functional requirements since the code is not runnable Python",
+      "CSV and TOML implementations sort keys unnecessarily (CSV order is unspecified, TOML likewise), and values are not quoted/escaped properly for CSV"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 834,
+      "prompt": 290,
+      "total": 1124,
+      "turns": [
+        {
+          "completion": 834,
+          "prompt": 290,
+          "total": 1124
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(25,14): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n25 |     invariant forall i, j :: 0 <= i < j < |keys| ==> keys[i] < keys[j]\n   |               ^^^^^^\n\nsolution.dfy(40,23): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n   |\n40 |       invariant minKey in remaining\n   |                        ^^\n\n\nDafny program verifier finished with 6 verified, 2 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "multiformat_serializer",
+  "variant": "oracle_dafny_generation"
+}

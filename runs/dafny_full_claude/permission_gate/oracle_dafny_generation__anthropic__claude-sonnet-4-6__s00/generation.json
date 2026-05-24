@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method has_permission(matrix: map<string, set<string>>, role: string, permission: string) returns (result: bool)\n  ensures result == (role in matrix && permission in matrix[role])\n{\n  if role in matrix {\n    var perms := matrix[role];\n    if permission in perms {\n      result := true;\n    } else {\n      result := false;\n    }\n  } else {\n    result := false;\n  }\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "has_permission",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 95,
+      "prompt": 289,
+      "total": 384,
+      "turns": [
+        {
+          "completion": 95,
+          "prompt": 289,
+          "total": 384
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod has_permission(matrix: map<string, set<string>>, role: string, permission: string) returns (result: bool)\n  ensures result == (role in matrix && permission in matrix[role])\n{\n  if role in matrix {\n    var perms := matrix[role];\n    if permission in perms {\n      result := true;\n    } else {\n      result := false;\n    }\n  } else {\n    result := false;\n  }\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend has_permission so a wildcard role '*' grants permissions to all roles.\nExplicit role permissions and wildcard permissions should both be considered.\nPreserve deny-by-default behavior when no wildcard exists.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import has_permission\n\n\ndef test_wildcard_role_expansion():\n    matrix = {'*': {'read'}, 'admin': {'write'}}\n    assert has_permission(matrix, 'admin', 'write') is True\n    assert has_permission(matrix, 'guest', 'read') is True\n    assert has_permission(matrix, 'guest', 'write') is False\n",
+    "entry_point": "has_permission",
+    "human_reference": "from __future__ import annotations\n\n\ndef has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool:\n    return permission in matrix.get(role, set())\n",
+    "id": "permission_gate",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef has_permission(matrix, role: str, permission: str) -> bool:\n    role_permissions = matrix.get(role, set())\n    wildcard_permissions = matrix.get('*', set())\n    return permission in role_permissions or permission in wildcard_permissions\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef has_permission(matrix, role: str, permission: str) -> bool:\n    if role not in matrix:\n        return False\n    return permission in matrix[role]\n",
+    "prompt": "Implement has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool.\nReturn True only when role exists and permission is explicitly listed for it.\nDeny by default for unknown roles or permissions.\n",
+    "tags": [
+      "reliability_critical",
+      "access_control",
+      "day2-hard"
+    ],
+    "test_code": "from solution import has_permission\n\n\ndef test_deny_by_default():\n    matrix = {'admin': {'read', 'write'}, 'viewer': {'read'}}\n    assert has_permission(matrix, 'admin', 'write') is True\n    assert has_permission(matrix, 'viewer', 'write') is False\n    assert has_permission(matrix, 'missing', 'read') is False\n"
+  },
+  "task_id": "permission_gate",
+  "user_prompt": "Task id: permission_gate\nEntry point: has_permission\n\nFunctional requirements:\nImplement has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool.\nReturn True only when role exists and permission is explicitly listed for it.\nDeny by default for unknown roles or permissions.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

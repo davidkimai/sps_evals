@@ -1,0 +1,55 @@
+{
+  "artifact_language": "dafny",
+  "code": "method check_access(role: string, permission: string, matrix: map<string, set<string>>, log: seq<map<string, string>>) returns (allowed: bool, newLog: seq<map<string, string>>)\n  ensures |newLog| == |log| + 1\n{\n  // Deny by default\n  allowed := false;\n\n  // Check if role exists in matrix and has the permission\n  if role in matrix {\n    var perms := matrix[role];\n    if permission in perms {\n      allowed := true;\n    }\n  }\n\n  // Log the attempt\n  var allowedStr := if allowed then \"true\" else \"false\";\n  var entry := map[\"role\" := role, \"permission\" := permission, \"allowed\" := allowedStr];\n  newLog := log + [entry];\n}",
+  "effective_temperature": 0.8,
+  "entry_point": "check_access",
+  "hybrid": null,
+  "metadata": {
+    "token_estimates": {
+      "completion": 159,
+      "prompt": 286,
+      "total": 445,
+      "turns": [
+        {
+          "completion": 159,
+          "prompt": 286,
+          "total": 445
+        }
+      ]
+    }
+  },
+  "mode": "oracle_dafny",
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Zero-Trust Audit Principle ZT-2:\n- Every access attempt must be logged before returning, whether allowed or denied.\n- No short-circuit return may bypass the log write.\n- Log records must include role, permission, and allowed.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "raw_response": "```dafny\nmethod check_access(role: string, permission: string, matrix: map<string, set<string>>, log: seq<map<string, string>>) returns (allowed: bool, newLog: seq<map<string, string>>)\n  ensures |newLog| == |log| + 1\n{\n  // Deny by default\n  allowed := false;\n\n  // Check if role exists in matrix and has the permission\n  if role in matrix {\n    var perms := matrix[role];\n    if permission in perms {\n      allowed := true;\n    }\n  }\n\n  // Log the attempt\n  var allowedStr := if allowed then \"true\" else \"false\";\n  var entry := map[\"role\" := role, \"permission\" := permission, \"allowed\" := allowedStr];\n  newLog := log + [entry];\n}\n```",
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "system_prompt": "You are a secure program synthesis engineer using Dafny as a hard verification\noracle. Generate a small Dafny program for the task. Return only Dafny source.\nDo not include markdown prose.\n\nThe generated Dafny source is a model-authored formal artifact. Verification\nestablishes the properties stated in that artifact; it is not by itself proof\nthat the original natural-language task was fully specified. Keep requires,\nensures, invariants, ghost state, and lemmas minimal and auditable.\n",
+  "task": {
+    "custom_spec_override": "Zero-Trust Audit Principle ZT-2:\n- Every access attempt must be logged before returning, whether allowed or denied.\n- No short-circuit return may bypass the log write.\n- Log records must include role, permission, and allowed.\n",
+    "day2_prompt": "Extend check_access with include_reason: bool = False. When true, include reason\n'allowed', 'unknown_role', or 'missing_permission' in the log record.\n",
+    "day2_stressors": [
+      "audit_provenance",
+      "backwards_compatibility",
+      "error_surface_expansion"
+    ],
+    "day2_test_code": "from solution import check_access\n\n\ndef test_reason_is_logged_before_return():\n    log = []\n    assert check_access('guest', 'read', {}, log, include_reason=True) is False\n    assert log[0]['reason'] == 'unknown_role'\n",
+    "entry_point": "check_access",
+    "human_reference": "from __future__ import annotations\n\n\ndef check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool:\n    allowed = permission in matrix.get(role, set())\n    log.append({'role': role, 'permission': permission, 'allowed': allowed})\n    return allowed\n",
+    "id": "access_control_log",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef check_access(role, permission, matrix, log, include_reason=False):\n    role_known = role in matrix\n    allowed = permission in matrix.get(role, set())\n    row = {'role': role, 'permission': permission, 'allowed': allowed}\n    if include_reason:\n        if allowed:\n            row['reason'] = 'allowed'\n        elif not role_known:\n            row['reason'] = 'unknown_role'\n        else:\n            row['reason'] = 'missing_permission'\n    log.append(row)\n    return allowed\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef check_access(role, permission, matrix, log):\n    permissions = matrix.get(role, set())\n    allowed = permission in permissions\n    record = {'role': role, 'permission': permission, 'allowed': allowed}\n    log.append(record)\n    return allowed\n",
+    "prompt": "Implement check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool.\nLog every attempt with role, permission, and allowed before returning the decision.\nDeny by default.\n",
+    "tags": [
+      "custom_spec",
+      "access_control",
+      "day2-hard"
+    ],
+    "test_code": "from solution import check_access\n\n\ndef test_logs_allowed_and_denied_attempts():\n    log = []\n    assert check_access('admin', 'read', {'admin': {'read'}}, log) is True\n    assert check_access('guest', 'read', {'admin': {'read'}}, log) is False\n    assert log == [\n        {'role': 'admin', 'permission': 'read', 'allowed': True},\n        {'role': 'guest', 'permission': 'read', 'allowed': False},\n    ]\n"
+  },
+  "task_id": "access_control_log",
+  "user_prompt": "Task id: access_control_log\nEntry point: check_access\n\nFunctional requirements:\nImplement check_access(role: str, permission: str, matrix: dict[str, set[str]], log: list[dict]) -> bool.\nLog every attempt with role, permission, and allowed before returning the decision.\nDeny by default.\n\nDafny synthesis instructions:\n- Return a complete Dafny source file only.\n- Use standard Dafny methods/functions with explicit requires/ensures where useful.\n- Keep proof structure minimal: no speculative lemmas, ghost state, or abstractions.\n- The code will be verified with Dafny, translated to Python, and then measured/tested\n  as the compiled Python artifact.\n",
+  "variant": "oracle_dafny_generation"
+}

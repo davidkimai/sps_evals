@@ -1,0 +1,182 @@
+id: thread_safe_counter
+entry_point: BoundedCounter
+tags: [concurrency, state_machine, locking, day2-hard]
+day2_stressors: [cross_function_state, error_surface_expansion, backwards_compatibility]
+prompt: |
+  Implement a BoundedCounter class for coordinating named counters across worker
+  threads.
+
+  Constructor: BoundedCounter(max_total: int)
+  - max_total must be positive, otherwise raise ValueError.
+
+  Methods:
+  - increment(name: str) -> int: increment the named counter by one and return
+    the new value for that name. If the total count would exceed max_total,
+    raise OverflowError.
+  - total() -> int: return the total count across all names.
+  - snapshot() -> dict[str, int]: return a copy of nonzero counts by name.
+
+  The implementation must be thread-safe and must not expose mutable internal
+  state.
+test_code: |
+  from concurrent.futures import ThreadPoolExecutor
+
+  import pytest
+
+  from solution import BoundedCounter
+
+
+  def test_counter_is_thread_safe_and_bounded():
+      counter = BoundedCounter(40)
+
+      def bump(worker):
+          for _ in range(10):
+              counter.increment(worker)
+
+      with ThreadPoolExecutor(max_workers=4) as pool:
+          list(pool.map(bump, ["a", "b", "c", "d"]))
+
+      assert counter.total() == 40
+      assert counter.snapshot() == {"a": 10, "b": 10, "c": 10, "d": 10}
+      with pytest.raises(OverflowError):
+          counter.increment("overflow")
+
+
+  def test_counter_validation_and_snapshot_copy():
+      with pytest.raises(ValueError):
+          BoundedCounter(0)
+      counter = BoundedCounter(2)
+      counter.increment("x")
+      snap = counter.snapshot()
+      snap["x"] = 99
+      assert counter.snapshot() == {"x": 1}
+day2_prompt: |
+  Add decrement(name: str) -> int. It should decrement the named counter and
+  return the new value. If the name is absent or already zero, raise KeyError.
+  Counts that reach zero should be removed from snapshot().
+day2_test_code: |
+  import pytest
+
+  from solution import BoundedCounter
+
+
+  def test_decrement_preserves_existing_behavior():
+      counter = BoundedCounter(3)
+      assert counter.increment("jobs") == 1
+      assert counter.increment("jobs") == 2
+      assert counter.total() == 2
+      assert counter.decrement("jobs") == 1
+      assert counter.decrement("jobs") == 0
+      assert counter.total() == 0
+      assert counter.snapshot() == {}
+      with pytest.raises(KeyError):
+          counter.decrement("jobs")
+
+
+  def test_decrement_frees_capacity():
+      counter = BoundedCounter(1)
+      counter.increment("a")
+      with pytest.raises(OverflowError):
+          counter.increment("b")
+      counter.decrement("a")
+      assert counter.increment("b") == 1
+human_reference: |
+  from threading import Lock
+
+
+  class BoundedCounter:
+      def __init__(self, max_total: int):
+          if max_total <= 0:
+              raise ValueError("max_total must be positive")
+          self._max_total = max_total
+          self._counts = {}
+          self._total = 0
+          self._lock = Lock()
+
+      def increment(self, name: str) -> int:
+          with self._lock:
+              if self._total >= self._max_total:
+                  raise OverflowError("counter capacity exceeded")
+              next_value = self._counts.get(name, 0) + 1
+              self._counts[name] = next_value
+              self._total += 1
+              return next_value
+
+      def total(self) -> int:
+          with self._lock:
+              return self._total
+
+      def snapshot(self) -> dict[str, int]:
+          with self._lock:
+              return dict(self._counts)
+mock_solution: |
+  from threading import Lock
+
+
+  class BoundedCounter:
+      def __init__(self, max_total: int):
+          if max_total <= 0:
+              raise ValueError("max_total must be positive")
+          self._max_total = max_total
+          self._counts = {}
+          self._total = 0
+          self._lock = Lock()
+
+      def increment(self, name: str) -> int:
+          with self._lock:
+              if self._total >= self._max_total:
+                  raise OverflowError("counter capacity exceeded")
+              next_value = self._counts.get(name, 0) + 1
+              self._counts[name] = next_value
+              self._total += 1
+              return next_value
+
+      def total(self) -> int:
+          with self._lock:
+              return self._total
+
+      def snapshot(self) -> dict[str, int]:
+          with self._lock:
+              return dict(self._counts)
+mock_day2_solution: |
+  from threading import Lock
+
+
+  class BoundedCounter:
+      def __init__(self, max_total: int):
+          if max_total <= 0:
+              raise ValueError("max_total must be positive")
+          self._max_total = max_total
+          self._counts = {}
+          self._total = 0
+          self._lock = Lock()
+
+      def increment(self, name: str) -> int:
+          with self._lock:
+              if self._total >= self._max_total:
+                  raise OverflowError("counter capacity exceeded")
+              next_value = self._counts.get(name, 0) + 1
+              self._counts[name] = next_value
+              self._total += 1
+              return next_value
+
+      def decrement(self, name: str) -> int:
+          with self._lock:
+              current = self._counts.get(name, 0)
+              if current <= 0:
+                  raise KeyError(name)
+              next_value = current - 1
+              if next_value:
+                  self._counts[name] = next_value
+              else:
+                  del self._counts[name]
+              self._total -= 1
+              return next_value
+
+      def total(self) -> int:
+          with self._lock:
+              return self._total
+
+      def snapshot(self) -> dict[str, int]:
+          with self._lock:
+              return dict(self._counts)

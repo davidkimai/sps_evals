@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 8.055,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.156,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/token_bucket_enforcer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 8,
+    "error_count": 0,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 8,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 0,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 7,
+      "while": 0
+    },
+    "lexical_proof_complexity": 17,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 7,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 44,
+    "source_token_estimate": 262,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 7.193,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop that completely fails to implement the required TokenBucketEnforcer class. Instead of providing a straightforward token bucket algorithm, it attempts to import a non-existent 'module_' (which will raise an ImportError at runtime), then applies a bizarre Dafny-to-Python symbol aliasing shim that serves no purpose here. There is no TokenBucketEnforcer class, no capacity/refill_rate logic, no allow() method, and no time-tracking whatsoever. The code is entirely fictional infrastructure wrapping nothing, violating every Zen of Python principle: it is implicit, complex, nested, impractical, and unreadable. It would crash immediately on import.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop that completely fails to implement the required TokenBucketEnforcer class. Instead of providing a straightforward token bucket algorithm, it attempts to import a non-existent 'module_' (which will raise an ImportError at runtime), then applies a bizarre Dafny-to-Python symbol aliasing shim that serves no purpose here. There is no TokenBucketEnforcer class, no capacity/refill_rate logic, no allow() method, and no time-tracking whatsoever. The code is entirely fictional infrastructure wrapping nothing, violating every Zen of Python principle: it is implicit, complex, nested, impractical, and unreadable. It would crash immediately on import.\",\n  \"strengths\": [\n    \"Attempts to reference a formal verification methodology (Dafny) in comments\"\n  ],\n  \"weaknesses\": [\n    \"No TokenBucketEnforcer class is defined anywhere\",\n    \"Imports a non-existent module 'module_' causing immediate ImportError\",\n    \"Zero functional implementation of token bucket logic\",\n    \"Wildcard imports and dynamic symbol aliasing are the opposite of explicit and readable\",\n    \"The entire file is dead infrastructure code wrapping nothing\",\n    \"Violates virtually every Zen of Python principle simultaneously\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Attempts to reference a formal verification methodology (Dafny) in comments"
+    ],
+    "weaknesses": [
+      "No TokenBucketEnforcer class is defined anywhere",
+      "Imports a non-existent module 'module_' causing immediate ImportError",
+      "Zero functional implementation of token bucket logic",
+      "Wildcard imports and dynamic symbol aliasing are the opposite of explicit and readable",
+      "The entire file is dead infrastructure code wrapping nothing",
+      "Violates virtually every Zen of Python principle simultaneously"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 265,
+      "prompt": 294,
+      "total": 559,
+      "turns": [
+        {
+          "completion": 265,
+          "prompt": 294,
+          "total": 559
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.777,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________________ test_token_bucket_enforces_costs _______________________\n\n    def test_token_bucket_enforces_costs():\n        clock = {'t': 0.0}\n>       bucket = TokenBucketEnforcer(3, 1.0, now=lambda: clock['t'])\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:6: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <module_.TokenBucketEnforcer object at 0xffff9a8a0c10>\n__orig = <function TokenBucketEnforcer.__init__ at 0xffff9a82f880>\n__ctor = <function TokenBucketEnforcer.ctor__ at 0xffff9a892b60>\nargs = (3, 1.0)\nkwargs = {'now': <function test_token_bucket_enforces_costs.<locals>.<lambda> at 0xffff9a892de0>}\n\n    def __init__(self, *args, __orig=original_init, __ctor=constructor, **kwargs):\n        __orig(self)\n        if args or kwargs:\n>           __ctor(self, *args, **kwargs)\nE           TypeError: TokenBucketEnforcer.ctor__() got an unexpected keyword argument 'now'\n\nsolution.py:16: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_token_bucket_enforces_costs - TypeError: TokenB...\n1 failed in 0.14s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "token_bucket_enforcer",
+  "variant": "oracle_dafny_generation"
+}

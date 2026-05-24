@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 6.683,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.839,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/audit_log_writer/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 6,
+    "error_count": 0,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 2,
+      "if": 2,
+      "invariant": 4,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 2
+    },
+    "lexical_proof_complexity": 18,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 45,
+    "source_token_estimate": 361,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 7.624,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 4
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is pure architectural slop with zero functional substance. It imports a non-existent 'module_' (which would cause an ImportError at runtime), contains no AuditLogWriter class, no write() method, no sequence numbering, no record appending, and no copy semantics. The code is a fabricated Dafny-compilation shim that doesn't implement any part of the required task. The 'informal structural spec' about Dafny verification has been misread as an instruction to produce Dafny-compiled Python boilerplate rather than a clean, simple Python implementation. This violates every Zen of Python principle: it is implicit, complex, nested, unreadable, and completely non-functional.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is pure architectural slop with zero functional substance. It imports a non-existent 'module_' (which would cause an ImportError at runtime), contains no AuditLogWriter class, no write() method, no sequence numbering, no record appending, and no copy semantics. The code is a fabricated Dafny-compilation shim that doesn't implement any part of the required task. The 'informal structural spec' about Dafny verification has been misread as an instruction to produce Dafny-compiled Python boilerplate rather than a clean, simple Python implementation. This violates every Zen of Python principle: it is implicit, complex, nested, unreadable, and completely non-functional.\",\n  \"strengths\": [\n    \"None \u2014 the code does not implement any required functionality\"\n  ],\n  \"weaknesses\": [\n    \"No AuditLogWriter class defined\",\n    \"No write() method implemented\",\n    \"No sequence number logic\",\n    \"No record copy semantics\",\n    \"Imports a non-existent module ('module_') causing immediate ImportError\",\n    \"Massive unnecessary boilerplate with zero functional value\",\n    \"Completely misinterprets the task specification\",\n    \"Violates simplicity, explicitness, and readability principles of Zen of Python\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the code does not implement any required functionality"
+    ],
+    "weaknesses": [
+      "No AuditLogWriter class defined",
+      "No write() method implemented",
+      "No sequence number logic",
+      "No record copy semantics",
+      "Imports a non-existent module ('module_') causing immediate ImportError",
+      "Massive unnecessary boilerplate with zero functional value",
+      "Completely misinterprets the task specification",
+      "Violates simplicity, explicitness, and readability principles of Zen of Python"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 364,
+      "prompt": 292,
+      "total": 656,
+      "turns": [
+        {
+          "completion": 364,
+          "prompt": 292,
+          "total": 656
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 5.32,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n________________ test_writes_monotonic_records_without_aliasing ________________\n\n    def test_writes_monotonic_records_without_aliasing():\n        sink = []\n>       writer = AuditLogWriter(sink)\n                 ^^^^^^^^^^^^^^^^^^^^\nE       TypeError: default__.AuditLogWriter() missing 1 required positional argument: 'initialSize'\n\ntest_solution.py:6: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_writes_monotonic_records_without_aliasing - Typ...\n1 failed in 0.10s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "audit_log_writer",
+  "variant": "oracle_dafny_generation"
+}

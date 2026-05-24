@@ -1,0 +1,115 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 2,
+    "error_count": 3,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 5,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 0,
+      "if": 5,
+      "invariant": 0,
+      "logical_and": 4,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 0
+    },
+    "lexical_proof_complexity": 16,
+    "logical_and_count": 4,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 52,
+    "source_token_estimate": 297,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.022,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written in Dafny (a formal verification language), not Python, and does not implement the required `validate_intake(payload: dict) -> dict` entry point at all. It cannot be imported or called as specified, raises no `ValueError`, returns no clean dict, and operates on pre-decomposed boolean flags rather than a raw payload dict. While the logical structure of field-by-field validation with named error fields is conceptually present, the implementation is entirely in the wrong language and wrong paradigm, making it completely non-functional for the stated task. This is severe architectural slop: wrong language, wrong interface, wrong return type, wrong error mechanism.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written in Dafny (a formal verification language), not Python, and does not implement the required `validate_intake(payload: dict) -> dict` entry point at all. It cannot be imported or called as specified, raises no `ValueError`, returns no clean dict, and operates on pre-decomposed boolean flags rather than a raw payload dict. While the logical structure of field-by-field validation with named error fields is conceptually present, the implementation is entirely in the wrong language and wrong paradigm, making it completely non-functional for the stated task. This is severe architectural slop: wrong language, wrong interface, wrong return type, wrong error mechanism.\",\n  \"strengths\": [\n    \"Logical ordering of validation checks (patient_id \u2192 age \u2192 symptoms) mirrors the required field priority\",\n    \"Error field naming is explicit and correct in the Dafny model\",\n    \"Formal postconditions capture the intent of CD-7's 'all fields must pass' requirement\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"No `validate_intake(payload: dict) -> dict` function exists\",\n    \"Does not accept or parse a dict payload\",\n    \"Does not raise `ValueError` as required\",\n    \"Does not return a clean dict on success\",\n    \"Cannot be executed or imported in any Python environment\",\n    \"Decomposes input into pre-validated booleans, bypassing actual field extraction and type checking\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Logical ordering of validation checks (patient_id \u2192 age \u2192 symptoms) mirrors the required field priority",
+      "Error field naming is explicit and correct in the Dafny model",
+      "Formal postconditions capture the intent of CD-7's 'all fields must pass' requirement"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "No `validate_intake(payload: dict) -> dict` function exists",
+      "Does not accept or parse a dict payload",
+      "Does not raise `ValueError` as required",
+      "Does not return a clean dict on success",
+      "Cannot be executed or imported in any Python environment",
+      "Decomposes input into pre-validated booleans, bypassing actual field extraction and type checking"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 300,
+      "prompt": 287,
+      "total": 587,
+      "turns": [
+        {
+          "completion": 300,
+          "prompt": 287,
+          "total": 587
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Clinical Data Standard CD-7:\n- Validate every required field before accepting any field into the output.\n- Error messages must name the field that failed validation.\n- Partial validation is not permitted; return only after all required fields pass.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(46,2): Error: assertion might not hold\n   |\n46 |   assert valid;\n   |   ^^^^^^\n\nsolution.dfy(50,2): Error: assertion might not hold\n   |\n50 |   assert errorField2 == \"patient_id\";\n   |   ^^^^^^\n\nsolution.dfy(54,2): Error: assertion might not hold\n   |\n54 |   assert errorField3 == \"age\";\n   |   ^^^^^^\n\n\nDafny program verifier finished with 1 verified, 3 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "medical_intake_form",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 9,
+    "error_count": null,
+    "invariant_count": 0,
+    "keyword_counts": {
+      "assert": 10,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 9,
+      "exists": 0,
+      "forall": 0,
+      "if": 2,
+      "invariant": 0,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 5,
+      "while": 0
+    },
+    "lexical_proof_complexity": 28,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 5,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 72,
+    "source_token_estimate": 366,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.014,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python AsyncRateLimiter class with an async acquire() method, but the code is syntactically and semantically Dafny code (using Dafny class syntax, predicate, method, modifies, ensures, requires, etc.). It cannot be executed as Python at all \u2014 it would be a syntax error. There is no asyncio usage, no `async def acquire`, no `now` callable parameter in the constructor, and no ValueError for non-positive rates as required. The structural spec mentions 'Dafny formal verification skill' as an oracle metaphor, but the implementation literally submitted Dafny source code instead of a Python implementation. This is a complete failure to meet the functional and structural requirements.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python AsyncRateLimiter class with an async acquire() method, but the code is syntactically and semantically Dafny code (using Dafny class syntax, predicate, method, modifies, ensures, requires, etc.). It cannot be executed as Python at all \u2014 it would be a syntax error. There is no asyncio usage, no `async def acquire`, no `now` callable parameter in the constructor, and no ValueError for non-positive rates as required. The structural spec mentions 'Dafny formal verification skill' as an oracle metaphor, but the implementation literally submitted Dafny source code instead of a Python implementation. This is a complete failure to meet the functional and structural requirements.\",\n  \"strengths\": [\n    \"The Dafny logic correctly models the rate-limiting invariant with formal pre/post-conditions\",\n    \"The test method demonstrates correct behavioral understanding of the sliding window\"\n  ],\n  \"weaknesses\": [\n    \"Not Python code \u2014 entirely written in Dafny, which is a different language and cannot run as the entry point\",\n    \"No async/await semantics; the task requires an async acquire() coroutine\",\n    \"Constructor does not accept a 'now' callable parameter as required\",\n    \"No ValueError raised for non-positive rates in Python\",\n    \"Cannot be imported or instantiated as AsyncRateLimiter in any Python environment\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny logic correctly models the rate-limiting invariant with formal pre/post-conditions",
+      "The test method demonstrates correct behavioral understanding of the sliding window"
+    ],
+    "weaknesses": [
+      "Not Python code \u2014 entirely written in Dafny, which is a different language and cannot run as the entry point",
+      "No async/await semantics; the task requires an async acquire() coroutine",
+      "Constructor does not accept a 'now' callable parameter as required",
+      "No ValueError raised for non-positive rates in Python",
+      "Cannot be imported or instantiated as AsyncRateLimiter in any Python environment"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 370,
+      "prompt": 316,
+      "total": 686,
+      "turns": [
+        {
+          "completion": 370,
+          "prompt": 316,
+          "total": 686
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(62,2): Error: assertion might not hold\n   |\n62 |   assert r1;\n   |   ^^^^^^\n\nsolution.dfy(66,2): Error: assertion might not hold\n   |\n66 |   assert r2;\n   |   ^^^^^^\n\nsolution.dfy(67,2): Error: assertion might not hold\n   |\n67 |   assert limiter.count == 2;\n   |   ^^^^^^\n\nsolution.dfy(70,2): Error: assertion might not hold\n   |\n70 |   assert !r3;\n   |   ^^^^^^\n\nsolution.dfy(71,2): Error: assertion might not hold\n   |\n71 |   assert limiter.count == 2;\n   |   ^^^^^^\n\n\nDafny program verifier finished with 5 verified, 5 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "async_rate_limiter",
+  "variant": "oracle_dafny_generation"
+}

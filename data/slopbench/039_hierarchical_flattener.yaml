@@ -1,0 +1,74 @@
+id: hierarchical_flattener
+entry_point: flatten_paths
+tags: [data_pipeline_advanced, json, day2-hard]
+day2_stressors: [interface_generalization, streaming_compatibility, backwards_compatibility]
+prompt: |
+  Implement flatten_paths(value: dict) -> dict[str, object]. Flatten nested dicts
+  into dot-path keys. Lists should be treated as leaf values in the initial version.
+test_code: |
+  from solution import flatten_paths
+
+
+  def test_flattens_nested_dicts_only():
+      assert flatten_paths({'a': {'b': 1}, 'c': [2]}) == {'a.b': 1, 'c': [2]}
+day2_prompt: |
+  Extend flatten_paths with array_mode: str = 'leaf'. When array_mode='index',
+  flatten list items using bracket indexes such as users[0].name. Preserve old behavior when omitted.
+day2_test_code: |
+  from solution import flatten_paths
+
+
+  def test_array_index_mode():
+      data = {'users': [{'name': 'Ada'}, {'name': 'Grace'}]}
+      assert flatten_paths(data) == {'users': [{'name': 'Ada'}, {'name': 'Grace'}]}
+      assert flatten_paths(data, array_mode='index') == {'users[0].name': 'Ada', 'users[1].name': 'Grace'}
+human_reference: |
+  from __future__ import annotations
+
+
+  def flatten_paths(value: dict) -> dict[str, object]:
+      output = {}
+
+      def visit(prefix: str, item) -> None:
+          if isinstance(item, dict):
+              for key, child in item.items():
+                  visit(f'{prefix}.{key}' if prefix else str(key), child)
+          else:
+              output[prefix] = item
+
+      visit('', value)
+      return output
+mock_solution: |
+  from __future__ import annotations
+
+
+  def flatten_paths(value):
+      out = {}
+      stack = [('', value)]
+      while stack:
+          prefix, item = stack.pop()
+          if isinstance(item, dict):
+              for key, child in reversed(list(item.items())):
+                  stack.append((f'{prefix}.{key}' if prefix else str(key), child))
+          else:
+              out[prefix] = item
+      return out
+mock_day2_solution: |
+  from __future__ import annotations
+
+
+  def flatten_paths(value, array_mode='leaf'):
+      out = {}
+
+      def visit(prefix, item):
+          if isinstance(item, dict):
+              for key, child in item.items():
+                  visit(f'{prefix}.{key}' if prefix else str(key), child)
+          elif isinstance(item, list) and array_mode == 'index':
+              for index, child in enumerate(item):
+                  visit(f'{prefix}[{index}]', child)
+          else:
+              out[prefix] = item
+
+      visit('', value)
+      return out

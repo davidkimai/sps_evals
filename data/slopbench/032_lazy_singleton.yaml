@@ -1,0 +1,103 @@
+id: lazy_singleton
+entry_point: LazySingleton
+tags: [object_lifecycle, threading, day2-hard]
+day2_stressors: [cross_function_state, interface_generalization, backwards_compatibility]
+prompt: |
+  Implement LazySingleton(factory). Method get() returns the same lazily-created
+  object on every call. It must be safe under concurrent calls from multiple
+  threads.
+test_code: |
+  from concurrent.futures import ThreadPoolExecutor
+
+  from solution import LazySingleton
+
+
+  def test_single_instance_under_threads():
+      calls = []
+      singleton = LazySingleton(lambda: calls.append(object()) or calls[-1])
+      with ThreadPoolExecutor(max_workers=4) as pool:
+          values = list(pool.map(lambda _: singleton.get(), range(20)))
+      assert len({id(value) for value in values}) == 1
+      assert len(calls) == 1
+day2_prompt: |
+  Add reset_for_test() that restores the uninitialized state so the next get()
+  creates a fresh object. Preserve thread safety.
+day2_test_code: |
+  from solution import LazySingleton
+
+
+  def test_reset_for_test_creates_new_instance():
+      counter = {'n': 0}
+      def factory():
+          counter['n'] += 1
+          return {'n': counter['n']}
+      singleton = LazySingleton(factory)
+      first = singleton.get()
+      singleton.reset_for_test()
+      second = singleton.get()
+      assert first != second
+      assert counter['n'] == 2
+human_reference: |
+  from __future__ import annotations
+
+  from threading import Lock
+  from typing import Callable, Generic, TypeVar
+
+  T = TypeVar('T')
+  _MISSING = object()
+
+
+  class LazySingleton(Generic[T]):
+      def __init__(self, factory: Callable[[], T]) -> None:
+          self._factory = factory
+          self._value: T | object = _MISSING
+          self._lock = Lock()
+
+      def get(self) -> T:
+          if self._value is _MISSING:
+              with self._lock:
+                  if self._value is _MISSING:
+                      self._value = self._factory()
+          return self._value  # type: ignore[return-value]
+mock_solution: |
+  from __future__ import annotations
+
+  import threading
+
+  _EMPTY = object()
+
+
+  class LazySingleton:
+      def __init__(self, factory):
+          self.factory = factory
+          self.value = _EMPTY
+          self.lock = threading.Lock()
+
+      def get(self):
+          with self.lock:
+              if self.value is _EMPTY:
+                  self.value = self.factory()
+              return self.value
+mock_day2_solution: |
+  from __future__ import annotations
+
+  import threading
+
+  _EMPTY = object()
+
+
+  class LazySingleton:
+      def __init__(self, factory):
+          self.factory = factory
+          self.value = _EMPTY
+          self.lock = threading.Lock()
+
+      def get(self):
+          with self.lock:
+              if self.value is _EMPTY:
+                  self.value = self.factory()
+              return self.value
+
+      def reset_for_test(self):
+          with self.lock:
+              self.value = _EMPTY

@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]:\n    ordered = sorted(points)\n    index = 0\n    current = None\n    output = []\n    for timestamp in range(start, end + 1, interval):\n        while index < len(ordered) and ordered[index][0] <= timestamp:\n            current = ordered[index][1]\n            index += 1\n        output.append((timestamp, current))\n    return output\n",
+  "effective_temperature": null,
+  "entry_point": "resample_series",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]:\n    ordered = sorted(points)\n    index = 0\n    current = None\n    output = []\n    for timestamp in range(start, end + 1, interval):\n        while index < len(ordered) and ordered[index][0] <= timestamp:\n            current = ordered[index][1]\n            index += 1\n        output.append((timestamp, current))\n    return output\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend resample_series with max_gap: int | None = None. If the distance from the\nlast observed point exceeds max_gap, emit None instead of forward-filling.\n",
+    "day2_stressors": [
+      "parameter_threading",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import resample_series\n\n\ndef test_max_gap_limits_forward_fill():\n    points = [(0, 1.0), (10, 3.0)]\n    assert resample_series(points, start=0, end=6, interval=3, max_gap=2) == [(0, 1.0), (3, None), (6, None)]\n",
+    "entry_point": "resample_series",
+    "human_reference": "from __future__ import annotations\n\n\ndef resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]]:\n    ordered = sorted(points)\n    index = 0\n    current = None\n    output = []\n    for timestamp in range(start, end + 1, interval):\n        while index < len(ordered) and ordered[index][0] <= timestamp:\n            current = ordered[index][1]\n            index += 1\n        output.append((timestamp, current))\n    return output\n",
+    "id": "time_series_resampler",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef resample_series(points, *, start: int, end: int, interval: int, max_gap=None):\n    points = sorted(points)\n    output = []\n    for ts in range(start, end + 1, interval):\n        chosen = None\n        chosen_ts = None\n        for point_ts, point_value in points:\n            if point_ts <= ts:\n                chosen = point_value\n                chosen_ts = point_ts\n            else:\n                break\n        if max_gap is not None and chosen_ts is not None and ts - chosen_ts > max_gap:\n            chosen = None\n        output.append((ts, chosen))\n    return output\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef resample_series(points, *, start: int, end: int, interval: int):\n    points = sorted(points)\n    output = []\n    for ts in range(start, end + 1, interval):\n        value = None\n        for point_ts, point_value in points:\n            if point_ts <= ts:\n                value = point_value\n            else:\n                break\n        output.append((ts, value))\n    return output\n",
+    "prompt": "Implement resample_series(points: list[tuple[int, float]], *, start: int, end: int, interval: int) -> list[tuple[int, float | None]].\nReturn timestamps from start to end inclusive by interval. Use forward-fill from\nthe latest point at or before each timestamp; use None when no value is known.\n",
+    "tags": [
+      "data_pipeline_advanced",
+      "time_series",
+      "day2-hard"
+    ],
+    "test_code": "from solution import resample_series\n\n\ndef test_forward_fill_resampling():\n    points = [(0, 1.0), (5, 2.0)]\n    assert resample_series(points, start=0, end=6, interval=2) == [(0, 1.0), (2, 1.0), (4, 1.0), (6, 2.0)]\n"
+  },
+  "task_id": "time_series_resampler",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

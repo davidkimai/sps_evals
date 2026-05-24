@@ -1,0 +1,59 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is a clean, flat, and readable realization of the task. It decomposes responsibility sensibly into three small pure helpers: a parser that returns None on malformed input, a rounding helper with a clear arithmetic idiom, and a main orchestrator that reads like a straightforward pipeline. Control flow is flat with guard clauses rather than deep nesting. Data movement is explicit\u2014no mutation, no hidden state. Names are self-explanatory and locally auditable. The only minor quibbles are that `_round_up_to_case` could use `math.ceil` for slightly more readability, and the `not sku` check silently skips empty-string SKUs rather than raising, which is consistent with the 'skip malformed' spec but slightly implicit. Overall this is a near-ideal realization of the Zen-of-Python oracle for this task.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is a clean, flat, and readable realization of the task. It decomposes responsibility sensibly into three small pure helpers: a parser that returns None on malformed input, a rounding helper with a clear arithmetic idiom, and a main orchestrator that reads like a straightforward pipeline. Control flow is flat with guard clauses rather than deep nesting. Data movement is explicit\u2014no mutation, no hidden state. Names are self-explanatory and locally auditable. The only minor quibbles are that `_round_up_to_case` could use `math.ceil` for slightly more readability, and the `not sku` check silently skips empty-string SKUs rather than raising, which is consistent with the 'skip malformed' spec but slightly implicit. Overall this is a near-ideal realization of the Zen-of-Python oracle for this task.\",\n  \"strengths\": [\n    \"Three small, single-purpose helpers with clear names\",\n    \"Flat control flow using guard clauses throughout\",\n    \"Explicit data movement with no hidden mutation or global state\",\n    \"Standard-library constructs only; no speculative abstractions\",\n    \"Parser cleanly isolates all validation and type coercion in one place\"\n  ],\n  \"weaknesses\": [\n    \"Manual ceiling-division idiom is slightly less readable than math.ceil(deficit / case_pack) * case_pack\",\n    \"Silent skip of empty-string SKUs via `not sku` could be more explicit about what constitutes a valid SKU\",\n    \"Lambda in sorted key is minor noise; an operator.itemgetter would be marginally cleaner\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Three small, single-purpose helpers with clear names",
+      "Flat control flow using guard clauses throughout",
+      "Explicit data movement with no hidden mutation or global state",
+      "Standard-library constructs only; no speculative abstractions",
+      "Parser cleanly isolates all validation and type coercion in one place"
+    ],
+    "weaknesses": [
+      "Manual ceiling-division idiom is slightly less readable than math.ceil(deficit / case_pack) * case_pack",
+      "Silent skip of empty-string SKUs via `not sku` could be more explicit about what constitutes a valid SKU",
+      "Lambda in sorted key is minor noise; an operator.itemgetter would be marginally cleaner"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 3.807,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.04s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 3.333,
+    "cyclomatic_complexity_max": 5,
+    "cyclomatic_complexity_total": 10,
+    "function_count": 3,
+    "loc": 30,
+    "maintainability_index": 52.114,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "inventory_reorder",
+  "variant": "human_reference"
+}

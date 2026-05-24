@@ -1,0 +1,114 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 6,
+    "error_count": 4,
+    "invariant_count": 19,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 6,
+      "exists": 0,
+      "forall": 11,
+      "if": 6,
+      "invariant": 19,
+      "logical_and": 0,
+      "logical_or": 1,
+      "match": 0,
+      "requires": 0,
+      "while": 6
+    },
+    "lexical_proof_complexity": 50,
+    "logical_and_count": 0,
+    "logical_or_count": 1,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 102,
+    "source_token_estimate": 801,
+    "status": "verification_failed",
+    "verification_duration_seconds": 7.01,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written in Dafny (a formal verification language), not Python as required by the task. The entry point `diff_versions` is specified as a Python function with `dict` parameters, but the submission uses Dafny's `method`, `map<string, string>`, `seq`, formal invariants, and verification constructs. This is a fundamental language mismatch \u2014 the code cannot be executed as Python, violates the Zen of Python entirely (no simplicity, no readability in Python context, no explicit Pythonic structure), and introduces massive architectural complexity (formal proofs, loop invariants, helper methods) for what should be a simple ~10-line Python function. The SRL-3 spec's requirements for explicit field/before/after records are logically present in the algorithm, but the implementation is completely unusable as a Python module.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written in Dafny (a formal verification language), not Python as required by the task. The entry point `diff_versions` is specified as a Python function with `dict` parameters, but the submission uses Dafny's `method`, `map<string, string>`, `seq`, formal invariants, and verification constructs. This is a fundamental language mismatch \u2014 the code cannot be executed as Python, violates the Zen of Python entirely (no simplicity, no readability in Python context, no explicit Pythonic structure), and introduces massive architectural complexity (formal proofs, loop invariants, helper methods) for what should be a simple ~10-line Python function. The SRL-3 spec's requirements for explicit field/before/after records are logically present in the algorithm, but the implementation is completely unusable as a Python module.\",\n  \"strengths\": [\n    \"Logically correct algorithm: correctly identifies added, removed, and modified fields\",\n    \"Sorts results by field name as required\",\n    \"Each record contains field, before, and after keys matching the spec\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Cannot be imported or executed as a Python module\",\n    \"Extreme over-engineering with formal verification constructs for a trivial task\",\n    \"Violates every Zen of Python principle: not simple, not readable, not flat, not explicit in Python terms\",\n    \"Uses empty string as sentinel for missing values instead of None, which is semantically incorrect for Python dicts\",\n    \"Helper methods setToSeq and sortStrings are unnecessary complexity in Python (sets and sorted() suffice)\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Logically correct algorithm: correctly identifies added, removed, and modified fields",
+      "Sorts results by field name as required",
+      "Each record contains field, before, and after keys matching the spec"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Cannot be imported or executed as a Python module",
+      "Extreme over-engineering with formal verification constructs for a trivial task",
+      "Violates every Zen of Python principle: not simple, not readable, not flat, not explicit in Python terms",
+      "Uses empty string as sentinel for missing values instead of None, which is semantically incorrect for Python dicts",
+      "Helper methods setToSeq and sortStrings are unnecessary complexity in Python (sets and sorted() suffice)"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 804,
+      "prompt": 289,
+      "total": 1093,
+      "turns": [
+        {
+          "completion": 804,
+          "prompt": 289,
+          "total": 1093
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "State Review Ledger SRL-3:\n- Every field-level change must be represented as an explicit record with field, before, and after.\n- Do not collapse multiple changed fields into a summary string.\n- Exported graph edges must preserve the same field labels as the diff records.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(2,60): Error: element might not be in domain\n  |\n2 |   ensures forall i, j :: 0 <= i < j < |result| ==> result[i][\"field\"] < result[j][\"field\"]\n  |                                                             ^\n\nsolution.dfy(2,81): Error: element might not be in domain\n  |\n2 |   ensures forall i, j :: 0 <= i < j < |result| ==> result[i][\"field\"] < result[j][\"field\"]\n  |                                                                                  ^\n\nsolution.dfy(3,0): Error: a postcondition could not be proved on this return path\n  |\n3 | {\n  | ^\n\nsolution.dfy(2,10): Related location: this is the postcondition that could not be proved\n  |\n2 |   ensures forall i, j :: 0 <= i < j < |result| ==> result[i][\"field\"] < result[j][\"field\"]\n  |           ^^^^^^\n\nsolution.dfy(101,16): Error: this invariant could not be proved to be maintained by the loop\n Related message: loop invariant violation\n    |\n101 |       invariant forall b :: i <= b < j ==> result[i] <= result[b]\n    |                 ^^^^^^\n\n\nDafny program verifier finished with 2 verified, 4 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "state_diff_tracker",
+  "variant": "oracle_dafny_generation"
+}

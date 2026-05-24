@@ -1,0 +1,8 @@
+{
+  "blocker_count": 0,
+  "created_at": "2026-05-19T12:47:43Z",
+  "program_version": "vericoding_research_v3",
+  "remaining_blockers": [],
+  "rule": "Codex may stop only when remaining_blockers is empty and audit-final raises final_submit_ready.",
+  "schema": "specoracle.vericoding.v3.active_blockers.v1"
+}

@@ -1,0 +1,11 @@
+{
+  "claim_a_success": ">=6/16 confirmatory tasks with visible-pass/hidden-fail candidates, >=2 on secure slice, flagship cases adjudicated",
+  "claim_b_success": "observed support-present on >=6 confirmatory tasks, support-absent on >=4, spec-aware selector beats tests-only on >=3 paired outcomes",
+  "claim_c_success": "tests-only secure false accept on >=3 secure confirmatory tasks and spec-aware selector reduces false accept on >=2",
+  "claim_d_success": ">=2 correct-escalation cases across >=2 task families and >=1 auto-accept case survives deep adjudication",
+  "claim_e_success": "repair beats equal-cost fresh generation on >=2 true near-miss task cases",
+  "created_at": "2026-05-19T08:42:51Z",
+  "rule": "Thresholds are frozen before the next full-scale confirmatory rerun; pre-freeze pilot rows are shadow evidence for final-submit readiness.",
+  "schema": "specoracle.vericoding.v3.claim_thresholds_freeze.v1",
+  "status": "frozen_for_full_track3_confirmatory_rerun"
+}

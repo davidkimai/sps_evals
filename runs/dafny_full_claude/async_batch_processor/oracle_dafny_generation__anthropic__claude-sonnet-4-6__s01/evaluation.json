@@ -1,0 +1,115 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.763,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 2.444,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/async_batch_processor/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s01/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 1,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 1,
+      "invariant": 2,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 1
+    },
+    "lexical_proof_complexity": 8,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 21,
+    "source_token_estimate": 124,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 7.243,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 1
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is entirely non-functional and represents severe architectural slop. It imports from a fictional 'module_' (a Dafny compiled module that doesn't exist), contains no actual async logic, no batch splitting, no concurrency control, no result flattening, and no input validation. The entry point 'process_in_batches' is never defined. The code is a hollow scaffolding that pretends to bridge Dafny-compiled Python but provides zero functional behavior. It fails every requirement: batch_size splitting, concurrency limiting, async handler invocation, result ordering, and rejection of non-positive parameters.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This implementation is entirely non-functional and represents severe architectural slop. It imports from a fictional 'module_' (a Dafny compiled module that doesn't exist), contains no actual async logic, no batch splitting, no concurrency control, no result flattening, and no input validation. The entry point 'process_in_batches' is never defined. The code is a hollow scaffolding that pretends to bridge Dafny-compiled Python but provides zero functional behavior. It fails every requirement: batch_size splitting, concurrency limiting, async handler invocation, result ordering, and rejection of non-positive parameters.\",\n  \"strengths\": [\n    \"At least attempts to reference a formal verification concept (Dafny) in the comments\"\n  ],\n  \"weaknesses\": [\n    \"No 'process_in_batches' function is defined anywhere\",\n    \"Imports from non-existent 'module_' will cause ImportError at runtime\",\n    \"Zero async functionality implemented\",\n    \"No batch splitting logic\",\n    \"No concurrency control (no semaphore, no asyncio.gather with limits)\",\n    \"No input validation for non-positive batch_size or concurrency\",\n    \"No result flattening or ordering\",\n    \"The Dafny symbol aliasing scaffolding is irrelevant noise that adds confusion\",\n    \"Completely fails all functional requirements\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "At least attempts to reference a formal verification concept (Dafny) in the comments"
+    ],
+    "weaknesses": [
+      "No 'process_in_batches' function is defined anywhere",
+      "Imports from non-existent 'module_' will cause ImportError at runtime",
+      "Zero async functionality implemented",
+      "No batch splitting logic",
+      "No concurrency control (no semaphore, no asyncio.gather with limits)",
+      "No input validation for non-positive batch_size or concurrency",
+      "No result flattening or ordering",
+      "The Dafny symbol aliasing scaffolding is irrelevant noise that adds confusion",
+      "Completely fails all functional requirements"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 127,
+      "prompt": 322,
+      "total": 449,
+      "turns": [
+        {
+          "completion": 127,
+          "prompt": 322,
+          "total": 449
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 4.826,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n_______________________ test_processes_batches_in_order ________________________\n\n    def test_processes_batches_in_order():\n        async def handler(batch):\n            return [item * 2 for item in batch]\n    \n>       result = asyncio.run(process_in_batches([1, 2, 3, 4, 5], handler, batch_size=2, concurrency=2))\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       TypeError: default__.process__in__batches() got an unexpected keyword argument 'batch_size'\n\ntest_solution.py:10: TypeError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_processes_batches_in_order - TypeError: default...\n1 failed in 0.25s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "async_batch_processor",
+  "variant": "oracle_dafny_generation"
+}

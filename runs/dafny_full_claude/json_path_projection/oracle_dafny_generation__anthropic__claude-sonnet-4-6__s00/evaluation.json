@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 5,
+    "error_count": null,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 5,
+      "exists": 0,
+      "forall": 3,
+      "if": 11,
+      "invariant": 5,
+      "logical_and": 2,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 0,
+      "while": 4
+    },
+    "lexical_proof_complexity": 30,
+    "logical_and_count": 2,
+    "logical_or_count": 0,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 116,
+    "source_token_estimate": 646,
+    "status": "verification_failed",
+    "verification_duration_seconds": 2.876,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires a Python function `extract_fields(record: dict, paths: dict[str, str], default=None) -> dict`. The informal oracle mentions 'Dafny formal verification skill' as a structural metaphor, but the actual deliverable must be a Python implementation. This code cannot be executed as Python at all \u2014 it uses Dafny syntax (`map<string, object?>`, `seq<string>`, `method`, `ensures`, `invariant`, `forall`, etc.). There is zero functional correctness in the Python context, no adherence to Pythonic idioms, and the submission fundamentally misunderstands the task by treating the oracle hint as a directive to write Dafny code instead of Python.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, a formal verification language, rather than Python. The task requires a Python function `extract_fields(record: dict, paths: dict[str, str], default=None) -> dict`. The informal oracle mentions 'Dafny formal verification skill' as a structural metaphor, but the actual deliverable must be a Python implementation. This code cannot be executed as Python at all \u2014 it uses Dafny syntax (`map<string, object?>`, `seq<string>`, `method`, `ensures`, `invariant`, `forall`, etc.). There is zero functional correctness in the Python context, no adherence to Pythonic idioms, and the submission fundamentally misunderstands the task by treating the oracle hint as a directive to write Dafny code instead of Python.\",\n  \"strengths\": [\n    \"The algorithmic logic (dot-splitting, index parsing, recursive navigation) is conceptually correct and would work if translated to Python\",\n    \"Handles edge cases like null/None values, invalid indexes, and missing keys in a structured way\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"No Python function `extract_fields` exists anywhere in the submission\",\n    \"Misinterprets the informal oracle as a language directive rather than a quality metaphor\",\n    \"Violates every Zen of Python principle by not being Python at all\",\n    \"Cannot be evaluated for simplicity, readability, or Pythonic style since it is a different language entirely\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The algorithmic logic (dot-splitting, index parsing, recursive navigation) is conceptually correct and would work if translated to Python",
+      "Handles edge cases like null/None values, invalid indexes, and missing keys in a structured way"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "No Python function `extract_fields` exists anywhere in the submission",
+      "Misinterprets the informal oracle as a language directive rather than a quality metaphor",
+      "Violates every Zen of Python principle by not being Python at all",
+      "Cannot be evaluated for simplicity, readability, or Pythonic style since it is a different language entirely"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 649,
+      "prompt": 314,
+      "total": 963,
+      "turns": [
+        {
+          "completion": 649,
+          "prompt": 314,
+          "total": 963
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(71,23): Error: type conversions are not supported to this type (got map<string, object?>)\n   |\n71 |       var m := current as map<string, object?>;\n   |                        ^^\n\nsolution.dfy(79,23): Error: type conversions are not supported to this type (got seq<object?>)\n   |\n79 |       var s := current as seq<object?>;\n   |                        ^^\n\nsolution.dfy(58,23): Error: RHS (of type map<string, object?>) not assignable to LHS (of type object?)\n   |\n58 |   var current: object? := record;\n   |                        ^^\n\nsolution.dfy(70,15): Error: type test for type 'map<string, object?>' must be from an expression assignable to it (got 'object?')\n   |\n70 |     if current is map<string, object?> {\n   |                ^^\n\nsolution.dfy(78,22): Error: type test for type 'seq<object?>' must be from an expression assignable to it (got 'object?')\n   |\n78 |     } else if current is seq<object?> {\n   |                       ^^\n\nsolution.dfy(72,14): Error: second argument to \"in\" must be a set, multiset, or sequence with elements of type seq<char>, or a map with domain seq<char> (instead got ?)\n   |\n72 |       if part in m {\n   |               ^^\n\nsolution.dfy(73,21): Error: incorrect type for selection into ? (got seq<char>)\n   |\n73 |         current := m[part];\n   |                      ^^^^\n\nsolution.dfy(73,20): Error: sequence has type ? which is incompatible with expected type object?\n   |\n73 |         current := m[part];\n   |                     ^\n\nsolution.dfy(82,21): Error: incorrect type for selection into ? (got int)\n   |\n82 |         current := s[idx];\n   |                      ^^^\n\nsolution.dfy(82,20): Error: sequence has type ? which is incompatible with expected type object?\n   |\n82 |         current := s[idx];\n   |                     ^\n\n10 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "json_path_projection",
+  "variant": "oracle_dafny_generation"
+}

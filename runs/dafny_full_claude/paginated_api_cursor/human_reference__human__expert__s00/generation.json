@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\nfrom collections.abc import Awaitable, Callable\nfrom typing import Any\n\n\nasync def collect_cursor_items(\n    fetch_page: Callable[[Any], Awaitable[tuple[list[Any], Any]]],\n    *,\n    start_cursor: Any = None,\n) -> list[Any]:\n    cursor = start_cursor\n    collected: list[Any] = []\n    while True:\n        items, cursor = await fetch_page(cursor)\n        collected.extend(items)\n        if cursor is None:\n            return collected\n",
+  "effective_temperature": null,
+  "entry_point": "collect_cursor_items",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\nfrom collections.abc import Awaitable, Callable\nfrom typing import Any\n\n\nasync def collect_cursor_items(\n    fetch_page: Callable[[Any], Awaitable[tuple[list[Any], Any]]],\n    *,\n    start_cursor: Any = None,\n) -> list[Any]:\n    cursor = start_cursor\n    collected: list[Any] = []\n    while True:\n        items, cursor = await fetch_page(cursor)\n        collected.extend(items)\n        if cursor is None:\n            return collected\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend collect_cursor_items with per_page_timeout: float | None = None. When set,\nwrap each page fetch in asyncio.wait_for. Preserve original behavior when omitted.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import asyncio\n\nimport pytest\n\nfrom solution import collect_cursor_items\n\n\ndef test_per_page_timeout_and_original_behavior():\n    async def fetch(cursor):\n        return ([cursor or 'start'], None)\n\n    assert asyncio.run(collect_cursor_items(fetch, start_cursor='x')) == ['x']\n\n    async def slow(_cursor):\n        await asyncio.sleep(0.05)\n        return ([], None)\n\n    with pytest.raises(asyncio.TimeoutError):\n        asyncio.run(collect_cursor_items(slow, per_page_timeout=0.001))\n",
+    "entry_point": "collect_cursor_items",
+    "human_reference": "from __future__ import annotations\n\nfrom collections.abc import Awaitable, Callable\nfrom typing import Any\n\n\nasync def collect_cursor_items(\n    fetch_page: Callable[[Any], Awaitable[tuple[list[Any], Any]]],\n    *,\n    start_cursor: Any = None,\n) -> list[Any]:\n    cursor = start_cursor\n    collected: list[Any] = []\n    while True:\n        items, cursor = await fetch_page(cursor)\n        collected.extend(items)\n        if cursor is None:\n            return collected\n",
+    "id": "paginated_api_cursor",
+    "mock_day2_solution": "from __future__ import annotations\n\nimport asyncio\n\n\nasync def collect_cursor_items(fetch_page, *, start_cursor=None, per_page_timeout=None):\n    out = []\n    cursor = start_cursor\n    while True:\n        if per_page_timeout is None:\n            items, cursor = await fetch_page(cursor)\n        else:\n            items, cursor = await asyncio.wait_for(fetch_page(cursor), timeout=per_page_timeout)\n        out.extend(items)\n        if cursor is None:\n            return out\n",
+    "mock_solution": "from __future__ import annotations\n\n\nasync def collect_cursor_items(fetch_page, *, start_cursor=None):\n    out = []\n    cursor = start_cursor\n    done = False\n    while not done:\n        page_items, next_cursor = await fetch_page(cursor)\n        for item in page_items:\n            out.append(item)\n        cursor = next_cursor\n        done = cursor is None\n    return out\n",
+    "prompt": "Implement async collect_cursor_items(fetch_page, *, start_cursor=None) -> list.\n\nfetch_page(cursor) is an async callable returning (items, next_cursor). Append\nitems from each page until next_cursor is None. Pass start_cursor to the first\ncall.\n",
+    "tags": [
+      "async",
+      "pagination",
+      "day2-hard"
+    ],
+    "test_code": "import asyncio\n\nfrom solution import collect_cursor_items\n\n\ndef test_collects_all_pages():\n    async def fetch(cursor):\n        pages = {\n            None: ([1, 2], 'b'),\n            'b': ([3], None),\n        }\n        return pages[cursor]\n\n    assert asyncio.run(collect_cursor_items(fetch)) == [1, 2, 3]\n"
+  },
+  "task_id": "paginated_api_cursor",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

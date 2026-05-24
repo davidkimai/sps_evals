@@ -1,0 +1,41 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\ndef has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool:\n    return permission in matrix.get(role, set())\n",
+  "effective_temperature": null,
+  "entry_point": "has_permission",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\ndef has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool:\n    return permission in matrix.get(role, set())\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Extend has_permission so a wildcard role '*' grants permissions to all roles.\nExplicit role permissions and wildcard permissions should both be considered.\nPreserve deny-by-default behavior when no wildcard exists.\n",
+    "day2_stressors": [
+      "interface_generalization",
+      "error_surface_expansion",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "from solution import has_permission\n\n\ndef test_wildcard_role_expansion():\n    matrix = {'*': {'read'}, 'admin': {'write'}}\n    assert has_permission(matrix, 'admin', 'write') is True\n    assert has_permission(matrix, 'guest', 'read') is True\n    assert has_permission(matrix, 'guest', 'write') is False\n",
+    "entry_point": "has_permission",
+    "human_reference": "from __future__ import annotations\n\n\ndef has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool:\n    return permission in matrix.get(role, set())\n",
+    "id": "permission_gate",
+    "mock_day2_solution": "from __future__ import annotations\n\n\ndef has_permission(matrix, role: str, permission: str) -> bool:\n    role_permissions = matrix.get(role, set())\n    wildcard_permissions = matrix.get('*', set())\n    return permission in role_permissions or permission in wildcard_permissions\n",
+    "mock_solution": "from __future__ import annotations\n\n\ndef has_permission(matrix, role: str, permission: str) -> bool:\n    if role not in matrix:\n        return False\n    return permission in matrix[role]\n",
+    "prompt": "Implement has_permission(matrix: dict[str, set[str]], role: str, permission: str) -> bool.\nReturn True only when role exists and permission is explicitly listed for it.\nDeny by default for unknown roles or permissions.\n",
+    "tags": [
+      "reliability_critical",
+      "access_control",
+      "day2-hard"
+    ],
+    "test_code": "from solution import has_permission\n\n\ndef test_deny_by_default():\n    matrix = {'admin': {'read', 'write'}, 'viewer': {'read'}}\n    assert has_permission(matrix, 'admin', 'write') is True\n    assert has_permission(matrix, 'viewer', 'write') is False\n    assert has_permission(matrix, 'missing', 'read') is False\n"
+  },
+  "task_id": "permission_gate",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

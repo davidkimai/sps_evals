@@ -1,0 +1,58 @@
+{
+  "artifact_language": "python",
+  "dafny": {
+    "selected_skill_ids": [],
+    "status": "not_dafny"
+  },
+  "effective_temperature": null,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The implementation is clean, minimal, and directly maps to the task requirements without any speculative abstractions. The class has a single responsibility, data movement is explicit (resources tracked in a plain list), control flow is flat, and the reverse-order closing via `pop()` is idiomatic and self-evident. The `__exit__` returning `False` correctly propagates exceptions. The only minor concern is that `__exit__` silently swallows errors from individual `close()` calls\u2014if one resource's `close()` raises, subsequent resources won't be closed\u2014but this is a common trade-off and the spec doesn't mandate error handling during cleanup. Names are clear and the whole implementation is locally auditable in one glance.",
+    "raw_response": "{\n  \"score\": 9,\n  \"rationale\": \"The implementation is clean, minimal, and directly maps to the task requirements without any speculative abstractions. The class has a single responsibility, data movement is explicit (resources tracked in a plain list), control flow is flat, and the reverse-order closing via `pop()` is idiomatic and self-evident. The `__exit__` returning `False` correctly propagates exceptions. The only minor concern is that `__exit__` silently swallows errors from individual `close()` calls\u2014if one resource's `close()` raises, subsequent resources won't be closed\u2014but this is a common trade-off and the spec doesn't mandate error handling during cleanup. Names are clear and the whole implementation is locally auditable in one glance.\",\n  \"strengths\": [\n    \"Minimal surface area with no unused extension points or framework-shaped scaffolding\",\n    \"Reverse acquisition order via list.pop() is idiomatic and obvious\",\n    \"Explicit data tracking in a plain list with no hidden mutation\",\n    \"Returns False from __exit__ to correctly propagate exceptions\",\n    \"acquire() returns the resource, enabling fluent one-liner usage\"\n  ],\n  \"weaknesses\": [\n    \"If a resource's close() raises, remaining resources in the stack won't be closed (no exception chaining or best-effort cleanup loop)\",\n    \"No validation that acquired objects are closeable or even non-None, though the spec doesn't require it\"\n  ]\n}",
+    "score": 9,
+    "skipped": false,
+    "strengths": [
+      "Minimal surface area with no unused extension points or framework-shaped scaffolding",
+      "Reverse acquisition order via list.pop() is idiomatic and obvious",
+      "Explicit data tracking in a plain list with no hidden mutation",
+      "Returns False from __exit__ to correctly propagate exceptions",
+      "acquire() returns the resource, enabling fluent one-liner usage"
+    ],
+    "weaknesses": [
+      "If a resource's close() raises, remaining resources in the stack won't be closed (no exception chaining or best-effort cleanup loop)",
+      "No validation that acquired objects are closeable or even non-None, though the spec doesn't require it"
+    ]
+  },
+  "metadata": null,
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "pytest": {
+    "duration_seconds": 4.19,
+    "exit_code": 0,
+    "passed": true,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": ".                                                                        [100%]\n1 passed in 0.13s\n",
+    "timed_out": false
+  },
+  "requested_temperature": null,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 1,
+    "cyclomatic_complexity_average": 1.6,
+    "cyclomatic_complexity_max": 3,
+    "cyclomatic_complexity_total": 8,
+    "function_count": 4,
+    "loc": 16,
+    "maintainability_index": 67.476,
+    "max_nesting_depth": 2,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "resource_scope",
+  "variant": "human_reference"
+}

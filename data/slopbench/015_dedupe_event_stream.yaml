@@ -1,0 +1,137 @@
+id: dedupe_event_stream
+entry_point: dedupe_events
+tags: [data_pipeline, streaming, json, day2-hard]
+day2_stressors: [streaming_compatibility, audit_provenance, backwards_compatibility]
+prompt: |
+  Implement dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict].
+
+  Keep the first event for each composite key within a rolling timestamp window.
+  Each event must contain integer timestamp and every key field. Skip malformed
+  events. A duplicate is any later event with the same composite key and
+  timestamp less than window_seconds after the kept event. Preserve the order of
+  retained events.
+test_code: |
+  from solution import dedupe_events
+
+
+  def test_dedupe_events_keeps_first_within_window():
+      events = [
+          {"timestamp": 10, "user": "u1", "kind": "click"},
+          {"timestamp": 12, "user": "u1", "kind": "click"},
+          {"timestamp": 25, "user": "u1", "kind": "click"},
+          {"timestamp": "bad", "user": "u2", "kind": "click"},
+          {"timestamp": 30, "user": "u2", "kind": "view"},
+      ]
+      assert dedupe_events(events, ["user", "kind"], 10) == [
+          {"timestamp": 10, "user": "u1", "kind": "click"},
+          {"timestamp": 25, "user": "u1", "kind": "click"},
+          {"timestamp": 30, "user": "u2", "kind": "view"},
+      ]
+day2_prompt: |
+  Add an optional return_stats: bool = False argument. When true, return a
+  tuple of (retained_events, {"kept": int, "duplicates": int, "malformed": int}).
+day2_test_code: |
+  from solution import dedupe_events
+
+
+  def test_return_stats_counts_duplicate_and_malformed_events():
+      events = [
+          {"timestamp": 10, "user": "u1"},
+          {"timestamp": 11, "user": "u1"},
+          {"timestamp": "bad", "user": "u1"},
+      ]
+      kept, stats = dedupe_events(events, ["user"], 5, return_stats=True)
+      assert kept == [{"timestamp": 10, "user": "u1"}]
+      assert stats == {"kept": 1, "duplicates": 1, "malformed": 1}
+human_reference: |
+  def dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]:
+      retained = []
+      last_seen: dict[tuple, int] = {}
+      for event in events:
+          parsed = _parse_event(event, key_fields)
+          if parsed is None:
+              continue
+          timestamp, key = parsed
+          previous = last_seen.get(key)
+          if previous is not None and timestamp - previous < window_seconds:
+              continue
+          retained.append(event)
+          last_seen[key] = timestamp
+      return retained
+
+
+  def _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:
+      timestamp = event.get("timestamp")
+      if not isinstance(timestamp, int):
+          return None
+      values = []
+      for field in key_fields:
+          if field not in event:
+              return None
+          values.append(event[field])
+      return timestamp, tuple(values)
+mock_solution: |
+  def dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]:
+      retained = []
+      last_seen: dict[tuple, int] = {}
+      for event in events:
+          parsed = _parse_event(event, key_fields)
+          if parsed is None:
+              continue
+          timestamp, key = parsed
+          previous = last_seen.get(key)
+          if previous is not None and timestamp - previous < window_seconds:
+              continue
+          retained.append(event)
+          last_seen[key] = timestamp
+      return retained
+
+
+  def _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:
+      timestamp = event.get("timestamp")
+      if not isinstance(timestamp, int):
+          return None
+      values = []
+      for field in key_fields:
+          if field not in event:
+              return None
+          values.append(event[field])
+      return timestamp, tuple(values)
+mock_day2_solution: |
+  def dedupe_events(
+      events: list[dict],
+      key_fields: list[str],
+      window_seconds: int,
+      return_stats: bool = False,
+  ):
+      retained = []
+      last_seen: dict[tuple, int] = {}
+      stats = {"kept": 0, "duplicates": 0, "malformed": 0}
+      for event in events:
+          parsed = _parse_event(event, key_fields)
+          if parsed is None:
+              stats["malformed"] += 1
+              continue
+          timestamp, key = parsed
+          previous = last_seen.get(key)
+          if previous is not None and timestamp - previous < window_seconds:
+              stats["duplicates"] += 1
+              continue
+          retained.append(event)
+          last_seen[key] = timestamp
+          stats["kept"] += 1
+      if return_stats:
+          return retained, stats
+      return retained
+
+
+  def _parse_event(event: dict, key_fields: list[str]) -> tuple[int, tuple] | None:
+      timestamp = event.get("timestamp")
+      if not isinstance(timestamp, int):
+          return None
+      values = []
+      for field in key_fields:
+          if field not in event:
+              return None
+          values.append(event[field])
+      return timestamp, tuple(values)

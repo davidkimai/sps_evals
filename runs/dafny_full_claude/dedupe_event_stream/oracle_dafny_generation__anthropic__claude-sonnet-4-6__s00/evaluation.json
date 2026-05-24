@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": null,
+    "invariant_count": 7,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 0,
+      "if": 15,
+      "invariant": 7,
+      "logical_and": 1,
+      "logical_or": 2,
+      "match": 0,
+      "requires": 1,
+      "while": 5
+    },
+    "lexical_proof_complexity": 32,
+    "logical_and_count": 1,
+    "logical_or_count": 2,
+    "requires_count": 1,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 129,
+    "source_token_estimate": 777,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.062,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written entirely in Dafny, not Python. The entry point `dedupe_events` is specified as a Python function with signature `dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]`, but the submission provides Dafny method syntax, Dafny types (seq, map<string, string>), Dafny invariants, and Dafny control flow constructs. This code cannot be executed as Python under any circumstances \u2014 it would cause a syntax error immediately. While the algorithmic logic expressed in Dafny is broadly correct (checking for timestamp, key fields, parsing integers, building composite keys, checking time windows), the fundamental requirement of producing a working Python implementation is completely unmet. The informal oracle references 'Dafny formal verification skill loaded through modular discovery,' which appears to have been misinterpreted as an instruction to write the solution in Dafny rather than to apply Dafny-style reasoning discipline to a Python implementation.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written entirely in Dafny, not Python. The entry point `dedupe_events` is specified as a Python function with signature `dedupe_events(events: list[dict], key_fields: list[str], window_seconds: int) -> list[dict]`, but the submission provides Dafny method syntax, Dafny types (seq, map<string, string>), Dafny invariants, and Dafny control flow constructs. This code cannot be executed as Python under any circumstances \u2014 it would cause a syntax error immediately. While the algorithmic logic expressed in Dafny is broadly correct (checking for timestamp, key fields, parsing integers, building composite keys, checking time windows), the fundamental requirement of producing a working Python implementation is completely unmet. The informal oracle references 'Dafny formal verification skill loaded through modular discovery,' which appears to have been misinterpreted as an instruction to write the solution in Dafny rather than to apply Dafny-style reasoning discipline to a Python implementation.\",\n  \"strengths\": [\n    \"The algorithmic structure (malformed event skipping, composite key building, rolling window duplicate detection) is logically sound\",\n    \"Loop invariants and preconditions/postconditions show formal reasoning discipline\",\n    \"ParseInt helper correctly handles negative numbers and empty strings\"\n  ],\n  \"weaknesses\": [\n    \"Entire implementation is in Dafny, not Python \u2014 completely non-executable as the required entry point\",\n    \"Wrong language means zero functional correctness for the Python task\",\n    \"No Python dict handling, no integer timestamp field (events use string maps in Dafny), mismatches task spec\",\n    \"The O(n*m) duplicate scan against all kept events is inefficient compared to a dict-based approach\",\n    \"Composite key collision risk (e.g., field value containing ';' or '=') not addressed\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The algorithmic structure (malformed event skipping, composite key building, rolling window duplicate detection) is logically sound",
+      "Loop invariants and preconditions/postconditions show formal reasoning discipline",
+      "ParseInt helper correctly handles negative numbers and empty strings"
+    ],
+    "weaknesses": [
+      "Entire implementation is in Dafny, not Python \u2014 completely non-executable as the required entry point",
+      "Wrong language means zero functional correctness for the Python task",
+      "No Python dict handling, no integer timestamp field (events use string maps in Dafny), mismatches task spec",
+      "The O(n*m) duplicate scan against all kept events is inefficient compared to a dict-based approach",
+      "Composite key collision risk (e.g., field value containing ';' or '=') not addressed"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 780,
+      "prompt": 342,
+      "total": 1122,
+      "turns": [
+        {
+          "completion": 780,
+          "prompt": 342,
+          "total": 1122
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(59,32): Error: element might not be in domain\n   |\n59 |       var keptTsStr := keptEvent[\"timestamp\"];\n   |                                 ^\n\n\nDafny program verifier finished with 2 verified, 1 error\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "dedupe_event_stream",
+  "variant": "oracle_dafny_generation"
+}

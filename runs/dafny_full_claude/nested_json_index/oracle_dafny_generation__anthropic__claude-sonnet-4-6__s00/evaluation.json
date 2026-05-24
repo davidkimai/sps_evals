@@ -1,0 +1,113 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 5.281,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 0.571,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/nested_json_index/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 1,
+    "error_count": 0,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 2,
+      "if": 12,
+      "invariant": 2,
+      "logical_and": 7,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 1,
+      "while": 1
+    },
+    "lexical_proof_complexity": 26,
+    "logical_and_count": 7,
+    "logical_or_count": 0,
+    "requires_count": 1,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 66,
+    "source_token_estimate": 531,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 6.691,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 5
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is pure architectural slop: it imports a non-existent 'module_' (which will raise ImportError immediately), never defines the required 'build_user_purchase_index' entry point, and instead contains a bizarre Dafny-to-Python symbol aliasing shim that has nothing to do with the task. The code is maximally indirect, opaque, and non-functional. It violates every Zen of Python principle\u2014explicit is better than implicit, simple is better than complex, flat is better than nested\u2014and fails to implement even a single line of the actual business logic.",
+    "raw_response": "```json\n{\n  \"score\": 1,\n  \"rationale\": \"This implementation is pure architectural slop: it imports a non-existent 'module_' (which will raise ImportError immediately), never defines the required 'build_user_purchase_index' entry point, and instead contains a bizarre Dafny-to-Python symbol aliasing shim that has nothing to do with the task. The code is maximally indirect, opaque, and non-functional. It violates every Zen of Python principle\u2014explicit is better than implicit, simple is better than complex, flat is better than nested\u2014and fails to implement even a single line of the actual business logic.\",\n  \"strengths\": [\"None whatsoever\"],\n  \"weaknesses\": [\n    \"Imports a non-existent module ('module_'), causing immediate ImportError\",\n    \"The required entry point 'build_user_purchase_index' is never defined\",\n    \"Zero business logic implemented\",\n    \"Introduces a completely irrelevant Dafny symbol aliasing mechanism\",\n    \"Wildcard imports and global namespace mutation are anti-patterns\",\n    \"Completely unreadable and non-auditable\",\n    \"Does not preserve task semantics in any way\"\n  ]\n}\n```",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None whatsoever"
+    ],
+    "weaknesses": [
+      "Imports a non-existent module ('module_'), causing immediate ImportError",
+      "The required entry point 'build_user_purchase_index' is never defined",
+      "Zero business logic implemented",
+      "Introduces a completely irrelevant Dafny symbol aliasing mechanism",
+      "Wildcard imports and global namespace mutation are anti-patterns",
+      "Completely unreadable and non-auditable",
+      "Does not preserve task semantics in any way"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 535,
+      "prompt": 347,
+      "total": 882,
+      "turns": [
+        {
+          "completion": 535,
+          "prompt": 347,
+          "total": 882
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.137,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "F                                                                        [100%]\n=================================== FAILURES ===================================\n___________________ test_builds_index_without_mutating_input ___________________\n\n    def test_builds_index_without_mutating_input():\n        events = [\n            {\"user_id\": \"alice\", \"kind\": \"purchase\", \"amount\": 4},\n            {\"user_id\": \"alice\", \"kind\": \"refund\", \"amount\": 1},\n            {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": 7},\n            {\"user_id\": \"\", \"kind\": \"purchase\", \"amount\": 10},\n            {\"user_id\": \"bob\", \"kind\": \"purchase\", \"amount\": \"9\"},\n        ]\n        snapshot = [dict(event) for event in events]\n    \n>       assert build_user_purchase_index(events) == {\n            \"alice\": {\"count\": 1, \"total\": 4},\n            \"bob\": {\"count\": 1, \"total\": 7},\n        }\nE       AssertionError: assert {} == {'alice': {'c..., 'total': 7}}\nE         \nE         Right contains 2 more items:\nE         {'alice': {'count': 1, 'total': 4}, 'bob': {'count': 1, 'total': 7}}\nE         Use -v to get more diff\n\ntest_solution.py:14: AssertionError\n=========================== short test summary info ============================\nFAILED test_solution.py::test_builds_index_without_mutating_input - Assertion...\n1 failed in 0.16s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "nested_json_index",
+  "variant": "oracle_dafny_generation"
+}

@@ -1,0 +1,40 @@
+{
+  "artifact_language": "python",
+  "code": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n",
+  "effective_temperature": null,
+  "entry_point": "RetryGate",
+  "metadata": null,
+  "mode": "human_reference",
+  "model": "expert",
+  "oracle_spec": "Treat the Zen of Python as an informal in-context oracle for structural quality.\nThe oracle is not a style preference layer; it is a degree-of-freedom collapse\nover the implementation space. Preserve functional correctness while choosing\nthe simplest architecture that satisfies the task.\n\nOperational constraints:\n- Prefer small pure helpers over monolithic functions.\n- Keep control flow flat; avoid deep nesting when guard clauses or extraction work.\n- Make data movement explicit; avoid hidden mutation and implicit global state.\n- Raise clear errors for invalid inputs instead of silently guessing.\n- Choose ordinary standard-library constructs over clever metaprogramming.\n- Use names that make the implementation easy to explain.\n- Avoid speculative abstractions, framework-shaped code, and unused extension points.\n- Keep code sparse enough that a maintainer can audit behavior locally.\n",
+  "oracle_spec_label": "zen_of_python",
+  "provider": "human",
+  "raw_response": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n",
+  "requested_temperature": null,
+  "sample_index": 0,
+  "system_prompt": "",
+  "task": {
+    "custom_spec_override": null,
+    "day2_prompt": "Add a snapshot() -> dict method that returns the current state without\nmutating it. The dictionary must contain max_attempts, failures, remaining,\nand allowed.\n",
+    "day2_stressors": [
+      "cross_function_state",
+      "backwards_compatibility"
+    ],
+    "day2_test_code": "import pytest\n\nfrom solution import RetryGate\n\n\ndef test_snapshot_reports_state_without_mutation():\n    gate = RetryGate(3)\n    gate.record_failure()\n    snapshot = gate.snapshot()\n\n    assert snapshot == {\n        \"max_attempts\": 3,\n        \"failures\": 1,\n        \"remaining\": 2,\n        \"allowed\": True,\n    }\n    assert gate.remaining() == 2\n    assert gate.allow()\n\n\ndef test_original_limit_validation_remains():\n    with pytest.raises(ValueError):\n        RetryGate(0)\n",
+    "entry_point": "RetryGate",
+    "human_reference": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n",
+    "id": "retry_state_machine",
+    "mock_day2_solution": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n\n    def snapshot(self) -> dict[str, int | bool]:\n        return {\n            \"max_attempts\": self._max_attempts,\n            \"failures\": self._failures,\n            \"remaining\": self.remaining(),\n            \"allowed\": self.allow(),\n        }\n",
+    "mock_solution": "from __future__ import annotations\n\n\nclass RetryGate:\n    def __init__(self, max_attempts: int) -> None:\n        if max_attempts <= 0:\n            raise ValueError(\"max_attempts must be positive\")\n        self._max_attempts = max_attempts\n        self._failures = 0\n\n    def allow(self) -> bool:\n        return self._failures < self._max_attempts\n\n    def record_success(self) -> None:\n        self._failures = 0\n\n    def record_failure(self) -> None:\n        self._failures += 1\n\n    def remaining(self) -> int:\n        return max(0, self._max_attempts - self._failures)\n",
+    "prompt": "Implement a RetryGate class.\n\nConstructor: RetryGate(max_attempts: int)\n- max_attempts must be positive, otherwise raise ValueError.\n\nMethods:\n- allow() -> bool: True while the number of recorded failures is less than max_attempts.\n- record_success() -> None: reset the failure count to zero.\n- record_failure() -> None: increment the failure count by one.\n- remaining() -> int: remaining attempts before allow() becomes False.\n\nThe implementation should be deterministic and should not use time, threads,\nnetworking, or global state.\n",
+    "tags": [
+      "state",
+      "control-flow",
+      "maintainability"
+    ],
+    "test_code": "import pytest\n\nfrom solution import RetryGate\n\n\ndef test_retry_gate_tracks_failures_and_reset():\n    gate = RetryGate(2)\n    assert gate.allow()\n    assert gate.remaining() == 2\n\n    gate.record_failure()\n    assert gate.allow()\n    assert gate.remaining() == 1\n\n    gate.record_failure()\n    assert not gate.allow()\n    assert gate.remaining() == 0\n\n    gate.record_success()\n    assert gate.allow()\n    assert gate.remaining() == 2\n\n\ndef test_retry_gate_rejects_invalid_limit():\n    with pytest.raises(ValueError):\n        RetryGate(0)\n"
+  },
+  "task_id": "retry_state_machine",
+  "user_prompt": "",
+  "variant": "human_reference"
+}

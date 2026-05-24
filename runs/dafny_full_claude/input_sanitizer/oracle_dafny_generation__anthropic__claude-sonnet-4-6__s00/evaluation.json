@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 2,
+    "error_count": null,
+    "invariant_count": 4,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 2,
+      "exists": 0,
+      "forall": 6,
+      "if": 1,
+      "invariant": 4,
+      "logical_and": 2,
+      "logical_or": 3,
+      "match": 0,
+      "requires": 0,
+      "while": 1
+    },
+    "lexical_proof_complexity": 19,
+    "logical_and_count": 2,
+    "logical_or_count": 3,
+    "requires_count": 0,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 29,
+    "source_token_estimate": 230,
+    "status": "verification_failed",
+    "verification_duration_seconds": 10.023,
+    "verification_exit_code": 124,
+    "verification_status": "timeout",
+    "verification_timed_out": true,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]`, but the code provided is a Dafny method with Dafny syntax, types, invariants, and helper functions. This is a complete language mismatch \u2014 the code cannot be executed as Python, fails the entry point requirement, and does not satisfy the functional requirements in the target language. While the Dafny logic itself appears structurally sound and correctly models the desired behavior (membership check, deduplication, character validation, order preservation), it is entirely the wrong artifact for the task. There is no Python implementation present whatsoever.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python function `sanitize_fields(fields: list[str], allowed: set[str]) -> list[str]`, but the code provided is a Dafny method with Dafny syntax, types, invariants, and helper functions. This is a complete language mismatch \u2014 the code cannot be executed as Python, fails the entry point requirement, and does not satisfy the functional requirements in the target language. While the Dafny logic itself appears structurally sound and correctly models the desired behavior (membership check, deduplication, character validation, order preservation), it is entirely the wrong artifact for the task. There is no Python implementation present whatsoever.\",\n  \"strengths\": [\n    \"The Dafny logic correctly models all three functional requirements: allowed membership, deduplication, and alphanumeric/underscore validation\",\n    \"Loop invariants are well-specified and the proof structure is clean\",\n    \"Helper function decomposition (IsValidField, IsAllowedChar) is readable and modular\"\n  ],\n  \"weaknesses\": [\n    \"Submitted Dafny code instead of Python \u2014 completely wrong language for the task\",\n    \"Cannot be executed or imported as a Python module\",\n    \"Entry point `sanitize_fields` as a Python callable does not exist in the submission\",\n    \"No Python-idiomatic constructs (list comprehension, re module, set tracking) are present\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "The Dafny logic correctly models all three functional requirements: allowed membership, deduplication, and alphanumeric/underscore validation",
+      "Loop invariants are well-specified and the proof structure is clean",
+      "Helper function decomposition (IsValidField, IsAllowedChar) is readable and modular"
+    ],
+    "weaknesses": [
+      "Submitted Dafny code instead of Python \u2014 completely wrong language for the task",
+      "Cannot be executed or imported as a Python module",
+      "Entry point `sanitize_fields` as a Python callable does not exist in the submission",
+      "No Python-idiomatic constructs (list comprehension, re module, set tracking) are present"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 234,
+      "prompt": 286,
+      "total": 520,
+      "turns": [
+        {
+          "completion": 234,
+          "prompt": 286,
+          "total": 520
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "input_sanitizer",
+  "variant": "oracle_dafny_generation"
+}

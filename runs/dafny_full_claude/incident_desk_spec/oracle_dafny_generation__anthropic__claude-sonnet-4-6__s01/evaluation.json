@@ -1,0 +1,116 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 1,
+    "error_count": 4,
+    "invariant_count": 2,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 1,
+      "exists": 0,
+      "forall": 1,
+      "if": 69,
+      "invariant": 2,
+      "logical_and": 3,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 2,
+      "while": 2
+    },
+    "lexical_proof_complexity": 80,
+    "logical_and_count": 3,
+    "logical_or_count": 0,
+    "requires_count": 2,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 133,
+    "source_token_estimate": 1067,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.28,
+    "verification_exit_code": 4,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate implementation is written in Dafny, a formal verification language, rather than Python as required by the task. The entry point is 'RouteTickets' (PascalCase method) not 'route_tickets' (snake_case function), the type signatures use Dafny syntax (seq, map<string,string>), and priority is stored as a string rather than an int in the output dict. The spec calls for a Python function returning list[dict] with 'priority' as int, but this returns string-encoded integers via a hardcoded lookup table (ParseInt/IntToString) that is both fragile and incomplete. There is no severity_table or bonus_table with names ending in _table as the oracle prefers. The code introduces formal verification constructs (requires/ensures/invariant) that are entirely alien to the Python Zen context. The implementation fails on language, entry point name, output types, and structural idioms simultaneously.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate implementation is written in Dafny, a formal verification language, rather than Python as required by the task. The entry point is 'RouteTickets' (PascalCase method) not 'route_tickets' (snake_case function), the type signatures use Dafny syntax (seq, map<string,string>), and priority is stored as a string rather than an int in the output dict. The spec calls for a Python function returning list[dict] with 'priority' as int, but this returns string-encoded integers via a hardcoded lookup table (ParseInt/IntToString) that is both fragile and incomplete. There is no severity_table or bonus_table with names ending in _table as the oracle prefers. The code introduces formal verification constructs (requires/ensures/invariant) that are entirely alien to the Python Zen context. The implementation fails on language, entry point name, output types, and structural idioms simultaneously.\",\n  \"strengths\": [\n    \"Correctly skips tickets missing id, severity, or service fields\",\n    \"Preserves ticket order via sequential iteration\",\n    \"Falls back to 'default' rule when service is absent\",\n    \"Applies correct severity bonuses (10 for critical, 5 for high)\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 completely wrong language for the task\",\n    \"Entry point is 'RouteTickets' not 'route_tickets'\",\n    \"Priority output is a string, not an int as required\",\n    \"Hardcoded ParseInt/IntToString lookup tables are fragile and incomplete\",\n    \"No _table naming convention used as oracle specifies\",\n    \"Formal verification annotations (requires/ensures/invariant) are irrelevant noise\",\n    \"Does not produce list[dict] with correct Python types\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Correctly skips tickets missing id, severity, or service fields",
+      "Preserves ticket order via sequential iteration",
+      "Falls back to 'default' rule when service is absent",
+      "Applies correct severity bonuses (10 for critical, 5 for high)"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 completely wrong language for the task",
+      "Entry point is 'RouteTickets' not 'route_tickets'",
+      "Priority output is a string, not an int as required",
+      "Hardcoded ParseInt/IntToString lookup tables are fragile and incomplete",
+      "No _table naming convention used as oracle specifies",
+      "Formal verification annotations (requires/ensures/invariant) are irrelevant noise",
+      "Does not produce list[dict] with correct Python types"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 1070,
+      "prompt": 352,
+      "total": 1422,
+      "turns": [
+        {
+          "completion": 1070,
+          "prompt": 352,
+          "total": 1422
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Incident Desk Spec N-9:\n- Return review-facing rows with stable status_code values, never booleans.\n- Prefer local lookup tables with names ending in _table.\n- Keep branch reasons as short explicit strings, not hidden in comments.\n- Do not introduce classes for single-pass ticket routing.\n- Preserve ticket order because shift leads compare rows against the intake log.",
+  "oracle_spec_label": "custom_spec_override",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(143,33): Error: element might not be in domain\n    |\n143 |     print \"Row \", j, \": id=\", row[\"id\"], \" queue=\", row[\"queue\"], \" priority=\", row[\"priority\"], \" status=\", row[\"status_code\"], \"\\n\";\n    |                                  ^\n\nsolution.dfy(143,55): Error: element might not be in domain\n    |\n143 |     print \"Row \", j, \": id=\", row[\"id\"], \" queue=\", row[\"queue\"], \" priority=\", row[\"priority\"], \" status=\", row[\"status_code\"], \"\\n\";\n    |                                                        ^\n\nsolution.dfy(143,83): Error: element might not be in domain\n    |\n143 |     print \"Row \", j, \": id=\", row[\"id\"], \" queue=\", row[\"queue\"], \" priority=\", row[\"priority\"], \" status=\", row[\"status_code\"], \"\\n\";\n    |                                                                                    ^\n\nsolution.dfy(143,112): Error: element might not be in domain\n    |\n143 |     print \"Row \", j, \": id=\", row[\"id\"], \" queue=\", row[\"queue\"], \" priority=\", row[\"priority\"], \" status=\", row[\"status_code\"], \"\\n\";\n    |                                                                                                                 ^\n\n\nDafny program verifier finished with 2 verified, 4 errors\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 1,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "incident_desk_spec",
+  "variant": "oracle_dafny_generation"
+}

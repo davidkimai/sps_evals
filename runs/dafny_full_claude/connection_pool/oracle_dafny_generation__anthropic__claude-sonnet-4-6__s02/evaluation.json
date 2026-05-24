@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": "",
+    "compilation_exit_code": "",
+    "compilation_status": "",
+    "compilation_timed_out": "",
+    "compiled_bloat_token_ratio": null,
+    "compiled_cc_average": "",
+    "compiled_loc": "",
+    "compiled_python_path": null,
+    "compiled_token_estimate": null,
+    "ensures_count": 13,
+    "error_count": null,
+    "invariant_count": 11,
+    "keyword_counts": {
+      "assert": 6,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 13,
+      "exists": 0,
+      "forall": 0,
+      "if": 6,
+      "invariant": 11,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 12,
+      "while": 4
+    },
+    "lexical_proof_complexity": 52,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 12,
+    "runtime_exit_code": "",
+    "runtime_passed": "",
+    "runtime_timed_out": "",
+    "source_loc": 158,
+    "source_token_estimate": 985,
+    "status": "verification_failed",
+    "verification_duration_seconds": 5.058,
+    "verification_exit_code": 2,
+    "verification_status": "verification_failed",
+    "verification_timed_out": false,
+    "verified": false,
+    "verified_count": null
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "The candidate submission is written entirely in Dafny, not Python. The task requires a Python class `ConnectionPool` with a specific constructor signature `ConnectionPool(factory, *, max_size: int, now=None)` and methods `acquire()`, `release(conn)`, and `evict_idle(max_idle_seconds)`. The submission fails on every axis: wrong language, wrong entry point signature (no `factory` parameter, no `now` callable), wrong method names (capitalized Dafny-style), and the code cannot be executed as Python at all. While the Dafny code itself shows some structural thought around formal verification, it is completely irrelevant to the Python task and represents a fundamental category error.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"The candidate submission is written entirely in Dafny, not Python. The task requires a Python class `ConnectionPool` with a specific constructor signature `ConnectionPool(factory, *, max_size: int, now=None)` and methods `acquire()`, `release(conn)`, and `evict_idle(max_idle_seconds)`. The submission fails on every axis: wrong language, wrong entry point signature (no `factory` parameter, no `now` callable), wrong method names (capitalized Dafny-style), and the code cannot be executed as Python at all. While the Dafny code itself shows some structural thought around formal verification, it is completely irrelevant to the Python task and represents a fundamental category error.\",\n  \"strengths\": [\n    \"Shows understanding of the pool's logical invariants (idle_count bounds, connection lifecycle)\",\n    \"Eviction logic correctly filters by idle time threshold\"\n  ],\n  \"weaknesses\": [\n    \"Written in Dafny, not Python \u2014 cannot be imported or executed as the required entry point\",\n    \"Missing `factory` callable parameter entirely\",\n    \"Method names are capitalized (Acquire, Release, EvictIdle) instead of snake_case (acquire, release, evict_idle)\",\n    \"No support for `now` callable parameter for time injection\",\n    \"Completely non-functional as a Python module\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "Shows understanding of the pool's logical invariants (idle_count bounds, connection lifecycle)",
+      "Eviction logic correctly filters by idle time threshold"
+    ],
+    "weaknesses": [
+      "Written in Dafny, not Python \u2014 cannot be imported or executed as the required entry point",
+      "Missing `factory` callable parameter entirely",
+      "Method names are capitalized (Acquire, Release, EvictIdle) instead of snake_case (acquire, release, evict_idle)",
+      "No support for `now` callable parameter for time injection",
+      "Completely non-functional as a Python module"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 989,
+      "prompt": 302,
+      "total": 1291,
+      "turns": [
+        {
+          "completion": 989,
+          "prompt": 302,
+          "total": 1291
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 0.0,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "not_run",
+    "sandbox_error": "verification_failed",
+    "stderr": "solution.dfy(157,12): Warning: the type of the other operand is a non-null type, so this comparison with 'null' will always return 'true' (to make it possible for variable 'c1' to have the value 'null', declare its type to be 'Connection?')\n    |\n157 |   assert c1 != null;\n    |             ^^\n\nsolution.dfy(161,12): Warning: the type of the other operand is a non-null type, so this comparison with 'null' will always return 'true' (to make it possible for variable 'c2' to have the value 'null', declare its type to be 'Connection?')\n    |\n161 |   assert c2 != null;\n    |             ^^\n\nsolution.dfy(171,12): Warning: the type of the other operand is a non-null type, so this comparison with 'null' will always return 'true' (to make it possible for variable 'c3' to have the value 'null', declare its type to be 'Connection?')\n    |\n171 |   assert c3 != null;\n    |             ^^\n\nsolution.dfy(66,17): Warning: the type of the other operand is a non-null type, so this comparison with 'null' will always return 'true' (to make it possible for variable 'conn' to have the value 'null', declare its type to be 'Connection?')\n   |\n66 |     ensures conn != null\n   |                  ^^\n\nsolution.dfy(83,18): Warning: the type of the other operand is a non-null type, so this comparison with 'null' will always return 'true' (to make it possible for variable 'conn' to have the value 'null', declare its type to be 'Connection?')\n   |\n83 |     requires conn != null\n   |                   ^^\n\nsolution.dfy(46,16): Error: in the first division of the constructor body (before 'new;'), 'this' can only be used to assign to its fields\n   |\n46 |       invariant idle_pool.Length == max_size\n   |                 ^^^^^^^^^\n\nsolution.dfy(48,6): Error: in the first division of the constructor body (before 'new;'), 'this' can only be used to assign to its fields\n   |\n48 |       idle_pool[i] := null;\n   |       ^^^^^^^^^\n\n2 resolution/type errors detected in solution.dfy\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 2,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 0.0,
+    "cyclomatic_complexity_max": 0,
+    "cyclomatic_complexity_total": 0,
+    "function_count": 0,
+    "loc": 0,
+    "maintainability_index": null,
+    "max_nesting_depth": 0,
+    "syntax_error": "Dafny verification failed",
+    "syntax_ok": false
+  },
+  "task_id": "connection_pool",
+  "variant": "oracle_dafny_generation"
+}

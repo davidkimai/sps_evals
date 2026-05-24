@@ -1,0 +1,65 @@
+{
+  "program_version": "vericoding_research_v3",
+  "queue": [
+    {
+      "phase": "phase_minus_1_ground",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_0_demote_canary",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_1_validity_surgery",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_2_dev_bank",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_3_freeze",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_4_primary_confirmatory",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_5_expansion",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_6_repair",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_7_review_formal",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_8_external",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_9_scbench",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:46:27Z"
+    },
+    {
+      "phase": "phase_10_package_audit",
+      "status": "completed",
+      "updated_at": "2026-05-19T12:47:43Z"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "artifact_language": "dafny",
+  "dafny": {
+    "compilation_duration_seconds": 4.393,
+    "compilation_exit_code": 0,
+    "compilation_status": "translated",
+    "compilation_timed_out": false,
+    "compiled_bloat_token_ratio": 1.048,
+    "compiled_cc_average": 12.0,
+    "compiled_loc": 27,
+    "compiled_python_path": "runs/dafny_full_claude/retry_backoff_schedule/oracle_dafny_generation__anthropic__claude-sonnet-4-6__s00/solution.py",
+    "compiled_token_estimate": 303,
+    "ensures_count": 3,
+    "error_count": 0,
+    "invariant_count": 5,
+    "keyword_counts": {
+      "assert": 0,
+      "assume": 0,
+      "decreases": 0,
+      "ensures": 3,
+      "exists": 0,
+      "forall": 4,
+      "if": 3,
+      "invariant": 5,
+      "logical_and": 0,
+      "logical_or": 0,
+      "match": 0,
+      "requires": 3,
+      "while": 1
+    },
+    "lexical_proof_complexity": 19,
+    "logical_and_count": 0,
+    "logical_or_count": 0,
+    "requires_count": 3,
+    "runtime_exit_code": 1,
+    "runtime_passed": false,
+    "runtime_timed_out": false,
+    "source_loc": 38,
+    "source_token_estimate": 289,
+    "status": "runtime_failed",
+    "verification_duration_seconds": 4.84,
+    "verification_exit_code": 0,
+    "verification_status": "verified",
+    "verification_timed_out": false,
+    "verified": true,
+    "verified_count": 2
+  },
+  "effective_temperature": 0.8,
+  "hybrid": null,
+  "judge": {
+    "error": null,
+    "rationale": "This implementation is severe architectural slop. It does not implement the required `build_retry_schedule` function at all \u2014 there is no exponential backoff logic, no input validation, no list construction, and no return value. Instead, it attempts to import a nonexistent `module_` (which will raise an ImportError at runtime), then runs a complex symbol-aliasing routine that manipulates Dafny-compiled namespaces. This is entirely irrelevant to the task. The code is opaque, indirect, relies on external dependencies that don't exist, and completely fails to satisfy any of the functional requirements. It represents the antithesis of the Zen of Python: explicit, simple, flat, readable code.",
+    "raw_response": "{\n  \"score\": 1,\n  \"rationale\": \"This implementation is severe architectural slop. It does not implement the required `build_retry_schedule` function at all \u2014 there is no exponential backoff logic, no input validation, no list construction, and no return value. Instead, it attempts to import a nonexistent `module_` (which will raise an ImportError at runtime), then runs a complex symbol-aliasing routine that manipulates Dafny-compiled namespaces. This is entirely irrelevant to the task. The code is opaque, indirect, relies on external dependencies that don't exist, and completely fails to satisfy any of the functional requirements. It represents the antithesis of the Zen of Python: explicit, simple, flat, readable code.\",\n  \"strengths\": [\n    \"None \u2014 the implementation does not fulfill any aspect of the task\"\n  ],\n  \"weaknesses\": [\n    \"Does not implement `build_retry_schedule` at all\",\n    \"Imports a nonexistent module (`module_`) causing immediate ImportError\",\n    \"No input validation, no exponential backoff logic, no return value\",\n    \"Deeply opaque symbol-aliasing machinery unrelated to the task\",\n    \"Violates every Zen of Python principle: implicit, complex, nested, unreadable\",\n    \"Appears to be a hallucinated Dafny-to-Python shim with no relevance to the problem\"\n  ]\n}",
+    "score": 1,
+    "skipped": false,
+    "strengths": [
+      "None \u2014 the implementation does not fulfill any aspect of the task"
+    ],
+    "weaknesses": [
+      "Does not implement `build_retry_schedule` at all",
+      "Imports a nonexistent module (`module_`) causing immediate ImportError",
+      "No input validation, no exponential backoff logic, no return value",
+      "Deeply opaque symbol-aliasing machinery unrelated to the task",
+      "Violates every Zen of Python principle: implicit, complex, nested, unreadable",
+      "Appears to be a hallucinated Dafny-to-Python shim with no relevance to the problem"
+    ]
+  },
+  "metadata": {
+    "token_estimates": {
+      "completion": 292,
+      "prompt": 325,
+      "total": 617,
+      "turns": [
+        {
+          "completion": 292,
+          "prompt": 325,
+          "total": 617
+        }
+      ]
+    }
+  },
+  "model": "claude-sonnet-4-6",
+  "oracle_spec": "Dafny formal verification skill loaded through modular discovery.",
+  "oracle_spec_label": "dafny_formal_verification",
+  "provider": "anthropic",
+  "pytest": {
+    "duration_seconds": 3.39,
+    "exit_code": 1,
+    "passed": false,
+    "sandbox": "docker:specoracle-pytest-dafny:py311-dotnet8",
+    "sandbox_error": null,
+    "stderr": "",
+    "stdout": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n____________________ test_build_retry_schedule_caps_values _____________________\n\n    def test_build_retry_schedule_caps_values():\n>       assert build_retry_schedule(0, 2, 10) == []\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntest_solution.py:7: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <_dafny.Seq object at 0xffff87fc1c90>, other = []\n\n    def __eq__(self, other: object) -> bool:\n>       return self.Elements == other.Elements\n                                ^^^^^^^^^^^^^^\nE       AttributeError: 'list' object has no attribute 'Elements'\n\n/usr/local/lib/python3.11/dist-packages/_dafny/__init__.py:269: AttributeError\n_____________________ test_build_retry_schedule_validation _____________________\n\n    def test_build_retry_schedule_validation():\n>       with pytest.raises(ValueError):\nE       Failed: DID NOT RAISE <class 'ValueError'>\n\ntest_solution.py:12: Failed\n=========================== short test summary info ============================\nFAILED test_solution.py::test_build_retry_schedule_caps_values - AttributeErr...\nFAILED test_solution.py::test_build_retry_schedule_validation - Failed: DID N...\n2 failed in 0.14s\n",
+    "timed_out": false
+  },
+  "requested_temperature": 0.8,
+  "sample_index": 0,
+  "static_metrics": {
+    "class_count": 0,
+    "cyclomatic_complexity_average": 12.0,
+    "cyclomatic_complexity_max": 12,
+    "cyclomatic_complexity_total": 12,
+    "function_count": 2,
+    "loc": 27,
+    "maintainability_index": 70.179,
+    "max_nesting_depth": 3,
+    "syntax_error": null,
+    "syntax_ok": true
+  },
+  "task_id": "retry_backoff_schedule",
+  "variant": "oracle_dafny_generation"
+}

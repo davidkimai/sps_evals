@@ -135,14 +135,16 @@ This dichotomy forms the empirical backbone of the paper, designed to explicitly
 
 \begin{table}[h]
 \centering
+\small
+\renewcommand{\arraystretch}{1.1}
 \caption{Representative visible vs. hidden evidence surfaces. Full construction details appear in Appendix A.}
 \label{tab:visible-hidden-examples}
-\begin{tabular}{p{1.35in}p{1.55in}p{1.55in}p{1.55in}}
+\begin{tabular}{p{1.55in}p{1.35in}p{1.5in}p{1.4in}}
 \hline
 Task surface & Visible evidence & Hidden evidence & Why hidden evidence matters \\
 \hline
-\texttt{permission\_gate} (owned internal) & Explicit-role deny-by-default behavior & Frozen day-2 harness adds wildcard-role expansion while preserving deny-by-default semantics & Catches day-2 authorization behavior that a visibly correct implementation can still miss \\
-\texttt{safe\_path\_validation} (secure slice) & Public summary plus schema-level visible test & Deterministic hidden oracle checks that adversarial paths such as \texttt{"../secret"} are rejected & Tests whether the component actually enforces the security boundary rather than only returning the right schema \\
+\texttt{permission\_gate}\\(owned internal) & Explicit-role deny-by-default behavior & Frozen day-2 harness adds wildcard-role expansion while preserving deny-by-default semantics & Catches day-2 authorization behavior that a visibly correct implementation can still miss \\
+\texttt{safe\_path\_validation}\\(secure slice) & Public summary plus schema-level visible test & Deterministic hidden oracle checks that adversarial paths such as \texttt{"../secret"} are rejected & Tests whether the component actually enforces the security boundary rather than only returning the right schema \\
 \hline
 \end{tabular}
 \end{table}
@@ -228,7 +230,7 @@ The implication is clear: specification-based triage depends fundamentally on ca
 
 Across 72 distinct accept/reject/review decisions, our system explicitly escalated 6 selected artifacts to human review. Crucially, these were not artifacts that failed tests; they were artifacts that \emph{passed} all automated oracles but retained unresolved trust-boundary ambiguities. This demonstrates that even surviving rigorous specification checks does not erase all review obligations. These included unverified wrapper dependencies, interface assumptions, and under-specified edge cases.
 
-This aligns with the principles of \textit{lean-tcb} \cite{OathTech2026LeanTCB}: successful automated checks do not eliminate the Trusted Computing Base. A realistic, high-assurance SPS workflow must embrace a tertiary outcome. Sometimes the correct answer is not ``pass'' or ``fail,'' but rather: ``The automated evidence is mathematically sound, but a human must audit the interface before deployment.''
+This aligns with the principles of \textit{lean-tcb} \cite{OathTech2026LeanTCB}: passing automated checks do not eliminate the Trusted Computing Base. A realistic, high-assurance SPS workflow must embrace a tertiary outcome. Sometimes the correct answer is not ``pass'' or ``fail,'' but rather: ``The automated evidence is mathematically sound, but a human must audit the interface before deployment.''
 
 A bounded formal overlay points to the same lesson. In the retained Dafny baseline, 52 of 150 candidate artifacts achieved verified status, yet all 52 still received the lowest task-level judge score in our audit because the dominant failures appeared at the operational Python boundary rather than inside the locally verified property. Verification did not erase the deployment problem; it relocated it to wrappers, interfaces, and other review-boundary surfaces.
 
@@ -401,7 +403,7 @@ The future-work section in the main paper focuses on the scientific next steps f
   \item \textbf{Runtime provenance:} \repotree{runs/vericoding_research_v3/inspect_logs}{runs/vericoding\_research\_v3/inspect\_logs/}
 \end{itemize}
 
-The repository README and reviewer quickstart include a minimal copy-and-paste audit path for checking the packaged tests, v3 completion contract, status report, and paper build.
+The repository README and reviewer quickstart include a minimal copy-and-paste audit path for checking the packaged tests, v3 completion contract, and status report.
 
 \section*{Author Contributions}
 
